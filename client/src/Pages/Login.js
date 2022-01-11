@@ -69,41 +69,47 @@ const Login = () => {
   return (
 		<FormBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">
 			<Heading className="pb-4">Sign in with Lumos account</Heading>
-			<FormBackground className="row p-5">
-				<div className="col-11 col-md-10 d-flex flex-column m-auto">
-					<div className="text-center">
-						<FormInput
-							className="mt-4 w-100"
-							id="email"
-							name="email"
-							onChange={(e) => { setEmailLog(e.target.value); }}
-							placeholder="username or email"
-							required
-							type="text"
-						/>
-						<FormInput
-							className="mt-4 w-100"
-							id="password"
-							name="password"
-							onChange={(e) => { setPasswordLog(e.target.value); }}
-							pattern="(?=.\d)(?=.[a-z])(?=.*[A-Z]).{8,}"
-							placeholder="password"
-							required
-							type="password"
-						/>
-						<PrimaryButton
-							text="Log In"
-							className="m-auto mt-4"
-							onClick={login}
-							type="logIn"
-							form="nameform"
-							value="logIn"
-							hasIcon
-						/>
+				<FormBackground className="col-12 col-md-6 col-xl-5 col-xxl-4 p-5">
+					<div className="d-flex flex-column m-auto">
+						<div className="text-center">
+							<FormInput
+								className="w-100"
+								id="email"
+								name="email"
+								onChange={(e) => { setEmailLog(e.target.value); }}
+								placeholder="username or email"
+								required
+								type="text"
+								hasIcon
+								icon="lock"
+							/>
+							<div className="my-3">
+								<FormInput
+									className="w-100"
+									hasIcon
+									icon="person"
+									id="password"
+									name="password"
+									onChange={(e) => { setPasswordLog(e.target.value); }}
+									pattern="(?=.\d)(?=.[a-z])(?=.*[A-Z]).{8,}"
+									placeholder="password"
+									required
+									type="password"
+								/>
+							</div>
+							<PrimaryButton
+								text="Log In"
+								className="m-auto mt-3"
+								onClick={login}
+								type="logIn"
+								form="nameform"
+								value="logIn"
+								hasIcon
+							/>
+						</div>
+						{loginStatus && <button>Check if authenticated</button>}
 					</div>
-      				{loginStatus && <button>Check if authenticated</button>}
-      			</div>
-			</FormBackground>
+				</FormBackground>
     	</FormBody>
   );
 }

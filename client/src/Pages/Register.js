@@ -41,21 +41,21 @@ const Register = () => {
 					<Heading size="24px" color="white" className="mb-5 text-center">Enter your details to create an account.</Heading>
 					<FormInput
 						id="firstName"
-						className="mb-3"
+						className="mb-3 w-100"
 						type="text"
 						placeholder="username"
 						onChange={(e) => { setUsenameReg(e.target.value); }}
 					/>
 					<FormInput
 						id="email"
-						className="mb-3"
+						className="mb-3 w-100"
 						type="text"
 						placeholder="email"
 						onChange={(e) => { setEmailReg(e.target.value); }}
 					/>
 					<FormInput
 						id="password"
-						className="mb-3"
+						className="mb-3 w-100"
 						type="password"
 						placeholder="password"
 						onChange={(e) => { setPasswordReg(e.target.value); }}

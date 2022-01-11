@@ -1,9 +1,10 @@
 
+import React from "react";
 import styled, { css } from "styled-components";
 
-export const FormInput = styled.input(({ theme }) => css`
+const StyledInput = styled.input(({ theme, hasIcon }) => css`
 	background: ${theme.colors.grey};
-	border-radius: 10px;
+	border-radius: ${hasIcon ? '0 10px 10px 0' : '10px'};
 	border: 2px solid transparent;
 	color: ${theme.colors.white};
 	font-size: 24px;
@@ -14,6 +15,38 @@ export const FormInput = styled.input(({ theme }) => css`
 		outline: none;
 	}
 `);
+
+const IconArea = styled.div(({ theme, hasIcon }) => css`
+	background: ${theme.colors.grey};
+	min-height: 60px;
+	padding: 10px;
+	border-radius: 10px 0 0 10px;
+`);
+
+export const FormInput = ({
+	hasIcon, text, className,
+	id, pattern, placeholder,
+	type, form, value, icon
+}) => (
+	<div className="d-flex">
+		{hasIcon && (
+			<IconArea className="d-flex align-items-center">
+				<i className="material-icons text-white">{icon}</i>
+			</IconArea>
+		)}
+		<StyledInput
+			className={className}
+			form={form}
+			hasIcon={ hasIcon }
+			id={id}
+			pattern={pattern}
+			placeholder={placeholder}
+			text={text}
+			type={type}
+			value={value}
+		/>
+	</div>
+);
 
 const StyledCheckbox = styled.input(({ theme }) => css`
 	-webkit-appearance: none;
