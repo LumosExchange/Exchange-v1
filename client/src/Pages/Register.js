@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import "../App.css";
 import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
 
@@ -10,7 +11,7 @@ const [emailReg, setEmailReg] = useState('');
 const [passwordReg, setPasswordReg] = useState('');
 const [nationalityReg, setNationalityReg] = useState('');
 
-
+const navigate = useNavigate();
 
 const register = () => {
     Axios.post("http://localhost:3001/register", {
@@ -21,6 +22,19 @@ const register = () => {
         nationality: nationalityReg
     })
 
+}
+
+//Pass details for 2fa
+
+function handleClick() {
+  navigate("/TwoFactorAuth", {
+    state: {
+      id: 1,
+      email: emailReg,
+      firstName: firstNameReg,
+      lastName: lastNameReg
+    },
+  });
 }
 
 
@@ -92,7 +106,7 @@ const register = () => {
 
       </div>
 
-      <button type="text" class="submit" onClick={register}>
+      <button type="text" class="submit" onClick={register, handleClick}>
         Register
       </button>
     </div>

@@ -7,6 +7,8 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const jwt = require("jsonwebtoken");
+const speakeasy = require("speakeasy");
+const qrcode = require("qrcode");
 
 //Change this to randomly generate salt
 const saltRounds = 10;
@@ -58,6 +60,12 @@ app.use(
 
 //Initiate Imports
 app.use(express.json());
+
+
+//initiate 2fa speakeasy for google auth
+var secret = speakeasy.generateSecret({
+name: "LumosExchange"
+})
 
 // Connection deatils for DB
 const db = mysql.createConnection({
@@ -236,7 +244,30 @@ app.get("/getUserFeedback", (req, res) => {
     } 
   );
 });
+
+app.get("/getSecret", (req, res)=> {
+var secret = speakeasy.generateSecret({
+  name: "Lumos Exchange"
+})
+
+console.log(secret);
+
+qrcode.toDataURL(secret.otpauth_url, function (err, data){
+ res.send(data, secret);
+
+})
+});
   
+app.post("/Verify2fa", (req, res)=> {
+
+//Get 6 digit passcode from user & get base32 
+  speakeasy.totp.verify({
+    secret: "",
+    encoding: "base32",
+    token: "000000"
+  })
+})
+
 
 
 //app.get('/', (req, res)=> {

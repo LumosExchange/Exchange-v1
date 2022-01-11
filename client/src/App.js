@@ -23,6 +23,7 @@ import Sell from "./Pages/Sell";
 import Offer from "./Pages/Offer";
 import Feedback from "./Pages/Feedback";
 import Axios from "axios";
+import TwoFactorAuth from "./Pages/TwoFactorAuth";
 
 function App() {
   //Check
@@ -72,6 +73,7 @@ function App() {
         <Route path="/Trades" element={<Trades />} />
         <Route path="/Account" element={<Account />} />
         <Route path="/Feedback" element={<Feedback />} />
+        <Route path="/TwoFactorAuth" element={<TwoFactorAuth />} />
       
         
       </Routes>
