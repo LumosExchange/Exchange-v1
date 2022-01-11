@@ -14,6 +14,12 @@ const StyledInput = styled.input(({ theme, hasIcon }) => css`
 		border: 2px solid ${theme.colors.yellow};
 		outline: none;
 	}
+
+	&:-webkit-autofill{
+		-webkit-box-shadow: 0 0 0 1000px ${theme.colors.grey} inset !important;
+		-webkit-text-fill-color: white !important;
+		border-color: ${theme.colors.yellow};
+	}
 `);
 
 const IconArea = styled.div(({ theme, hasIcon }) => css`

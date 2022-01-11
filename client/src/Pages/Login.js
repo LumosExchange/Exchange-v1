@@ -6,12 +6,15 @@ import { FormBody, FormInput } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
 import PrimaryButton from "../Components/Button";
+import ConnectWalletButton from "../Components/ConnectWalletButton";
+import PhantomIcon from '../Images/phantom-icon-purple.svg';
+import SolflareIcon from '../Images/solflare-icon.svg';
+import ExodusIcon from '../Images/exodus-icon.svg';
 
-const FormBackground = styled.div(({ theme, color, size }) => css`
+const FormBackground = styled.div(({ theme }) => css`
 	background: ${theme.colors.darkerGrey};
 	border-radius: 20px;
 `);
-
 
 const Login = () => {
   const [emailLog, setEmailLog] = useState("");
@@ -107,7 +110,13 @@ const Login = () => {
 								hasIcon
 							/>
 						</div>
+						<Paragraph size="18px" className="text-center my-4">Or continue with these Solana wallets</Paragraph>
 						{loginStatus && <button>Check if authenticated</button>}
+						<div className="d-flex justify-content-center">
+							<ConnectWalletButton icon={PhantomIcon} onClick={ null }/>
+							<ConnectWalletButton icon={SolflareIcon} onClick={ null } className="mx-3" />
+							<ConnectWalletButton icon={ExodusIcon} onClick={ null }/>
+						</div>
 					</div>
 				</FormBackground>
     	</FormBody>
