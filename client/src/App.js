@@ -1,6 +1,7 @@
-import { BrowserRouter } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import "./App.css";
+import "./Fonts.css";
+import { ThemeProvider } from "styled-components";
 import Navbar from "./Components/Navbar";
 import {
   BrowserRouter as Router,
@@ -23,7 +24,31 @@ import Sell from "./Pages/Sell";
 import Offer from "./Pages/Offer";
 import Feedback from "./Pages/Feedback";
 import Axios from "axios";
-import TwoFactorAuth from "./Pages/TwoFactorAuth";
+
+const theme = {
+  colors: {
+      black: '#131313',
+      white: '#FFF',
+      lightGrey: '#CECECE',
+      grey: '#3C3C3C',
+      darkerGrey: '#2E2E2E',
+      yellow: '#F1DF27',
+  },
+  fonts: {
+      primary: 'Arial, Helvetica, sans-serif'
+  },
+  breakpoints: {
+      sm: '576px',
+      md: '768px',
+      lg: '992px',
+      xl: '1200px',
+      xxl: '1400px',
+      xxxl: '1600px',
+      fhd: '1920px',
+      qhd: '2560px',
+      uhd: '3840px',
+  },
+}
 
 function App() {
   //Check
@@ -33,7 +58,7 @@ function App() {
 
   useEffect(() => {
     Axios.get("http://localhost:3001/login").then((response) => {
-      if (response.data.loggedIn == true) {
+      if (response.data.loggedIn === true) {
         setLoginStatus(response.data.user[0].email);
         console.log(response);
       }
@@ -43,42 +68,44 @@ function App() {
   //check if user is logged in if so print logged in navbar else normal nav
 
   return (
-    <Router>
-      {!loginStatus ? (
-        <div className="Navbar">
-          <Navbar />
-        </div>
-      ) : (
-        <div className="LoggedNavbar">
-          <LoggedNavbar />
-        </div>
-      )}
-      
-      
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Register" element={<Register />} />
-        <Route path="*" element={<ErrorPage />} />
-        //These need to be protected routes eventually
-        {!loginStatus ? (
-          <Route path="/Home" element={<Home />} />
-        ) : (
-          <Route path="/Home" element={<LoggedHome />} />
-        )}
-        ;
-        <Route path="/Offer" element={<Offer />} />
-        <Route path="/Sell" element={<Sell />} />
-        <Route path="/Buy" element={<Buy />} />
-        <Route path="/Trades" element={<Trades />} />
-        <Route path="/Account" element={<Account />} />
-        <Route path="/Feedback" element={<Feedback />} />
-        <Route path="/TwoFactorAuth" element={<TwoFactorAuth />} />
-      
-        
-      </Routes>
-      <div>Footer</div>
-    </Router>
+    <React.Fragment>
+      <ThemeProvider theme={theme}>
+        <Router>
+          {!loginStatus ? (
+              <Navbar />
+          ) : (
+            <div className="LoggedNavbar">
+              <LoggedNavbar />
+            </div>
+          )}
+          
+          
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/Login" element={<Login />} />
+            <Route path="/Register" element={<Register />} />
+            <Route path="*" element={<ErrorPage />} />
+            //These need to be protected routes eventually
+            {!loginStatus ? (
+              <Route path="/Home" element={<Home />} />
+            ) : (
+              <Route path="/Home" element={<LoggedHome />} />
+            )}
+            ;
+            <Route path="/Offer" element={<Offer />} />
+            <Route path="/Sell" element={<Sell />} />
+            <Route path="/Buy" element={<Buy />} />
+            <Route path="/Trades" element={<Trades />} />
+            <Route path="/Account" element={<Account />} />
+            <Route path="/Feedback" element={<Feedback />} />
+            {/*<Route path="/TwoFa" element={<TwoFa />} />*/}
+          
+          
+            
+          </Routes>
+        </Router>
+          </ThemeProvider>
+      </React.Fragment>
   );
 }
 
