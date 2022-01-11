@@ -19,7 +19,11 @@
     "express-session": "^1.17.2",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
+    "node-json-db": "^1.4.1",
     "nodemon": "^2.0.15",
-    "react-router-dom": "^6.0.2"
+    "qrcode": "^1.5.0",
+    "react-router-dom": "^6.0.2",
+    "speakeasy": "^2.0.0",
+    "uuid": "^8.3.2"
   }
 }
