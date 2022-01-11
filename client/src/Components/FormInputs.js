@@ -16,8 +16,8 @@ const StyledInput = styled.input(({ theme, hasIcon }) => css`
 	}
 
 	&:-webkit-autofill{
-		-webkit-box-shadow: 0 0 0 1000px ${theme.colors.grey} inset !important;
-		-webkit-text-fill-color: white !important;
+		-webkit-box-shadow: 0 0 0 1000px ${theme.colors.grey} inset;
+		-webkit-text-fill-color: white;
 		border-color: ${theme.colors.yellow};
 	}
 `);
