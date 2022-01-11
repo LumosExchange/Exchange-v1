@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from "react";
+import styled, { css } from "styled-components";
 import Axios from "axios";
 import { useNavigate, } from 'react-router';
+import { FormBody, FormInput } from "../Components/FormInputs";
+import Heading from "../Components/Heading";
+import Paragraph from "../Components/Paragraph";
+import PrimaryButton from "../Components/Button";
+
+const FormBackground = styled.div(({ theme, color, size }) => css`
+	background: ${theme.colors.darkerGrey};
+	border-radius: 20px;
+`);
 
 
-
-function Login() {
+const Login = () => {
   const [emailLog, setEmailLog] = useState("");
 
   const [passwordLog, setPasswordLog] = useState("");
@@ -50,7 +59,7 @@ function Login() {
   //testing logged in
   useEffect(() => {
     Axios.get("http://localhost:3001/login").then((response) => {
-      if (response.data.loggedIn == true) {
+      if (response.data.loggedIn === true) {
         setLoginStatus(response.data.user[0].email);
         console.log(response);
       }
@@ -58,45 +67,44 @@ function Login() {
   }, []);
 
   return (
-    <div>
-      <div className="logInForm">
-        <h1>Log in</h1>
-        <p>
-          Lumos Exchange is the most popular non-custodial crypto marketplace
-          for Solana Ecosystem.
-        </p>
-
-        <label for="Email"></label>
-        <input
-          type="text"
-          placeholder="email"
-          name="email"
-          id="email"
-          onChange={(e) => {
-            setEmailLog(e.target.value);
-          }}
-          required
-        />
-        <label for="Password"></label>
-        <input
-          type="password"
-          placeholder="Enter Password"
-          name="psw"
-          id="psw"
-          pattern="(?=.\d)(?=.[a-z])(?=.*[A-Z]).{8,}"
-          title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-          onChange={(e) => {
-            setPasswordLog(e.target.value);
-          }}
-          required
-        />
-        <button onClick={login} type="logIn" form="nameform" value="logIn">
-          Log in
-        </button>
-      </div>
-
-      {loginStatus && <button>Check if authenticated</button>}
-    </div>
+		<FormBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">
+			<Heading className="pb-4">Sign in with Lumos account</Heading>
+			<FormBackground className="row p-5">
+				<div className="col-11 col-md-10 d-flex flex-column m-auto">
+					<div className="text-center">
+						<FormInput
+							className="mt-4 w-100"
+							id="email"
+							name="email"
+							onChange={(e) => { setEmailLog(e.target.value); }}
+							placeholder="username or email"
+							required
+							type="text"
+						/>
+						<FormInput
+							className="mt-4 w-100"
+							id="password"
+							name="password"
+							onChange={(e) => { setPasswordLog(e.target.value); }}
+							pattern="(?=.\d)(?=.[a-z])(?=.*[A-Z]).{8,}"
+							placeholder="password"
+							required
+							type="password"
+						/>
+						<PrimaryButton
+							text="Log In"
+							className="m-auto mt-4"
+							onClick={login}
+							type="logIn"
+							form="nameform"
+							value="logIn"
+							hasIcon
+						/>
+					</div>
+      				{loginStatus && <button>Check if authenticated</button>}
+      			</div>
+			</FormBackground>
+    	</FormBody>
   );
 }
 

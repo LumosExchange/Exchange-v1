@@ -1,12 +1,13 @@
-import React, {Children, useState} from "react";
-import "../App.css";
-import ReorderIcon from "@material-ui/icons/Reorder";
-import SearchIcon from "@material-ui/icons/Search";
+// Core
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
+
+// Images
 import Logo from '../Images/logo.png';
 import GradientButton from "./GradientButton";
 import MobileMenuIcon from '../Images/mobile-menu.svg';
 
+// Components
 const Base = styled.div(({ theme }) => css`
     background: ${theme.colors.black};
     font-family: Arial, Helvetica, sans-serif;

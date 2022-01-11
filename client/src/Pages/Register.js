@@ -5,15 +5,9 @@ import { useNavigate } from 'react-router';
 import Heading from "../Components/Heading";
 import styled, { css } from "styled-components";
 import PrimaryButton from "../Components/Button";
-import { FormInput, FormCheckbox, StyledLabel } from "../Components/FormInputs";
+import { FormInput, FormCheckbox, StyledLabel, FormBody } from "../Components/FormInputs";
 import WarningTriangle from '../Images/icon-park-outline_caution.svg';
 import Paragraph from "../Components/Paragraph";
-
-const FormBody = styled.div(({ theme }) => css`
-	background: ${theme.colors.black};
-	font-family: 'THICCCBOI-REGULAR';
-	min-height: calc(100vh - 80px);
-`);
 
 const Register = () => {
 	const [emailReg, setEmailReg] = useState('');
