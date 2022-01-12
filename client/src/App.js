@@ -76,13 +76,7 @@ function App() {
     <React.Fragment>
       <ThemeProvider theme={theme}>
         <Router>
-          {!loginStatus ? (
-              <div>Not logged in</div>
-          ) : (
-            <div>Logged in!</div>
-          )}
-          
-          
+          <Navbar isLoggedIn={loginStatus} />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/Login" element={<Login />} />
