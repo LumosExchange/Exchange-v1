@@ -20,8 +20,16 @@ const ButtonBase = styled.button(({ theme, round, size }) => css`
     }
 `);
 
-const PrimaryButton = ({ text, size, hasIcon, iconPosition, iconName, className }) => (
-    <ButtonBase size={size} className={`d-flex align-items-center justify-content-center ${className}`}>
+const PrimaryButton = ({
+    text, size, hasIcon, 
+    iconPosition, iconName, className,
+    onClick, type, form, value
+}) => (
+    <ButtonBase
+        onClick={onClick} type={type} form={form} value={value}
+        size={size}
+        className={`d-flex align-items-center justify-content-center ${className}`}
+    >
         {(hasIcon) && (iconPosition === 'left') && (
             <i className="material-icons me-3">{iconName}</i>
         )}
@@ -29,7 +37,6 @@ const PrimaryButton = ({ text, size, hasIcon, iconPosition, iconName, className 
         {(hasIcon) && (iconPosition === 'right') && (
             <i className="material-icons ms-3">{iconName}</i>
         )}
-
     </ButtonBase>
 );
 

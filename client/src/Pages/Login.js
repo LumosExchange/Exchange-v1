@@ -75,40 +75,41 @@ const Login = () => {
 				<FormBackground className="col-12 col-md-6 col-xl-5 col-xxl-4 p-5">
 					<div className="d-flex flex-column m-auto">
 						<div className="text-center">
-							<FormInput
-								className="w-100"
-								id="email"
-								name="email"
-								onChange={(e) => { setEmailLog(e.target.value); }}
-								placeholder="username or email"
-								required
-								type="text"
-								hasIcon
-								icon="lock"
-							/>
-							<div className="my-3">
+							<form>
 								<FormInput
 									className="w-100"
-									hasIcon
-									icon="person"
-									id="password"
-									name="password"
-									onChange={(e) => { setPasswordLog(e.target.value); }}
-									pattern="(?=.\d)(?=.[a-z])(?=.*[A-Z]).{8,}"
-									placeholder="password"
+									id="email"
+									name="email"
+									onChange={(e) => { setEmailLog(e.target.value); }}
+									placeholder="username or email"
 									required
-									type="password"
+									type="text"
+									hasIcon
+									icon="lock"
 								/>
-							</div>
-							<PrimaryButton
-								text="Log In"
-								className="m-auto mt-3"
-								onClick={login}
-								type="logIn"
-								form="nameform"
-								value="logIn"
-								hasIcon
-							/>
+								<div className="my-3">
+									<FormInput
+										className="w-100"
+										hasIcon
+										icon="person"
+										id="psw"
+										name="psw"
+										onChange={(e) => { setPasswordLog(e.target.value); }}
+										placeholder="password"
+										required
+										type="password"
+									/>
+								</div>
+								<PrimaryButton
+									text="Log In"
+									className="m-auto mt-3"
+									onClick={login}
+									type="logIn"
+									form="nameform"
+									value="logIn"
+									hasIcon
+								/>
+							</form>
 						</div>
 						<Paragraph size="18px" className="text-center my-4">Or continue with these Solana wallets</Paragraph>
 						{loginStatus && <button>Check if authenticated</button>}

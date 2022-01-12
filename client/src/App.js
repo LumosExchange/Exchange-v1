@@ -24,6 +24,7 @@ import Sell from "./Pages/Sell";
 import Offer from "./Pages/Offer";
 import Feedback from "./Pages/Feedback";
 import Axios from "axios";
+import Footer from "./Components/Footer";
 
 const theme = {
   colors: {
@@ -33,6 +34,7 @@ const theme = {
       grey: '#3C3C3C',
       darkerGrey: '#2E2E2E',
       yellow: '#F1DF27',
+      blueGrey: '#b7b4c7',
   },
   fonts: {
       primary: 'Arial, Helvetica, sans-serif'
@@ -72,11 +74,9 @@ function App() {
       <ThemeProvider theme={theme}>
         <Router>
           {!loginStatus ? (
-              <Navbar />
+              <div>Not logged in</div>
           ) : (
-            <div className="LoggedNavbar">
-              <LoggedNavbar />
-            </div>
+            <div>Logged in!</div>
           )}
           
           
@@ -104,7 +104,9 @@ function App() {
             
           </Routes>
         </Router>
+        <Footer />
           </ThemeProvider>
+          
       </React.Fragment>
   );
 }
