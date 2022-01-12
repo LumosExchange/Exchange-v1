@@ -36,6 +36,7 @@ const theme = {
       darkerGrey: '#2E2E2E',
       yellow: '#F1DF27',
       blueGrey: '#b7b4c7',
+      navyGrey: '#212127',
   },
   fonts: {
       primary: 'Arial, Helvetica, sans-serif'

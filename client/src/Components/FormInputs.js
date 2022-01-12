@@ -22,6 +22,26 @@ const StyledInput = styled.input(({ theme, hasIcon }) => css`
 	}
 `);
 
+const RoundedInput = styled.input(({ theme, hasIcon }) => css`
+	background: ${theme.colors.navyGrey};
+	border-radius: 50px;
+	border: 2px solid transparent;
+	color: ${theme.colors.white};
+	font-size: 18px;
+	padding: 10px;
+
+	:focus, :active {
+		border: 2px solid rgba(255,255,255,0.1);
+		outline: none;
+	}
+
+	&:-webkit-autofill{
+		-webkit-box-shadow: 0 0 0 1000px ${theme.colors.grey} inset;
+		-webkit-text-fill-color: white;
+		border-color: ${theme.colors.yellow};
+	}
+`);
+
 const IconArea = styled.div(({ theme, hasIcon }) => css`
 	background: ${theme.colors.grey};
 	min-height: 60px;
@@ -32,7 +52,7 @@ const IconArea = styled.div(({ theme, hasIcon }) => css`
 export const FormInput = ({
 	hasIcon, text, className,
 	id, pattern, placeholder,
-	type, form, value, icon
+	type, form, value, icon, rounded
 }) => (
 	<div className="d-flex">
 		{hasIcon && (
@@ -40,17 +60,31 @@ export const FormInput = ({
 				<i className="material-icons text-white">{icon}</i>
 			</IconArea>
 		)}
-		<StyledInput
-			className={className}
-			form={form}
-			hasIcon={ hasIcon }
-			id={id}
-			pattern={pattern}
-			placeholder={placeholder}
-			text={text}
-			type={type}
-			value={value}
-		/>
+		{rounded ? (
+			<RoundedInput
+				className={className}
+				form={form}
+				hasIcon={ hasIcon }
+				id={id}
+				pattern={pattern}
+				placeholder={placeholder}
+				text={text}
+				type={type}
+				value={value}
+			/>
+		) : (
+			<StyledInput
+				className={className}
+				form={form}
+				hasIcon={ hasIcon }
+				id={id}
+				pattern={pattern}
+				placeholder={placeholder}
+				text={text}
+				type={type}
+				value={value}
+			/>
+		)}
 	</div>
 );
 
