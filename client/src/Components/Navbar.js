@@ -24,14 +24,22 @@ const Base = styled.div(({ theme }) => css`
 const NavLink = styled.a(({ theme }) => css`
 	color: ${theme.colors.white};
 	text-decoration: none;
-	font-size: 25px;
-
-	@media screen and (min-width: ${theme.breakpoints.lg}) {
-		font-size: 16px;
-	}
+	font-size: 18px;
+	font-family: 'THICCCBOI-REGULAR';
 
 	&:hover {
 		color: ${theme.colors.yellow};
+	}
+`);
+
+const ProfileLink = styled.a(({ theme }) => css`
+	color: ${theme.colors.yellow};
+	text-decoration: none;
+	font-size: 18px;
+	font-family: 'THICCCBOI-REGULAR';
+
+	&:hover {
+		color: ${theme.colors.white};
 	}
 `);
 
@@ -41,7 +49,9 @@ const MenuBase = styled.div(({ theme }) => css`
 	color: ${theme.colors.yellow};
 `);
 
-const Navbar = () => {
+const username = 'Lumos001';
+
+const Navbar = ({ isLoggedIn }) => {
 	const[showMobileMenu, setMenuOpen] = useState(false);
   	return (
 		<Base className="d-flex justify-content-center">
@@ -49,18 +59,36 @@ const Navbar = () => {
 				<div className="d-flex col-12 justify-content-between align-items-center">
 					<a href="/home">
 						<img src={Logo} alt="Logo" className="me-1" />
-					</a>
-					<div className="d-none d-lg-block m-auto">
-						<NavLink href="/Offers" className="me-5">Offers</NavLink>
-						<NavLink href="/Cryptos" className="me-5">Cryptos</NavLink>
-						<NavLink href="/Trade" className="me-5">How to Trade</NavLink>
-						<NavLink href="/Wallet" className="me-5">Reviews</NavLink>
-						<NavLink href="/Faq" className="me-5">FAQ</NavLink>
-						<NavLink href="/Airdrops">Airdrops</NavLink>
-					</div>
-					<div className="d-none d-lg-block">
-						<GradientButton linkTo="/Register" text="Sign In" />
-					</div>
+					</a>=
+					{isLoggedIn ? (
+						<React.Fragment>
+							<div className="d-none d-lg-block m-auto">
+								<NavLink href="/Offers" className="me-5">Market</NavLink>
+								<NavLink href="/Offers" className="me-5">Offers</NavLink>
+								<NavLink href="/Cryptos" className="me-5">Trade</NavLink>
+								<NavLink href="/Trade" className="me-5">Wallet</NavLink>
+								<NavLink href="/Airdrops">Airdrops</NavLink>
+							</div>
+							<div className="align-items-center d-none d-lg-flex">
+								<i className="material-icons me-3 text-white">notifications</i>
+								<ProfileLink>{username}</ProfileLink>
+							</div>
+						</React.Fragment>
+					) : (
+						<React.Fragment>
+							<div className="d-none d-lg-block m-auto">
+								<NavLink href="/Offers" className="me-5">Offers</NavLink>
+								<NavLink href="/Cryptos" className="me-5">Cryptos</NavLink>
+								<NavLink href="/Trade" className="me-5">How to Trade</NavLink>
+								<NavLink href="/Wallet" className="me-5">Reviews</NavLink>
+								<NavLink href="/Faq" className="me-5">FAQ</NavLink>
+								<NavLink href="/Airdrops">Airdrops</NavLink>
+							</div>
+							<div className="d-none d-lg-block">
+								<GradientButton linkTo="/Register" text="Sign In" />
+							</div>
+						</React.Fragment>
+					)}
 					<div className="d-lg-none">
 						<button
 							className="bg-transparent border-0"
@@ -84,17 +112,30 @@ const Navbar = () => {
 							</button>
 						</div>
 					</div>
-					<div className="d-flex flex-column p-4 pt-3">
-						<NavLink href="/Offers" className="mb-3">Offers</NavLink>
-						<NavLink href="/Cryptos" className="mb-3">Cryptos</NavLink>
-						<NavLink href="/Trade" className="mb-3">How to Trade</NavLink>
-						<NavLink href="/Wallet" className="mb-3">Reviews</NavLink>
-						<NavLink href="/Faq" className="mb-3">FAQ</NavLink>
-						<NavLink href="/Airdrops">Airdrops</NavLink>
-					</div>
-					<div className="p-4">
-						<GradientButton text="Register Interest" linkTo="/Register" className="text-decoration-none w-100" />
-					</div>
+					{isLoggedIn ? (
+						<div className="d-flex flex-column p-4 pt-3">
+							<NavLink href="/Offers" className="mb-3">Offers</NavLink>
+							<NavLink href="/Cryptos" className="mb-3">Cryptos</NavLink>
+							<NavLink href="/Trade" className="mb-3">How to Trade</NavLink>
+							<NavLink href="/Wallet" className="mb-3">Reviews</NavLink>
+							<NavLink href="/Faq" className="mb-3">FAQ</NavLink>
+							<NavLink href="/Airdrops">Airdrops</NavLink>
+						</div>
+					) : (
+						<React.Fragment>
+							<div className="d-flex flex-column p-4 pt-3">
+								<NavLink href="/Offers" className="mb-3">Offers</NavLink>
+								<NavLink href="/Cryptos" className="mb-3">Cryptos</NavLink>
+								<NavLink href="/Trade" className="mb-3">How to Trade</NavLink>
+								<NavLink href="/Wallet" className="mb-3">Reviews</NavLink>
+								<NavLink href="/Faq" className="mb-3">FAQ</NavLink>
+								<NavLink href="/Airdrops">Airdrops</NavLink>
+							</div>
+							<div className="p-4">
+								<GradientButton text="Register Interest" linkTo="/Register" className="text-decoration-none w-100" />
+							</div>
+						</React.Fragment>
+					)}
 				</MenuBase>
 			)}
 		</Base>

@@ -36,6 +36,7 @@ const theme = {
       darkerGrey: '#2E2E2E',
       yellow: '#F1DF27',
       blueGrey: '#b7b4c7',
+      navyGrey: '#212127',
   },
   fonts: {
       primary: 'Arial, Helvetica, sans-serif'
@@ -75,13 +76,7 @@ function App() {
     <React.Fragment>
       <ThemeProvider theme={theme}>
         <Router>
-          {!loginStatus ? (
-              <div>Not logged in</div>
-          ) : (
-            <div>Logged in!</div>
-          )}
-          
-          
+          <Navbar isLoggedIn={loginStatus} />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/Login" element={<Login />} />
