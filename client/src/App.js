@@ -61,7 +61,7 @@ function App() {
   useEffect(() => {
     Axios.get("http://localhost:3001/login").then((response) => {
       if (response.data.loggedIn === true) {
-        setLoginStatus(response.data.user[0].email);
+        setLoginStatus(true);
         console.log(response);
       }
     });
@@ -69,6 +69,7 @@ function App() {
 
   //check if user is logged in if so print logged in navbar else normal nav
 
+  console.log()
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
