@@ -25,6 +25,7 @@ import Offer from "./Pages/Offer";
 import Feedback from "./Pages/Feedback";
 import Axios from "axios";
 import Footer from "./Components/Footer";
+import TwoFa from "./Pages/TwoFactorAuth";
 
 const theme = {
   colors: {
@@ -99,7 +100,7 @@ function App() {
             <Route path="/Trades" element={<Trades />} />
             <Route path="/Account" element={<Account />} />
             <Route path="/Feedback" element={<Feedback />} />
-            {/*<Route path="/TwoFa" element={<TwoFa />} />*/}
+            <Route path="/TwoFactorAuth" element={<TwoFa />} />
           
           
             

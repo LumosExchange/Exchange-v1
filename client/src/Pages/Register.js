@@ -11,7 +11,6 @@ import Paragraph from "../Components/Paragraph";
 const Register = () => {
 	const [emailReg, setEmailReg] = useState('');
 	const [passwordReg, setPasswordReg] = useState('');
-	const [usernameReg, setUsenameReg] = useState('');
 
 	/* Unused */
 	const [nationalityReg, setNationalityReg] = useState('');
@@ -27,7 +26,7 @@ const Register = () => {
 			email: emailReg,
 			password: passwordReg,
 			nationality: nationalityReg,
-			userName: usernameReg,
+
 		})
 		navigate("/TwoFa");
 	}
@@ -43,8 +42,15 @@ const Register = () => {
 							id="firstName"
 							className="mb-3 w-100"
 							type="text"
-							placeholder="username"
-							onChange={(e) => { setUsenameReg(e.target.value); }}
+							placeholder="First Name"
+							onChange={(e) => { setFirstNameReg(e.target.value); }}
+						/>
+						<FormInput
+							id="lastName"
+							className="mb-3 w-100"
+							type="text"
+							placeholder="Last Name"
+							onChange={(e) => { setLastNameReg(e.target.value); }}
 						/>
 						<FormInput
 							id="email"
@@ -59,6 +65,13 @@ const Register = () => {
 							type="password"
 							placeholder="password"
 							onChange={(e) => { setPasswordReg(e.target.value); }}
+						/>
+						<FormInput
+							id="nationality"
+							className="mb-3 w-100"
+							type="text"
+							placeholder="Nationality"
+							onChange={(e) => { setNationalityReg(e.target.value); }}
 						/>
 						<div className="d-flex align-items-start mb-4 pt-2">
 							<img src={WarningTriangle} alt="Warning" className="me-3 pt-1" />
