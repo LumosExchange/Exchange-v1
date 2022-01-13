@@ -4,6 +4,7 @@ import { FormInput } from "./FormInputs";
 import GradientButton from "./GradientButton";
 import Heading from "./Heading";
 import Paragraph from "./Paragraph";
+import Logo from '../Images/logo.png';
 
 const FooterBase = styled.footer(({ theme }) => css`
 	background: ${theme.colors.black};
@@ -36,11 +37,17 @@ const FooterBase = styled.footer(({ theme }) => css`
 		width: 32px;
 		min-height: 32px;
 	}
+
+	.subfooter {
+		border-top: 1px solid ${theme.colors.grey};
+
+		img { width: 150px; }
+	}
 `);
 
 const Footer = () => (
     <FooterBase>
-		<div className="container-fluid py-5 px-4">
+		<div className="container-fluid pt-5 px-4 pb-3">
 				<div className="w-100 d-flex flex-column">
 					<div className="row">
 						<div className="col-4 col-sm-3 d-flex flex-column mb-5 mb-md-0">
@@ -74,6 +81,14 @@ const Footer = () => (
 								<GradientButton as="button" text="Subscribe" />
 							</div>
 						</div>
+					</div>
+				</div>
+				<div className="row">
+					<div className="d-flex col-12 justify-content-between align-items-center subfooter pt-4 mt-5">
+						<a href="/home">
+							<img src={Logo} alt="Logo" className="me-1" />
+						</a>
+						<Paragraph color="blueGrey">&copy; 2022 Lumos Exchange</Paragraph>
 					</div>
 				</div>
 		</div>

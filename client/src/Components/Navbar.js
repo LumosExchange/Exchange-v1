@@ -59,7 +59,7 @@ const Navbar = ({ isLoggedIn }) => {
 				<div className="d-flex col-12 justify-content-between align-items-center">
 					<a href="/home">
 						<img src={Logo} alt="Logo" className="me-1" />
-					</a>=
+					</a>
 					{isLoggedIn ? (
 						<React.Fragment>
 							<div className="d-none d-lg-block m-auto">
