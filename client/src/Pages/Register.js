@@ -28,7 +28,7 @@ const Register = () => {
 			nationality: nationalityReg,
 
 		})
-		navigate("/TwoFa");
+		navigate("/TwoFactorAuth");
 	}
 
 	return (
