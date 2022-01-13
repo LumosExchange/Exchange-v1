@@ -130,7 +130,7 @@ const Home = () => (
                 </div>
                 <div className="col-12 col-xl-8">
                     <div className="row">
-                        <div className="col-12 col-lg-6 mb-lg-3">
+                        <div className="col-12 col-lg-6 mb-3">
                             <Card className="d-flex p-4 h-100">
                                 <img src={IconMiddleMan} alt="Middleman" />
                                 <div className="ms-4 d-flex flex-column justify-content-center">
@@ -141,7 +141,7 @@ const Home = () => (
                                 </div>
                             </Card>
                         </div>
-                        <div className="col-12 col-lg-6 mb-lg-3">
+                        <div className="col-12 col-lg-6 mb-3">
                             <Card className="d-flex p-4 h-100">
                                 <img src={IconNonCustodial} alt="Non Custodial" />
                                 <div className="ms-4 d-flex flex-column justify-content-center">
@@ -152,7 +152,7 @@ const Home = () => (
                                 </div>
                             </Card>
                         </div>
-                        <div className="col-12 col-lg-6 mb-lg-3">
+                        <div className="col-12 col-lg-6 mb-3">
                             <Card className="d-flex p-4 h-100">
                                 <img src={IconWorldwide} alt="Worldwide" />
                                 <div className="ms-4 d-flex flex-column justify-content-center">
@@ -163,7 +163,7 @@ const Home = () => (
                                 </div>
                             </Card>
                         </div>
-                        <div className="col-12 col-lg-6 mb-lg-3">
+                        <div className="col-12 col-lg-6 mb-3">
                             <Card className="d-flex p-4 h-100">
                                 <img src={IconSecured} alt="Secured" />
                                 <div className="ms-4 d-flex flex-column justify-content-center">
