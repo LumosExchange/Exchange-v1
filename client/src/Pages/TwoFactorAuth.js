@@ -1,57 +1,72 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import qrcode from "qrcode";
 
 
 function TwoFactorAuth() {
-    
-const navigate = useNavigate();
+  
+  const navigate = useNavigate();
 
-
-const [userSecret, setUserSecret] = useState('');
-const [base32, setBase32]= useState([]);
-const [Twofa, setTwofaCode]= useState('');
-
-
-
-useEffect(() => {
+  const [secret, setSecret] = useState([]);
+  const [Twofa, setTwofaCode]= useState('');
+  const [verified , setVerifed]= useState([]);
+  
+  
+const img = '';
+  //get secret from back end
+  useEffect(() => {
     Axios.get("http://localhost:3001/getSecret").then((response) => {
-      setUserSecret(response.data); 
-      setBase32(response.secret);
+      setSecret(response.data);
       
+
+      console.log("here is the secret " + secret.base32);
+
 
     });
   }, []);
 
-  function showGoogleAuthQR() {
+ //display img as QR code
+  function ShowGoogleAuthQR() {
 
-    base32 = base32.base32;
-    var img = document.getElementById('QRCode');
-    img.src = userSecret;
-    
+    var originalImg = document.getElementById('QRCode');
+
+    qrcode.toDataURL(secret.otpauth_url, function(err, data_url){
+      originalImg.src = data_url;
+        
+      })
+   
   }
 
-  function Verify2fa() {
-    //pass base 32 and 6 digit code through and verify 
+  async function VerifyGoogleAuth() {
+
     useEffect(() => {
       Axios.get("http://localhost:3001/VerifyGoogle2FA", {
         params: {
-          base32: base32,
+          secret: secret.base32,
           passcode: Twofa
-        },
-  
-
-        
+        }
       }).then((response) => {
-        
+         setVerifed(response.data);
+         console.log("authentication is: " + verified);
+  
+       
       });
     }, []);
   }
 
+  //pass secret and take 6 digit input from the user 
+
+ 
+
+  //if returns true succeful else try again 
+
+
+
     return (
     <div>
         <h1>Please select 2FA methord</h1>
-        <button onClick={showGoogleAuthQR}>
+        <button onClick={ShowGoogleAuthQR}>
             Google Auth
         </button>
             <br></br>
@@ -64,17 +79,21 @@ useEffect(() => {
             </button>
             <br></br>
             <img id="QRCode"></img>
-            <h2 onChange={(e) => { setTwofaCode(e.target.value); }}>Please enter 6 digit 2fa code:</h2>
-            <input type="text" id="Code" name="code"></input>
-            <button onclick={Verify2fa}>
+            <form onSubmit={VerifyGoogleAuth}>
+            <h2>Please enter 6 digit 2fa code:</h2>
+            <input type="text" id="Code" name="code" onChange={(e) => { setTwofaCode(e.target.value); }}></input>
+            <button type="submit">
               Submit
             </button>
+            </form>
             
 
     </div>
     )
+   
 
 
 }
+
 
 export default TwoFactorAuth;

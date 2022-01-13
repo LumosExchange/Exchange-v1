@@ -253,30 +253,35 @@ var secret = speakeasy.generateSecret({
 
 console.log(secret);
 
-qrcode.toDataURL(secret.otpauth_url, function (err, data){
- res.send(data);
- res.send(secret.base32);
-
-})
+res.send(secret);
 });
   
+
+
+
+
 
 app.post("/VerifyGoogle2FA", (req, res)=> {
 
 //Get 6 digit passcode from user & get base32 
-let secret = req.query.base32;
-let token = req.query.TwoFa;
+let secret = '';
+secret = req.query.secret;
+let token = '';
+token = req.query.passcode;
 
-console.log("The secret is " +  secret);
-console.log("The token  is " +  TwoFa);
+console.log("Secret: "+ secret + "Token is: "+token);
 
 
-  speakeasy.totp.verify({
+ var verified = speakeasy.totp.verify({
     secret: secret,
     encoding: "base32",
     token: token
-  })
-})
+  }
+  )
+  console.log("user is: " + verified)
+  res.send(verified);
+
+});
 
 
 
