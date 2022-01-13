@@ -9,11 +9,14 @@ import {
   Routes,
   Link,
   Switch,
-  useLocation
+  useLocation,
 } from "react-router-dom";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
+import UpgradeBronze from "./Pages/UpgradeBronze";
+import UpgradeGold from "./Pages/UpgradeGold";
+import RegisterCompany from "./Pages/RegisterCompany";
 import LoggedNavbar from "./Components/LoggedNavbar";
 import LoggedHome from "./Pages/LoggedHome";
 import ErrorPage from "./Pages/ErrorPage";
@@ -29,30 +32,30 @@ import TwoFa from "./Pages/TwoFactorAuth";
 
 const theme = {
   colors: {
-      black: '#131313',
-      white: '#FFF',
-      lightGrey: '#CECECE',
-      grey: '#3C3C3C',
-      darkerGrey: '#2E2E2E',
-      yellow: '#F1DF27',
-      blueGrey: '#b7b4c7',
-      navyGrey: '#212127',
+    black: "#131313",
+    white: "#FFF",
+    lightGrey: "#CECECE",
+    grey: "#3C3C3C",
+    darkerGrey: "#2E2E2E",
+    yellow: "#F1DF27",
+    blueGrey: "#b7b4c7",
+    navyGrey: "#212127",
   },
   fonts: {
-      primary: 'Arial, Helvetica, sans-serif'
+    primary: "Arial, Helvetica, sans-serif",
   },
   breakpoints: {
-      sm: '576px',
-      md: '768px',
-      lg: '992px',
-      xl: '1200px',
-      xxl: '1400px',
-      xxxl: '1600px',
-      fhd: '1920px',
-      qhd: '2560px',
-      uhd: '3840px',
+    sm: "576px",
+    md: "768px",
+    lg: "992px",
+    xl: "1200px",
+    xxl: "1400px",
+    xxxl: "1600px",
+    fhd: "1920px",
+    qhd: "2560px",
+    uhd: "3840px",
   },
-}
+};
 
 function App() {
   //Check
@@ -71,7 +74,7 @@ function App() {
 
   //check if user is logged in if so print logged in navbar else normal nav
 
-  console.log()
+  console.log();
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
@@ -81,6 +84,9 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/Register" element={<Register />} />
+            <Route path="/UpgradeBronze" element={<UpgradeBronze />} />
+            <Route path="/UpgradeGold" element={<UpgradeGold />} />
+            <Route path="/RegisterCompany" element={<RegisterCompany />} />
             <Route path="*" element={<ErrorPage />} />
             //These need to be protected routes eventually
             {!loginStatus ? (
@@ -96,15 +102,11 @@ function App() {
             <Route path="/Account" element={<Account />} />
             <Route path="/Feedback" element={<Feedback />} />
             <Route path="/TwoFactorAuth" element={<TwoFa />} />
-          
-          
-            
           </Routes>
         </Router>
         <Footer />
-          </ThemeProvider>
-          
-      </React.Fragment>
+      </ThemeProvider>
+    </React.Fragment>
   );
 }
 
