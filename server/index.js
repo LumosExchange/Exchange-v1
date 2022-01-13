@@ -264,12 +264,17 @@ qrcode.toDataURL(secret.otpauth_url, function (err, data){
 app.post("/VerifyGoogle2FA", (req, res)=> {
 
 //Get 6 digit passcode from user & get base32 
+let secret = req.query.base32;
+let token = req.query.TwoFa;
+
+console.log("The secret is " +  secret);
+console.log("The token  is " +  TwoFa);
 
 
   speakeasy.totp.verify({
-    secret: "",
+    secret: secret,
     encoding: "base32",
-    token: "000000"
+    token: token
   })
 })
 
