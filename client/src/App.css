@@ -110,3 +110,8 @@ button:hover {
 
 
 }
+
+.py-6 {
+  padding-top: 150px;
+  padding-bottom: 150px;
+}

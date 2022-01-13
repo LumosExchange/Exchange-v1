@@ -7,3 +7,8 @@
   font-family: 'THICCCBOI-BOLD';
   src: url('Fonts/THICCCBOI-Bold.woff2');
 }
+
+@font-face {
+  font-family: 'THICCCBOI-LIGHT';
+  src: url('Fonts/THICCCBOI-Light.woff2');
+}
