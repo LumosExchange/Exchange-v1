@@ -275,10 +275,15 @@ console.log("Secret: "+ secret + " Token is: "+ token);
     token: token
   }
   )
+
+  
   console.log("user is verfiedd: " + verified);
   res.send(verified);
 
 });
+
+
+
 
 
 
