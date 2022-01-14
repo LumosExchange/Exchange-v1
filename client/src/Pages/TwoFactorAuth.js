@@ -10,17 +10,15 @@ function TwoFactorAuth() {
 
   const [secret, setSecret] = useState([]);
   const [Twofa, setTwofaCode]= useState('');
-  const [verified , setVerifed]= useState([]);
+  const [verified , setVerifed]= useState('');
   
   
 const img = '';
   //get secret from back end
   useEffect(() => {
-    Axios.get("http://localhost:3001/getSecret").then((response) => {
+    Axios.post("http://localhost:3001/getSecret").then((response) => { 
       setSecret(response.data);
-      
-
-      console.log("here is the secret " + secret.base32);
+      console.log("response front end: " + secret.base32);
 
 
     });
@@ -38,21 +36,25 @@ const img = '';
    
   }
 
-  async function VerifyGoogleAuth() {
+  async function VerifyGoogleAuth(event) {
+    event.preventDefault();
 
-    useEffect(() => {
+    
       Axios.get("http://localhost:3001/VerifyGoogle2FA", {
         params: {
           secret: secret.base32,
           passcode: Twofa
-        }
+          
+        },
+        
+        
+       
       }).then((response) => {
          setVerifed(response.data);
          console.log("authentication is: " + verified);
   
        
       });
-    }, []);
   }
 
   //pass secret and take 6 digit input from the user 
@@ -79,13 +81,15 @@ const img = '';
             </button>
             <br></br>
             <img id="QRCode"></img>
-            <form onSubmit={VerifyGoogleAuth}>
+            
             <h2>Please enter 6 digit 2fa code:</h2>
             <input type="text" id="Code" name="code" onChange={(e) => { setTwofaCode(e.target.value); }}></input>
-            <button type="submit">
+            <button type="submit" onClick={VerifyGoogleAuth}>
               Submit
             </button>
-            </form>
+            
+            
+            
             
 
     </div>

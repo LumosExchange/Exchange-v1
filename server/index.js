@@ -246,13 +246,11 @@ app.get("/getUserFeedback", (req, res) => {
 });
 
 //creates secret for 2fa app
-app.get("/getSecret", (req, res)=> {
+app.post("/getSecret", (req, res)=> {
 var secret = speakeasy.generateSecret({
   name: "Lumos Exchange"
 })
-
-console.log(secret);
-
+console.log("secret is: " + secret);
 res.send(secret);
 });
   
@@ -261,15 +259,14 @@ res.send(secret);
 
 
 
-app.post("/VerifyGoogle2FA", (req, res)=> {
+app.get("/VerifyGoogle2FA", (req, res)=> {
 
 //Get 6 digit passcode from user & get base32 
-let secret = '';
 secret = req.query.secret;
-let token = '';
+
 token = req.query.passcode;
 
-console.log("Secret: "+ secret + "Token is: "+token);
+console.log("Secret: "+ secret + " Token is: "+ token);
 
 
  var verified = speakeasy.totp.verify({
@@ -278,7 +275,7 @@ console.log("Secret: "+ secret + "Token is: "+token);
     token: token
   }
   )
-  console.log("user is: " + verified)
+  console.log("user is verfiedd: " + verified);
   res.send(verified);
 
 });
