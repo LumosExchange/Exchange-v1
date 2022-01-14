@@ -246,37 +246,39 @@ app.get("/getUserFeedback", (req, res) => {
 });
 
 //creates secret for 2fa app
-app.get("/getSecret", (req, res)=> {
+app.post("/getSecret", (req, res)=> {
 var secret = speakeasy.generateSecret({
   name: "Lumos Exchange"
 })
-
-console.log(secret);
-
-qrcode.toDataURL(secret.otpauth_url, function (err, data){
- res.send(data);
- res.send(secret.base32);
-
-})
+console.log("secret is: " + secret);
+res.send(secret);
 });
   
 
-app.post("/VerifyGoogle2FA", (req, res)=> {
+
+
+
+
+app.get("/VerifyGoogle2FA", (req, res)=> {
 
 //Get 6 digit passcode from user & get base32 
-let secret = req.query.base32;
-let token = req.query.TwoFa;
+secret = req.query.secret;
 
-console.log("The secret is " +  secret);
-console.log("The token  is " +  TwoFa);
+token = req.query.passcode;
+
+console.log("Secret: "+ secret + " Token is: "+ token);
 
 
-  speakeasy.totp.verify({
+ var verified = speakeasy.totp.verify({
     secret: secret,
     encoding: "base32",
     token: token
-  })
-})
+  }
+  )
+  console.log("user is verfiedd: " + verified);
+  res.send(verified);
+
+});
 
 
 
