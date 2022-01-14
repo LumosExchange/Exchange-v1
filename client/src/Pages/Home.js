@@ -6,6 +6,7 @@ import Heading from "../Components/Heading";
 // Images
 import ShowcaseTablet from '../Images/showcase-tablet.svg';
 import ShowcaseLaptop from '../Images/showcase-laptop.svg';
+import ShowCaseMobile from '../Images/showcase-mobile.svg';
 import GradientButton from "../Components/GradientButton";
 import PrimaryButton from "../Components/Button";
 import Paragraph from "../Components/Paragraph";
@@ -20,13 +21,17 @@ import IconSecured from '../Images/icon-secured.svg';
 
 const ShowcaseBase = styled.div(({ theme }) => css`
     min-height: 600px;
+
     .tablet {
-        left: 0;
-        bottom: 0;
         position: absolute;
         z-index: 2;
+        left: 0px;
+        bottom: 0;
     }
     .laptop {
+        position: absolute;
+        z-index: 1;
+        left: 70px; 
     }
 `);
 
@@ -48,9 +53,10 @@ const IconCard = ({ icon, title, text}) => (
 );
 
 const Showcase = () => (
-    <ShowcaseBase className="position-relative mb-5">
-        <img className="tablet img-fluid" src={ShowcaseTablet} alt="Showcase Tablet" />
-        <img className="laptop img-fluid" src={ShowcaseLaptop} alt="Showcase Tablet" />
+    <ShowcaseBase className="position-relative mb-5 w-100 d-flex justify-content-center">
+        <img className="img-fluid d-xl-none" src={ShowCaseMobile} alt="Showcase" />
+        <img className="tablet img-fluid d-none d-xl-block" src={ShowcaseTablet} alt="Showcase Tablet" />
+        <img className="laptop img-fluid d-none d-xl-block" src={ShowcaseLaptop} alt="Showcase Tablet" />
     </ShowcaseBase>
 );
 
@@ -84,7 +90,7 @@ const Home = () => (
                     </div>
                 </div>
             </div>
-            <div className="col-12 col-xl-4 d-flex justify-content-center">
+            <div className="col-11 col-xl-7 col-xxl-5">
                 <Showcase />
             </div>
         </div>
