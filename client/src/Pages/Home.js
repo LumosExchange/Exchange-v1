@@ -2,14 +2,12 @@ import React from "react";
 import styled, { css } from "styled-components";
 import { FormBody } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
-
-// Images
-import ShowcaseTablet from '../Images/showcase-tablet.svg';
-import ShowcaseLaptop from '../Images/showcase-laptop.svg';
-import ShowCaseMobile from '../Images/showcase-mobile.svg';
 import GradientButton from "../Components/GradientButton";
 import PrimaryButton from "../Components/Button";
 import Paragraph from "../Components/Paragraph";
+
+// Images
+import ShowCaseMobile from '../Images/showcase-mobile.svg';
 import IconSolana from '../Images/icon-circle-solana.svg';
 import IconLumosRewards from '../Images/icon-circle-lumos-rewards.svg';
 import IconKin from '../Images/icon-circle-kin.svg';
@@ -52,6 +50,14 @@ const IconCard = ({ icon, title, text}) => (
     </div>
 );
 
+const GradientHeading = styled(Heading)(({ theme }) => css`
+	@supports (-webkit-background-clip: text){
+		background: -webkit-linear-gradient(300deg, #FCE608, #FF7586, #B372CE, #6F86FF);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}
+`);
+
 const Showcase = () => (
     <ShowcaseBase className="position-relative mb-5 w-100 d-flex justify-content-center">
         <img className="img-fluid" src={ShowCaseMobile} alt="Showcase" />
@@ -67,6 +73,7 @@ const Home = () => (
                         Non-Custodial,<br />
                         Peer-to-Peer Trading
                     </Heading>
+					<GradientHeading color="white" size="48px" bold>For Solana</GradientHeading>
                     <div className="row mt-5 pt-5">
                         <div className="col-12 col-md-6">
                             <GradientButton
