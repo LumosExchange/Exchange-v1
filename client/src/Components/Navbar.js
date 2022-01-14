@@ -85,7 +85,7 @@ const Navbar = ({ isLoggedIn }) => {
 								<NavLink href="/Airdrops">Airdrops</NavLink>
 							</div>
 							<div className="d-none d-lg-block">
-								<GradientButton linkTo="/Register" text="Sign In" />
+								<GradientButton linkTo="/Login" text="Login" />
 							</div>
 						</React.Fragment>
 					)}
