@@ -47,7 +47,7 @@ const FooterBase = styled.footer(({ theme }) => css`
 
 const Footer = () => (
     <FooterBase>
-		<div className="container-fluid pt-5 px-4 pb-3">
+		<div className="container pt-5 px-4 pb-3">
 				<div className="w-100 d-flex flex-column">
 					<div className="row">
 						<div className="col-4 col-sm-3 d-flex flex-column mb-5 mb-md-0">
