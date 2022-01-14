@@ -54,16 +54,14 @@ const IconCard = ({ icon, title, text}) => (
 
 const Showcase = () => (
     <ShowcaseBase className="position-relative mb-5 w-100 d-flex justify-content-center">
-        <img className="img-fluid d-xl-none" src={ShowCaseMobile} alt="Showcase" />
-        <img className="tablet img-fluid d-none d-xl-block" src={ShowcaseTablet} alt="Showcase Tablet" />
-        <img className="laptop img-fluid d-none d-xl-block" src={ShowcaseLaptop} alt="Showcase Tablet" />
+        <img className="img-fluid" src={ShowCaseMobile} alt="Showcase" />
     </ShowcaseBase>
 );
 
 const Home = () => (
     <FormBody className="container-fluid">
-        <div className="row pt-5 d-flex justify-content-center">
-            <div className="col-12 col-xl-4 d-flex align-items-center justify-content-center">
+        <div className="row pt-5 d-flex justify-content-center container m-auto">
+            <div className="col-12 col-lg-6 d-flex align-items-center justify-content-center">
                 <div className="my-5">
                     <Heading color="white" size="48px" bold>
                         Non-Custodial,<br />
@@ -90,7 +88,7 @@ const Home = () => (
                     </div>
                 </div>
             </div>
-            <div className="col-11 col-xl-7 col-xxl-5">
+            <div className="col-11 col-lg-6">
                 <Showcase />
             </div>
         </div>

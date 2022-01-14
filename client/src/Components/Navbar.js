@@ -55,7 +55,7 @@ const Navbar = ({ isLoggedIn }) => {
 	const[showMobileMenu, setMenuOpen] = useState(false);
   	return (
 		<Base className="d-flex justify-content-center">
-			<div className="container-fluid d-flex fixedHeight">
+			<div className="container d-flex fixedHeight">
 				<div className="d-flex col-12 justify-content-between align-items-center">
 					<a href="/home">
 						<img src={Logo} alt="Logo" className="me-1" />
