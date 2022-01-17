@@ -10,6 +10,7 @@ import ConnectWalletButton from "../Components/ConnectWalletButton";
 import PhantomIcon from '../Images/phantom-icon-purple.svg';
 import SolflareIcon from '../Images/solflare-icon.svg';
 import ExodusIcon from '../Images/exodus-icon.svg';
+import Link from "../Components/Link";
 
 const FormBackground = styled.div(({ theme }) => css`
 	background: ${theme.colors.darkerGrey};
@@ -120,6 +121,9 @@ const Login = () => {
 						</div>
 					</div>
 				</FormBackground>
+				<Paragraph size="18px" className="mt-4">
+					Not got an account yet? <Link href="/Register">Register here</Link>.
+				</Paragraph>
     	</FormBody>
   );
 }

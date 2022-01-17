@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import { FormBody } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
@@ -7,15 +7,7 @@ import PrimaryButton from "../Components/Button";
 import PhantomIcon from '../Images/phantom-icon-purple.svg';
 import SolflareIcon from '../Images/solflare-icon.svg';
 import ExodusIcon from '../Images/exodus-icon.svg';
-
-const StyledLink = styled.a(({ theme }) => css`
-	color: ${theme.colors.yellow};
-	text-decoration: none;
-	&:hover, &:focus, &:active {
-		color: ${theme.colors.white};
-		text-decoration: underline;	
-	}
-`);
+import Link from "../Components/Link";
 
 const WalletCard = styled.span(({ theme }) => css`
 	background: ${theme.colors.darkerGrey};
@@ -85,35 +77,35 @@ const Login = () => {
 						<div className="col-12 col-lg-6 col-xl-8 d-flex mt-5">
 						{selectedWallet === 'phantom' && (
 							<Paragraph size="18px">
-								<StyledLink
+								<Link
 									href="https://phantom.app"
 									alt="Phantom"
 									target="_blank"
 								>
 									Phantom
-								</StyledLink> is a friendly non-custodial, browser extension, Solana wallet that makes it safe & easy for you to store, send, receive, collect, and swap tokens.
+								</Link> is a friendly non-custodial, browser extension, Solana wallet that makes it safe & easy for you to store, send, receive, collect, and swap tokens.
 							</Paragraph>
 						)}
 							{selectedWallet === 'solflare' && (
 								<Paragraph size="18px">
-									<StyledLink
+									<Link
 										href="https://solflare.com"
 										alt="Solflare"
 										target="_blank"
 									>
 										Solflare
-									</StyledLink> is a friendly non-custodial, browser extension, Solana wallet that makes it safe & easy for you to store, send, receive, collect, and swap tokens.
+									</Link> is a friendly non-custodial, browser extension, Solana wallet that makes it safe & easy for you to store, send, receive, collect, and swap tokens.
 								</Paragraph>
 							)}
 							{selectedWallet === 'exodus' && (
 								<Paragraph size="18px">
-									<StyledLink
+									<Link
 										href="https://www.exodus.com/"
 										alt="Exodus"
 										target="_blank"
 									>
 										Exodus
-									</StyledLink> is a friendly non-custodial, browser extension, Solana wallet that makes it safe & easy for you to store, send, receive, collect, and swap tokens.
+									</Link> is a friendly non-custodial, browser extension, Solana wallet that makes it safe & easy for you to store, send, receive, collect, and swap tokens.
 								</Paragraph>
 							)}
 						</div>
