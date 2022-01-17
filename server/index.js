@@ -9,9 +9,16 @@ const session = require("express-session");
 const jwt = require("jsonwebtoken");
 const speakeasy = require("speakeasy");
 const qrcode = require("qrcode");
+const nexmo = require("nexmo");
 
 //Change this to randomly generate salt
 const saltRounds = 10;
+
+//create nexmo request
+const nexmo = new Nexmo({
+  apiKey: process.env.NEXMO_API_KEY,
+  apiSecret: process.env.NEXMO_API_KEY,
+});
 
 //needed to avoid cors errors
 app.use(function (req, res, next) {
@@ -61,11 +68,10 @@ app.use(
 //Initiate Imports
 app.use(express.json());
 
-
 //initiate 2fa speakeasy for google auth
 var secret = speakeasy.generateSecret({
-name: "LumosExchange"
-})
+  name: "LumosExchange",
+});
 
 // Connection deatils for DB
 const db = mysql.createConnection({
@@ -175,7 +181,7 @@ app.post("/sell", (req, res) => {
   const amountForSale = req.body.amountForSale;
   const aboveOrBelow = req.body.aboveOrBelow;
   const change = req.body.change;
-  
+
   const id = req.session.user[0].userID;
 
   db.query(
@@ -185,7 +191,6 @@ app.post("/sell", (req, res) => {
     (err, result) => {
       console.log(err);
     }
-  
   );
 });
 
@@ -193,31 +198,18 @@ app.post("/sell", (req, res) => {
 app.get("/getListings", (req, res) => {
   const id = req.session.user[0].userID;
 
-  db.query(
-    "SELECT * FROM sale WHERE (userID) = (?)",
-    [id],
-    (err, result) => {
-      res.send(result);
-      console.log(err);
-
-    }
-  );
+  db.query("SELECT * FROM sale WHERE (userID) = (?)", [id], (err, result) => {
+    res.send(result);
+    console.log(err);
+  });
 });
-
 
 //get Sales for buyers this will eventually take parameters to specify the types of payments from the seller
 app.get("/getAllListings", (req, res) => {
-  db.query(
-    "SELECT * FROM sale",
-    (err, result) => {
-      res.send(result);
-      console.log(err);
-    
-  
-    }
-  );
-
-
+  db.query("SELECT * FROM sale", (err, result) => {
+    res.send(result);
+    console.log(err);
+  });
 });
 
 //get userID name
@@ -227,11 +219,10 @@ app.get("/getUserName", (req, res) => {
     "SELECT * FROM users WHERE (userID) = (?)",
     [params],
     (err, result) => {
-      res.send(result);    
-    } 
+      res.send(result);
+    }
   );
 });
-
 
 app.get("/getUserFeedback", (req, res) => {
   let params = req.query.sellerID;
@@ -240,52 +231,90 @@ app.get("/getUserFeedback", (req, res) => {
     "SELECT * FROM Feedback WHERE (saleUserID) = (?)",
     [params],
     (err, result) => {
-      res.send(result);    
-    } 
+      res.send(result);
+    }
   );
 });
 
 //creates secret for 2fa app
-app.post("/getSecret", (req, res)=> {
-var secret = speakeasy.generateSecret({
-  name: "Lumos Exchange"
-})
-console.log("secret is: " + secret);
-res.send(secret);
+app.post("/getSecret", (req, res) => {
+  var secret = speakeasy.generateSecret({
+    name: "Lumos Exchange",
+  });
+  console.log("secret is: " + secret);
+  res.send(secret);
 });
-  
 
+app.get("/VerifyGoogle2FA", (req, res) => {
+  //Get 6 digit passcode from user & get base32
+  secret = req.query.secret;
 
+  token = req.query.passcode;
 
+  console.log("Secret: " + secret + " Token is: " + token);
 
-
-app.get("/VerifyGoogle2FA", (req, res)=> {
-
-//Get 6 digit passcode from user & get base32 
-secret = req.query.secret;
-
-token = req.query.passcode;
-
-console.log("Secret: "+ secret + " Token is: "+ token);
-
-
- var verified = speakeasy.totp.verify({
+  var verified = speakeasy.totp.verify({
     secret: secret,
     encoding: "base32",
-    token: token
-  }
-  )
+    token: token,
+  });
 
-  
   console.log("user is verfiedd: " + verified);
   res.send(verified);
-
 });
 
+//maybe chnage this to post
+app.get("VonageSMSRequest", (req, res) => {
+  //verify the user has specified a number
+  if (!req.body.number) {
+    res
+      .status(400)
+      .send("You must supply a phone number to get a verification code");
+    return;
+  }
+  //Send request to Vonage Servers
+  nexmo.verify.request(
+    {
+      number: req.body.number,
+      brand: "Lumos Exchange",
+      code_length: "6",
+    },
+    (err, result) => {
+      if (err) {
+        //if error let the user know
+        res.status(500).send(err.error_text);
+        return;
+      }
+      //send back request ID as need for the verify step
+      const requestId = result.request_id;
+      res.send(requestId);
+    }
+  );
+});
 
+app.get("VonageSMSVerify", (req, res) => {
+  //user needs to send request id and code for authetication
 
+  if (!requestId || !userCode) {
+    res.status(400).send("You must supply a code");
+    return;
+  }
+  nexmo.verify.check(
+    {
+      request_id: req.body.requestId,
+      code: req.body.code,
+    },
+    (err, result) => {
+      if (err) {
+        res.status(500).send(err.error_text);
+        return;
+      }
+      res.send(result);
+    }
+  );
 
-
+  //Pass details to vonage servers for validation
+});
 
 //app.get('/', (req, res)=> {
 
