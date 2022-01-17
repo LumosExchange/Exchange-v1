@@ -63,10 +63,10 @@ const Navbar = ({ isLoggedIn }) => {
 					{isLoggedIn ? (
 						<React.Fragment>
 							<div className="d-none d-lg-block m-auto">
-								<NavLink href="/Offers" className="me-5">Market</NavLink>
-								<NavLink href="/Offers" className="me-5">Offers</NavLink>
-								<NavLink href="/Cryptos" className="me-5">Trade</NavLink>
-								<NavLink href="/Trade" className="me-5">Wallet</NavLink>
+								<NavLink href="/Offers" className="me-4 me-xl-5">Market</NavLink>
+								<NavLink href="/Offers" className="me-4 me-xl-5">Offers</NavLink>
+								<NavLink href="/Cryptos" className="me-4 me-xl-5">Trade</NavLink>
+								<NavLink href="/Trade" className="me-4 me-xl-5">Wallet</NavLink>
 								<NavLink href="/Airdrops">Airdrops</NavLink>
 							</div>
 							<div className="align-items-center d-none d-lg-flex">
@@ -77,11 +77,11 @@ const Navbar = ({ isLoggedIn }) => {
 					) : (
 						<React.Fragment>
 							<div className="d-none d-lg-block m-auto">
-								<NavLink href="/Offers" className="me-5">Offers</NavLink>
-								<NavLink href="/Cryptos" className="me-5">Cryptos</NavLink>
-								<NavLink href="/Trade" className="me-5">How to Trade</NavLink>
-								<NavLink href="/Wallet" className="me-5">Reviews</NavLink>
-								<NavLink href="/Faq" className="me-5">FAQ</NavLink>
+								<NavLink href="/Offers" className="me-4 me-xl-5">Offers</NavLink>
+								<NavLink href="/Cryptos" className="me-4 me-xl-5">Cryptos</NavLink>
+								<NavLink href="/Trade" className="me-4 me-xl-5">How to Trade</NavLink>
+								<NavLink href="/Wallet" className="me-4 me-xl-5">Reviews</NavLink>
+								<NavLink href="/Faq" className="me-4 me-xl-5">FAQ</NavLink>
 								<NavLink href="/Airdrops">Airdrops</NavLink>
 							</div>
 							<div className="d-none d-lg-block">
@@ -100,7 +100,7 @@ const Navbar = ({ isLoggedIn }) => {
 			</div>
 			{showMobileMenu && (
 				<MenuBase className="d-flex d-lg-none position-fixed w-100 h-100 flex-column">
-					<div className="d-flex container-fluid fixedHeight">
+					<div className="d-flex container fixedHeight">
 						<div className="col-12 d-flex justify-content-between align-items-center">
 							<a href="/home">
 								<img src={Logo} alt="Logo" className="me-1" />
