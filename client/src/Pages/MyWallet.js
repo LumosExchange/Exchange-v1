@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
+import PropTypes from 'prop-types';
 import { FormBody, FormInput } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
@@ -16,16 +17,31 @@ const InvisibleButton = styled.button(({ theme }) => css`
 	border: 0;
 `);
 
-const ToggleIcon = styled.img(({ theme, toggled }) => css`
+const ToggleIcon = styled.img(({ toggled }) => css`
 	transform: ${toggled && 'rotate(180deg)'};
 `);
 
-const GradientCard = styled.div(({ theme, stop1, stop2, stop3, stop4 }) => css`
+const GradientCard = styled.div(({
+	theme, stopOne, stopOnePosition, stopTwo, stopTwoPosition,
+	stopThree, stopThreePosition, stopFour, stopFourPosition,
+	padding, stops, stopFive, stopFivePosition
+	}) => css`
 	border-radius: 20px;
-	background: linear-gradient(90deg,
-			${theme.colors.gradients[stop1]} 0%,
-			${theme.colors.gradients[stop2]} 100%
-		);
+	padding: ${padding};
+	background: linear-gradient(90deg, 
+		${theme.colors.gradients[stopOne]} ${stopOnePosition}%,
+		${theme.colors.gradients[stopTwo]} ${stopTwoPosition}%
+
+		${stops >= 3 && `
+			,${theme.colors.gradients[stopThree]} ${stopThreePosition}%,
+		`}
+		${stops >= 4 && `
+			${theme.colors.gradients[stopFour]} ${stopFourPosition}%
+		`}
+		${stops >= 5 && `
+			,${theme.colors.gradients[stopFive]} ${stopFivePosition}%
+		`}
+	);
 
 	img {
 		width: 100%;
@@ -38,6 +54,34 @@ const GradientCard = styled.div(({ theme, stop1, stop2, stop3, stop4 }) => css`
 		}
 	}
 `);
+
+GradientCard.propTypes = {
+	padding: PropTypes.string,
+	stopOne: PropTypes.string,
+	stopOnePosition: PropTypes.number,
+	stopTwo: PropTypes.string,
+	stopTwoPosition: PropTypes.number,
+	stopThree: PropTypes.string,
+	stopThreePosition: PropTypes.number,
+	stopFour: PropTypes.string,
+	stopFourPosition: PropTypes.number,
+	stops: PropTypes.number,
+}
+
+GradientCard.defaultProps = {
+	padding: '10px 30px',
+	stopOne: 'sage',
+	stopOnePosition: '0',
+	stopTwo: 'yellow',
+	stopTwoPosition: '25',
+	stopThree: 'pink',
+	stopThreePosition: '50',
+	stopFour: 'blue',
+	stopFourPosition: '75',
+	stopFive: 'blue',
+	stopFivePosition: '100',
+	stops: 2,
+}
 
 const Login = () => {
   const [walletExpanded, expandWallet] = useState(false);
@@ -72,7 +116,13 @@ const Login = () => {
 				</div>
 				<div className="row w-100 d-flex justify-content-center pt-5">
 					<div className="col-12">
-						<GradientCard stop1="sage" stop2="magenta" className="d-flex p-4">
+						<GradientCard
+							stopOne="magenta"
+							stopOnePosition="0"
+							stopTwo="sage"
+							stopTwoPosition="100"
+							className="d-flex p-4"
+						>
 							<div className="col-0 col-lg-2 d-none d-lg-flex justify-content-center">
 								<img src={SolanaIcon} alt="Solana Icon" />
 							</div>
@@ -130,6 +180,44 @@ const Login = () => {
 							</div>
 						</Card>
 					</Collapse>
+				</div>
+				<div className="row w-100 mt-4">
+					<div className="col-12 col-lg-4">
+						<GradientCard
+							stops="5"
+							stopOne="yellow"
+							stopTwo="peach"
+							stopThree="pink"
+							stopFour="mauve"
+							stopFive="blue"
+							padding="35px"
+							className="d-flex align-items-center justify-content-center"
+						>
+							<Heading size="28px" className="mb-0">17,727 LRA</Heading>
+						</GradientCard>
+					</div>
+					<div className="col-12 col-lg-4">
+						<GradientCard
+							padding="35px"
+							stops="2"
+							stopOne="bluePurple"
+							stopTwo="bluePurple"
+							className="d-flex align-items-center justify-content-center"
+						>
+							<Heading size="28px" className="mb-0">2,500 KIN</Heading>
+						</GradientCard>
+					</div>
+					<div className="col-12 col-lg-4">
+						<GradientCard
+							padding="35px"
+							stops="2"
+							stopOne="bluePurple"
+							stopTwo="bluePurple"
+							className="d-flex align-items-center justify-content-center"
+						>
+							<Heading size="28px" className="mb-0">3,628 COPE</Heading>
+						</GradientCard>
+					</div>
 				</div>
 			</div>
     	</FormBody>

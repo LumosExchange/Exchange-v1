@@ -47,8 +47,14 @@ const theme = {
     placeHolderGrey: "#D9D9D9",
 
     gradients: {
-      magenta: '#0EF1A9',
-      sage: '#D12AFA',
+      sage: "#0EF1A9",
+      magenta: "#D12AFA",
+      yellow: "#F5E237",
+      peach: "#FF9675",
+      pink: "#D373B0",
+      mauve: "#B372CE",
+      blue: "#6F86FF",
+      bluePurple: "#6F41E8",
     }
   },
   fonts: {
