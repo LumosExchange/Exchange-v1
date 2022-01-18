@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import Axios from "axios";
-import { useNavigate, } from 'react-router';
+import { useNavigate } from 'react-router';
 import { FormBody, FormInput } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
@@ -25,7 +25,10 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+
   Axios.defaults.withCredentials = true;
+
+  
 
 
   const login = () => {
@@ -42,6 +45,9 @@ const Login = () => {
         localStorage.setItem("token", response.data.token);
         console.log(response.data);
         navigate("/Pages/LoggedHome");
+		window.location.reload(true);
+		
+	
      
 
         
