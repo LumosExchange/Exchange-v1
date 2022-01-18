@@ -299,6 +299,8 @@ app.get("VonageSMSVerify", (req, res) => {
     res.status(400).send("You must supply a code");
     return;
   }
+
+    //Pass details to vonage servers for validation
   nexmo.verify.check(
     {
       request_id: req.body.requestId,
@@ -313,7 +315,7 @@ app.get("VonageSMSVerify", (req, res) => {
     }
   );
 
-  //Pass details to vonage servers for validation
+
 });
 
 //app.get('/', (req, res)=> {
