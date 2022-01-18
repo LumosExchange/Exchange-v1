@@ -52,7 +52,7 @@ const Login = () => {
 		<FormBody className="d-flex align-items-center">
 			<div className="container d-flex align-items-center justify-content-center py-5 flex-column">
 				<div className="row w-100">
-					<div className="col-12 col-md-8">
+					<div className="col-12 col-lg-8">
 						<div className="flex-column">
 							<Heading className="pb-3">Your Wallet</Heading>
 							<Paragraph size="18px" bold>
@@ -60,7 +60,7 @@ const Login = () => {
 							</Paragraph>
 						</div>
 					</div>
-					<div className="col-12 col-md-4">
+					<div className="col-12 col-lg-4">
 						<Card className="p-4 flex-column">
 							<Heading size="24px" color="lightGrey">Reward Pool</Heading>
 							<div className="d-flex justify-content-between align-items-center">
