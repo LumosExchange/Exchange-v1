@@ -1,14 +1,19 @@
 
 import React from "react";
 import styled, { css } from "styled-components";
+import PropTypes from 'prop-types';
 
-const StyledInput = styled.input(({ theme, hasIcon }) => css`
-	background: ${theme.colors.grey};
+const StyledInput = styled.input(({ theme, hasIcon, color, padding }) => css`
+	background: ${theme.colors[color]};
 	border-radius: ${hasIcon ? '0 10px 10px 0' : '10px'};
 	border: 2px solid transparent;
 	color: ${theme.colors.white};
 	font-size: 24px;
-	padding: 10px;
+	padding: ${padding};
+
+	::placeholder {
+		color: ${theme.colors.placeholderGrey};
+	}
 
 	:focus, :active {
 		border: 2px solid ${theme.colors.yellow};
@@ -22,7 +27,7 @@ const StyledInput = styled.input(({ theme, hasIcon }) => css`
 	}
 `);
 
-const RoundedInput = styled.input(({ theme, hasIcon }) => css`
+const RoundedInput = styled.input(({ theme }) => css`
 	background: ${theme.colors.navyGrey};
 	border-radius: 50px;
 	border: 2px solid transparent;
@@ -42,7 +47,7 @@ const RoundedInput = styled.input(({ theme, hasIcon }) => css`
 	}
 `);
 
-const IconArea = styled.div(({ theme, hasIcon }) => css`
+const IconArea = styled.div(({ theme }) => css`
 	background: ${theme.colors.grey};
 	min-height: 60px;
 	padding: 10px;
@@ -50,9 +55,10 @@ const IconArea = styled.div(({ theme, hasIcon }) => css`
 `);
 
 export const FormInput = ({
-	hasIcon, text, className,
-	id, pattern, placeholder,
-	type, form, value, icon, rounded
+	hasIcon, text, className, textColor,
+	id, pattern, placeholder, color,
+	type, form, value, icon, rounded,
+	padding
 }) => (
 	<div className="d-flex">
 		{hasIcon && (
@@ -71,6 +77,9 @@ export const FormInput = ({
 				text={text}
 				type={type}
 				value={value}
+				color={color}
+				textColor={textColor}
+				padding={padding}
 			/>
 		) : (
 			<StyledInput
@@ -83,10 +92,29 @@ export const FormInput = ({
 				text={text}
 				type={type}
 				value={value}
+				color={color}
+				textColor={textColor}
+				padding={padding}
 			/>
 		)}
 	</div>
 );
+
+FormInput.propTypes = {
+	color: PropTypes.string,
+	textColor: PropTypes.string,
+	hasIcon: PropTypes.bool,
+	padding: PropTypes.string,
+	placeholder: PropTypes.string,
+}
+
+FormInput.defaultProps = {
+    hasIcon: false,
+    color: 'grey',
+	textColor: 'white',
+	padding: '10px',
+	placeholder: '',
+}
 
 const StyledCheckbox = styled.input(({ theme }) => css`
 	-webkit-appearance: none;
@@ -122,6 +150,7 @@ export const FormCheckbox = ({ className, id, name }) => (
 	/>
 );
 
+
 export const StyledLabel = styled.label(({ theme, color }) => css`
 	color: ${theme.colors[color]};
 	cursor: pointer;
@@ -130,6 +159,16 @@ export const StyledLabel = styled.label(({ theme, color }) => css`
 
 	a { color: ${theme.colors.yellow}; }
 `);
+
+StyledLabel.propTypes = {
+	color: PropTypes.string,
+}
+
+StyledLabel.defaultProps = {
+    color: 'white',
+}
+
+
 
 export const FormBody = styled.div(({ theme }) => css`
 	background: ${theme.colors.black};
