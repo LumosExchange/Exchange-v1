@@ -30,6 +30,7 @@ import Axios from "axios";
 import Footer from "./Components/Footer";
 import TwoFactorAuth from "./Pages/TwoFactorAuth";
 import ConnectWallet from "./Pages/ConnectWallet";
+import ChangePassword from "./Pages/ChangePassword";
 
 const theme = {
   colors: {
@@ -104,6 +105,7 @@ function App() {
             <Route path="/Feedback" element={<Feedback />} />
             <Route path="/TwoFactorAuth" element={<TwoFactorAuth />} />
             <Route path="/ConnectWallet" element={<ConnectWallet />} />
+            <Route path="/ChangePassword" element={<ChangePassword/>} />
           </Routes>
         </Router>
         <Footer />
