@@ -73,21 +73,20 @@ const Login = () => {
 				<div className="row w-100 d-flex justify-content-center pt-5">
 					<div className="col-12">
 						<GradientCard stop1="sage" stop2="magenta" className="d-flex p-4">
-							<div className="col-lg-2 d-none d-lg-flex justify-content-center">
+							<div className="col-0 col-lg-2 d-none d-lg-flex justify-content-center">
 								<img src={SolanaIcon} alt="Solana Icon" />
 							</div>
-							<div className="col-9 col-lg-9 d-flex flex-column">
+							<div className="col-9 col-lg-8 d-flex flex-column">
 								<div className="d-flex">
-									<img src={SolanaIcon} alt="Solana Icon" className="inline me-2 d-md-none" />
+									<img src={SolanaIcon} alt="Solana Icon" className="inline me-2 d-lg-none" />
 									<Heading size="36px" bold>Solana</Heading>
 								</div>
-
 								<Heading size="36px" bold>11,000 SOL</Heading>
 								<Paragraph size="18px" className="mb-0 text-break">
 									383196VqKiMLqS74qZtA4U1DEzEQgpH6P3
 								</Paragraph>
 							</div>
-							<div className="col-3 col-lg-2 d-flex">
+							<div className="col-3 col-lg-2 d-flex justify-content-end">
 								<InvisibleButton onClick={handleChange}>
 									<ToggleIcon src={DropdownIcon} toggled={walletExpanded} alt="Dropdown" className="w-100" />
 								</InvisibleButton>
