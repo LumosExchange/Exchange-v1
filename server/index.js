@@ -9,7 +9,7 @@ const session = require("express-session");
 const jwt = require("jsonwebtoken");
 const speakeasy = require("speakeasy");
 const qrcode = require("qrcode");
-const nexmo = require("nexmo");
+const Nexmo = require("nexmo");
 
 //Change this to randomly generate salt
 const saltRounds = 10;
