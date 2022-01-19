@@ -10,6 +10,10 @@ const jwt = require("jsonwebtoken");
 const speakeasy = require("speakeasy");
 const qrcode = require("qrcode");
 const Nexmo = require("nexmo");
+const nodemailer = require("nodemailer");
+const SMTPPool = require("nodemailer/lib/smtp-pool");
+
+require("dotenv").config();
 
 //Change this to randomly generate salt
 const saltRounds = 10;
@@ -314,9 +318,44 @@ app.get("VonageSMSVerify", (req, res) => {
       res.send(result);
     }
   );
-
-
 });
+
+app.post("/Send_Email_Verification", cors(), async (req, res) => {
+//Get email from user and pass 6 digit code
+
+let {text} = "111111"
+
+  //Pass connection details to Emailer API from ENV 
+  const transport = nodemailer.createTransport({
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.emv.MAIL_PASS
+    }
+
+  })
+
+  //Send email 
+  await transport.sendMail({
+    from: process.env.MAIL_FROM,
+    to: req.body.email,
+    subject: "Lumos Email Verification",
+    html: `<div className="email" style="
+    border: 1px solid black;
+    padding: 20px;
+    font-family: sans-serif;
+    line-height: 2;
+    font-size: 20px; 
+    ">
+    <h2>Here is your verification code!</h2>
+    <p>${text}</p>
+     </div>
+`
+  })
+
+})
+
 
 //app.get('/', (req, res)=> {
 
