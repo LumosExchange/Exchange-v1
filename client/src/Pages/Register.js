@@ -3,7 +3,7 @@ import "../App.css";
 import Axios from "axios";
 import { useNavigate } from 'react-router';
 import Heading from "../Components/Heading";
-import PrimaryButton from "../Components/Button";
+import PrimaryButton from "../Components/Buttons";
 import { FormInput, FormCheckbox, StyledLabel, FormBody } from "../Components/FormInputs";
 import WarningTriangle from '../Images/icon-park-outline_caution.svg';
 import Paragraph from "../Components/Paragraph";

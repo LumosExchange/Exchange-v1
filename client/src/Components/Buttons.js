@@ -70,3 +70,9 @@ PrimaryButton.defaultProps = {
 }
 
 export default PrimaryButton;
+
+export const InvisibleButton = styled.button`
+	background: none;
+	border: 0;
+`;
+

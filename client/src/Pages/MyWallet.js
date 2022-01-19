@@ -3,8 +3,7 @@ import styled, { css } from "styled-components";
 import { FormBody, FormInput } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
-import PrimaryButton from "../Components/Button";
-import Link from "../Components/Link";
+import PrimaryButton, { InvisibleButton } from "../Components/Buttons";
 import Card from "../Components/Card";
 import GradientButton from "../Components/GradientButton";
 import GradientCard from "../Components/GradientCard";
@@ -12,11 +11,6 @@ import { Collapse } from "@material-ui/core";
 import SolanaIcon from '../Images/icon-solana.svg';
 import DropdownIcon from '../Images/icon-dropdown.svg';
 import StyledTable from "../Components/Tables";
-
-const InvisibleButton = styled.button`
-	background: none;
-	border: 0;
-`;
 
 const ToggleIcon = styled.img(({ toggled }) => css`
 	transform: ${toggled && 'rotate(180deg)'};
