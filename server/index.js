@@ -103,6 +103,42 @@ app.post("/register", (req, res) => {
     );
   });
 });
+//UpgradeGold
+app.post("/UpgradeGold", (req, res) => {
+  const EmployerName = req.params.EmployerName;
+  const EmployerAddress = req.params.EmployerAddress;
+  const Occupation = req.params.Occupation;
+  const Income = req.params.Income;
+  console.log("Income" + Income);
+  console.log("EmpoloyerName" + EmployerName);
+  console.log("EmployerAddress" + EmployerAddress);
+  console.log("Occupation" + Occupation);
+
+  console.log("params" + req.params);
+
+  db.query(
+    "INSERT INTO UpgradeGold (EmployerName, EmployerAddress, Occupation, Income) VALUES (?,?,?,?)",
+    [EmployerName, EmployerAddress, Occupation, Income],
+    (err, result) => {
+      console.log(err);
+    }
+  );
+});
+//UpgradeBronze
+app.post("/UpgradeBronze", (req, res) => {
+  const DateOfBirth = req.body.DateOfBirth;
+  const Phone = req.body.Phone;
+  const CountryofResidence = req.body.CountryofResidence;
+  const Tax = req.body.Tax;
+
+  db.query(
+    "INSERT INTO UpgradeBronze (DateOfBirth, Phone, Occupation, Tax) VALUES (?,?,?,?)",
+    [DateOfBirth, Phone, CountryofResidence, Tax],
+    (err, result) => {
+      console.log(err);
+    }
+  );
+});
 
 //Login functionality
 //check logged in state
@@ -300,7 +336,7 @@ app.get("VonageSMSVerify", (req, res) => {
     return;
   }
 
-    //Pass details to vonage servers for validation
+  //Pass details to vonage servers for validation
   nexmo.verify.check(
     {
       request_id: req.body.requestId,
@@ -314,8 +350,6 @@ app.get("VonageSMSVerify", (req, res) => {
       res.send(result);
     }
   );
-
-
 });
 
 //app.get('/', (req, res)=> {
