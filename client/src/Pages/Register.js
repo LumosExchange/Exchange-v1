@@ -103,6 +103,7 @@ const Register = () => {
 		</FormBody>
 	);
 }
+
 export default Register;
 
 

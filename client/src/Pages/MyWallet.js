@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
-import PropTypes from 'prop-types';
 import { FormBody, FormInput } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
@@ -8,89 +7,53 @@ import PrimaryButton from "../Components/Button";
 import Link from "../Components/Link";
 import Card from "../Components/Card";
 import GradientButton from "../Components/GradientButton";
+import GradientCard from "../Components/GradientCard";
 import { Collapse } from "@material-ui/core";
 import SolanaIcon from '../Images/icon-solana.svg';
 import DropdownIcon from '../Images/icon-dropdown.svg';
+import StyledTable from "../Components/Tables";
 
-const InvisibleButton = styled.button(({ theme }) => css`
+const InvisibleButton = styled.button`
 	background: none;
 	border: 0;
-`);
+`;
 
 const ToggleIcon = styled.img(({ toggled }) => css`
 	transform: ${toggled && 'rotate(180deg)'};
-`);
 
-const GradientCard = styled.div(({
-	theme, stopOne, stopOnePosition, stopTwo, stopTwoPosition,
-	stopThree, stopThreePosition, stopFour, stopFourPosition,
-	padding, stops, stopFive, stopFivePosition
-	}) => css`
-	border-radius: 20px;
-	padding: ${padding};
-	background: linear-gradient(90deg, 
-		${theme.colors.gradients[stopOne]} ${stopOnePosition}%,
-		${theme.colors.gradients[stopTwo]} ${stopTwoPosition}%
-
-		${stops >= 3 && `
-			,${theme.colors.gradients[stopThree]} ${stopThreePosition}%,
-		`}
-		${stops >= 4 && `
-			${theme.colors.gradients[stopFour]} ${stopFourPosition}%
-		`}
-		${stops >= 5 && `
-			,${theme.colors.gradients[stopFive]} ${stopFivePosition}%
-		`}
-	);
-
-	img {
-		width: 100%;
-		max-width: 90px;
-
-		&.inline {
-			width: 28px;
-			min-width: 28px;
-			min-height: 28px;
-		}
+	&.small {
+		width: 40px;
+		min-height: 40px;
+		min-width: 40px;
 	}
 `);
 
-GradientCard.propTypes = {
-	padding: PropTypes.string,
-	stopOne: PropTypes.string,
-	stopOnePosition: PropTypes.number,
-	stopTwo: PropTypes.string,
-	stopTwoPosition: PropTypes.number,
-	stopThree: PropTypes.string,
-	stopThreePosition: PropTypes.number,
-	stopFour: PropTypes.string,
-	stopFourPosition: PropTypes.number,
-	stops: PropTypes.number,
-}
+const Divider = styled.hr(({ theme }) => css`
+	background ${theme.colors.six9Grey};
+	width: 100%;
+	opacity: 1;
+`);
 
-GradientCard.defaultProps = {
-	padding: '10px 30px',
-	stopOne: 'sage',
-	stopOnePosition: '0',
-	stopTwo: 'yellow',
-	stopTwoPosition: '25',
-	stopThree: 'pink',
-	stopThreePosition: '50',
-	stopFour: 'blue',
-	stopFourPosition: '75',
-	stopFive: 'blue',
-	stopFivePosition: '100',
-	stops: 2,
-}
+const FakeTableData = [
+	{
+		'provider': 'shinji0314',
+		'region': 'United Kingdom',
+		'date': '16-07-2021 - 11:00:00',
+		'type': 'Airdrop',
+		'amount': '0.5 SOL',
+	},
+	{
+		'provider': 'asuka',
+		'region': 'Germany',
+		'date': '15-07-2021 - 09:30:00',
+		'type': 'Airdrop',
+		'amount': '1 SOL',
+	},
+]
 
 const Login = () => {
   const [walletExpanded, expandWallet] = useState(false);
-
-  console.log('selected wallet is', walletExpanded);
-
-  const handleChange = () => {
-    expandWallet((prev) => !prev);
-  };
+  const [rewardsExpanded, expandRewards] = useState(false);
 
   return (
 		<FormBody className="d-flex align-items-center">
@@ -118,9 +81,9 @@ const Login = () => {
 					<div className="col-12">
 						<GradientCard
 							stopOne="magenta"
-							stopOnePosition="0"
+							stopOnePosition={ 0 }
 							stopTwo="sage"
-							stopTwoPosition="100"
+							stopTwoPosition={ 100 }
 							className="d-flex p-4"
 						>
 							<div className="col-0 col-lg-2 d-none d-lg-flex justify-content-center">
@@ -129,7 +92,7 @@ const Login = () => {
 							<div className="col-9 col-lg-8 d-flex flex-column">
 								<div className="d-flex">
 									<img src={SolanaIcon} alt="Solana Icon" className="inline me-2 d-lg-none" />
-									<Heading size="36px" bold>Solana</Heading>
+									<Heading size="36px" bold className="mb-0">Solana</Heading>
 								</div>
 								<Heading size="36px" bold>11,000 SOL</Heading>
 								<Paragraph size="18px" className="mb-0 text-break">
@@ -137,7 +100,7 @@ const Login = () => {
 								</Paragraph>
 							</div>
 							<div className="col-3 col-lg-2 d-flex justify-content-end">
-								<InvisibleButton onClick={handleChange}>
+								<InvisibleButton onClick={ () => expandWallet((prev) => !prev) }>
 									<ToggleIcon src={DropdownIcon} toggled={walletExpanded} alt="Dropdown" className="w-100" />
 								</InvisibleButton>
 							</div>
@@ -184,7 +147,7 @@ const Login = () => {
 				<div className="row w-100 mt-4">
 					<div className="col-12 col-lg-4">
 						<GradientCard
-							stops="5"
+							stops={ 5 }
 							stopOne="yellow"
 							stopTwo="peach"
 							stopThree="pink"
@@ -199,7 +162,7 @@ const Login = () => {
 					<div className="col-12 col-lg-4">
 						<GradientCard
 							padding="35px"
-							stops="2"
+							stops={ 2 }
 							stopOne="bluePurple"
 							stopTwo="bluePurple"
 							className="d-flex align-items-center justify-content-center"
@@ -210,7 +173,7 @@ const Login = () => {
 					<div className="col-12 col-lg-4">
 						<GradientCard
 							padding="35px"
-							stops="2"
+							stops={ 2 }
 							stopOne="bluePurple"
 							stopTwo="bluePurple"
 							className="d-flex align-items-center justify-content-center"
@@ -218,6 +181,46 @@ const Login = () => {
 							<Heading size="28px" className="mb-0">3,628 COPE</Heading>
 						</GradientCard>
 					</div>
+				</div>
+				<div className="row w-100 mt-4">
+					<div className="col-12 d-flex flex-column">
+						<Divider />
+						<InvisibleButton
+							onClick={ () => expandRewards((prev) => !prev)}
+							className="d-flex align-items-center pt-2"
+						>
+							<Heading size="24px" color="white" className="mb-0">Reward History</Heading>
+							<ToggleIcon src={DropdownIcon} toggled={rewardsExpanded} alt="Dropdown" className="small ms-3" />
+						</InvisibleButton>
+					</div>
+					<Collapse orientation="horizontal" in={rewardsExpanded}>
+						<StyledTable className="w-100 mt-4">
+							<thead>
+								<tr>
+									<th>Provider</th>
+									<th>Region</th>
+									<th>Date</th>
+									<th>Type</th>
+									<th>Amount</th>
+								</tr>
+							</thead>
+							<tbody>
+								{FakeTableData.map((data, d) => (
+									<tr key={d}>
+										<td>
+											<span>
+												{data.provider}
+											</span>
+										</td>
+										<td>{data.region}</td>
+										<td>{data.date}</td>
+										<td>{data.type}</td>
+										<td>{data.amount}</td>
+									</tr>
+								))}
+							</tbody>
+						</StyledTable>
+					</Collapse>
 				</div>
 			</div>
     	</FormBody>

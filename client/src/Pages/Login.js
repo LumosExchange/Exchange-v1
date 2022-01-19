@@ -44,7 +44,7 @@ const Login = () => {
         //store JWT token in localstorage
         localStorage.setItem("token", response.data.token);
         console.log(response.data);
-        navigate("/Pages/LoggedHome");
+        navigate("/MyWallet");
 		window.location.reload(true);
 		
 	
