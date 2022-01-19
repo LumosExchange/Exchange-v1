@@ -40,14 +40,16 @@ const FakeTableData = [
 		'region': 'United Kingdom',
 		'date': '16-07-2021 - 11:00:00',
 		'type': 'Airdrop',
-		'amount': '0.5 SOL',
+		'amount': 0.5,
+		'currency': 'SOL',
 	},
 	{
 		'provider': 'asuka',
 		'region': 'Germany',
 		'date': '15-07-2021 - 09:30:00',
 		'type': 'Airdrop',
-		'amount': '1 SOL',
+		'amount': 1,
+		'currency': 'SOL',
 	},
 ]
 
@@ -215,7 +217,7 @@ const Login = () => {
 										<td>{data.region}</td>
 										<td>{data.date}</td>
 										<td>{data.type}</td>
-										<td>{data.amount}</td>
+										<td>{data.amount} {data.currency}</td>
 									</tr>
 								))}
 							</tbody>
