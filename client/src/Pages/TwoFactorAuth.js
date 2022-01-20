@@ -40,15 +40,15 @@ const TwoFactorAuth = () => {
   const [verified, setVerifed] = useState("");
   const [toggled, setToggled] = useState(false);
 
-  console.log(toggled, 'toggled');
+  console.log(secret, 'secret');
 
   const img = "";
   //get secret from back end
   useEffect(() => {
     Axios.post("http://localhost:3001/getSecret").then((response) => {
-      setSecret(response.data.base32);
-	  console.log(response.data.base32, 'response.data')
-      console.log(secret, 'secret');
+      setSecret(response.data);
+	  console.log(response.data, 'response.data')
+      console.log("response front end: " + secret.base32);
     });
   }, []);
 
