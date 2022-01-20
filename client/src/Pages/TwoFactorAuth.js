@@ -46,8 +46,9 @@ const TwoFactorAuth = () => {
   //get secret from back end
   useEffect(() => {
     Axios.post("http://localhost:3001/getSecret").then((response) => {
-      setSecret(response.data);
-      console.log("response front end: " + secret.base32);
+      setSecret(response.data.base32);
+	  console.log(response.data.base32, 'response.data')
+      console.log(secret, 'secret');
     });
   }, []);
 
