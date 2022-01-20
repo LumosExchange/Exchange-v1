@@ -132,21 +132,25 @@ export const FormCheckbox = ({ className, id, name }) => (
 	/>
 );
 
-export const StyledLabel = styled.label(({ theme, color }) => css`
+export const StyledLabel = styled.label(({ theme, color, padding, fontSize }) => css`
 	color: ${theme.colors[color]};
 	cursor: pointer;
-	font-size: 18px;
-	padding-left: 10px;
+	font-size: ${fontSize};
+	padding: ${padding};
 
 	a { color: ${theme.colors.yellow}; }
 `);
 
 StyledLabel.propTypes = {
 	color: PropTypes.string,
+	padding: PropTypes.string,
+	fontSize: PropTypes.string,
 }
 
 StyledLabel.defaultProps = {
     color: 'white',
+	padding: '0 0 0 10px',
+	fontSize: '18px',
 }
 
 export const PageBody = styled.div(({ theme }) => css`
@@ -155,4 +159,18 @@ export const PageBody = styled.div(({ theme }) => css`
 	min-height: calc(100vh - 80px);
 `);
 
-export const StyledDropdown = styled.select``;
+export const StyledDropdown = styled.select(({ theme }) => css`
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	background: ${theme.colors.grey};
+	background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAyNCAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIgMkwxMiAxMi45MDkxTDIyIDIiIHN0cm9rZT0iI0NFQ0VDRSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+Cg==);
+	background-position: 95%;
+	background-repeat: no-repeat;
+	border-radius: 10px;
+	border: 0;
+	color: ${theme.colors.white};
+	font-size: 20px;
+	outline: 0;
+	padding: 16px;
+`);
