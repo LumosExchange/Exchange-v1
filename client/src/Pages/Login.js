@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import Axios from "axios";
 import { useNavigate } from 'react-router';
-import { FormBody, FormInput } from "../Components/FormInputs";
+import { PageBody, FormInput } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
 import PrimaryButton from "../Components/Button";
@@ -77,7 +77,7 @@ const Login = () => {
   }, []);
 
   return (
-		<FormBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">
+		<PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">
 			<Heading className="pb-4">Sign in with Lumos account</Heading>
 				<FormBackground className="col-12 col-md-6 col-xl-5 col-xxl-4 p-5">
 					<div className="d-flex flex-column m-auto">
@@ -130,7 +130,7 @@ const Login = () => {
 				<Paragraph size="18px" className="mt-4">
 					Not got an account yet? <Link href="/Register">Register here</Link>.
 				</Paragraph>
-    	</FormBody>
+    	</PageBody>
   );
 }
 

@@ -140,7 +140,19 @@ export const StyledLabel = styled.label(({ theme, color }) => css`
 	a { color: ${theme.colors.yellow}; }
 `);
 
+<<<<<<< Updated upstream
 export const FormBody = styled.div(({ theme }) => css`
+=======
+StyledLabel.propTypes = {
+	color: PropTypes.string,
+}
+
+StyledLabel.defaultProps = {
+    color: 'white',
+}
+
+export const PageBody = styled.div(({ theme }) => css`
+>>>>>>> Stashed changes
 	background: ${theme.colors.black};
 	font-family: 'THICCCBOI-REGULAR';
 	min-height: calc(100vh - 80px);

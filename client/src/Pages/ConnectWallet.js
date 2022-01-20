@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
-import { FormBody } from "../Components/FormInputs";
+import { PageBody } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
 import PrimaryButton from "../Components/Button";
@@ -46,7 +46,7 @@ const Login = () => {
   console.log('selected wallet is', selectedWallet);
 
   return (
-		<FormBody className="d-flex align-items-center">
+		<PageBody className="d-flex align-items-center">
 			<div className="container d-flex align-items-center justify-content-center py-5 flex-column">
 				<Heading className="pb-4 text-center">Connect Using a SQL Wallet</Heading>
 				<Heading size="24px" className="text-center">
@@ -136,7 +136,7 @@ const Login = () => {
 							</div>
 						</div>
 					</div>
-    	</FormBody>
+    	</PageBody>
   );
 }
 

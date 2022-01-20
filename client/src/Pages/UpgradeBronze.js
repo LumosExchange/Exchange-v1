@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import "../App.css";
 import Axios from "axios";
+<<<<<<< Updated upstream
+=======
+import { FormInput, PageBody } from "../Components/FormInputs";
+>>>>>>> Stashed changes
 
 function UpgradeBronze() {
   const [dateOfBirthReg, setDateOfBirthReg] = useState("");

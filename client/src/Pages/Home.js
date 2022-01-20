@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { FormBody } from "../Components/FormInputs";
+import { PageBody } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import GradientButton from "../Components/GradientButton";
 import PrimaryButton from "../Components/Button";
@@ -65,7 +65,7 @@ const Showcase = () => (
 );
 
 const Home = () => (
-    <FormBody className="container-fluid">
+    <PageBody className="container-fluid">
         <div className="row pt-5 d-flex justify-content-center container m-auto">
             <div className="col-12 col-lg-6 d-flex align-items-center justify-content-center">
                 <div className="my-5">
@@ -189,7 +189,7 @@ const Home = () => (
                 </div>
             </div>
         </div>
-    </FormBody>
+    </PageBody>
 );
 
 export default Home;
