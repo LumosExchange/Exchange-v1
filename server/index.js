@@ -12,9 +12,7 @@ const qrcode = require("qrcode");
 const Nexmo = require("nexmo");
 const nodemailer = require("nodemailer");
 const SMTPPool = require("nodemailer/lib/smtp-pool");
-const multer  = require('multer');
-const upload = multer();
-app.use(upload.array());
+const crypto = require("crypto");
 
 require("dotenv").config();
 
@@ -330,9 +328,17 @@ app.get("VonageSMSVerify", (req, res) => {
 });
 
 app.post("/Send_Email_Verification", cors(), async (req, res) => {
-//Get email from user and pass 6 digit code
+//Get email from user and send email with code
 
-let {text} = "111111"
+let {text} = "";
+
+crypto.randomInt(100000, 999999, (err, n) => {
+  if (err) throw err;
+  console.log(`Random 6 digit integer: `, n);
+  text = n;
+});
+
+//store temp secret in DB 
 
   //Pass connection details to Emailer API from ENV 
   const transport = nodemailer.createTransport({
@@ -340,7 +346,7 @@ let {text} = "111111"
     port: process.env.MAIL_PORT,
     auth: {
       user: process.env.MAIL_USER,
-      pass: process.emv.MAIL_PASS
+      pass: process.env.MAIL_PASS
     }
 
   })
@@ -361,7 +367,8 @@ let {text} = "111111"
     <p>${text}</p>
      </div>
 `
-  })
+  }
+  )
 
 })
 
