@@ -7,7 +7,8 @@ import PrimaryButton from "../Components/Buttons";
 import { FormInput, FormCheckbox, StyledLabel, PageBody } from "../Components/FormInputs";
 import WarningTriangle from '../Images/icon-park-outline_caution.svg';
 import Paragraph from "../Components/Paragraph";
-import qs from "qs";   
+import Buttons from "../Components/Buttons";
+
 
 const Register = () => {
 	const [emailReg, setEmailReg] = useState('');
@@ -18,22 +19,36 @@ const Register = () => {
 	const [firstNameReg, setFirstNameReg] = useState('');
 	const [lastNameReg, setLastNameReg] = useState('');
 
+	const [secret, setSecret] = useState([]);
+
 	const navigate = useNavigate();
 
-	console.log(emailReg, 'email');
-	console.log(passwordReg, 'password');
 
 	const register = () => {
-		Axios.post("http://localhost:3001/register", {
-			firstName: firstNameReg,
-			lastName: lastNameReg,
-			email: emailReg,
-			password: passwordReg,
-			nationality: nationalityReg,
-
-		})
-		navigate("/TwoFactorAuth");
+    Axios.all([
+      Axios.post("http://localhost:3001/register", {
+        firstName: firstNameReg,
+        lastName: lastNameReg,
+        email: emailReg,
+        password: passwordReg,
+        nationality: nationalityReg,
+      }),
+      Axios.post("http://localhost:3001/Send_Email_Verification",{
+        email: emailReg
+      })
+    ])
+	.then(Axios.spread((data1, data2) => {
+		console.log('data1', data1, 'data2', data2)
+		setSecret(data1);
+		console.log('2fa is : ', secret );
+	}));	
+		navigate("/EmailVerification", {
+	
+		});
 	}
+
+	
+
 
 	return (
 		<PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid">
