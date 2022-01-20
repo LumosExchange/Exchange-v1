@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { FormBody } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import GradientButton from "../Components/GradientButton";
-import PrimaryButton from "../Components/Buttons";
+import PrimaryButton from "../Components/Button";
 import Paragraph from "../Components/Paragraph";
 
 // Images

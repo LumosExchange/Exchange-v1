@@ -12,11 +12,10 @@ const ButtonBase = styled.button(({
 	color: ${theme.colors[textColor]};
 	font-family: ${boldText ? 'THICCCBOI-BOLD' : 'THICCCBOI-REGULAR'};
 	padding: ${
-		(size === 'sm' && '4px 25px')
+		(size === 'sm' && '8px')
 		|| (size === 'md' && '10px 30px')
 		|| (size === 'lg' && '16px')
 	};
-    height: auto;
 
     &:hover { transform: scale(1.05); }
 
@@ -70,9 +69,3 @@ PrimaryButton.defaultProps = {
 }
 
 export default PrimaryButton;
-
-export const InvisibleButton = styled.button`
-	background: none;
-	border: 0;
-`;
-

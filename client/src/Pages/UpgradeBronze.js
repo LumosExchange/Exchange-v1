@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "../App.css";
 import Axios from "axios";
-import { FormInput, FormBody } from "../Components/FormInputs";
 
 function UpgradeBronze() {
   const [dateOfBirthReg, setDateOfBirthReg] = useState("");
@@ -12,7 +11,7 @@ function UpgradeBronze() {
 
   const upgradeBronze = () => {
     Axios.post("http://localhost:3001/upgradeBronze", {
-      DateOfBirth: dateOfBirthReg,
+      DatOfBirth: dateOfBirthReg,
       Phone: phoneReg,
       CountryofResidence: countryOfResidencenReg,
       Tax: taxReg,
@@ -25,14 +24,14 @@ function UpgradeBronze() {
         <h1>Let's upgrade to bronze tier!</h1>
       </div>
       <div class="input-container ic1">
-        <label for="DateOfBirth" class="placeholder">
+        <label for="DatOfBirth" class="placeholder">
           Date of birth
         </label>
-        <FormInput
-          id="DateOfBirth"
+        <input
+          id="Date of Birth"
           class="input"
           type="text"
-          placeholder="Date of Birth "
+          placeholder=" "
           onChange={(e) => {
             setDateOfBirthReg(e.target.value);
           }}
@@ -44,11 +43,11 @@ function UpgradeBronze() {
         <label for="Phone" class="placeholder">
           Phone number
         </label>
-        <FormInput
+        <input
           id="Phone"
           class="input"
           type="text"
-          placeholder="Phone number "
+          placeholder=" "
           onChange={(e) => {
             setPhoneReg(e.target.value);
           }}
@@ -60,11 +59,11 @@ function UpgradeBronze() {
         <label for="CountryofResidence" class="placeholder">
           Country of Residence
         </label>
-        <FormInput
+        <input
           id="CountryofResidence"
           class="input"
           type="CountryofResidence"
-          placeholder="Country of Residence "
+          placeholder=" "
           onChange={(e) => {
             setCountryOfResidenceReg(e.target.value);
           }}
@@ -75,11 +74,11 @@ function UpgradeBronze() {
         <label for="Tax" class="placeholder">
           Additional Tax Obligations(Optional)
         </label>
-        <FormInput
+        <input
           id="Tax"
           class="input"
           type="Tax"
-          placeholder="Additional Tax Obligations "
+          placeholder=" "
           onChange={(e) => {
             setTaxReg(e.target.value);
           }}

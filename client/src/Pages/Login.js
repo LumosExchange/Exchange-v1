@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import { FormBody, FormInput } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
-import PrimaryButton from "../Components/Buttons";
+import PrimaryButton from "../Components/Button";
 import ConnectWalletButton from "../Components/ConnectWalletButton";
 import PhantomIcon from '../Images/phantom-icon-purple.svg';
 import SolflareIcon from '../Images/solflare-icon.svg';
@@ -24,9 +24,6 @@ const Login = () => {
   const [loginStatus, setLoginStatus] = useState(false);
 
   const navigate = useNavigate();
-
-  console.log(emailLog, 'email');
-  console.log(passwordLog, 'password');
 
 
   Axios.defaults.withCredentials = true;
@@ -47,9 +44,11 @@ const Login = () => {
         //store JWT token in localstorage
         localStorage.setItem("token", response.data.token);
         console.log(response.data);
+        navigate("/Pages/LoggedHome");
 		window.location.reload(true);
 		
-		navigate("/MyWallet");
+	
+     
 
         
       }
@@ -112,9 +111,9 @@ const Login = () => {
 									text="Log In"
 									className="m-auto mt-3"
 									onClick={login}
-									type="submit"
+									type="logIn"
 									form="nameform"
-									value="Submit"
+									value="logIn"
 									hasIcon
 								/>
 							</form>

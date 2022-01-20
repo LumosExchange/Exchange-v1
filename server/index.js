@@ -10,6 +10,13 @@ const jwt = require("jsonwebtoken");
 const speakeasy = require("speakeasy");
 const qrcode = require("qrcode");
 const Nexmo = require("nexmo");
+const nodemailer = require("nodemailer");
+const SMTPPool = require("nodemailer/lib/smtp-pool");
+const multer  = require('multer');
+const upload = multer();
+app.use(upload.array());
+
+require("dotenv").config();
 
 //Change this to randomly generate salt
 const saltRounds = 10;
@@ -50,8 +57,13 @@ app.use(
   })
 );
 
-app.use(cookieParser());
+
+//Initiate Imports
+app.use(express.json());
+
+//app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(
   session({
@@ -65,8 +77,6 @@ app.use(
   })
 );
 
-//Initiate Imports
-app.use(express.json());
 
 //initiate 2fa speakeasy for google auth
 var secret = speakeasy.generateSecret({
@@ -84,6 +94,9 @@ const db = mysql.createConnection({
 //Register
 app.post("/register", (req, res) => {
   const firstName = req.body.firstName;
+
+  console.log("firstName: "+ req.body.firstName);
+
   const lastName = req.body.lastName;
   const email = req.body.email;
   const password = req.body.password;
@@ -102,42 +115,6 @@ app.post("/register", (req, res) => {
       }
     );
   });
-});
-//UpgradeGold
-app.post("/UpgradeGold", (req, res) => {
-  const EmployerName = req.params.EmployerName;
-  const EmployerAddress = req.params.EmployerAddress;
-  const Occupation = req.params.Occupation;
-  const Income = req.params.Income;
-  console.log("Income" + Income);
-  console.log("EmpoloyerName" + EmployerName);
-  console.log("EmployerAddress" + EmployerAddress);
-  console.log("Occupation" + Occupation);
-
-  console.log("params" + req.params);
-
-  db.query(
-    "INSERT INTO UpgradeGold (EmployerName, EmployerAddress, Occupation, Income) VALUES (?,?,?,?)",
-    [EmployerName, EmployerAddress, Occupation, Income],
-    (err, result) => {
-      console.log(err);
-    }
-  );
-});
-//UpgradeBronze
-app.post("/UpgradeBronze", (req, res) => {
-  const DateOfBirth = req.body.DateOfBirth;
-  const Phone = req.body.Phone;
-  const CountryofResidence = req.body.CountryofResidence;
-  const Tax = req.body.Tax;
-
-  db.query(
-    "INSERT INTO UpgradeBronze (DateOfBirth, Phone, Occupation, Tax) VALUES (?,?,?,?)",
-    [DateOfBirth, Phone, CountryofResidence, Tax],
-    (err, result) => {
-      console.log(err);
-    }
-  );
 });
 
 //Login functionality
@@ -336,7 +313,7 @@ app.get("VonageSMSVerify", (req, res) => {
     return;
   }
 
-  //Pass details to vonage servers for validation
+    //Pass details to vonage servers for validation
   nexmo.verify.check(
     {
       request_id: req.body.requestId,
@@ -351,6 +328,43 @@ app.get("VonageSMSVerify", (req, res) => {
     }
   );
 });
+
+app.post("/Send_Email_Verification", cors(), async (req, res) => {
+//Get email from user and pass 6 digit code
+
+let {text} = "111111"
+
+  //Pass connection details to Emailer API from ENV 
+  const transport = nodemailer.createTransport({
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.emv.MAIL_PASS
+    }
+
+  })
+
+  //Send email 
+  await transport.sendMail({
+    from: process.env.MAIL_FROM,
+    to: req.body.email,
+    subject: "Lumos Email Verification",
+    html: `<div className="email" style="
+    border: 1px solid black;
+    padding: 20px;
+    font-family: sans-serif;
+    line-height: 2;
+    font-size: 20px; 
+    ">
+    <h2>Here is your verification code!</h2>
+    <p>${text}</p>
+     </div>
+`
+  })
+
+})
+
 
 //app.get('/', (req, res)=> {
 

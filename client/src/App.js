@@ -30,7 +30,7 @@ import Axios from "axios";
 import Footer from "./Components/Footer";
 import TwoFactorAuth from "./Pages/TwoFactorAuth";
 import ConnectWallet from "./Pages/ConnectWallet";
-import MyWallet from "./Pages/MyWallet";
+import ChangePassword from "./Pages/ChangePassword";
 
 const theme = {
   colors: {
@@ -42,20 +42,6 @@ const theme = {
     yellow: "#F1DF27",
     blueGrey: "#b7b4c7",
     navyGrey: "#212127",
-    brightGrey: "#E5E5E5",
-    six9Grey: "#696969",
-    placeHolderGrey: "#D9D9D9",
-
-    gradients: {
-      sage: "#0EF1A9",
-      magenta: "#D12AFA",
-      yellow: "#F5E237",
-      peach: "#FF9675",
-      pink: "#D373B0",
-      mauve: "#B372CE",
-      blue: "#6F86FF",
-      bluePurple: "#6F41E8",
-    }
   },
   fonts: {
     primary: "Arial, Helvetica, sans-serif",
@@ -119,7 +105,7 @@ function App() {
             <Route path="/Feedback" element={<Feedback />} />
             <Route path="/TwoFactorAuth" element={<TwoFactorAuth />} />
             <Route path="/ConnectWallet" element={<ConnectWallet />} />
-            <Route path="/MyWallet" element={<MyWallet />} />
+            <Route path="/ChangePassword" element={<ChangePassword/>} />
           </Routes>
         </Router>
         <Footer />
