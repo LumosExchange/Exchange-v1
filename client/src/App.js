@@ -33,6 +33,7 @@ import ConnectWallet from "./Pages/ConnectWallet";
 import ChangePassword from "./Pages/ChangePassword";
 import MyWallet from "./Pages/MyWallet";
 import TradeHistory from "./Pages/TradeHistory";
+import EmailVerification from "./Pages/EmailVerification";
 
 const theme = {
   colors: {
@@ -120,6 +121,7 @@ function App() {
             <Route path="/ConnectWallet" element={<ConnectWallet />} />
             <Route path="/ChangePassword" element={<ChangePassword/>} />
             <Route path="/MyWallet" element={<MyWallet/>} />
+            <Route path="/EmailVerification" element={<EmailVerification/>} />
           </Routes>
         </Router>
         <Footer />

@@ -154,3 +154,5 @@ export const PageBody = styled.div(({ theme }) => css`
 	font-family: 'THICCCBOI-REGULAR';
 	min-height: calc(100vh - 80px);
 `);
+
+export const StyledDropdown = styled.select``;

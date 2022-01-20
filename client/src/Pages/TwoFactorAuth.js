@@ -58,7 +58,7 @@ function TwoFactorAuth() {
 		getSecret();
 	}
 
-  }, []);
+  }, [secret]);
 
   //display img as QR code
   function ShowGoogleAuthQR() {

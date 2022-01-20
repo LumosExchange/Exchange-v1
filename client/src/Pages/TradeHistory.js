@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import styled, { css } from "styled-components";
-import { PageBody } from "../Components/FormInputs";
+import { PageBody, StyledLabel } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
 import StyledTable from "../Components/Tables";
@@ -34,6 +34,14 @@ const TradeHistory = () => {
 		<PageBody className="d-flex align-items-center">
 			<div className="container d-flex align-items-center justify-content-center py-5 flex-column">
 				<div className="row w-100 mt-4">
+					<Heading>Trade History</Heading>
+					<div className="d-flex">
+						<div className="col-4 flex-column">
+							<StyledLabel>Type</StyledLabel>
+						</div>
+						<div className="col-4">2</div>
+						<div className="col-4">3</div>
+					</div>
 					<StyledTable className="w-100 mt-4">
 						<thead>
 							<tr>
