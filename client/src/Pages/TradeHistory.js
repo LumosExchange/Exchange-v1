@@ -32,9 +32,9 @@ const TradeHistory = () => {
 	console.log(userListings, 'user listings');
 
   return (
-		<PageBody className="d-flex align-items-center">
+		<PageBody className="d-flex align-items-start">
 			<div className="container d-flex align-items-center justify-content-center py-5 flex-column">
-				<div className="row w-100 mt-4">
+				<div className="row w-100 mt-5">
 					<Heading className="pb-4">Trade History</Heading>
 					<div className="col-8 d-flex justify-content-between">
 						<div className="col-4 d-flex flex-column me-3">
