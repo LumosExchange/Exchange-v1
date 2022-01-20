@@ -25,6 +25,9 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  console.log(emailLog, 'email');
+  console.log(passwordLog, 'password');
+
 
   Axios.defaults.withCredentials = true;
 
@@ -44,11 +47,9 @@ const Login = () => {
         //store JWT token in localstorage
         localStorage.setItem("token", response.data.token);
         console.log(response.data);
-        navigate("/MyWallet");
 		window.location.reload(true);
 		
-	
-     
+		navigate("/MyWallet");
 
         
       }
@@ -111,9 +112,9 @@ const Login = () => {
 									text="Log In"
 									className="m-auto mt-3"
 									onClick={login}
-									type="logIn"
+									type="submit"
 									form="nameform"
-									value="logIn"
+									value="Submit"
 									hasIcon
 								/>
 							</form>

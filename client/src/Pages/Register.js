@@ -19,6 +19,9 @@ const Register = () => {
 
 	const navigate = useNavigate();
 
+	console.log(emailReg, 'email');
+	console.log(passwordReg, 'password');
+
 	const register = () => {
 		Axios.post("http://localhost:3001/register", {
 			firstName: firstNameReg,
@@ -37,18 +40,20 @@ const Register = () => {
 				<div className="col-11 col-md-6 d-flex flex-column m-auto">
 					<Heading size="36px" color="white" className="mt-5 mb-4 text-center">Sign up with an email address</Heading>
 					<Heading size="24px" color="white" className="mb-5 text-center">Enter your details to create an account.</Heading>
-					<form>
+					<form name="register">
 						<FormInput
 							id="firstName"
 							className="mb-3 w-100"
 							type="text"
 							placeholder="First Name"
+							form="register"
 							onChange={(e) => { setFirstNameReg(e.target.value); }}
 						/>
 						<FormInput
 							id="lastName"
 							className="mb-3 w-100"
 							type="text"
+							form="register"
 							placeholder="Last Name"
 							onChange={(e) => { setLastNameReg(e.target.value); }}
 						/>
@@ -56,6 +61,7 @@ const Register = () => {
 							id="email"
 							className="mb-3 w-100"
 							type="text"
+							form="register"
 							placeholder="email"
 							onChange={(e) => { setEmailReg(e.target.value); }}
 						/>
@@ -63,6 +69,7 @@ const Register = () => {
 							id="password"
 							className="mb-3 w-100"
 							type="password"
+							form="register"
 							placeholder="password"
 							onChange={(e) => { setPasswordReg(e.target.value); }}
 						/>
@@ -70,6 +77,7 @@ const Register = () => {
 							id="nationality"
 							className="mb-3 w-100"
 							type="text"
+							form="register"
 							placeholder="Nationality"
 							onChange={(e) => { setNationalityReg(e.target.value); }}
 						/>
@@ -96,7 +104,7 @@ const Register = () => {
 								I would like to subscribe to the free newsletter to receive free crypto news digests.
 							</StyledLabel>
 						</div>
-						<PrimaryButton type="text" className="m-auto" onClick={register} text="Create An Account" hasIcon />
+						<PrimaryButton type="submit" className="m-auto" onClick={register} text="Create An Account" hasIcon />
 					</form>
 				</div>
 			</div>

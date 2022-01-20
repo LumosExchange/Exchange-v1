@@ -58,7 +58,7 @@ export const FormInput = ({
 	hasIcon, text, className, textColor,
 	id, pattern, placeholder, color,
 	type, form, value, icon, rounded,
-	padding
+	padding, onChange
 }) => (
 	<div className="d-flex">
 		{hasIcon && (
@@ -80,6 +80,7 @@ export const FormInput = ({
 				color={color}
 				textColor={textColor}
 				padding={padding}
+				onChange={onChange}
 			/>
 		) : (
 			<StyledInput
@@ -95,6 +96,7 @@ export const FormInput = ({
 				color={color}
 				textColor={textColor}
 				padding={padding}
+				onChange={onChange}
 			/>
 		)}
 	</div>
