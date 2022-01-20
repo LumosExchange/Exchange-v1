@@ -13,21 +13,27 @@ import Paragraph from "../Components/Paragraph";
 import axios from "axios";
 
 const AuthIcon = styled.div(({ theme }) => css`
-	border: 1px solid ${theme.colors.white};
+	border: 2px solid ${theme.colors.white};
 	border-radius: 50px;
+	padding: 10px;
+	i {
+		font-size: 50px;
+		color: ${theme.colors.white};
+	}
+
 	img {
-		width: 70px;
-		height: 70px;
+		width: 50px;
+		height: 50px;
 	}
 
 	&:hover {
-		border: 1px solid ${theme.colors.yellow};
+		border: 2px solid ${theme.colors.yellow};
 	}
 `);
 
 const QRCode = styled.img`
 	width: 100%;
-	max-width: 70px;
+	max-width: 200px;
 `;
 
 function TwoFactorAuth() {
@@ -57,6 +63,7 @@ function TwoFactorAuth() {
   //display img as QR code
   function ShowGoogleAuthQR() {
     var originalImg = document.getElementById("QRCode");
+	setToggled(true);
 
     qrcode.toDataURL(secret.otpauth_url, function (err, data_url) {
       originalImg.src = data_url;
@@ -83,7 +90,7 @@ function TwoFactorAuth() {
 
   return (
     	<PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">
-			<Card radius="20px" className="p-5 d-flex flex-column">
+			<Card radius="20px" color="darkerGrey" className="p-5 d-flex flex-column">
 				<Heading className="pb-4 text-center">Please select an 2FA method</Heading>
 				<div className="w-100 d-flex justify-content-center">
 					<div className="col-3 col-xxl-2 text-center">
