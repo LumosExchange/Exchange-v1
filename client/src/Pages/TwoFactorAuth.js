@@ -10,6 +10,7 @@ import Card from "../Components/Card";
 import GoogleAuthLogo from '../Images/icon-google.png';
 import AuthyLogo from '../Images/icon-authy.png';
 import Paragraph from "../Components/Paragraph";
+import axios from "axios";
 
 const AuthIcon = styled.div(({ theme }) => css`
 	width: 80px;
@@ -40,16 +41,22 @@ const TwoFactorAuth = () => {
   const [verified, setVerifed] = useState("");
   const [toggled, setToggled] = useState(false);
 
-  console.log(secret, 'secret');
+  console.log(secret, 'secret1');
 
   const img = "";
   //get secret from back end
   useEffect(() => {
-    Axios.post("http://localhost:3001/getSecret").then((response) => {
-      setSecret(response.data);
-	  console.log(response.data, 'response.data')
-      console.log("response front end: " + secret.base32);
-    });
+
+	async function getSecret() {
+		const response = await axios.post("http://localhost:3001/getSecret");
+		console.log(response.data.base32, 'response from getSecret2')
+		setSecret(response.data)
+	}
+
+	if (secret.length === 0){
+		getSecret();
+	}
+	
   }, []);
 
   //display img as QR code
