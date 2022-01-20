@@ -47,7 +47,7 @@ const FakeTableData = [
 	},
 ]
 
-const Login = () => {
+const MyWallet = () => {
   const [walletExpanded, expandWallet] = useState(false);
   const [rewardsExpanded, expandRewards] = useState(false);
 
@@ -223,4 +223,4 @@ const Login = () => {
   );
 }
 
-export default Login;
+export default MyWallet;

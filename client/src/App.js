@@ -30,12 +30,9 @@ import Axios from "axios";
 import Footer from "./Components/Footer";
 import TwoFactorAuth from "./Pages/TwoFactorAuth";
 import ConnectWallet from "./Pages/ConnectWallet";
-<<<<<<< Updated upstream
 import ChangePassword from "./Pages/ChangePassword";
-=======
 import MyWallet from "./Pages/MyWallet";
 import TradeHistory from "./Pages/TradeHistory";
->>>>>>> Stashed changes
 
 const theme = {
   colors: {
@@ -47,6 +44,16 @@ const theme = {
     yellow: "#F1DF27",
     blueGrey: "#b7b4c7",
     navyGrey: "#212127",
+    six9Grey: "#696969",
+    gradients: {
+      yellow: "#FCE608",
+      peach: "#FF7586",
+      pink: "",
+      magenta: "#D12AFA",
+      sage: "#0EF1A9",
+      mauve: "#B372CE",
+      blue: "#6F86FF",
+    }
   },
   fonts: {
     primary: "Arial, Helvetica, sans-serif",
@@ -112,6 +119,7 @@ function App() {
             <Route path="/TwoFactorAuth" element={<TwoFactorAuth />} />
             <Route path="/ConnectWallet" element={<ConnectWallet />} />
             <Route path="/ChangePassword" element={<ChangePassword/>} />
+            <Route path="/MyWallet" element={<MyWallet/>} />
           </Routes>
         </Router>
         <Footer />

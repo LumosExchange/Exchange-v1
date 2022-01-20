@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
+import styled, { css } from "styled-components";
 import Axios from "axios";
 import { useNavigate} from "react-router-dom";
 import qrcode from "qrcode";
-<<<<<<< Updated upstream
-=======
 import { PageBody, FormInput } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import PrimaryButton, { InvisibleButton } from "../Components/Buttons";
@@ -12,7 +11,24 @@ import GoogleAuthLogo from '../Images/icon-google.png';
 import AuthyLogo from '../Images/icon-authy.png';
 import Paragraph from "../Components/Paragraph";
 import axios from "axios";
->>>>>>> Stashed changes
+
+const AuthIcon = styled.div(({ theme }) => css`
+	border: 1px solid ${theme.colors.white};
+	border-radius: 50px;
+	img {
+		width: 70px;
+		height: 70px;
+	}
+
+	&:hover {
+		border: 1px solid ${theme.colors.yellow};
+	}
+`);
+
+const QRCode = styled.img`
+	width: 100%;
+	max-width: 70px;
+`;
 
 function TwoFactorAuth() {
   const navigate = useNavigate();
@@ -20,6 +36,7 @@ function TwoFactorAuth() {
   const [secret, setSecret] = useState([]);
   const [Twofa, setTwofaCode] = useState("");
   const [verified, setVerifed] = useState("");
+  const [toggled, setToggled] = useState(false);
 
   const img = "";
   //get secret from back end

@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import "../App.css";
 import Axios from "axios";
-<<<<<<< Updated upstream
-=======
 import { FormInput, PageBody } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import { useNavigate } from "react-router";
->>>>>>> Stashed changes
 
 function UpgradeGold() {
   const [employerNameReg, setEmployerNameReg] = useState("");
@@ -25,27 +22,6 @@ function UpgradeGold() {
   };
 
   return (
-<<<<<<< Updated upstream
-    <div class="form">
-      <div class="subtitle">
-        <h1>Let's upgrade to gold tier!</h1>
-      </div>
-      <div class="input-container ic1">
-        <label for="EmployerName" class="placeholder">
-          Employer Name
-        </label>
-        <input
-          id="Employer Name"
-          class="input"
-          type="text"
-          placeholder=" "
-          onChange={(e) => {
-            setEmployerNameReg(e.target.value);
-          }}
-        />
-        <div class="cut"></div>
-      </div>
-=======
     <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid">
       <div className="row">
         <div className="col-11 col-md-6 d-flex flex-column m-auto">
@@ -86,7 +62,7 @@ function UpgradeGold() {
                 setOccupationReg(e.target.value);
               }}
             />
->>>>>>> Stashed changes
+            </form>
 
       <div class="input-container ic2">
         <label for="Employeraddress" class="placeholder">
@@ -119,30 +95,9 @@ function UpgradeGold() {
         />
         <div class="cut cut-short"></div>
       </div>
-<<<<<<< Updated upstream
-      <div class="input-container ic2">
-        <label for="Income" class="placeholder">
-          Estimated Income Range
-        </label>
-        <input
-          id="Income"
-          class="input"
-          type="Income"
-          placeholder=" "
-          onChange={(e) => {
-            setIncomeReg(e.target.value);
-          }}
-        />
-        <div class="cut cut-short"></div>
       </div>
-
-      <button type="text" class="submit" onClick={upgradeGold}>
-        upgrade
-      </button>
-    </div>
-=======
+      </div>
     </PageBody>
->>>>>>> Stashed changes
   );
 }
 export default UpgradeGold;

@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { PageBody } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
-import PrimaryButton from "../Components/Button";
+import PrimaryButton from "../Components/Buttons";
 import PhantomIcon from '../Images/phantom-icon-purple.svg';
 import SolflareIcon from '../Images/solflare-icon.svg';
 import ExodusIcon from '../Images/exodus-icon.svg';
