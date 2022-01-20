@@ -50,9 +50,10 @@ const IconArea = styled.div(({ theme, hasIcon }) => css`
 `);
 
 export const FormInput = ({
-	hasIcon, text, className,
-	id, pattern, placeholder,
-	type, form, value, icon, rounded
+    hasIcon, text, className, textColor,
+    id, pattern, placeholder, color,
+    type, form, value, icon, rounded,
+    padding, onChange
 }) => (
 	<div className="d-flex">
 		{hasIcon && (
@@ -71,6 +72,10 @@ export const FormInput = ({
 				text={text}
 				type={type}
 				value={value}
+				color={color}
+                textColor={textColor}
+                padding={padding}
+                onChange={onChange}
 			/>
 		) : (
 			<StyledInput
@@ -83,6 +88,10 @@ export const FormInput = ({
 				text={text}
 				type={type}
 				value={value}
+				color={color}
+                textColor={textColor}
+                padding={padding}
+                onChange={onChange}
 			/>
 		)}
 	</div>

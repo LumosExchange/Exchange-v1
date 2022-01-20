@@ -12,6 +12,9 @@ const qrcode = require("qrcode");
 const Nexmo = require("nexmo");
 const nodemailer = require("nodemailer");
 const SMTPPool = require("nodemailer/lib/smtp-pool");
+const multer  = require('multer');
+const upload = multer();
+app.use(upload.array());
 
 require("dotenv").config();
 
@@ -54,8 +57,13 @@ app.use(
   })
 );
 
-app.use(cookieParser());
+
+//Initiate Imports
+app.use(express.json());
+
+//app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(
   session({
@@ -69,8 +77,6 @@ app.use(
   })
 );
 
-//Initiate Imports
-app.use(express.json());
 
 //initiate 2fa speakeasy for google auth
 var secret = speakeasy.generateSecret({
@@ -88,6 +94,9 @@ const db = mysql.createConnection({
 //Register
 app.post("/register", (req, res) => {
   const firstName = req.body.firstName;
+
+  console.log("firstName: "+ req.body.firstName);
+
   const lastName = req.body.lastName;
   const email = req.body.email;
   const password = req.body.password;
