@@ -24,12 +24,6 @@ function TwoFactorAuth() {
   const img = "";
   //get secret from back end
   useEffect(() => {
-<<<<<<< Updated upstream
-    Axios.post("http://localhost:3001/getSecret").then((response) => {
-      setSecret(response.data);
-      console.log("response front end: " + secret.base32);
-    });
-=======
 
 	async function getSecret() {
 		const response = await axios.post("http://localhost:3001/getSecret");
@@ -41,7 +35,6 @@ function TwoFactorAuth() {
 		getSecret();
 	}
 
->>>>>>> Stashed changes
   }, []);
 
   //display img as QR code
@@ -72,32 +65,6 @@ function TwoFactorAuth() {
   }
 
   return (
-<<<<<<< Updated upstream
-    <div>
-      <h1>Please select 2FA methord</h1>
-      <button onClick={ShowGoogleAuthQR}>Google Auth</button>
-      <br></br>
-      <button>Email 2FA</button>
-      <br></br>
-      <button>SMS 2FA</button>
-      <br></br>
-      <img id="QRCode"></img>
-
-      <h2>Please enter 6 digit 2fa code:</h2>
-      <input
-        type="text"
-        id="Code"
-        name="code"
-        onChange={(e) => {
-          setTwofaCode(e.target.value);
-        }}
-      ></input>
-      <button type="submit" onClick={VerifyGoogleAuth}>
-        Submit
-      </button>
-    </div>
-  );
-=======
     	<PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">
 			<Card radius="20px" className="p-5 d-flex flex-column">
 				<Heading className="pb-4 text-center">Please select an 2FA method</Heading>
@@ -157,7 +124,6 @@ function TwoFactorAuth() {
 			</Card>
     	</PageBody>
   	);
->>>>>>> Stashed changes
 }
 
 export default TwoFactorAuth;
