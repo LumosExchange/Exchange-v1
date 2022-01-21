@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useLocation } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router";
 import { PageBody } from "../Components/FormInputs";
 import PrimaryButton from "../Components/Buttons";
 import { FormInput } from "../Components/FormInputs";
@@ -7,24 +8,22 @@ import Card from "../Components/Card";
 import Axios from "axios";
 
 const EmailVerification = () => {
-  const { state } = useLocation();
-
   const [Twofa, setTwofaCode] = useState("");
   const [verified, setVerifed] = useState("");
   const [userEmail, setUserEmail] = useState([]);
 
-  async function VerifyEmailAuth(event) {
-    event.preventDefault();
-    useEffect(() => {
-      Axios.get("http://localhost:3001/VerifyEmail2FA", {
+  const { state } = useLocation();
+
+  async function VerifyEmailAuth() {
+      Axios.post("http://localhost:3001/VerifyEmail2FA", {
         params: {
           email: state.email,
           passcode: Twofa,
         },
       }).then((response) => {
+        console.log(response.data);
         setUserEmail(response.data);
       });
-    }, []);
   }
 
   return (
