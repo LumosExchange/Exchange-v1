@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useLocation } from "react";
 import { PageBody } from "../Components/FormInputs";
 import PrimaryButton from "../Components/Buttons";
 import { FormInput } from "../Components/FormInputs";
@@ -19,7 +19,7 @@ const EmailVerification = () => {
       Axios.get("http://localhost:3001/VerifyEmail2FA", {
         params: {
           email: state.email,
-          passcode: TwoFa,
+          passcode: Twofa,
         },
       }).then((response) => {
         setUserEmail(response.data);
