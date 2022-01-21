@@ -55,7 +55,6 @@ app.use(
   })
 );
 
-
 //Initiate Imports
 app.use(express.json());
 
@@ -75,7 +74,6 @@ app.use(
   })
 );
 
-
 //initiate 2fa speakeasy for google auth
 var secret = speakeasy.generateSecret({
   name: "LumosExchange",
@@ -93,7 +91,7 @@ const db = mysql.createConnection({
 app.post("/register", (req, res) => {
   const firstName = req.body.firstName;
 
-  console.log("firstName: "+ req.body.firstName);
+  console.log("firstName: " + req.body.firstName);
 
   const lastName = req.body.lastName;
   const email = req.body.email;
@@ -311,7 +309,7 @@ app.get("VonageSMSVerify", (req, res) => {
     return;
   }
 
-    //Pass details to vonage servers for validation
+  //Pass details to vonage servers for validation
   nexmo.verify.check(
     {
       request_id: req.body.requestId,
@@ -328,30 +326,29 @@ app.get("VonageSMSVerify", (req, res) => {
 });
 
 app.post("/Send_Email_Verification", cors(), async (req, res) => {
-//Get email from user and send email with code
+  //Get email from user and send email with code
 
-let {text} = "";
+  let { text } = "";
 
-crypto.randomInt(100000, 999999, (err, n) => {
-  if (err) throw err;
-  console.log(`Random 6 digit integer: `, n);
-  text = n;
-});
+  crypto.randomInt(100000, 999999, (err, n) => {
+    if (err) throw err;
+    console.log(`Random 6 digit integer: `, n);
+    text = n;
+  });
 
-//store temp secret in DB 
+  //store temp secret in DB
 
-  //Pass connection details to Emailer API from ENV 
+  //Pass connection details to Emailer API from ENV
   const transport = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
     port: process.env.MAIL_PORT,
     auth: {
       user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASS
-    }
+      pass: process.env.MAIL_PASS,
+    },
+  });
 
-  })
-
-  //Send email 
+  //Send email
   await transport.sendMail({
     from: process.env.MAIL_FROM,
     to: req.body.email,
@@ -366,12 +363,40 @@ crypto.randomInt(100000, 999999, (err, n) => {
     <h2>Here is your verification code!</h2>
     <p>${text}</p>
      </div>
-`
+`,
+  });
+  //STORE EMAIL & PASSCODE IN DB
+
+  db.query(
+    "INSERT INTO TempAuth (Email, Secret) VALUES (?,?)",
+    [req.body.email, text],
+
+    (err, result) => {
+      console.log(err);
+    }
+  );
+});
+
+app.post("/VerifyEmail2FA", (req, res) => {
+  const email = req.body.email;
+  const userCode = req.body.passcode;
+  const checkCode = "";
+  const auth = false;
+
+  db.query(
+    "SELECT * FROM TempAuth WHERE (email) = (?)",
+    [email],
+    (err, result) => {
+      CheckCode = result;
+    }
+  );
+  if ((checkCode = userCode)) {
+    auth = true;
+  } else {
+    auth = false;
   }
-  )
-
-})
-
+  res.send(auth);
+});
 
 //app.get('/', (req, res)=> {
 
