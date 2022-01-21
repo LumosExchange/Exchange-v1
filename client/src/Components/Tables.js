@@ -18,3 +18,16 @@ const StyledTable = styled.table(({ theme }) => css`
 `);
 
 export default StyledTable;
+
+export const AirDropTable = styled.table(({ theme }) => css`
+    color: ${theme.colors.white};
+    font-size: 18px;
+    
+    thead th, td, tr {
+        padding: 20px;
+    }
+
+    span {
+        color: ${theme.colors.yellow};
+    }
+`);

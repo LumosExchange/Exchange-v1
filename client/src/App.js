@@ -34,6 +34,7 @@ import ChangePassword from "./Pages/ChangePassword";
 import MyWallet from "./Pages/MyWallet";
 import TradeHistory from "./Pages/TradeHistory";
 import EmailVerification from "./Pages/EmailVerification";
+import AirDrops from "./Pages/AirDrops";
 
 const theme = {
   colors: {
@@ -49,7 +50,6 @@ const theme = {
     gradients: {
       yellow: "#FCE608",
       peach: "#FF7586",
-      pink: "",
       magenta: "#D12AFA",
       sage: "#0EF1A9",
       mauve: "#B372CE",
@@ -122,6 +122,7 @@ function App() {
             <Route path="/ChangePassword" element={<ChangePassword/>} />
             <Route path="/MyWallet" element={<MyWallet/>} />
             <Route path="/EmailVerification" element={<EmailVerification/>} />
+            <Route path="/AirDrops" element={<AirDrops/>} />
           </Routes>
         </Router>
         <Footer />
