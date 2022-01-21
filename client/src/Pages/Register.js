@@ -33,8 +33,10 @@ const Register = () => {
         password: passwordReg,
         nationality: nationalityReg,
       }),
-      Axios.post("http://localhost:3001/Send_Email_Verification",{
-        email: emailReg
+      Axios.post("http://localhost:3001/SendEmailVerification",{
+        email: emailReg,
+		firstName: firstNameReg,
+		lastName: lastNameReg
       })
     ])
 	.then(Axios.spread((data1, data2) => {
@@ -45,7 +47,8 @@ const Register = () => {
 		navigate("/EmailVerification", {
 			state: {
 				id: 1,
-				email: emailReg
+				email: emailReg,
+			
 			}
 	
 		});
