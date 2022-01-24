@@ -113,6 +113,40 @@ app.post("/register", (req, res) => {
   });
 });
 
+//UpgradeGold
+app.post("/UpgradeGold", (req, res) => {
+  const EmployerName = req.body.EmployerName;
+
+  const EmployerAddress = req.body.EmployerAddress;
+  const Occupation = req.body.Occupation;
+  const Income = req.body.Income;
+  console.log("EmployerName: " + req.body.EmployerName);
+  db.query(
+    "INSERT INTO UpgradeGold (EmployerName, EmployerAddress, Occupation, Income) VALUES (?,?,?,?)",
+    [EmployerName, EmployerAddress, Occupation, Income],
+    (err, result) => {
+      console.log(err);
+    }
+  );
+});
+
+//UpgradeBronze
+app.post("/UpgradeBronze", (req, res) => {
+  const DateOfBirth = req.body.DateOfBirth;
+
+  const Phone = req.body.Phone;
+  const CountryOfResidence = req.body.CountryOfResidence;
+  const Tax = req.body.Tax;
+  console.log("DateOfBirth: " + req.body.DateOfBirth);
+  db.query(
+    "INSERT INTO UpgradeBronze (DateOfBirth, Phone, CountryOfResidence, Tax) VALUES (?,?,?,?)",
+    [DateOfBirth, Phone, CountryOfResidence, Tax],
+    (err, result) => {
+      console.log(err);
+    }
+  );
+});
+
 //Login functionality
 //check logged in state
 app.get("/login", (req, res) => {
@@ -328,13 +362,10 @@ app.get("VonageSMSVerify", (req, res) => {
 app.post("/SendEmailVerification", (req, res) => {
   //Get email from user and send email with code
 
-  
   const text = crypto.randomInt(0, 1000000);
-  console.log('Verification code is: ', text);
-  const name = (req.body.firstName + " " + req.body.lastName);
-  console.log('name: ', req.body.firstName);
-  
 
+  const name = req.body.firstName + " " + req.body.lastName;
+  console.log("name: ", req.body.firstName);
 
   //store temp secret in DB
 
@@ -349,7 +380,7 @@ app.post("/SendEmailVerification", (req, res) => {
   });
 
   //Send email
-transport.sendMail({
+  transport.sendMail({
     from: process.env.MAIL_FROM,
     to: req.body.email,
     subject: "Lumos Email Verification",
@@ -402,10 +433,8 @@ transport.sendMail({
     </tr>
 </table>
 `,
-
-  }
- )
- console.log('email sent');
+  });
+  console.log("email sent");
   //STORE EMAIL & PASSCODE IN DB
 
   db.query(
@@ -420,23 +449,29 @@ transport.sendMail({
 
 app.post("/VerifyEmail2FA", (req, res) => {
   const email = req.body.email;
+
   const userCode = req.body.passcode;
-  const checkCode = "";
+
+  console.log("usercode: ", req.body.passcode);
+  console.log("email is: ", req.body.email);
+  var checkCode = 0;
   const auth = false;
 
   db.query(
     "SELECT * FROM TempAuth WHERE (email) = (?)",
     [email],
     (err, result) => {
-      checkCode = result;
+      checkCode = result.toString;
     }
   );
-  if ((checkCode = userCode)) {
+  if (checkCode == userCode) {
     auth = true;
   } else {
     auth = false;
   }
   res.send(auth);
+
+  //once verified delete 2fa from db
 });
 
 //app.get('/', (req, res)=> {

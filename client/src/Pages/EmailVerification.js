@@ -14,16 +14,16 @@ const EmailVerification = () => {
 
   const { state } = useLocation();
 
-  async function VerifyEmailAuth() {
-      Axios.post("http://localhost:3001/VerifyEmail2FA", {
-        params: {
-          email: state.email,
-          passcode: Twofa,
-        },
-      }).then((response) => {
-        console.log(response.data);
-        setUserEmail(response.data);
-      });
+  function VerifyEmailAuth() {
+    console.log("user passcode", Twofa);
+    console.log("email: ", state.email);
+    Axios.post("http://localhost:3001/VerifyEmail2FA", {
+        email: state.email,
+        passcode: Twofa,
+      
+    }).then((response) => {
+      setVerifed(response.data);
+    });
   }
 
   return (
@@ -34,24 +34,26 @@ const EmailVerification = () => {
         </Heading>
         <div className="w-100 row">
           <div className="col-12 col-md-8">
-            <FormInput
-              type="text"
-              id="Code"
-              name="code"
-              placeholder="Enter 2FA Code"
-              onChange={(e) => {
-                setTwofaCode(e.target.value);
-              }}
-              className="w-100"
-            />
-          </div>
-          <div className="col-12 col-md-4 p-0">
-            <PrimaryButton
-              type="submit"
-              text="Submit"
-              onClick={VerifyEmailAuth}
-              className="w-100 h-100"
-            />
+            <form>
+              <FormInput
+                type="text"
+                id="Code"
+                name="code"
+                placeholder="Enter 2FA Code"
+                onChange={(e) => {
+                  setTwofaCode(e.target.value);
+                }}
+                className="w-100"
+              />
+              <div className="col-12 col-md-4 p-0">
+                <PrimaryButton
+                  text="Submit"
+                  type="submit"
+                  onClick={VerifyEmailAuth}
+                  className="w-100 h-100"
+                />
+              </div>
+            </form>
           </div>
         </div>
       </Card>
