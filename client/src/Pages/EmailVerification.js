@@ -6,23 +6,37 @@ import { FormInput } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Card from "../Components/Card";
 import Axios from "axios";
+import { useNavigate } from "react-router";
 
 const EmailVerification = () => {
   const [Twofa, setTwofaCode] = useState("");
-  const [verified, setVerifed] = useState("");
   const [userEmail, setUserEmail] = useState([]);
+  const navigate = useNavigate();
+
+  let verified = false;
+  let result = "";
 
   const { state } = useLocation();
 
-  function VerifyEmailAuth() {
+  async function VerifyEmailAuth(event) {
+    event.preventDefault();
+
     console.log("user passcode", Twofa);
     console.log("email: ", state.email);
     Axios.post("http://localhost:3001/VerifyEmail2FA", {
-        email: state.email,
-        passcode: Twofa,
-      
+      email: state.email,
+      passcode: Twofa,
     }).then((response) => {
-      setVerifed(response.data);
+      if (response.data == true) {
+        //Show popup with confirmation
+
+        verified = true;
+        navigate("/Login");
+      } else {
+        //show popup with error
+
+        verified = false;
+      }
     });
   }
 
