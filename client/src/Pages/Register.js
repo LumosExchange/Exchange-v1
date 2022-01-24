@@ -25,33 +25,33 @@ const Register = () => {
 
 
 	const register = () => {
-    Axios.all([
-      Axios.post("http://localhost:3001/register", {
-        firstName: firstNameReg,
-        lastName: lastNameReg,
-        email: emailReg,
-        password: passwordReg,
-        nationality: nationalityReg,
-      }),
-      Axios.post("http://localhost:3001/SendEmailVerification",{
-        email: emailReg,
-		firstName: firstNameReg,
-		lastName: lastNameReg
-      })
-    ])
-	.then(Axios.spread((data1, data2) => {
-		console.log('data1', data1, 'data2', data2)
-		setSecret(data1);
-		console.log('2fa is : ', secret );
-	}));	
-		navigate("/EmailVerification", {
-			state: {
-				id: 1,
-				email: emailReg,
-			
-			}
-	
-		});
+		Axios.all([
+		Axios.post("http://localhost:3001/register", {
+			firstName: firstNameReg,
+			lastName: lastNameReg,
+			email: emailReg,
+			password: passwordReg,
+			nationality: nationalityReg,
+		}),
+		Axios.post("http://localhost:3001/SendEmailVerification",{
+			email: emailReg,
+			firstName: firstNameReg,
+			lastName: lastNameReg
+		})
+		])
+		.then(Axios.spread((data1, data2) => {
+			console.log('data1', data1, 'data2', data2)
+			setSecret(data1);
+			console.log('2fa is : ', secret );
+		}));	
+			navigate("/EmailVerification", {
+				state: {
+					id: 1,
+					email: emailReg,
+				
+				}
+		
+			});
 	}
 
 	
