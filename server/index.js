@@ -328,13 +328,9 @@ app.get("VonageSMSVerify", (req, res) => {
 app.post("/SendEmailVerification", (req, res) => {
   //Get email from user and send email with code
 
-  
   const text = crypto.randomInt(0, 1000000);
-  console.log('Verification code is: ', text);
-  const name = (req.body.firstName + " " + req.body.lastName);
-  console.log('name: ', req.body.firstName);
-  
 
+  const name = req.body.firstName + " " + req.body.lastName;
 
   //store temp secret in DB
 
@@ -349,7 +345,7 @@ app.post("/SendEmailVerification", (req, res) => {
   });
 
   //Send email
-transport.sendMail({
+  transport.sendMail({
     from: process.env.MAIL_FROM,
     to: req.body.email,
     subject: "Lumos Email Verification",
@@ -402,10 +398,8 @@ transport.sendMail({
     </tr>
 </table>
 `,
-
-  }
- )
- console.log('email sent');
+  });
+  console.log("email sent");
   //STORE EMAIL & PASSCODE IN DB
 
   db.query(
@@ -421,10 +415,10 @@ transport.sendMail({
 app.post("/VerifyEmail2FA", (req, res) => {
   const email = req.body.email;
 
-
   const userCode = req.body.passcode;
 
-  console.log('usercode: ', userCode);
+  console.log("usercode: ", req.body.passcode);
+  console.log("email is: ", req.body.email);
   var checkCode = 0;
   const auth = false;
 
@@ -435,14 +429,14 @@ app.post("/VerifyEmail2FA", (req, res) => {
       checkCode = result.toString;
     }
   );
-  if ((checkCode == userCode)) {
+  if (checkCode == userCode) {
     auth = true;
   } else {
     auth = false;
   }
   res.send(auth);
 
-  //once verified delete 2fa from db 
+  //once verified delete 2fa from db
 });
 
 //app.get('/', (req, res)=> {
