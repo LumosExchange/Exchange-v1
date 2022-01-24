@@ -415,23 +415,29 @@ transport.sendMail({
 
 app.post("/VerifyEmail2FA", (req, res) => {
   const email = req.body.email;
+
+
   const userCode = req.body.passcode;
-  const checkCode = "";
+
+  console.log('usercode: ', userCode);
+  var checkCode = 0;
   const auth = false;
 
   db.query(
     "SELECT * FROM TempAuth WHERE (email) = (?)",
     [email],
     (err, result) => {
-      checkCode = result;
+      checkCode = result.toString;
     }
   );
-  if ((checkCode = userCode)) {
+  if ((checkCode == userCode)) {
     auth = true;
   } else {
     auth = false;
   }
   res.send(auth);
+
+  //once verified delete 2fa from db 
 });
 
 //app.get('/', (req, res)=> {

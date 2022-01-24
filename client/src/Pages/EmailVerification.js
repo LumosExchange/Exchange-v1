@@ -15,6 +15,9 @@ const EmailVerification = () => {
   const { state } = useLocation();
 
   async function VerifyEmailAuth() {
+
+    console.log('user passcode', Twofa);
+    console.log('email: ', state.email);
       Axios.post("http://localhost:3001/VerifyEmail2FA", {
         params: {
           email: state.email,
@@ -22,7 +25,7 @@ const EmailVerification = () => {
         },
       }).then((response) => {
         console.log(response.data);
-        setUserEmail(response.data);
+        setVerifed(response.data);
       });
   }
 
