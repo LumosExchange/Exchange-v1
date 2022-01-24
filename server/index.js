@@ -363,14 +363,9 @@ app.post("/SendEmailVerification", (req, res) => {
   //Get email from user and send email with code
 
   const text = crypto.randomInt(0, 1000000);
-<<<<<<< Updated upstream
 
   const name = req.body.firstName + " " + req.body.lastName;
-=======
-  console.log("Verification code is: ", text);
-  const name = req.body.firstName + " " + req.body.lastName;
   console.log("name: ", req.body.firstName);
->>>>>>> Stashed changes
 
   //store temp secret in DB
 
