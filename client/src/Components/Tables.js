@@ -42,7 +42,7 @@ export const AirDropTable = styled.table(({ theme }) => css`
             background: ${theme.colors.tableGrey};
         }
 
-        .buttons { width: 50px };
-        .icons { width: 28px };
+        .buttons { width: 140px };
+        .icons { width: 75px };
     }
 `);

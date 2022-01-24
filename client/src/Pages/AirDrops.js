@@ -232,8 +232,9 @@ const AirDrops = () => {
                                                     padding="5px 10px"
                                                     fontSize="14px"
                                                     borderSize="2px"
-                                                    disabled
                                                     className="w-100"
+                                                    dark
+                                                    disabled
                                                 />
                                             ) : (
                                                 <GradientButton
@@ -242,7 +243,7 @@ const AirDrops = () => {
                                                     fontSize="14px"
                                                     borderSize="2px"
                                                     className="w-100"
-                                                    disabled 
+                                                    dark
                                             />
                                             )}</td>
                                         </tr>

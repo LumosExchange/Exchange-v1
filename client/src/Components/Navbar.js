@@ -13,12 +13,6 @@ const Base = styled.div(({ theme }) => css`
     font-family: Arial, Helvetica, sans-serif;
 
 	.fixedHeight { min-height: 80px; }
-
-	button {
-		height: 32px;
-		width: 70px;
-		font-size: 16px;
-	}
 `);
 
 const NavLink = styled.a(({ theme }) => css`
@@ -85,7 +79,7 @@ const Navbar = ({ isLoggedIn }) => {
 								<NavLink href="/Airdrops">Airdrops</NavLink>
 							</div>
 							<div className="d-none d-lg-block">
-								<GradientButton linkTo="/Login" text="Login" />
+								<GradientButton linkTo="/Login" text="Login" as="link" />
 							</div>
 						</React.Fragment>
 					)}
