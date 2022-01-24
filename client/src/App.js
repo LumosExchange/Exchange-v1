@@ -35,6 +35,7 @@ import MyWallet from "./Pages/MyWallet";
 import TradeHistory from "./Pages/TradeHistory";
 import EmailVerification from "./Pages/EmailVerification";
 import AirDrops from "./Pages/AirDrops";
+import Profile from "./Pages/Profile";
 
 const theme = {
   colors: {
@@ -120,10 +121,11 @@ function App() {
             <Route path="/Feedback" element={<Feedback />} />
             <Route path="/TwoFactorAuth" element={<TwoFactorAuth />} />
             <Route path="/ConnectWallet" element={<ConnectWallet />} />
-            <Route path="/ChangePassword" element={<ChangePassword/>} />
-            <Route path="/MyWallet" element={<MyWallet/>} />
-            <Route path="/EmailVerification" element={<EmailVerification/>} />
-            <Route path="/AirDrops" element={<AirDrops/>} />
+            <Route path="/ChangePassword" element={<ChangePassword />} />
+            <Route path="/MyWallet" element={<MyWallet />} />
+            <Route path="/EmailVerification" element={<EmailVerification />} />
+            <Route path="/AirDrops" element={<AirDrops />} />
+            <Route path="/Profile" element={<Profile />} />
           </Routes>
         </Router>
         <Footer />
