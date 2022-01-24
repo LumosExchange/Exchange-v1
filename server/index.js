@@ -363,14 +363,9 @@ app.post("/SendEmailVerification", (req, res) => {
   //Get email from user and send email with code
 
   const text = crypto.randomInt(0, 1000000);
-<<<<<<< Updated upstream
-
-  const name = req.body.firstName + " " + req.body.lastName;
-=======
   console.log("Verification code is: ", text);
   const name = req.body.firstName + " " + req.body.lastName;
   console.log("name: ", req.body.firstName);
->>>>>>> Stashed changes
 
   //store temp secret in DB
 
@@ -459,21 +454,28 @@ app.post("/VerifyEmail2FA", (req, res) => {
 
   console.log("usercode: ", req.body.passcode);
   console.log("email is: ", req.body.email);
-  var checkCode = 0;
-  const auth = false;
+  let checkCode;
+  let auth = false;
 
   db.query(
     "SELECT * FROM TempAuth WHERE (email) = (?)",
     [email],
     (err, result) => {
-      checkCode = result.toString;
+      checkCode = result[0].Secret;
+      console.log('Checkcode from db: ', checkCode);
+      console.log('Passcode from  user: ', userCode);
     }
   );
-  if (checkCode == userCode) {
+  let newcheckCode = toString(checkCode);
+  let newuserCode = toString(userCode);
+  //convert both to string before checking 
+
+  if (newcheckCode == newuserCode) {
     auth = true;
   } else {
     auth = false;
   }
+  console.log('auth: ', auth);
   res.send(auth);
 
   //once verified delete 2fa from db
@@ -482,6 +484,7 @@ app.post("/VerifyEmail2FA", (req, res) => {
 //app.get('/', (req, res)=> {
 
 //});
+
 
 app.listen(3001, () => {
   console.log("running on port 3001");
