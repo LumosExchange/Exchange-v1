@@ -13,12 +13,6 @@ const Base = styled.div(({ theme }) => css`
     font-family: Arial, Helvetica, sans-serif;
 
 	.fixedHeight { min-height: 80px; }
-
-	button {
-		height: 32px;
-		width: 70px;
-		font-size: 16px;
-	}
 `);
 
 const NavLink = styled.a(({ theme }) => css`
@@ -63,11 +57,11 @@ const Navbar = ({ isLoggedIn }) => {
 					{isLoggedIn ? (
 						<React.Fragment>
 							<div className="d-none d-lg-block m-auto">
-								<NavLink href="/Offers" className="me-4 me-xl-5">Market</NavLink>
+								<NavLink href="/Market" className="me-4 me-xl-5">Market</NavLink>
 								<NavLink href="/Offers" className="me-4 me-xl-5">Offers</NavLink>
-								<NavLink href="/Cryptos" className="me-4 me-xl-5">Trade</NavLink>
-								<NavLink href="/Trade" className="me-4 me-xl-5">Wallet</NavLink>
-								<NavLink href="/Airdrops">Airdrops</NavLink>
+								<NavLink href="/Trade" className="me-4 me-xl-5">Trade</NavLink>
+								<NavLink href="/MyWallet" className="me-4 me-xl-5">Wallet</NavLink>
+								<NavLink href="/AirDrops">Airdrops</NavLink>
 							</div>
 							<div className="align-items-center d-none d-lg-flex">
 								<i className="material-icons me-3 text-white">notifications</i>
@@ -80,12 +74,12 @@ const Navbar = ({ isLoggedIn }) => {
 								<NavLink href="/Offers" className="me-4 me-xl-5">Offers</NavLink>
 								<NavLink href="/Cryptos" className="me-4 me-xl-5">Cryptos</NavLink>
 								<NavLink href="/Trade" className="me-4 me-xl-5">How to Trade</NavLink>
-								<NavLink href="/Wallet" className="me-4 me-xl-5">Reviews</NavLink>
+								<NavLink href="/Reviews" className="me-4 me-xl-5">Reviews</NavLink>
 								<NavLink href="/Faq" className="me-4 me-xl-5">FAQ</NavLink>
-								<NavLink href="/Airdrops">Airdrops</NavLink>
+								<NavLink href="/AirDrops">Airdrops</NavLink>
 							</div>
 							<div className="d-none d-lg-block">
-								<GradientButton linkTo="/Login" text="Login" />
+								<GradientButton linkTo="/Login" text="Login" as="link" />
 							</div>
 						</React.Fragment>
 					)}

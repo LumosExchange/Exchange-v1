@@ -2,27 +2,41 @@ import React from "react";
 import styled, { css } from "styled-components";
 import PropTypes from 'prop-types';
 
-const ButtonBase = styled.div(({ theme, fontSize }) => css`
+const ButtonBase = styled.div(({ theme, fontSize, padding, borderSize, dark }) => css`
 	border-radius: 50px;
 	background: rgba(46, 46, 46, 0.5);
 	background: linear-gradient(90deg, rgba(252,230,8,1) 0%, rgba(255,117,134,1) 33%, rgba(179,114,206,1) 66%, rgba(111,134,255,1) 100%);
 
 	.innerButton {
-		background: #202020;
-		margin: 3px;
+		background: ${dark ? '#000' : '#202020'};
+		margin: ${borderSize};
 		border-radius: 50px;
 		font-size: ${fontSize};
-		padding: 7px 25px;
+		padding: ${padding};
 		color: ${theme.colors.white};
 		border: 0;
+
+		&:disabled {
+			opacity: 0.7;
+		}
 	}
 
 	&:hover { transform: scale(1.05); }
 	a, a:hover { color: #fff; }
 `);
 
-const GradientButton = ({ text, linkTo, className, as, onClick, value, type, fontSize }) => (
-	<ButtonBase fontSize={fontSize} className={`d-inline-flex ${className ? className : ''}`}>
+const GradientButton = ({
+	text, linkTo, className,
+	as, onClick, value, type,
+	fontSize, padding, borderSize, dark, disabled
+}) => (
+	<ButtonBase
+		fontSize={fontSize}
+		className={`d-inline-flex ${className ? className : ''}`}
+		padding={padding}
+		borderSize={borderSize}
+		dark={dark}
+	>
 		{as === 'link' ? (
 			<a href={linkTo} alt="1" className="innerButton w-100 text-center text-decoration-none">
 				{text}
@@ -34,6 +48,7 @@ const GradientButton = ({ text, linkTo, className, as, onClick, value, type, fon
 				value={value}
 				type={type}
 				fontSize={fontSize}
+				disabled={disabled}
 			>{text}</button>
 		)}
 	</ButtonBase>
@@ -44,13 +59,19 @@ GradientButton.propTypes = {
 	linkTo: PropTypes.string,
     as: PropTypes.string,
 	fontSize: PropTypes.string,
+	padding: PropTypes.string,
+	borderSize: PropTypes.string,
+	dark: PropTypes.bool,
 }
 
 GradientButton.defaultProps = {
     text: 'Button Text',
 	linkTo: '#',
-	as: 'link',
+	as: 'button',
 	fontSize: '16px',
+	padding: '7px 25px',
+	borderSize: '3px',
+	dark: false,
 }
 
 export default GradientButton;
