@@ -4,6 +4,7 @@ import Axios from "axios";
 import { FormInput, PageBody } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import { useNavigate } from "react-router";
+import PrimaryButton from "../Components/Buttons";
 
 function UpgradeGold() {
   const [employerNameReg, setEmployerNameReg] = useState("");
@@ -62,40 +63,25 @@ function UpgradeGold() {
                 setOccupationReg(e.target.value);
               }}
             />
-            </form>
+            <FormInput
+              id="Income"
+              className="mb-3 w-100"
+              type="text"
+              placeholder="Income "
+              onChange={(e) => {
+                setIncomeReg(e.target.value);
+              }}
+            />
+          </form>
 
-      <div class="input-container ic2">
-        <label for="Employeraddress" class="placeholder">
-          Employer Address
-        </label>
-        <input
-          id="Employer address"
-          class="input"
-          type="text"
-          placeholder=" "
-          onChange={(e) => {
-            setEmployerAddressReg(e.target.value);
-          }}
-        />
-        <div class="cut"></div>
-      </div>
-
-      <div class="input-container ic2">
-        <label for="Occupation" class="placeholder">
-          Occupation
-        </label>
-        <input
-          id="Occupation"
-          class="input"
-          type="Occupation"
-          placeholder=" "
-          onChange={(e) => {
-            setOccupationReg(e.target.value);
-          }}
-        />
-        <div class="cut cut-short"></div>
-      </div>
-      </div>
+          <PrimaryButton
+            type="submit"
+            className="m-auto"
+            onClick={upgradeGold}
+            text="Upgrade"
+            hasIcon
+          />
+        </div>
       </div>
     </PageBody>
   );

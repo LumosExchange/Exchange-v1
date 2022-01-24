@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import "../App.css";
 import Axios from "axios";
 import { FormInput, PageBody } from "../Components/FormInputs";
+import PrimaryButton from "../Components/Buttons";
+import Heading from "../Components/Heading";
+import { useNavigate } from "react-router";
 
 function UpgradeBronze() {
   const [dateOfBirthReg, setDateOfBirthReg] = useState("");
@@ -12,85 +15,74 @@ function UpgradeBronze() {
 
   const upgradeBronze = () => {
     Axios.post("http://localhost:3001/upgradeBronze", {
-      DatOfBirth: dateOfBirthReg,
+      DateOfBirth: dateOfBirthReg,
       Phone: phoneReg,
-      CountryofResidence: countryOfResidencenReg,
+      CountryOfResidence: countryOfResidencenReg,
       Tax: taxReg,
     });
   };
 
   return (
-    <div class="form">
-      <div class="subtitle">
-        <h1>Let's upgrade to bronze tier!</h1>
-      </div>
-      <div class="input-container ic1">
-        <label for="DatOfBirth" class="placeholder">
-          Date of birth
-        </label>
-        <input
-          id="Date of Birth"
-          class="input"
-          type="text"
-          placeholder=" "
-          onChange={(e) => {
-            setDateOfBirthReg(e.target.value);
-          }}
-        />
-        <div class="cut"></div>
-      </div>
+    <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid">
+      <div className="row">
+        <div className="col-11 col-md-6 d-flex flex-column m-auto">
+          <Heading size="36px" color="white" className="mt-5 mb-4 text-center">
+            Upgrade to Bronze
+          </Heading>
+          <Heading size="24px" color="white" className="mb-5 text-center">
+            Enter your details to upgrade to Bronze.
+          </Heading>
 
-      <div class="input-container ic2">
-        <label for="Phone" class="placeholder">
-          Phone number
-        </label>
-        <input
-          id="Phone"
-          class="input"
-          type="text"
-          placeholder=" "
-          onChange={(e) => {
-            setPhoneReg(e.target.value);
-          }}
-        />
-        <div class="cut"></div>
-      </div>
+          <form>
+            <FormInput
+              id="DateOfBirth"
+              className="mb-3 w-100"
+              type="DateOfBirth"
+              placeholder="Date of Birth "
+              onChange={(e) => {
+                setDateOfBirthReg(e.target.value);
+              }}
+            />
 
-      <div class="input-container ic2">
-        <label for="CountryofResidence" class="placeholder">
-          Country of Residence
-        </label>
-        <input
-          id="CountryofResidence"
-          class="input"
-          type="CountryofResidence"
-          placeholder=" "
-          onChange={(e) => {
-            setCountryOfResidenceReg(e.target.value);
-          }}
-        />
-        <div class="cut cut-short"></div>
-      </div>
-      <div class="input-container ic2">
-        <label for="Tax" class="placeholder">
-          Additional Tax Obligations(Optional)
-        </label>
-        <input
-          id="Tax"
-          class="input"
-          type="Tax"
-          placeholder=" "
-          onChange={(e) => {
-            setTaxReg(e.target.value);
-          }}
-        />
-        <div class="cut cut-short"></div>
-      </div>
+            <FormInput
+              id="Phone"
+              className="mb-3 w-100"
+              type="Phone"
+              placeholder="Phone"
+              onChange={(e) => {
+                setPhoneReg(e.target.value);
+              }}
+            />
+            <FormInput
+              id="CountryOfResidence"
+              className="mb-3 w-100"
+              type="CountryOfResidence"
+              placeholder="Country of Residence "
+              onChange={(e) => {
+                setCountryOfResidenceReg(e.target.value);
+              }}
+            />
+            <FormInput
+              id="Tax"
+              className="mb-3 w-100"
+              type="Tax"
+              placeholder="Tax "
+              onChange={(e) => {
+                setTaxReg(e.target.value);
+              }}
+            />
+          </form>
 
-      <button type="text" class="submit" onClick={upgradeBronze}>
-        upgrade
-      </button>
-    </div>
+          <PrimaryButton
+            type="submit"
+            className="m-auto"
+            onClick={upgradeBronze}
+            text="Upgrade"
+            hasIcon
+          />
+        </div>
+      </div>
+    </PageBody>
   );
 }
 export default UpgradeBronze;
