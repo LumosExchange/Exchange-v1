@@ -8,6 +8,7 @@ import IconNews from "../Images/icon-news.svg";
 import IconFaq from "../Images/icon-faq.svg";
 import { Link } from "react-router-dom";
 import { AirDropTable } from "../Components/Tables";
+import GradientButton from "../Components/GradientButton";
 
 // AirDrop Icons
 import IconAirdropAssetSol from '../Images/icon-airdrop-asset-sol.svg';
@@ -220,12 +221,30 @@ const AirDrops = () => {
                                 <tbody>
                                     {OngoingAirdropData.map((data) => (
                                         <tr key={data.date}>
-                                            <td>{convertAssetToIcon(data.asset)}</td>
+                                            <td className="icons">{convertAssetToIcon(data.asset)}</td>
                                             <td>{data.project}</td>
                                             <td>{data.amount}</td>
                                             <td>{data.filled}</td>
                                             <td>{data.ends}</td>
-                                            <td>{data.participating}</td>
+                                            <td className="buttons">{data.participating ? (
+                                                <GradientButton
+                                                    text="Participating"
+                                                    padding="5px 10px"
+                                                    fontSize="14px"
+                                                    borderSize="2px"
+                                                    disabled
+                                                    className="w-100"
+                                                />
+                                            ) : (
+                                                <GradientButton
+                                                    text="Participate"
+                                                    padding="5px 10px"
+                                                    fontSize="14px"
+                                                    borderSize="2px"
+                                                    className="w-100"
+                                                    disabled 
+                                            />
+                                            )}</td>
                                         </tr>
                                     ))}
                                 </tbody>

@@ -41,5 +41,8 @@ export const AirDropTable = styled.table(({ theme }) => css`
         &:nth-of-type(even){
             background: ${theme.colors.tableGrey};
         }
+
+        .buttons { width: 50px };
+        .icons { width: 28px };
     }
 `);
