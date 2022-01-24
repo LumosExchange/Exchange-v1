@@ -47,6 +47,7 @@ const theme = {
     blueGrey: "#b7b4c7",
     navyGrey: "#212127",
     six9Grey: "#696969",
+    tableGrey: "#3F3F3F",
     gradients: {
       yellow: "#FCE608",
       peach: "#FF7586",
