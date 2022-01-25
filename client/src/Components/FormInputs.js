@@ -98,6 +98,7 @@ export const FormInput = ({
 	</div>
 );
 
+
 const StyledCheckbox = styled.input(({ theme }) => css`
 	-webkit-appearance: none;
 	background-color: ${theme.colors.grey};

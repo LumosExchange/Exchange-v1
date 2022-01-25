@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Alert } from "react";
 import { useLocation } from "react-router";
 import { PageBody } from "../Components/FormInputs";
 import PrimaryButton from "../Components/Buttons";
@@ -7,6 +7,7 @@ import Heading from "../Components/Heading";
 import Card from "../Components/Card";
 import Axios from "axios";
 import { useNavigate } from "react-router";
+
 
 const EmailVerification = () => {
   const [Twofa, setTwofaCode] = useState("");
@@ -29,11 +30,17 @@ const EmailVerification = () => {
     }).then((response) => {
       if (response.data == true) {
         //Show popup with confirmation
+        <Alert variant="filled" severity="success">
+          Succesfull you will now be redirected to login!
+        </Alert>;
 
         verified = true;
         navigate("/Login");
       } else {
         //show popup with error
+        <Alert variant="filled" severity="error">
+          Incorrect Code pelase try again!
+        </Alert>;
 
         verified = false;
       }
