@@ -61,13 +61,18 @@ const AccountTierCard = styled.div(({ theme, tier }) => css`
         );
     color: ${theme.colors.white};
 
-    &::before {
-        content: "1",
-        display: block;
-        width: 100%;
-        height: 20px;
+    .inner {
+        background-color: ${theme.colors.white};
     }
 `);
+
+const AccountTier = ({ tier, children }) => (
+    <AccountTierCard tier={tier} className="d-flex flex-column p-2 rounded mb-3">
+        <div className="inner rounded p-3">
+            {children}
+        </div>
+    </AccountTierCard>
+);
 
 const BasicTab = () => {
     const [selectedTheme, selectTheme] = useState('');
@@ -144,28 +149,28 @@ const BasicTab = () => {
                     <Heading size="18px">Account Limits</Heading>
                 </div>
                 <div className="col-12 col-lg-4">
-                    <AccountTierCard tier="bronze" className="d-flex flex-column p-3 rounded mb-3 mb-lg-0">
-                        <Heading size="20px" bold>Bronze</Heading>
-                        <Paragraph size="20px">Trade Limit: 5 SOL</Paragraph>
-                    </AccountTierCard>
+                    <AccountTier tier="bronze">
+                        <Heading size="20px" color="black" bold>Bronze</Heading>
+                        <Paragraph size="20px" color="black" className="mb-0">Trade Limit: 5 SOL</Paragraph>
+                    </AccountTier>
                 </div>
                 <div className="col-12 col-lg-4">
-                    <AccountTierCard tier="silver" className="d-flex flex-column p-3 rounded mb-3 mb-lg-0">
-                        <Heading size="20px" bold>Silver</Heading>
-                        <Paragraph size="20px">Trade Limit: 10 SOL</Paragraph>
-                    </AccountTierCard>
+                    <AccountTier tier="silver">
+                        <Heading size="20px" color="black" bold>Silver</Heading>
+                        <Paragraph size="20px" color="black" className="mb-0">Trade Limit: 10 SOL</Paragraph>
+                    </AccountTier>
                 </div>
                 <div className="col-12 col-lg-4">
-                    <AccountTierCard tier="gold" className="d-flex flex-column p-3 rounded mb-3">
-                        <Heading size="20px" bold>Gold</Heading>
-                        <Paragraph size="20px">Trade Limit: 25 SOL</Paragraph>
-                    </AccountTierCard>
+                    <AccountTier tier="gold">
+                        <Heading size="20px" color="black" bold>Gold</Heading>
+                        <Paragraph size="20px" color="black" className="mb-0">Trade Limit: 25 SOL</Paragraph>
+                    </AccountTier>
                 </div>
                 <div className="col-12 col-lg-4">
-                    <AccountTierCard tier="diamond" className="d-flex flex-column p-3 rounded mb-3">
-                        <Heading size="20px" bold>Diamond</Heading>
-                        <Paragraph size="20px">Trade Limit: 50 SOL</Paragraph>
-                    </AccountTierCard>
+                    <AccountTier tier="diamond">
+                        <Heading size="20px" color="black" bold>Diamond</Heading>
+                        <Paragraph size="20px" color="black" className="mb-0">Trade Limit: 50 SOL</Paragraph>
+                    </AccountTier>
                 </div>
             </div>
         </ContentTab>
