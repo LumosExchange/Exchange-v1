@@ -35,6 +35,7 @@ import MyWallet from "./Pages/MyWallet";
 import TradeHistory from "./Pages/TradeHistory";
 import EmailVerification from "./Pages/EmailVerification";
 import AirDrops from "./Pages/AirDrops";
+import Profile from "./Pages/Profile";
 
 const theme = {
   colors: {
@@ -48,6 +49,9 @@ const theme = {
     navyGrey: "#212127",
     six9Grey: "#696969",
     tableGrey: "#3F3F3F",
+    bronze: "#AD8A56",
+    silver: "#B4B4B4",
+    gold: "#C9B037",
     gradients: {
       yellow: "#FCE608",
       peach: "#FF7586",
@@ -55,6 +59,9 @@ const theme = {
       sage: "#0EF1A9",
       mauve: "#B372CE",
       blue: "#6F86FF",
+      bluePurple: "#6F41E8",
+      grey: "#3C3C3C",
+      slate: "#94B3B5",
     }
   },
   fonts: {
@@ -120,10 +127,11 @@ function App() {
             <Route path="/Feedback" element={<Feedback />} />
             <Route path="/TwoFactorAuth" element={<TwoFactorAuth />} />
             <Route path="/ConnectWallet" element={<ConnectWallet />} />
-            <Route path="/ChangePassword" element={<ChangePassword/>} />
-            <Route path="/MyWallet" element={<MyWallet/>} />
-            <Route path="/EmailVerification" element={<EmailVerification/>} />
-            <Route path="/AirDrops" element={<AirDrops/>} />
+            <Route path="/ChangePassword" element={<ChangePassword />} />
+            <Route path="/MyWallet" element={<MyWallet />} />
+            <Route path="/EmailVerification" element={<EmailVerification />} />
+            <Route path="/AirDrops" element={<AirDrops />} />
+            <Route path="/Profile" element={<Profile />} />
           </Routes>
         </Router>
         <Footer />
