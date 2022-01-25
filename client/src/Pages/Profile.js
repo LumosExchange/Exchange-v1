@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
-import { PageBody, StyledDropdown } from "../Components/FormInputs";
+import { PageBody, StyledDropdown, FormInput, StyledLabel } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import GradientButton from "../Components/GradientButton";
 import PrimaryButton from "../Components/Buttons";
@@ -177,9 +177,55 @@ const BasicTab = () => {
     );
 }
 
-const SecurityTab = () => (
-    <ContentTab className="text-white">Security Goes here</ContentTab>
-);
+const SecurityTab = () => {
+    const [selectedEmail, selectEmail] = useState('');
+    const [selectedPassword, selectPassword] = useState('');
+    const [selectedAuthType, selectAuthType] = useState('');
+
+    console.log('email is', selectedEmail);
+    console.log('password is', selectedPassword);
+    console.log('auth type is', selectedAuthType);
+
+    return (
+        <ContentTab>
+            <div className="d-flex p-4 row">
+                <div className="col-12 col-lg-4">
+                    <EditableOption className="p-4">
+                        <Heading color="black" size="20px" bold>Update Email</Heading>
+                        <FormInput
+                            id="email"
+                            className="mb-3 w-100"
+                            type="text"
+                            placeholder="Email"
+                            value={ selectedEmail }
+                            form="register"
+                            onChange={(e) => { selectEmail(e.target.value); }}
+                        />
+                    </EditableOption>
+                </div>
+                <div className="col-12 col-lg-4 my-3 my-lg-0">
+                    <EditableOption className="p-4">
+                        <Heading color="black" size="20px" bold>Update Password</Heading>
+                        <FormInput
+                            id="email"
+                            className="mb-3 w-100"
+                            type="password"
+                            placeholder="Password"
+                            value={ selectedPassword }
+                            form="register"
+                            onChange={(e) => { selectPassword(e.target.value); }}
+                        />
+                    </EditableOption>
+                </div>
+            </div>
+            <div className="d-flex px-4 row">
+                <div className="col-12 col-lg-2 pb-4">
+                    <PrimaryButton text="Save" className="w-100" />
+                </div>
+            </div>
+        </ContentTab>
+    );
+}
 
 const KycTab = () => (
     <ContentTab className="text-white">KYC Goes here</ContentTab>
