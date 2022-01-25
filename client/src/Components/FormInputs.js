@@ -97,16 +97,17 @@ export const FormInput = ({
 		)}
 	</div>
 );
-
 FormInput.propTypes = {
-	color: PropTypes.string,
-	textColor: PropTypes.string,
+    color: PropTypes.string,
+    textColor: PropTypes.string,
 }
 
 FormInput.defaultProps = {
     color: 'grey',
-	textColor: 'white',
+    textColor: 'white',
 }
+
+
 
 const StyledCheckbox = styled.input(({ theme }) => css`
 	-webkit-appearance: none;
