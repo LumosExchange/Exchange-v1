@@ -116,7 +116,7 @@ const MyWallet = () => {
 									<Paragraph size="18px">Amount (SOL)</Paragraph>
 									<FormInput color="six9Grey" padding="3px 10px" className="w-100" />
 								</div>
-								<div className="col-11 d-flex px-5 justify-content-end align-items-start pt-5">
+								<div className="col-12 d-flex justify-content-end align-items-start pt-5">
 									<PrimaryButton
 										text="Check"
 										color="brightGrey"
@@ -124,7 +124,7 @@ const MyWallet = () => {
 										hasIcon
 										round
 										className="me-5"
-										size="sm"
+										size="md"
 										fontSize="26px"
 									/>
 									<PrimaryButton
@@ -132,7 +132,7 @@ const MyWallet = () => {
 										color="yellow"
 										textColor="grey"
 										round
-										size="sm"
+										size="md"
 										fontSize="26px"
 									/>
 								</div>
@@ -143,19 +143,16 @@ const MyWallet = () => {
 				<div className="row w-100 mt-4">
 					<div className="col-12 col-lg-4">
 						<GradientCard
-							stops={ 5 }
-							stopOne="yellow"
-							stopTwo="peach"
-							stopThree="pink"
-							stopFour="mauve"
-							stopFive="blue"
+							stops={ 2 }
+							stopOne="grey"
+							stopTwo="grey"
 							padding="35px"
 							className="d-flex align-items-center justify-content-center"
 						>
 							<Heading size="28px" className="mb-0">17,727 LRA</Heading>
 						</GradientCard>
 					</div>
-					<div className="col-12 col-lg-4">
+					<div className="col-12 col-lg-4 my-3 my-lg-0">
 						<GradientCard
 							padding="35px"
 							stops={ 2 }
@@ -170,8 +167,8 @@ const MyWallet = () => {
 						<GradientCard
 							padding="35px"
 							stops={ 2 }
-							stopOne="bluePurple"
-							stopTwo="bluePurple"
+							stopOne="slate"
+							stopTwo="slate"
 							className="d-flex align-items-center justify-content-center"
 						>
 							<Heading size="28px" className="mb-0">3,628 COPE</Heading>

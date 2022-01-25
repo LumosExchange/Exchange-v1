@@ -6,9 +6,14 @@ import GradientButton from "../Components/GradientButton";
 import PrimaryButton from "../Components/Buttons";
 import Paragraph from "../Components/Paragraph";
 
+const TAB_TITLE_BASIC = 'basic';
+const TAB_TITLE_SECURITY = 'security';
+const TAB_TITLE_KYC = 'kyc';
+
 const ContentTab = styled.div(({ theme }) => css`
     background: ${theme.colors.darkerGrey};
     border-radius: 3px;
+    border: 2px solid ${theme.colors.yellow};
 `);
 
 const EditableOption = styled.div(({ theme }) => css`
@@ -28,6 +33,19 @@ const ProfileInitials = styled.div(({ theme }) => css`
     color: ${theme.colors.white};
     font-size: 30px;
     font-family: 'THICCCBOI-BOLD';
+`);
+
+const ProfileTab = styled.button(({ theme }) => css`
+    background: ${theme.colors.white};
+    padding: 10px 30px;
+    border-radius: 5px 5px 0 0; 
+    border: 0;
+    margin-right: 16px;
+
+    &.active {
+        background: ${theme.colors.yellow};
+        font-family: 'THICCCBOI-BOLD';
+    }
 `);
 
 const BasicTab = () => (
@@ -89,12 +107,27 @@ const Profile = () => {
 
     return(
         <PageBody>
-            <div className="container">
+            <div className="container pt-5">
                 <div className="row">
-                    <div className="col-12 col-lg-6 d-flex align-items-center justify-content-center">
-                        <button onClick={ () => selectProfileTab("basic") }>Profile</button>
-                        <button onClick={ () => selectProfileTab("security") }>Security</button>
-                        <button onClick={ () => selectProfileTab("kyc") }>KYC</button>
+                    <div className="col-12 d-flex justify-content-start">
+                        <ProfileTab
+                            onClick={ () => selectProfileTab(TAB_TITLE_BASIC) }
+                            className={ selectedProfileTab === TAB_TITLE_BASIC && 'active'}
+                        >
+                            Basic Info
+                        </ProfileTab>
+                        <ProfileTab
+                            onClick={ () => selectProfileTab(TAB_TITLE_SECURITY) }
+                            className={ selectedProfileTab === TAB_TITLE_SECURITY && 'active'}
+                        >
+                            Security
+                        </ProfileTab>
+                        <ProfileTab
+                            onClick={ () => selectProfileTab(TAB_TITLE_KYC) }
+                            className={ selectedProfileTab === TAB_TITLE_KYC && 'active'}
+                        >
+                            KYC
+                        </ProfileTab>
                     </div>
                     {selectedProfileTab === 'basic' && <BasicTab />}
                     {selectedProfileTab === 'security' && <SecurityTab />}

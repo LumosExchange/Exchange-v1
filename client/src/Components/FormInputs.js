@@ -3,8 +3,8 @@ import React from "react";
 import styled, { css } from "styled-components";
 import PropTypes from 'prop-types';
 
-const StyledInput = styled.input(({ theme, hasIcon }) => css`
-	background: ${theme.colors.grey};
+const StyledInput = styled.input(({ theme, hasIcon, color }) => css`
+	background: ${theme.colors[color]};
 	border-radius: ${hasIcon ? '0 10px 10px 0' : '10px'};
 	border: 2px solid transparent;
 	color: ${theme.colors.white};

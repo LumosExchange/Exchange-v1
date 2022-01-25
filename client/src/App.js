@@ -56,6 +56,9 @@ const theme = {
       sage: "#0EF1A9",
       mauve: "#B372CE",
       blue: "#6F86FF",
+      bluePurple: "#6F41E8",
+      grey: "#3C3C3C",
+      slate: "#94B3B5",
     }
   },
   fonts: {
