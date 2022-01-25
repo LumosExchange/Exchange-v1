@@ -46,30 +46,30 @@ const EmailVerification = () => {
         <Heading className="pb-4 text-center">
           Please enter your email 2FA code below
         </Heading>
-        <div className="w-100 row">
-          <div className="col-12 col-md-8">
-            <form>
-              <FormInput
-                type="text"
-                id="Code"
-                name="code"
-                placeholder="Enter 2FA Code"
-                onChange={(e) => {
-                  setTwofaCode(e.target.value);
-                }}
-                className="w-100"
-              />
-              <div className="col-12 col-md-4 p-0">
-                <PrimaryButton
-                  text="Submit"
-                  type="submit"
-                  onClick={VerifyEmailAuth}
-                  className="w-100 h-100"
+        <form>
+          <div className="w-100 row">
+            <div className="col-12 col-md-8">
+                <FormInput
+                  type="text"
+                  id="Code"
+                  name="code"
+                  placeholder="Enter 2FA Code"
+                  onChange={(e) => {
+                    setTwofaCode(e.target.value);
+                  }}
+                  className="w-100"
                 />
               </div>
-            </form>
+              <div className="col-12 col-md-4 p-md-0 mt-3 mt-md-0">
+                  <PrimaryButton
+                    text="Submit"
+                    type="submit"
+                    onClick={VerifyEmailAuth}
+                    className="w-100 h-100"
+                  />
+              </div>
           </div>
-        </div>
+        </form>
       </Card>
     </PageBody>
   );

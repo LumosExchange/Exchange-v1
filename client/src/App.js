@@ -52,6 +52,7 @@ const theme = {
     bronze: "#AD8A56",
     silver: "#B4B4B4",
     gold: "#C9B037",
+    diamond: "#b9f2ff",
     gradients: {
       yellow: "#FCE608",
       peach: "#FF7586",

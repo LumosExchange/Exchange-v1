@@ -60,6 +60,13 @@ const AccountTierCard = styled.div(({ theme, tier }) => css`
             rgba(255,255,255,0.6) 100%
         );
     color: ${theme.colors.white};
+
+    &::before {
+        content: "1",
+        display: block;
+        width: 100%;
+        height: 20px;
+    }
 `);
 
 const BasicTab = () => {
@@ -155,7 +162,7 @@ const BasicTab = () => {
                     </AccountTierCard>
                 </div>
                 <div className="col-12 col-lg-4">
-                    <AccountTierCard tier="gold" className="d-flex flex-column p-3 rounded mb-3">
+                    <AccountTierCard tier="diamond" className="d-flex flex-column p-3 rounded mb-3">
                         <Heading size="20px" bold>Diamond</Heading>
                         <Paragraph size="20px">Trade Limit: 50 SOL</Paragraph>
                     </AccountTierCard>
