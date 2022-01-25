@@ -472,6 +472,14 @@ app.post("/VerifyEmail2FA", (req, res) => {
 
   if (newcheckCode == newuserCode) {
     auth = true;
+    //if true delete from temp db
+    db.query(
+      "DELETE * FROM TempAuth WHERE (email) = (?)",
+      [email],
+      (err, result) => {
+      }
+    )
+    
   } else {
     auth = false;
   }
