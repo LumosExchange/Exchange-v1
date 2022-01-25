@@ -3,11 +3,11 @@ import React from "react";
 import styled, { css } from "styled-components";
 import PropTypes from 'prop-types';
 
-const StyledInput = styled.input(({ theme, hasIcon, color }) => css`
+const StyledInput = styled.input(({ theme, hasIcon, color, textColor }) => css`
 	background: ${theme.colors[color]};
 	border-radius: ${hasIcon ? '0 10px 10px 0' : '10px'};
 	border: 2px solid transparent;
-	color: ${theme.colors.white};
+	color: ${theme.colors[textColor]};
 	font-size: 24px;
 	padding: 10px;
 
@@ -23,7 +23,7 @@ const StyledInput = styled.input(({ theme, hasIcon, color }) => css`
 	}
 `);
 
-const RoundedInput = styled.input(({ theme, hasIcon }) => css`
+const RoundedInput = styled.input(({ theme }) => css`
 	background: ${theme.colors.navyGrey};
 	border-radius: 50px;
 	border: 2px solid transparent;
@@ -43,7 +43,7 @@ const RoundedInput = styled.input(({ theme, hasIcon }) => css`
 	}
 `);
 
-const IconArea = styled.div(({ theme, hasIcon }) => css`
+const IconArea = styled.div(({ theme }) => css`
 	background: ${theme.colors.grey};
 	min-height: 60px;
 	padding: 10px;
@@ -97,6 +97,16 @@ export const FormInput = ({
 		)}
 	</div>
 );
+FormInput.propTypes = {
+    color: PropTypes.string,
+    textColor: PropTypes.string,
+}
+
+FormInput.defaultProps = {
+    color: 'grey',
+    textColor: 'white',
+}
+
 
 
 const StyledCheckbox = styled.input(({ theme }) => css`

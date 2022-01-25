@@ -51,6 +51,17 @@ const ProfileTab = styled.button(({ theme }) => css`
     }
 `);
 
+const AccountTierCard = styled.div(({ theme, tier }) => css`
+    background-color: ${theme.colors.white};
+    background-image: linear-gradient(150deg,
+            ${theme.colors[tier]} 0%,
+            ${theme.colors[tier]} 20%,
+            ${theme.colors[tier]} 50%,
+            rgba(255,255,255,0.6) 100%
+        );
+    color: ${theme.colors.white};
+`);
+
 const BasicTab = () => {
     const [selectedTheme, selectTheme] = useState('');
     const [selectedTimezone, selectTimezone] = useState('');
@@ -117,8 +128,37 @@ const BasicTab = () => {
                     </div>
             </div>
             <div className="d-flex px-4 row">
-            <div className="col-12 col-lg-2 pb-4">
-                <PrimaryButton text="Save" className="w-100" />
+                <div className="col-12 col-lg-2 pb-4">
+                    <PrimaryButton text="Save" className="w-100" />
+                </div>
+            </div>
+            <div className="d-flex px-4 row py-4">
+                <div className="col-12">
+                    <Heading size="18px">Account Limits</Heading>
+                </div>
+                <div className="col-12 col-lg-4">
+                    <AccountTierCard tier="bronze" className="d-flex flex-column p-3 rounded mb-3 mb-lg-0">
+                        <Heading size="20px" bold>Bronze</Heading>
+                        <Paragraph size="20px">Trade Limit: 5 SOL</Paragraph>
+                    </AccountTierCard>
+                </div>
+                <div className="col-12 col-lg-4">
+                    <AccountTierCard tier="silver" className="d-flex flex-column p-3 rounded mb-3 mb-lg-0">
+                        <Heading size="20px" bold>Silver</Heading>
+                        <Paragraph size="20px">Trade Limit: 10 SOL</Paragraph>
+                    </AccountTierCard>
+                </div>
+                <div className="col-12 col-lg-4">
+                    <AccountTierCard tier="gold" className="d-flex flex-column p-3 rounded mb-3">
+                        <Heading size="20px" bold>Gold</Heading>
+                        <Paragraph size="20px">Trade Limit: 25 SOL</Paragraph>
+                    </AccountTierCard>
+                </div>
+                <div className="col-12 col-lg-4">
+                    <AccountTierCard tier="gold" className="d-flex flex-column p-3 rounded mb-3">
+                        <Heading size="20px" bold>Diamond</Heading>
+                        <Paragraph size="20px">Trade Limit: 50 SOL</Paragraph>
+                    </AccountTierCard>
                 </div>
             </div>
         </ContentTab>
