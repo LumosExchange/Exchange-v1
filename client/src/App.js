@@ -49,6 +49,9 @@ const theme = {
     navyGrey: "#212127",
     six9Grey: "#696969",
     tableGrey: "#3F3F3F",
+    bronze: "#AD8A56",
+    silver: "#B4B4B4",
+    gold: "#C9B037",
     gradients: {
       yellow: "#FCE608",
       peach: "#FF7586",
