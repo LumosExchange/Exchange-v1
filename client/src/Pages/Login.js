@@ -20,7 +20,7 @@ const FormBackground = styled.div(
 );
 
 const Login = () => {
-  const [emailLog, setEmailLog] = useState("");
+  const [userLog, setUserLog] = useState("");
 
   const [passwordLog, setPasswordLog] = useState("");
   const [loginStatus, setLoginStatus] = useState(false);
@@ -31,7 +31,7 @@ const Login = () => {
 
   const login = () => {
     Axios.post("http://localhost:3001/login", {
-      email: emailLog,
+      userName: userLog,
       password: passwordLog,
     }).then((response) => {
       if (!response.data.auth) {
@@ -79,7 +79,7 @@ const Login = () => {
                 id="email"
                 name="email"
                 onChange={(e) => {
-                  setEmailLog(e.target.value);
+                  setUserLog(e.target.value);
                 }}
                 placeholder="username or email"
                 required

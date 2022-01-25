@@ -30,6 +30,7 @@ const EmailVerification = () => {
     }).then((response) => {
       if (response.data == true) {
         //Show popup with confirmation
+
         <Alert variant="filled" severity="success">
           Succesfull you will now be redirected to login!
         </Alert>;
@@ -53,30 +54,30 @@ const EmailVerification = () => {
         <Heading className="pb-4 text-center">
           Please enter your email 2FA code below
         </Heading>
-        <form>
-          <div className="w-100 row">
-            <div className="col-12 col-md-8">
-                <FormInput
-                  type="text"
-                  id="Code"
-                  name="code"
-                  placeholder="Enter 2FA Code"
-                  onChange={(e) => {
-                    setTwofaCode(e.target.value);
-                  }}
-                  className="w-100"
+        <div className="w-100 row">
+          <div className="col-12 col-md-8">
+          <form>
+              <FormInput
+                type="text"
+                id="Code"
+                name="code"
+                placeholder="Enter 2FA Code"
+                onChange={(e) => {
+                  setTwofaCode(e.target.value);
+                }}
+                className="w-100"
+              />
+              <div className="col-12 col-md-4 p-0">
+                <PrimaryButton
+                  text="Submit"
+                  type="submit"
+                  onClick={VerifyEmailAuth}
+                  className="w-100 h-100"
                 />
               </div>
-              <div className="col-12 col-md-4 p-md-0 mt-3 mt-md-0">
-                  <PrimaryButton
-                    text="Submit"
-                    type="submit"
-                    onClick={VerifyEmailAuth}
-                    className="w-100 h-100"
-                  />
-              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </Card>
     </PageBody>
   );
