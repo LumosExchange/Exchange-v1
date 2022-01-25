@@ -18,6 +18,7 @@ const Register = () => {
 	const [nationalityReg, setNationalityReg] = useState('');
 	const [firstNameReg, setFirstNameReg] = useState('');
 	const [lastNameReg, setLastNameReg] = useState('');
+	const [userNameReg, setUserNameReg] = useState('');
 
 	const [secret, setSecret] = useState([]);
 
@@ -32,6 +33,7 @@ const Register = () => {
 			email: emailReg,
 			password: passwordReg,
 			nationality: nationalityReg,
+			userName: userNameReg
 		}),
 		Axios.post("http://localhost:3001/SendEmailVerification",{
 			email: emailReg,
@@ -79,6 +81,14 @@ const Register = () => {
 							form="register"
 							placeholder="Last Name"
 							onChange={(e) => { setLastNameReg(e.target.value); }}
+						/>
+						<FormInput
+							id="userName"
+							className="mb-3 w-100"
+							type="text"
+							form="register"
+							placeholder="User Name"
+							onChange={(e) => { setUserNameReg(e.target.value); }}
 						/>
 						<FormInput
 							id="email"

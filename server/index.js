@@ -97,6 +97,12 @@ app.post("/register", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const nationality = req.body.nationality;
+  const userName = req.body.userName;
+
+  const theme = "Dark";
+  const timezone = "UTC+0";
+  const currency = "GBP";
+  const accountLevel = "Standard"
 
   //hash password
   bcrypt.hash(password, saltRounds, (err, hash) => {
@@ -104,8 +110,22 @@ app.post("/register", (req, res) => {
       console.log(err);
     }
     db.query(
-      "INSERT INTO users (firstName, lastName, email, password, nationality) VALUES (?,?,?,?,?)",
-      [firstName, lastName, email, hash, nationality],
+      "INSERT INTO users (firstName, lastName, email, password, nationality, userName) VALUES (?,?,?,?,?,?)",
+      [firstName, lastName, email, hash, nationality, userName],
+      (err, result) => {
+        console.log(err);
+      }
+    );
+    db.query(
+      "INSERT INTO userSettings (theme, timezone, currency) VALUES (?,?,?)",
+      [theme, timezone, currency],
+      (err, result) => {
+        console.log(err);
+      }
+    );
+    db.query(
+      "INSERT INTO accountLevel (accountLevel) VALUES (?)",
+      [accountLevel],
       (err, result) => {
         console.log(err);
       }
@@ -180,10 +200,10 @@ app.get("/isUserAuth", verifyJWT, (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const email = req.body.email;
+  const userName = req.body.userName;
   const password = req.body.password;
 
-  db.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
+  db.query("SELECT * FROM users WHERE userName = ?", userName, (err, result) => {
     if (err) {
       res.send({ err: err });
     }
