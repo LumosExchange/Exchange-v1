@@ -1,5 +1,5 @@
 // Core
-import React, { useState, useEffect, setState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 
 import Axios from "axios";
@@ -67,7 +67,7 @@ const Navbar = ({ isLoggedIn }) => {
     Axios.get("http://localhost:3001/getUserNameNav", {
     }).then((response) => {
       setUserName(response.data);
-      console.log(userName);
+    
     });
   }, []);
 
