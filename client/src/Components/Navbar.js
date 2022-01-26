@@ -55,9 +55,8 @@ const MenuBase = styled.div(
   `
 );
 
+
 //get username
-
-
 
 const Navbar = ({ isLoggedIn }) => {
   const [showMobileMenu, setMenuOpen] = useState(false);
@@ -67,7 +66,7 @@ const Navbar = ({ isLoggedIn }) => {
     Axios.get("http://localhost:3001/getUserNameNav", {
     }).then((response) => {
       setUserName(response.data);
-      console.log('userName: ',userName);
+      console.log('userName: ', userName);
     });
   }, []);
 
