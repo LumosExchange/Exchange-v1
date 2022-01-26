@@ -93,7 +93,7 @@ const AirDropIcon = styled.img`
     min-height: 28px;
 `;
 
-const convertAssetToIcon = (asset) => {
+export const convertAssetToIcon = (asset) => {
     if (asset === 'SOL'){ return <AirDropIcon src={IconAirdropAssetSol} alt="SOL" title="SOL" /> }
     if (asset === 'LUMOS'){ return <AirDropIcon src={IconAirdropAssetLumos} alt="LUMOS" title="LUMOS" /> }
     if (asset === 'KIN'){ return <AirDropIcon src={IconAirdropAssetKin} alt="KIN" title="KIN" /> }
