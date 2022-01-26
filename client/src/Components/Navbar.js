@@ -60,14 +60,14 @@ const MenuBase = styled.div(
 
 const Navbar = ({ isLoggedIn }) => {
   const [showMobileMenu, setMenuOpen] = useState(false);
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState('');
 
 
   useEffect(() => {
     Axios.get("http://localhost:3001/getUserNameNav", {
     }).then((response) => {
       setUserName(response.data);
-      console.log('userName: ', userName);
+      console.log(userName);
     });
   }, []);
 
