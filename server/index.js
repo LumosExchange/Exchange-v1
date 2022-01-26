@@ -133,39 +133,7 @@ app.post("/register", (req, res) => {
   });
 });
 
-//UpgradeGold
-app.post("/UpgradeGold", (req, res) => {
-  const EmployerName = req.body.EmployerName;
 
-  const EmployerAddress = req.body.EmployerAddress;
-  const Occupation = req.body.Occupation;
-  const Income = req.body.Income;
-  console.log("EmployerName: " + req.body.EmployerName);
-  db.query(
-    "INSERT INTO UpgradeGold (EmployerName, EmployerAddress, Occupation, Income) VALUES (?,?,?,?)",
-    [EmployerName, EmployerAddress, Occupation, Income],
-    (err, result) => {
-      console.log(err);
-    }
-  );
-});
-
-//UpgradeBronze
-app.post("/UpgradeBronze", (req, res) => {
-  const DateOfBirth = req.body.DateOfBirth;
-
-  const Phone = req.body.Phone;
-  const CountryOfResidence = req.body.CountryOfResidence;
-  const Tax = req.body.Tax;
-  console.log("DateOfBirth: " + req.body.DateOfBirth);
-  db.query(
-    "INSERT INTO UpgradeBronze (DateOfBirth, Phone, CountryOfResidence, Tax) VALUES (?,?,?,?)",
-    [DateOfBirth, Phone, CountryOfResidence, Tax],
-    (err, result) => {
-      console.log(err);
-    }
-  );
-});
 
 //Login functionality
 //check logged in state
@@ -343,8 +311,19 @@ app.get("/getUserAccountLevel", (req, res) => {
 
 //update user settings 
 app.post("/updateUserSettings", (req, res) => {
+  const theme = req.body.theme;
+  const timezone = req.body.timezone;
+  const currency = req.body.currency;
+  const user = req.session.user[0].userID;
 
-
+  db.query(
+    'UPDATE userSettings SET currency = ?, timezone = ?, theme = ? WHERE userID = ?',
+    [currency, timezone, theme, user],
+    (err, result) => {
+      res.send(result);
+      console.log(err);
+    }
+  );
 });
 
 //creates secret for 2fa app
@@ -560,6 +539,40 @@ app.post("/VerifyEmail2FA", (req, res) => {
 //app.get('/', (req, res)=> {
 
 //});
+
+//UpgradeGold
+app.post("/UpgradeGold", (req, res) => {
+  const EmployerName = req.body.EmployerName;
+
+  const EmployerAddress = req.body.EmployerAddress;
+  const Occupation = req.body.Occupation;
+  const Income = req.body.Income;
+  console.log("EmployerName: " + req.body.EmployerName);
+  db.query(
+    "INSERT INTO UpgradeGold (EmployerName, EmployerAddress, Occupation, Income) VALUES (?,?,?,?)",
+    [EmployerName, EmployerAddress, Occupation, Income],
+    (err, result) => {
+      console.log(err);
+    }
+  );
+});
+
+//UpgradeBronze
+app.post("/UpgradeBronze", (req, res) => {
+  const DateOfBirth = req.body.DateOfBirth;
+
+  const Phone = req.body.Phone;
+  const CountryOfResidence = req.body.CountryOfResidence;
+  const Tax = req.body.Tax;
+  console.log("DateOfBirth: " + req.body.DateOfBirth);
+  db.query(
+    "INSERT INTO UpgradeBronze (DateOfBirth, Phone, CountryOfResidence, Tax) VALUES (?,?,?,?)",
+    [DateOfBirth, Phone, CountryOfResidence, Tax],
+    (err, result) => {
+      console.log(err);
+    }
+  );
+});
 
 
 app.listen(3001, () => {
