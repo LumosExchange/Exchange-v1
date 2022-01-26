@@ -1,5 +1,5 @@
 // Core
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, setState } from "react";
 import styled, { css } from "styled-components";
 
 import Axios from "axios";
@@ -61,6 +61,7 @@ const MenuBase = styled.div(
 const Navbar = ({ isLoggedIn }) => {
   const [showMobileMenu, setMenuOpen] = useState(false);
   const [userName, setUserName] = useState("");
+
 
   useEffect(() => {
     Axios.get("http://localhost:3001/getUserNameNav", {
