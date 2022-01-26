@@ -275,8 +275,8 @@ app.get("/getAllListings", (req, res) => {
   });
 });
 
-//get userID name
-app.get("/getUserName", (req, res) => {
+//get userID name for feedback
+app.get("/getUserNameSeller", (req, res) => {
   let params = req.query.sellerID;
   db.query(
     "SELECT * FROM users WHERE (userID) = (?)",
@@ -285,6 +285,20 @@ app.get("/getUserName", (req, res) => {
       res.send(result);
     }
   );
+});
+
+//get username for navbar after user is logegd in
+app.get("getUserNameNav", (req, res) => {
+  const id = req.session.user[0].userID;
+  db.query(
+    "SELECT * FROM users WHERE (userID) = (?)",
+    [id],
+    (err, result) => {
+      res.send(result);
+    }
+  );
+
+
 });
 
 app.get("/getUserFeedback", (req, res) => {

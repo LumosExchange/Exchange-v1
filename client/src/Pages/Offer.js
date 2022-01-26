@@ -18,7 +18,7 @@ function Offer() {
 
   //Create lookup for seller ID Name & Feedback
   useEffect(() => {
-    Axios.get("http://localhost:3001/getUserName", {
+    Axios.get("http://localhost:3001/getUserNameSeller", {
       params: {
         sellerID: state.userID
       }
