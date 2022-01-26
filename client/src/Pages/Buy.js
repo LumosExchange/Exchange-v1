@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
+import styled, { css } from 'styled-components';
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-import $ from "jquery";
+import { PageBody } from "../Components/FormInputs";
+import Card from "../Components/Card";
+import Heading from "../Components/Heading";
+import Paragraph from "../Components/Paragraph";
+import GradientButton from "../Components/GradientButton";
+import PrimaryButton from "../Components/Buttons";
 
 var TRADEID = "";
 var F4S = 0;
@@ -9,15 +15,57 @@ var AOB = "";
 var PER = "";
 var USERID = "";
 
-function Buy() {
-  const [allListings, setAllListings] = useState([]);
+const CRYPTO_KIN = 'KIN';
+const CRYPTO_SOL = 'SOL';
+const CRYPTO_LRA = 'LRA';
+const CRYPTO_COPE = 'COPE';
 
-  const navigate = useNavigate();
+const ToggleButton = styled.button(({ theme }) => css`
+	background: ${theme.colors.six9Grey};
+	padding: 10px 0;
+	border: 2px solid ${theme.colors.yellow};
+	color: ${theme.colors.white};
+	font-size: 18px;
+
+	&.left { border-radius: 10px 0 0px 10px };
+	&.right { border-radius: 0 10px 10px 0 };
+
+	&.selected {
+		background: ${theme.colors.yellow};
+		font-family: 'THICCCBOI-BOLD';
+		color: ${theme.colors.black};
+	}
+`);
+
+const QuadButton = styled.button(({ theme }) => css`
+	background: ${theme.colors.six9Grey};
+	padding: 10px 0;
+	border: 0;
+	border-radius: 10px;
+	color: ${theme.colors.white};
+	font-size: 18px;
+
+	&.selected {
+		background: ${theme.colors.yellow};
+		font-family: 'THICCCBOI-BOLD';
+		color: ${theme.colors.black};
+	}
+`);
+
+const Buy = () => {
+	const [allListings, setAllListings] = useState([]);
+	const [selectedCrypto, selectCrypto] = useState(CRYPTO_SOL);
+	const [selectedMode, selectMode] = useState('buy');
+	const [selectedCurrency, selectCurrency] = useState('£');
+
+	console.log(selectedCrypto, 'selected crypto');
+
+  	const navigate = useNavigate();
  
 
   //pass variables we need here
 
-  function handleClick() {
+  const handleClick = () => {
     navigate("/Offer", {
       state: {
         id: 1,
@@ -39,57 +87,120 @@ function Buy() {
   }, []);
 
   return (
-    <div>
-      <h1>Please see current market listings</h1>
-      <div>
-        <table id="myTable" border="1">
-          <thead>
-            <tr>
-              <th>Sol for sale</th>
-              <th>Above or Below</th>
-              <th>Percentage</th>
-              <th>UserID</th>
-              <th>TradeID</th>
-              <th>BUY</th>
-            </tr>
-          </thead>
-
-          {allListings.map((val) => {
-            return (
-              <tbody key={val.tradeID}>
-                <tr>
-                  <td>{val.amountForSale}</td>
-
-                  <td>{val.aboveOrBelow}</td>
-                  <td>{val.percentChange}</td>
-                  <td>{val.userID}</td>
-                  <td>{val.tradeID}</td>
-                  <td>
-                    <button class="btnSelect" onClick={handleClick}>
-                      BUY
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            );
-          })}
-        </table>
-      </div>
-    </div>
+		<PageBody>
+			<div className="container">
+				<div className="row pt-5">
+					<div className="col-12 col-md-4">
+						<Card radius="10px" className="p-4">
+						<div className="d-flex">
+							<div className="col-md-6">
+								<ToggleButton
+									onClick={() => selectMode('buy')}
+									className={`left w-100 ${selectedMode === 'buy' && 'selected'}`}
+								>
+									Buy
+								</ToggleButton>
+							</div>
+							<div className="col-md-6">
+								<ToggleButton
+									onClick={() => selectMode('sell')}
+									className={`right w-100 ${selectedMode === 'sell' && 'selected'}`}
+								>
+									Sell
+								</ToggleButton>
+							</div>
+						</div>
+							<div className="d-flex flex-wrap mt-3">
+								<div className="col-12">
+									<Heading size="16px">Crypto</Heading>
+								</div>
+								<div className="col-6 d-flex">
+									<QuadButton
+										className={`
+											w-100 me-1 mb-1 d-flex justify-content-center
+											${selectedCrypto === CRYPTO_SOL && 'selected'}
+										`}
+										onClick={ () => selectCrypto(CRYPTO_SOL) }
+									>
+										<i className="material-icons me-2">token</i>
+										<span>{CRYPTO_SOL}</span>
+									</QuadButton>
+								</div>
+								<div className="col-6 d-flex">
+									<QuadButton
+										className={`
+											w-100 me-1 mb-1 d-flex justify-content-center
+											${selectedCrypto === CRYPTO_KIN && 'selected'}
+										`}
+										onClick={ () => selectCrypto(CRYPTO_KIN) }
+									>
+										<i className="material-icons me-2">token</i>
+										<span>{CRYPTO_KIN}</span>
+									</QuadButton>
+								</div>
+								<div className="col-6 d-flex">
+									<QuadButton
+										className={`
+											w-100 me-1 mb-1 d-flex justify-content-center
+											${selectedCrypto === CRYPTO_COPE && 'selected'}
+										`}
+										onClick={ () => selectCrypto(CRYPTO_COPE) }
+									>
+										<i className="material-icons me-2">token</i>
+										<span>{CRYPTO_COPE}</span>
+									</QuadButton>
+								</div>
+								<div className="col-6 d-flex">
+									<QuadButton
+										className={`
+											w-100 me-1 mb-1 d-flex justify-content-center
+											${selectedCrypto === CRYPTO_LRA && 'selected'}
+										`}
+										onClick={ () => selectCrypto(CRYPTO_LRA) }
+									>
+										<i className="material-icons me-2">token</i>
+										<span>{CRYPTO_LRA}</span>
+									</QuadButton>
+								</div>
+							</div>
+						</Card>
+					</div>
+					<div className="col-12 col-md-8">
+						<Heading size="26px">
+							<span style={{ textTransform: 'capitalize' }}>{selectedMode} </span>
+							{selectedCrypto} from these Sellers</Heading>
+						{allListings.map((val) => (
+							<Card className="p-4 mb-3">
+								<div className="row">
+									<div className="col-3">
+										<Heading size="24px">userName</Heading>
+									</div>
+									<div className="col-3">United States</div>
+									<div className="col-3">Oceanside, CA</div>
+									<div className="col-3">
+										<Heading size="24px" color="yellow">
+											{selectedCurrency}{val.amountForSale}
+										</Heading>
+									</div>
+									<div className="col-3">110 Trades</div>
+									<div className="col-3">Paypal</div>
+									<div className="col-3">
+										<Paragraph size="18px">
+											{val.percentChange}%
+											{' '}{val.aboveOrBelow}{' '}market
+										</Paragraph>
+									</div>
+									<div className="col-3">
+										<GradientButton text="Buy" fontSize="24px" padding="4px 20px" className="w-100" />
+									</div>
+								</div>
+							</Card>
+						))}
+					</div>
+				</div>
+			</div>
+		</PageBody>
   );
 }
-$(document).ready(function () {
-  // code to read selected table row cell data (values).
-  $("#myTable").on("click", ".btnSelect", function () {
-    // get the current row
-    var currentRow = $(this).closest("tr");
-
-    F4S = currentRow.find("td:eq(0)").text(); // get current row 1st TD value
-    AOB = currentRow.find("td:eq(1)").text(); // get current row 2nd TD
-    PER = currentRow.find("td:eq(2)").text(); // get current row 3rd TD
-    USERID = currentRow.find("td:eq(3)").text(); // get current row 3rd TD
-     TRADEID = currentRow.find("td:eq(4)").text(); // get current row 3rd TD
-  });
-});
 
 export default Buy;
