@@ -17,7 +17,6 @@ import Register from "./Pages/Register";
 import UpgradeBronze from "./Pages/UpgradeBronze";
 import UpgradeGold from "./Pages/UpgradeGold";
 import RegisterCompany from "./Pages/RegisterCompany";
-import LoggedNavbar from "./Components/LoggedNavbar";
 import LoggedHome from "./Pages/LoggedHome";
 import ErrorPage from "./Pages/ErrorPage";
 import Trades from "./Pages/Trades";

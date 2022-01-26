@@ -290,11 +290,15 @@ app.get("/getUserNameSeller", (req, res) => {
 //get username for navbar after user is logegd in
 app.get("/getUserNameNav", (req, res) => {
   const name = req.session.user[0].userName;
-  console.log('name: ', name);
 res.send(name);
-
-
 });
+
+//get email for profile page
+app.get("/getUserEmail", (req, res) => {
+  const email = req.session.user[0].email;
+res.send(email);
+});
+
 
 app.get("/getUserFeedback", (req, res) => {
   let params = req.query.sellerID;
@@ -306,6 +310,41 @@ app.get("/getUserFeedback", (req, res) => {
       res.send(result);
     }
   );
+});
+
+app.get("/getUserSettings", (req, res) => {
+  const user = req.session.user[0].userID;
+
+  db.query(
+    "SELECT * FROM userSettings WHERE (userID) = (?)",
+    [user],
+    (err, result) => {
+      res.send(result);
+      console.log('result: ', result);
+    }
+  );
+});
+
+//gte user account level for profile page
+app.get("/getUserAccountLevel", (req, res) => {
+  const user = req.session.user[0].userID;
+
+  db.query(
+    "SELECT * FROM accountLevel WHERE (userID) = (?)",
+    [user],
+    (err, result) => {
+      res.send(result);
+      console.log(result);
+      
+    }
+  );
+
+});
+
+//update user settings 
+app.post("/updateUserSettings", (req, res) => {
+
+
 });
 
 //creates secret for 2fa app
