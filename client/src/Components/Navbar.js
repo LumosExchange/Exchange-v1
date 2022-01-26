@@ -55,23 +55,20 @@ const MenuBase = styled.div(
   `
 );
 
-//get username
 
-let userName = "hello"
+//get username
 
 const Navbar = ({ isLoggedIn }) => {
   const [showMobileMenu, setMenuOpen] = useState(false);
+  const [userName, setUserName] = useState("");
 
- // const [userName, setUserName] = useState("");
-
-  
-  //  Axios.get("http://localhost:3001/getUserNameNav", {}).then((response) => {
-   ////   setUserName(response.data);
-//});
-
-
-   
-
+  useEffect(() => {
+    Axios.get("http://localhost:3001/getUserNameNav", {
+    }).then((response) => {
+      setUserName(response.data);
+      console.log('userName: ', userName);
+    });
+  }, []);
 
   return (
     <Base className="d-flex justify-content-center">

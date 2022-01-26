@@ -290,6 +290,8 @@ app.get("/getUserNameSeller", (req, res) => {
 //get username for navbar after user is logegd in
 app.get("getUserNameNav", (req, res) => {
   const id = req.session.user[0].userID;
+  console.log('current user: ', id);
+  
   db.query(
     "SELECT * FROM users WHERE (userID) = (?)",
     [id],
