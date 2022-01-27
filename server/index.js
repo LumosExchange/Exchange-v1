@@ -734,7 +734,11 @@ app.post("/updateUserPass", (req, res) => {
       console.log(err);
     }
     db.query(
-      ""
+      "UPDATE users SET password = ? WHERE userID = ?"
+      [hash, user],
+      (err, result) => {
+        console.log(err);
+      }
     )
   })
 

@@ -54,9 +54,9 @@ function ChangePassword() {
 
     }else {
 
-    }
+    };
 
-  }
+  };
 
 
 
