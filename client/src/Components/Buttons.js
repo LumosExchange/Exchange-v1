@@ -19,20 +19,27 @@ const ButtonBase = styled.button(({
 
     &:hover { transform: scale(1.05); }
 
+    &:disabled {
+        background: ${theme.colors.six9Grey};
+        cursor: not-allowed;
+        &:hover { transform: none; }
+    }
+
+
     @media screen and (min-width: ${theme.breakpoints.md}) {
         width: auto;
     }
 `);
 
 const PrimaryButton = ({
-    text, size, hasIcon, 
+    text, size, hasIcon, disabled,
     iconPosition, iconName, className,
     onClick, type, form, value, color,
     textColor, round, boldText, fontSize
 }) => (
     <ButtonBase
         onClick={onClick} type={type} form={form} value={value}
-        size={size} color={color} textColor={textColor} 
+        size={size} color={color} textColor={textColor} disabled={disabled}
         round={round} boldText={boldText} fontSize={fontSize}
         className={`d-flex align-items-center justify-content-center ${className ? className : ''}`}
     >

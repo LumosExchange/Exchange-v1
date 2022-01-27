@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import {
   PageBody,
   StyledDropdown,
@@ -11,6 +11,7 @@ import GradientButton from "../Components/GradientButton";
 import PrimaryButton from "../Components/Buttons";
 import Paragraph from "../Components/Paragraph";
 import Axios from "axios";
+import LoadingSpinner from '../Images/loading-spinner.png';
 
 const TAB_TITLE_BASIC = "basic";
 const TAB_TITLE_SECURITY = "security";
@@ -31,8 +32,7 @@ const ContentTab = styled.div(
     .gold {
       color: ${theme.colors.gold};
     }
-  `
-);
+`);
 
 const EditableOption = styled.div(
   ({ theme }) => css`
@@ -101,6 +101,32 @@ const CheckIcon = styled.i(({ theme }) => css`
 	}
 `);
 
+const Rotate = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+`;
+
+const FixedBackground = styled.div(({ theme }) => css`
+	background: ${theme.colors.black};
+	z-index: 2;
+	margin-left: -12px;
+
+	img {
+		width: 64px;
+		height: 64px;
+		min-width: 64px;
+		min-height: 64px;
+		animation: ${Rotate} 1s linear infinite;
+	}
+`);
+
+
+const LoadingState = () => (
+	<FixedBackground className="position-absolute d-flex align-items-center justify-content-center w-100 h-100">
+		<img src={LoadingSpinner} alt="Loading" />
+	</FixedBackground>
+);
+
 const AccountTier = ({ tier, selectedTier, limit, title }) => (
   <AccountTierCard tier={tier} className={`d-flex flex-column padding rounded mb-3 ${!selectedTier && 'opaque'}`}>
     <div className="inner rounded p-3">
@@ -125,55 +151,66 @@ const AccountTier = ({ tier, selectedTier, limit, title }) => (
 );
 
 const BasicTab = () => {
-  const [userSetting, setUserSettings] = useState("");
-  const [userAccountLevel, setUserAccountLevel] = useState("");
-  const [selectedTheme, selectTheme] = useState("");
-  const [selectedTimezone, selectTimezone] = useState("");
-  const [selectedCurrency, selectCurrency] = useState("");
+	const [userSetting, setUserSettings] = useState("");
+	const [userAccountLevel, setUserAccountLevel] = useState("");
+	const [selectedTheme, selectTheme] = useState("");
+	const [selectedTimezone, selectTimezone] = useState("");
+	const [selectedCurrency, selectCurrency] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
+	const [userEmail, setUserEmail] = useState("");
 
-  const [userEmail, setUserEmail] = useState("");
+	const getUserEmail = () => {
+	// get user email
+		Axios.get("http://localhost:3001/getUserEmail", {}).then((response) => {
+			setUserEmail(response.data);
+		});
+	}
+
+	const getUserSettings = () => {
+	// get user settings from usersettings db
+		Axios.get("http://localhost:3001/getUserSettings", {}).then((response) => {
+			setUserSettings(response?.data);
+			selectTheme(response.data[0]?.theme);
+			selectTimezone(response.data[0]?.timezone);
+			selectCurrency(response.data[0]?.currency);
+		});
+	}
+
+	const getAccountLevel = () => {
+    //get account level from db
+		Axios.get("http://localhost:3001/getUserAccountLevel", {}).then((response) => {
+			setUserAccountLevel(response.data[0].accountLevel);
+		});
+	}
+
+	//create functionality to update user settings
+	const updateUserSettings = () => {
+		setIsLoading(true);
+		Axios.post("http://localhost:3001/updateUserSettings", {
+			theme: selectedTheme,
+			timezone: selectedTimezone,
+			currency: selectedCurrency,
+		}).then((response) => {
+			//handle errors
+			console.log(response, 'response');
+			setIsLoading(false);
+			window.location.reload(false);
+		});
+	};
 
   useEffect(() => {
-
-	// get user email
-    Axios.get("http://localhost:3001/getUserEmail", {}).then((response) => {
-      setUserEmail(response.data);
-    });
-
-    // get user settings from usersettings db
-    Axios.get("http://localhost:3001/getUserSettings", {}).then((response) => {
-      setUserSettings(response.data);
-      selectTheme(response.data[0].theme);
-      selectTimezone(response.data[0].timezone);
-      selectCurrency(response.data[0].currency);
-    });
-
-    //get account level from db
-    Axios.get("http://localhost:3001/getUserAccountLevel", {}).then((response) => {
-      setUserAccountLevel(response.data[0].accountLevel);
-    });
-
+	getUserEmail();
+	getUserSettings();
+	getAccountLevel();
   }, []);
 
-  //creat functionality to update user settings
-  const updateUserSettings = () => {
-    Axios.post("http://localhost:3001/updateUserSettings", {
-        theme: selectedTheme,
-        timezone: selectedTimezone,
-        currency: selectedCurrency,
-      }).then((response) => {
-        //handle errors
-
-      });
-  };
-
-  console.log(userAccountLevel, 'account level');
-
+  console.log(selectedTheme, 'selected theme');
 
   return (
-    <ContentTab>
+    <ContentTab className="position-relative">
+		{isLoading && <LoadingState />}
       <div className="d-flex p-4 row">
-        <div className="col-10 d-flex">
+        <div className="col-12 d-flex">
           <ProfileInitials>KC</ProfileInitials>
           <div className="d-flex ms-3 flex-column justify-content-center">
             <Paragraph size="20px" className="mb-0">
@@ -183,10 +220,6 @@ const BasicTab = () => {
               UTC - London
             </Paragraph>
           </div>
-        </div>
-        <div className="col-2 d-flex bronze">
-          <i className="material-icons me-2">emoji_events</i>
-          <Paragraph>{userAccountLevel}</Paragraph>
         </div>
       </div>
       <div className="d-flex p-4 row">
@@ -200,8 +233,8 @@ const BasicTab = () => {
               value={selectedTheme}
               onChange={(e) => selectTheme(e.currentTarget.value)}
             >
-              <option>Dark</option>
-              <option>Light</option>
+              <option value="Dark">Dark</option>
+              <option value="Light">Light</option>
             </StyledDropdown>
           </EditableOption>
         </div>
@@ -215,8 +248,8 @@ const BasicTab = () => {
               value={selectedTimezone}
               onChange={(e) => selectTimezone(e.currentTarget.value)}
             >
-              <option>UTC+0</option>
-              <option>UTC+1</option>
+              <option value="UTC+0">UTC+0</option>
+              <option value="UTC+1">UTC+1</option>
             </StyledDropdown>
           </EditableOption>
         </div>
@@ -230,15 +263,25 @@ const BasicTab = () => {
               value={selectedCurrency}
               onChange={(e) => selectCurrency(e.currentTarget.value)}
             >
-              <option>British Pounds (GBP)</option>
-              <option>Didgeridollars (AUS)</option>
+              <option value="GBP">British Pounds (GBP)</option>
+              <option value="AUS">Australian Dollars (AUS)</option>
             </StyledDropdown>
           </EditableOption>
         </div>
       </div>
       <div className="d-flex px-4 row">
         <div className="col-12 col-lg-2 pb-4">
-          <PrimaryButton text="Save" className="w-100" onClick={updateUserSettings} />
+			<PrimaryButton
+				text="Save"
+			  	className="w-100" 
+				onClick={updateUserSettings}
+				disabled={
+					userSetting[0]?.theme === selectedTheme
+					&& userSetting[0]?.timezone === selectedTimezone
+					&& userSetting[0]?.currency === selectedCurrency
+				} 
+			/>
+			{console.log(userSetting, 'usersetting')}
         </div>
       </div>
 
