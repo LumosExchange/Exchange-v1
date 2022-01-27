@@ -179,7 +179,7 @@ const BasicTab = () => {
 	const getAccountLevel = () => {
     //get account level from db
 		Axios.get("http://localhost:3001/getUserAccountLevel", {}).then((response) => {
-			setUserAccountLevel(response.data[0].accountLevel);
+			setUserAccountLevel(response.data[0]?.accountLevel);
 		});
 	}
 
@@ -220,6 +220,7 @@ const BasicTab = () => {
               UTC - London
             </Paragraph>
           </div>
+
         </div>
       </div>
       <div className="d-flex p-4 row">
