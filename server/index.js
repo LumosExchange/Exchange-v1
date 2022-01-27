@@ -91,8 +91,6 @@ const db = mysql.createConnection({
 app.post("/register", (req, res) => {
   const firstName = req.body.firstName;
 
-  console.log("firstName: " + req.body.firstName);
-
   const lastName = req.body.lastName;
   const email = req.body.email;
   const password = req.body.password;
@@ -705,8 +703,7 @@ app.post("/checkChangePass", (req, res) => {
       if (result.length > 0) {
         bcrypt.compare(password, result[0].password, (err, response) => {
           //if password match return auth as true
-          if (response) {
-           
+          if (response) {           
             res.send({
               auth: true,
             });
@@ -726,6 +723,24 @@ app.post("/checkChangePass", (req, res) => {
     }
   );
 });
+
+//update user password
+app.post("/updateUserPass", (req, res) => {
+  const user = req.session.user[0].userID;
+  const password = req.body.password;
+
+  bcrypt.hash (password, saltRounds, (err, hash) => {
+    if (err) {
+      console.log(err);
+    }
+    db.query(
+      ""
+    )
+  })
+
+
+
+})
 
 app.listen(3001, () => {
   console.log("running on port 3001");
