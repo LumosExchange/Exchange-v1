@@ -73,25 +73,54 @@ const ProfileTab = styled.button(
 
 const AccountTierCard = styled.div(
   ({ theme, tier }) => css`
-    background-color: ${theme.colors.white};
-    background-image: linear-gradient(
-      150deg,
-      ${theme.colors[tier]} 0%,
-      ${theme.colors[tier]} 20%,
-      ${theme.colors[tier]} 50%,
-      rgba(255, 255, 255, 0.6) 100%
-    );
+    background: ${theme.colors[tier]};
     color: ${theme.colors.white};
+	cursor: pointer;
 
     .inner {
       background-color: ${theme.colors.white};
     }
-  `
-);
 
-const AccountTier = ({ tier, children }) => (
-  <AccountTierCard tier={tier} className="d-flex flex-column p-2 rounded mb-3">
-    <div className="inner rounded p-3">{children}</div>
+	&.padding {
+		padding: 5px;
+	}
+
+	&.opaque {
+		opacity: 0.3;
+		&:hover {
+			opacity: 1;
+		}
+	}
+`);
+
+const CheckIcon = styled.i(({ theme }) => css`
+	font-size: 40px;
+	color: ${theme.colors.lightGrey};
+	&.selected {
+		color: #48a852;
+	}
+`);
+
+const AccountTier = ({ tier, selectedTier, limit, title }) => (
+  <AccountTierCard tier={tier} className={`d-flex flex-column padding rounded mb-3 ${!selectedTier && 'opaque'}`}>
+    <div className="inner rounded p-3">
+		<div className="d-flex justify-content-between">
+			<div className="d-flex flex-column">
+				<Heading size="20px" color="black" bold className="capitalize">
+					{title}
+				</Heading>
+				<Paragraph size="20px" color="black" className="mb-0">
+					Trade Limit: {limit} SOL
+				</Paragraph>
+			</div>
+			<div className="d-flex align-items-center">
+				{selectedTier 
+					? <CheckIcon className="material-icons selected">check_circle</CheckIcon>
+					: <GradientButton text="Upgrade" padding="5px 10px" />
+				}
+			</div>
+		</div>
+	</div>
   </AccountTierCard>
 );
 
@@ -105,17 +134,20 @@ const BasicTab = () => {
   const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
-      //get user email
+
+	// get user email
     Axios.get("http://localhost:3001/getUserEmail", {}).then((response) => {
       setUserEmail(response.data);
     });
-    //get user settings from usersettings db
+
+    // get user settings from usersettings db
     Axios.get("http://localhost:3001/getUserSettings", {}).then((response) => {
       setUserSettings(response.data);
       selectTheme(response.data[0].theme);
       selectTimezone(response.data[0].timezone);
       selectCurrency(response.data[0].currency);
     });
+
     //get account level from db
     Axios.get("http://localhost:3001/getUserAccountLevel", {}).then((response) => {
       setUserAccountLevel(response.data[0].accountLevel);
@@ -134,6 +166,8 @@ const BasicTab = () => {
 
       });
   };
+
+  console.log(userAccountLevel, 'account level');
 
 
   return (
@@ -207,49 +241,60 @@ const BasicTab = () => {
           <PrimaryButton text="Save" className="w-100" onClick={updateUserSettings} />
         </div>
       </div>
+
+	  {/* Account Limit Section */}
+
       <div className="d-flex px-4 row py-4">
         <div className="col-12">
           <Heading size="18px">Account Limits</Heading>
         </div>
         <div className="col-12 col-lg-4">
-          <AccountTier tier="bronze">
-            <Heading size="20px" color="black" bold>
-              Bronze
-            </Heading>
-            <Paragraph size="20px" color="black" className="mb-0">
-              Trade Limit: 5 SOL
-            </Paragraph>
-          </AccountTier>
+			<AccountTier
+				tier="six9Grey"
+				title="Standard"
+				limit="1"
+				selectedTier={userAccountLevel === 'Standard'}
+			/>
         </div>
         <div className="col-12 col-lg-4">
-          <AccountTier tier="silver">
-            <Heading size="20px" color="black" bold>
-              Silver
-            </Heading>
-            <Paragraph size="20px" color="black" className="mb-0">
-              Trade Limit: 10 SOL
-            </Paragraph>
-          </AccountTier>
+			<AccountTier
+				tier="bronze"
+				title="Bronze"
+				limit="5"
+				selectedTier={userAccountLevel === 'Bronze'}
+			/>
         </div>
         <div className="col-12 col-lg-4">
-          <AccountTier tier="gold">
-            <Heading size="20px" color="black" bold>
-              Gold
-            </Heading>
-            <Paragraph size="20px" color="black" className="mb-0">
-              Trade Limit: 25 SOL
-            </Paragraph>
-          </AccountTier>
+			<AccountTier
+				tier="silver"
+				title="Silver"
+				limit="10"
+				selectedTier={userAccountLevel === 'Silver'}
+			/>
         </div>
         <div className="col-12 col-lg-4">
-          <AccountTier tier="diamond">
-            <Heading size="20px" color="black" bold>
-              Diamond
-            </Heading>
-            <Paragraph size="20px" color="black" className="mb-0">
-              Trade Limit: 50 SOL
-            </Paragraph>
-          </AccountTier>
+			<AccountTier
+				tier="gold"
+				title="Gold"
+				limit="25"
+				selectedTier={userAccountLevel === 'Gold'}
+			/>
+        </div>
+        <div className="col-12 col-lg-4">
+			<AccountTier
+				tier="diamond"
+				title="Diamond"
+				limit="50"
+				selectedTier={userAccountLevel === 'Diamond'}
+			/>
+        </div>
+        <div className="col-12 col-lg-4">
+			<AccountTier
+				tier="six9Grey"
+				title="Team"
+				limit="100"
+				selectedTier={userAccountLevel === 'Team'}
+			/>
         </div>
       </div>
     </ContentTab>
