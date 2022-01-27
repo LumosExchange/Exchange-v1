@@ -124,6 +124,17 @@ const BasicTab = () => {
   }, []);
 
   //creat functionality to update user settings
+  const updateUserSettings = () => {
+    Axios.post("http://localhost:3001/updateUserSettings", {
+        theme: selectedTheme,
+        timezone: selectedTimezone,
+        currency: selectedCurrency,
+      }).then((response) => {
+        //handle errors
+
+      });
+  };
+
 
   return (
     <ContentTab>
@@ -193,7 +204,7 @@ const BasicTab = () => {
       </div>
       <div className="d-flex px-4 row">
         <div className="col-12 col-lg-2 pb-4">
-          <PrimaryButton text="Save" className="w-100" />
+          <PrimaryButton text="Save" className="w-100" onClick={updateUserSettings} />
         </div>
       </div>
       <div className="d-flex px-4 row py-4">
