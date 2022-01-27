@@ -102,7 +102,7 @@ app.post("/register", (req, res) => {
   const theme = "Dark";
   const timezone = "UTC+0";
   const currency = "GBP";
-  const accountLevel = "Standard"
+  const accountLevel = "Standard";
 
   //hash password
   bcrypt.hash(password, saltRounds, (err, hash) => {
@@ -132,8 +132,6 @@ app.post("/register", (req, res) => {
     );
   });
 });
-
-
 
 //Login functionality
 //check logged in state
@@ -171,39 +169,43 @@ app.post("/login", (req, res) => {
   const userName = req.body.userName;
   const password = req.body.password;
 
-  db.query("SELECT * FROM users WHERE userName = ?", userName, (err, result) => {
-    if (err) {
-      res.send({ err: err });
+  db.query(
+    "SELECT * FROM users WHERE userName = ?",
+    userName,
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      }
+
+      if (result.length > 0) {
+        bcrypt.compare(password, result[0].password, (err, response) => {
+          if (response) {
+            //create session
+            req.session.user = result;
+
+            const id = result[0].id;
+
+            //replace jwtsecret with env file
+            const token = jwt.sign({ id }, "JWTSECRET", {
+              expiresIn: 300,
+            });
+
+            req.session.user = result;
+
+            console.log(req.session.user);
+            res.json({ auth: true, token: token, result: result });
+          } else {
+            res.send({
+              auth: false,
+              message: "Wrong username / password combination",
+            });
+          }
+        });
+      } else {
+        res.json({ auth: false, message: "No user Exists" });
+      }
     }
-
-    if (result.length > 0) {
-      bcrypt.compare(password, result[0].password, (err, response) => {
-        if (response) {
-          //create session
-          req.session.user = result;
-
-          const id = result[0].id;
-
-          //replace jwtsecret with env file
-          const token = jwt.sign({ id }, "JWTSECRET", {
-            expiresIn: 300,
-          });
-
-          req.session.user = result;
-
-          console.log(req.session.user);
-          res.json({ auth: true, token: token, result: result });
-        } else {
-          res.send({
-            auth: false,
-            message: "Wrong username / password combination",
-          });
-        }
-      });
-    } else {
-      res.json({ auth: false, message: "No user Exists" });
-    }
-  });
+  );
 });
 
 //Create sell functionality
@@ -258,15 +260,14 @@ app.get("/getUserNameSeller", (req, res) => {
 //get username for navbar after user is logegd in
 app.get("/getUserNameNav", (req, res) => {
   const name = req.session.user[0].userName;
-res.send(name);
+  res.send(name);
 });
 
 //get email for profile page
 app.get("/getUserEmail", (req, res) => {
   const email = req.session.user[0].email;
-res.send(email);
+  res.send(email);
 });
-
 
 app.get("/getUserFeedback", (req, res) => {
   let params = req.query.sellerID;
@@ -288,7 +289,6 @@ app.get("/getUserSettings", (req, res) => {
     [user],
     (err, result) => {
       res.send(result);
-
     }
   );
 });
@@ -302,14 +302,11 @@ app.get("/getUserAccountLevel", (req, res) => {
     [user],
     (err, result) => {
       res.send(result);
-  
-      
     }
   );
-
 });
 
-//update user settings 
+//update user settings
 app.post("/updateUserSettings", (req, res) => {
   const theme = req.body.theme;
   const timezone = req.body.timezone;
@@ -317,7 +314,7 @@ app.post("/updateUserSettings", (req, res) => {
   const user = req.session.user[0].userID;
 
   db.query(
-    'UPDATE userSettings SET currency = ?, timezone = ?, theme = ? WHERE userID = ?',
+    "UPDATE userSettings SET currency = ?, timezone = ?, theme = ? WHERE userID = ?",
     [currency, timezone, theme, user],
     (err, result) => {
       res.send(result);
@@ -509,13 +506,13 @@ app.post("/VerifyEmail2FA", (req, res) => {
     [email],
     (err, result) => {
       checkCode = result[0].Secret;
-      console.log('Checkcode from db: ', checkCode);
-      console.log('Passcode from  user: ', userCode);
+      console.log("Checkcode from db: ", checkCode);
+      console.log("Passcode from  user: ", userCode);
     }
   );
   let newcheckCode = toString(checkCode);
   let newuserCode = toString(userCode);
-  //convert both to string before checking 
+  //convert both to string before checking
 
   if (newcheckCode == newuserCode) {
     auth = true;
@@ -523,14 +520,12 @@ app.post("/VerifyEmail2FA", (req, res) => {
     db.query(
       "DELETE * FROM TempAuth WHERE (email) = (?)",
       [email],
-      (err, result) => {
-      }
-    )
-    
+      (err, result) => {}
+    );
   } else {
     auth = false;
   }
-  console.log('auth: ', auth);
+  console.log("auth: ", auth);
   res.send(auth);
 
   //once verified delete 2fa from db
@@ -576,22 +571,22 @@ app.post("/UpgradeBronze", (req, res) => {
 
 //this email verification will be built for chnaging 2fa options
 app.post("/2FAEmailVerificationSend", (req, res) => {
-
   //get user email and generate 6 digit code
   const email = req.session.user[0].email;
   const text = crypto.randomInt(0, 1000000);
-  const name = req.session.user[0].firstName + " " + req.session.user[0].lastName;
+  const name =
+    req.session.user[0].firstName + " " + req.session.user[0].lastName;
 
-    //Pass connection details to Emailer API from ENV
-    const transport = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,
-      port: process.env.MAIL_PORT,
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
-      },
-    });
-      //Send email
+  //Pass connection details to Emailer API from ENV
+  const transport = nodemailer.createTransport({
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
+    },
+  });
+  //Send email
   transport.sendMail({
     from: process.env.MAIL_FROM,
     to: req.body.email,
@@ -661,12 +656,76 @@ app.post("/2FAEmailVerificationSend", (req, res) => {
 
 //this email verification will be built for chnaging 2fa options
 app.post("/2FAEmailVerification", (req, res) => {
+  const email = req.session.user[0].email;
+  const userCode = req.body.passcode;
+  let checkCode;
+  let auth = false;
 
+  db.query(
+    "SELECT * FROM TempAuth WHERE (email) = (?)",
+    [email],
+    (err, result) => {
+      checkCode = result[0].Secret;
+    }
+  );
+  let newcheckCode = toString(checkCode);
+  let newuserCode = toString(userCode);
+  //convert both to string before checking
+
+  if (newcheckCode == newuserCode) {
+    res.send({
+      auth: true
+    })
+    //if true delete from temp db
+    db.query(
+      "DELETE * FROM TempAuth WHERE (email) = (?)",
+      [email],
+      (err, result) => {}
+    );
+  } else {
+    res.send({
+      auth: false
+    })
+  }
 });
 
+//used for user to chnage password verification
+app.post("/checkChangePass", (req, res) => {
+  const userName = req.session.user[0].userName;
+  const password = req.body.password;
+  let auth = false;
 
-
-
+  db.query(
+    "SELECT * FROM users WHERE userName = ?",
+    userName,
+    (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      }
+      if (result.length > 0) {
+        bcrypt.compare(password, result[0].password, (err, response) => {
+          //if password match return auth as true
+          if (response) {
+           
+            res.send({
+              auth: true,
+            });
+          } else {
+            res.send({
+              auth: false,
+              message: "Incorrect Password please try again",
+            });
+          }
+        });
+      } else {
+        res.send({
+          auth: false,
+          message: "no user exists",
+        });
+      }
+    }
+  );
+});
 
 app.listen(3001, () => {
   console.log("running on port 3001");
