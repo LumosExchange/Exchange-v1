@@ -56,20 +56,25 @@ const MenuBase = styled.div(
 );
 
 
-//get username
-
-const Navbar = ({ isLoggedIn }) => {
+const Navbar = ({ loginStatus }) => {
   const [showMobileMenu, setMenuOpen] = useState(false);
   const [userName, setUserName] = useState('');
 
+  const getUserName = () => {
+      Axios.get("http://localhost:3001/getUserNameNav", {
+      }).then((response) => {
+        console.log('get user name fired');
+          setUserName(response?.data);
+      });
+    }
+
+    console.log(loginStatus, 'login status');
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/getUserNameNav", {
-    }).then((response) => {
-      setUserName(response.data);
-    
-    });
-  }, []);
+    if (loginStatus === true) {
+      getUserName();
+    }
+  }, [loginStatus]);
 
   return (
     <Base className="d-flex justify-content-center">
@@ -78,7 +83,7 @@ const Navbar = ({ isLoggedIn }) => {
           <a href="/home">
             <img src={Logo} alt="Logo" className="me-1" />
           </a>
-          {isLoggedIn ? (
+          {loginStatus ? (
             <React.Fragment>
               <div className="d-none d-lg-block m-auto">
                 <NavLink href="/Market" className="me-4 me-xl-5">
@@ -150,7 +155,7 @@ const Navbar = ({ isLoggedIn }) => {
               </button>
             </div>
           </div>
-          {isLoggedIn ? (
+          {loginStatus ? (
             <div className="d-flex flex-column p-4 pt-3">
               <NavLink href="/Offers" className="mb-3">
                 Offers
