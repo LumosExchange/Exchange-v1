@@ -102,7 +102,7 @@ function App() {
     <React.Fragment>
       <ThemeProvider theme={theme}>
         <Router>
-          <Navbar isLoggedIn={loginStatus} />
+          <Navbar loginStatus={loginStatus} />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/Login" element={<Login />} />
