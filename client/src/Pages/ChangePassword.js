@@ -4,6 +4,8 @@ import Axios from "axios";
 function ChangePassword() {
   const [userVerification, setUserVerification] = useState("");
   const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [checkNewPass, setCheckNewPass] = useState("");
   const [passwordStatus, setPasswordStatus] = useState(false);
   const [emailStatus, setEmailStatus] = useState(false);
 
@@ -21,7 +23,6 @@ function ChangePassword() {
         setEmailStatus(false);
       } else {
         setEmailStatus(true);
-        
       }
     });
   };
@@ -36,15 +37,33 @@ function ChangePassword() {
         setPasswordStatus(true);
       }
     });
-
   };
 
- 
-
   //if both above are true then update user password
+  const checkRequirements = () => {
+    //check both passwords are equal
+    if (newPassword === checkNewPass) {
+      //then check email verification and old passverification
+      if (emailStatus === true && passwordStatus === true) {
+        Axios.post("/updateUserPass", {
+          password: newPassword
+        }).then((response) => {
+          //handle response here if we pass one 
+        })
+      }
 
-  //TODO- pass user input for email verifasction to setUserVerification
-  //    = pass old password to setOldPassword
+    }else {
+
+    }
+
+  }
+
+
+
+  // TODO - pass user input for email verifasction to setUserVerification
+  //      - pass old password to setOldPassword
+  //      - pass new password to setNewPass
+  //      - pass new password repeat to setCheckNewPass
 
   return (
     <div>
