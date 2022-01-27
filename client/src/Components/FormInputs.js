@@ -143,11 +143,12 @@ export const FormCheckbox = ({ className, id, name }) => (
 	/>
 );
 
-export const StyledLabel = styled.label(({ theme, color, padding, fontSize }) => css`
+export const StyledLabel = styled.label(({ theme, color, padding, fontSize, bold }) => css`
 	color: ${theme.colors[color]};
 	cursor: pointer;
 	font-size: ${fontSize};
 	padding: ${padding};
+	font-family: ${bold ? 'THICCCBOI-BOLD' : 'THICCBOI-REGULAR'};
 
 	a { color: ${theme.colors.yellow}; }
 `);

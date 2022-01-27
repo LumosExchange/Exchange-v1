@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { PageBody } from "../Components/FormInputs";
-import { FormInput } from "../Components/FormInputs";
+import { FormInput, StyledLabel } from "../Components/FormInputs";
 import PrimaryButton from "../Components/Buttons";
 import Card from "../Components/Card";
 import Heading from "../Components/Heading";
@@ -75,10 +75,18 @@ function ChangePassword() {
       <div className="container col-12 col-md-8 col-xl-5 col-xxl-4">
         <Card radius="20px" color="darkerGrey" className="p-5 d-flex flex-column">
           <Heading className="pb-4 text-center">
-            Reset Password
+            Change Password
           </Heading>
           <div className="w-100">
             <form>
+              <StyledLabel
+                htmlFor="emailVerification"
+                fontSize="20px"
+                padding="0"
+                bold
+                >
+                  Enter email verification code
+                </StyledLabel>
                 <FormInput
                   type="text"
                   id="emailVerification"
@@ -89,6 +97,14 @@ function ChangePassword() {
                   }}
                   className="w-100 mb-3"
                 />
+              <StyledLabel
+                htmlFor="oldPass"
+                fontSize="20px"
+                padding="0"
+                bold
+                >
+                  Enter old password
+                </StyledLabel>
                 <FormInput
                   type="text"
                   id="oldPass"
@@ -99,6 +115,14 @@ function ChangePassword() {
                   }}
                   className="w-100 mb-3"
                 />
+                <StyledLabel
+                  htmlFor="newPass"
+                  fontSize="20px"
+                  padding="0"
+                  bold
+                >
+                  Enter new password
+                </StyledLabel>
                 <FormInput
                   type="text"
                   id="newPass"
@@ -109,6 +133,14 @@ function ChangePassword() {
                   }}
                   className="w-100 mb-3"
                 />
+                <StyledLabel
+                  htmlFor="repeatNewPass"
+                  fontSize="20px"
+                  padding="0"
+                  bold
+                >
+                  Repeat new password
+                </StyledLabel>
                 <FormInput
                   type="text"
                   id="repeatNewPass"
