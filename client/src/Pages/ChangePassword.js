@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
+import { PageBody } from "../Components/FormInputs";
+import { FormInput } from "../Components/FormInputs";
+import PrimaryButton from "../Components/Buttons";
+import Card from "../Components/Card";
+import Heading from "../Components/Heading";
 
 function ChangePassword() {
   const [userVerification, setUserVerification] = useState("");
@@ -66,24 +71,66 @@ function ChangePassword() {
   //      - pass new password repeat to setCheckNewPass
 
   return (
-    <div>
-      <h3>Please enter email verification</h3>
-
-      <input type="" id="emailVerification" name="emailVerification"></input>
-      <div>
-        <h3>Please enter old password</h3>
-        <input type="password" id="oldPass" name="oldPass"></input>
-
-        <h3>Please enter new password</h3>
-        <input type="password" id="newPass" name="newPass"></input>
-
-        <h3>Please repeat new password </h3>
-        <input type="password" id="repeatNewPass" name="repeatNewPass"></input>
-        <br></br>
-
-        <button type="submit">Submit</button>
+    <PageBody className="d-flex align-items-center justify-content-center py-5 flex-column">
+      <div className="container col-12 col-md-8 col-xl-5 col-xxl-4">
+        <Card radius="20px" color="darkerGrey" className="p-5 d-flex flex-column">
+          <Heading className="pb-4 text-center">
+            Reset Password
+          </Heading>
+          <div className="w-100">
+            <form>
+                <FormInput
+                  type="text"
+                  id="emailVerification"
+                  name="emailVerification"
+                  placeholder="Enter current email"
+                  onChange={(e) => {
+                    setUserVerification(e.target.value);
+                  }}
+                  className="w-100 mb-3"
+                />
+                <FormInput
+                  type="text"
+                  id="oldPass"
+                  name="oldPass"
+                  placeholder="Enter old password"
+                  onChange={(e) => {
+                    setOldPassword(e.target.value);
+                  }}
+                  className="w-100 mb-3"
+                />
+                <FormInput
+                  type="text"
+                  id="newPass"
+                  name="newPass"
+                  placeholder="Enter new password"
+                  onChange={(e) => {
+                    setNewPassword(e.target.value);
+                  }}
+                  className="w-100 mb-3"
+                />
+                <FormInput
+                  type="text"
+                  id="repeatNewPass"
+                  name="repeatNewPass"
+                  placeholder="Repeat new password"
+                  onChange={(e) => {
+                    setCheckNewPass(e.target.value);
+                  }}
+                  className="w-100 mb-3"
+                />
+                <div className="col-12 p-0">
+                  <PrimaryButton
+                    text="Submit"
+                    type="submit"
+                    className="w-100 h-100"
+                  />
+                </div>
+              </form>
+            </div>
+        </Card>
       </div>
-    </div>
+  </PageBody>
   );
 }
 
