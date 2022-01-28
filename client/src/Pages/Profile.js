@@ -1,131 +1,22 @@
 import React, { useState, useEffect } from "react";
-import styled, { css, keyframes } from "styled-components";
 import {
   PageBody,
   StyledDropdown,
   FormInput,
-  StyledLabel,
 } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import GradientButton from "../Components/GradientButton";
 import PrimaryButton from "../Components/Buttons";
 import Paragraph from "../Components/Paragraph";
 import Axios from "axios";
-import LoadingSpinner from '../Images/loading-spinner.png';
+import {
+  AccountTierCard, CheckIcon, ContentTab, ProfileInitials,
+  EditableOption, LoadingState, ProfileTab
+} from "../Components/Profile";
 
 const TAB_TITLE_BASIC = "basic";
 const TAB_TITLE_SECURITY = "security";
 const TAB_TITLE_KYC = "kyc";
-
-const ContentTab = styled.div(
-  ({ theme }) => css`
-    background: ${theme.colors.grey};
-    border-radius: 3px;
-    border: 2px solid ${theme.colors.yellow};
-
-    .bronze {
-      color: ${theme.colors.bronze};
-    }
-    .silver {
-      color: ${theme.colors.silver};
-    }
-    .gold {
-      color: ${theme.colors.gold};
-    }
-`);
-
-const EditableOption = styled.div(
-  ({ theme }) => css`
-    background: ${theme.colors.white};
-    border-radius: 3px;
-  `
-);
-
-const ProfileInitials = styled.div(
-  ({ theme }) => css`
-    width: 75px;
-    height: 75px;
-    border-radius: 50px;
-    background: ${theme.colors.yellow};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: ${theme.colors.black};
-    font-size: 30px;
-    font-family: "THICCCBOI-BOLD";
-  `
-);
-
-const ProfileTab = styled.button(
-  ({ theme }) => css`
-    background: ${theme.colors.white};
-    padding: 10px 30px;
-    border-radius: 5px 5px 0 0;
-    border: 0;
-    margin-right: 16px;
-
-    &.active {
-      background: ${theme.colors.yellow};
-      font-family: "THICCCBOI-BOLD";
-    }
-  `
-);
-
-const AccountTierCard = styled.div(
-  ({ theme, tier }) => css`
-    background: ${theme.colors[tier]};
-    color: ${theme.colors.white};
-	cursor: pointer;
-
-    .inner {
-      background-color: ${theme.colors.white};
-    }
-
-	&.padding {
-		padding: 5px;
-	}
-
-	&.opaque {
-		opacity: 0.3;
-		&:hover {
-			opacity: 1;
-		}
-	}
-`);
-
-const CheckIcon = styled.i(({ theme }) => css`
-	font-size: 40px;
-	color: ${theme.colors.lightGrey};
-	&.selected {
-		color: #48a852;
-	}
-`);
-
-const Rotate = keyframes`
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-`;
-
-const FixedBackground = styled.div(({ theme }) => css`
-	background: ${theme.colors.black};
-	z-index: 2;
-	margin-left: -12px;
-
-	img {
-		width: 64px;
-		height: 64px;
-		min-width: 64px;
-		min-height: 64px;
-		animation: ${Rotate} 1s linear infinite;
-	}
-`);
-
-
-const LoadingState = () => (
-	<FixedBackground className="position-absolute d-flex align-items-center justify-content-center w-100 h-100">
-		<img src={LoadingSpinner} alt="Loading" />
-	</FixedBackground>
-);
 
 const AccountTier = ({ tier, selectedTier, limit, title }) => (
   <AccountTierCard tier={tier} className={`d-flex flex-column padding rounded mb-3 ${!selectedTier && 'opaque'}`}>
@@ -282,7 +173,6 @@ const BasicTab = () => {
 					&& userSetting[0]?.currency === selectedCurrency
 				} 
 			/>
-			{console.log(userSetting, 'usersetting')}
         </div>
       </div>
 
@@ -350,10 +240,6 @@ const SecurityTab = () => {
   const [selectedPassword, selectPassword] = useState("");
   const [selectedAuthType, selectAuthType] = useState("");
 
-  console.log("email is", selectedEmail);
-  console.log("password is", selectedPassword);
-  console.log("auth type is", selectedAuthType);
-
   return (
     <ContentTab>
       <div className="d-flex p-4 row">
@@ -403,9 +289,463 @@ const SecurityTab = () => {
   );
 };
 
-const KycTab = () => (
-  <ContentTab className="text-white">KYC Goes here</ContentTab>
-);
+const birthDayOptions = [
+	1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+	11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+	21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
+];
+
+const birthMonthOptions = [
+	"January", "February", "March", "April", "May", "June", "July",
+	"August", "September", "October", "November", "December"
+];
+
+const currentYear = (new Date()).getFullYear();
+const birthYearOptions = (start, stop, step) => Array.from({ length: (stop - start) / step + 1}, (_, i) => start + (i * step));
+
+const countryOptions = [
+	"Afghanistan",
+	"Albania",
+	"Algeria",
+	"American Samoa",
+	"Andorra",
+	"Angola",
+	"Anguilla",
+	"Antarctica",
+	"Antigua and Barbuda",
+	"Argentina",
+	"Armenia",
+	"Aruba",
+	"Australia",
+	"Austria",
+	"Azerbaijan",
+	"Bahamas (the)",
+	"Bahrain",
+	"Bangladesh",
+	"Barbados",
+	"Belarus",
+	"Belgium",
+	"Belize",
+	"Benin",
+	"Bermuda",
+	"Bhutan",
+	"Bolivia (Plurinational State of)",
+	"Bonaire, Sint Eustatius and Saba",
+	"Bosnia and Herzegovina",
+	"Botswana",
+	"Bouvet Island",
+	"Brazil",
+	"British Indian Ocean Territory (the)",
+	"Brunei Darussalam",
+	"Bulgaria",
+	"Burkina Faso",
+	"Burundi",
+	"Cabo Verde",
+	"Cambodia",
+	"Cameroon",
+	"Canada",
+	"Cayman Islands (the)",
+	"Central African Republic (the)",
+	"Chad",
+	"Chile",
+	"China",
+	"Christmas Island",
+	"Cocos (Keeling) Islands (the)",
+	"Colombia",
+	"Comoros (the)",
+	"Congo (the Democratic Republic of the)",
+	"Congo (the)",
+	"Cook Islands (the)",
+	"Costa Rica",
+	"Croatia",
+	"Cuba",
+	"Curaçao",
+	"Cyprus",
+	"Czechia",
+	"Côte d'Ivoire",
+	"Denmark",
+	"Djibouti",
+	"Dominica",
+	"Dominican Republic (the)",
+	"Ecuador",
+	"Egypt",
+	"El Salvador",
+	"Equatorial Guinea",
+	"Eritrea",
+	"Estonia",
+	"Eswatini",
+	"Ethiopia",
+	"Falkland Islands (the) [Malvinas]",
+	"Faroe Islands (the)",
+	"Fiji",
+	"Finland",
+	"France",
+	"French Guiana",
+	"French Polynesia",
+	"French Southern Territories (the)",
+	"Gabon",
+	"Gambia (the)",
+	"Georgia",
+	"Germany",
+	"Ghana",
+	"Gibraltar",
+	"Greece",
+	"Greenland",
+	"Grenada",
+	"Guadeloupe",
+	"Guam",
+	"Guatemala",
+	"Guernsey",
+	"Guinea",
+	"Guinea-Bissau",
+	"Guyana",
+	"Haiti",
+	"Heard Island and McDonald Islands",
+	"Holy See (the)",
+	"Honduras",
+	"Hong Kong",
+	"Hungary",
+	"Iceland",
+	"India",
+	"Indonesia",
+	"Iran (Islamic Republic of)",
+	"Iraq",
+	"Ireland",
+	"Isle of Man",
+	"Israel",
+	"Italy",
+	"Jamaica",
+	"Japan",
+	"Jersey",
+	"Jordan",
+	"Kazakhstan",
+	"Kenya",
+	"Kiribati",
+	"Korea (the Democratic People's Republic of)",
+	"Korea (the Republic of)",
+	"Kuwait",
+	"Kyrgyzstan",
+	"Lao People's Democratic Republic (the)",
+	"Latvia",
+	"Lebanon",
+	"Lesotho",
+	"Liberia",
+	"Libya",
+	"Liechtenstein",
+	"Lithuania",
+	"Luxembourg",
+	"Macao",
+	"Madagascar",
+	"Malawi",
+	"Malaysia",
+	"Maldives",
+	"Mali",
+	"Malta",
+	"Marshall Islands (the)",
+	"Martinique",
+	"Mauritania",
+	"Mauritius",
+	"Mayotte",
+	"Mexico",
+	"Micronesia (Federated States of)",
+	"Moldova (the Republic of)",
+	"Monaco",
+	"Mongolia",
+	"Montenegro",
+	"Montserrat",
+	"Morocco",
+	"Mozambique",
+	"Myanmar",
+	"Namibia",
+	"Nauru",
+	"Nepal",
+	"Netherlands (the)",
+	"New Caledonia",
+	"New Zealand",
+	"Nicaragua",
+	"Niger (the)",
+	"Nigeria",
+	"Niue",
+	"Norfolk Island",
+	"Northern Mariana Islands (the)",
+	"Norway",
+	"Oman",
+	"Pakistan",
+	"Palau",
+	"Palestine, State of",
+	"Panama",
+	"Papua New Guinea",
+	"Paraguay",
+	"Peru",
+	"Philippines (the)",
+	"Pitcairn",
+	"Poland",
+	"Portugal",
+	"Puerto Rico",
+	"Qatar",
+	"Republic of North Macedonia",
+	"Romania",
+	"Russian Federation (the)",
+	"Rwanda",
+	"Réunion",
+	"Saint Barthélemy",
+	"Saint Helena, Ascension and Tristan da Cunha",
+	"Saint Kitts and Nevis",
+	"Saint Lucia",
+	"Saint Martin (French part)",
+	"Saint Pierre and Miquelon",
+	"Saint Vincent and the Grenadines",
+	"Samoa",
+	"San Marino",
+	"Sao Tome and Principe",
+	"Saudi Arabia",
+	"Senegal",
+	"Serbia",
+	"Seychelles",
+	"Sierra Leone",
+	"Singapore",
+	"Sint Maarten (Dutch part)",
+	"Slovakia",
+	"Slovenia",
+	"Solomon Islands",
+	"Somalia",
+	"South Africa",
+	"South Georgia and the South Sandwich Islands",
+	"South Sudan",
+	"Spain",
+	"Sri Lanka",
+	"Sudan (the)",
+	"Suriname",
+	"Svalbard and Jan Mayen",
+	"Sweden",
+	"Switzerland",
+	"Syrian Arab Republic",
+	"Taiwan",
+	"Tajikistan",
+	"Tanzania, United Republic of",
+	"Thailand",
+	"Timor-Leste",
+	"Togo",
+	"Tokelau",
+	"Tonga",
+	"Trinidad and Tobago",
+	"Tunisia",
+	"Turkey",
+	"Turkmenistan",
+	"Turks and Caicos Islands (the)",
+	"Tuvalu",
+	"Uganda",
+	"Ukraine",
+	"United Arab Emirates (the)",
+	"United Kingdom of Great Britain and Northern Ireland (the)",
+	"United States Minor Outlying Islands (the)",
+	"United States of America (the)",
+	"Uruguay",
+	"Uzbekistan",
+	"Vanuatu",
+	"Venezuela (Bolivarian Republic of)",
+	"Viet Nam",
+	"Virgin Islands (British)",
+	"Virgin Islands (U.S.)",
+	"Wallis and Futuna",
+	"Western Sahara",
+	"Yemen",
+	"Zambia",
+	"Zimbabwe",
+	"Åland Islands"
+];
+
+const KycTab = () => {
+	const [legalName, setLegalName] = useState("");
+	const [birthDay, setBirthDay] = useState(0);
+	const [birthMonth, setBirthMonth] = useState("");
+	const [birthYear, setBirthYear] = useState("");
+	const [displayName, setDisplayName] = useState("");
+	const [streetAdress, setStreetAdress] = useState("");
+	const [cityTown, setCityTown] = useState("");
+	const [cityState, setCityState] = useState("");
+	const [postCode, setPostCode] = useState("");
+	const [country, setCountry] = useState("");
+	
+	return (
+	<ContentTab className="text-white">
+    	<div className="d-flex p-4 row">
+			<div className="col-12 col-md-6 mb-3">
+				<EditableOption className="p-4">
+					<Heading color="black" size="20px" bold>
+						Display Name
+					</Heading>
+					<FormInput
+						id="displayname"
+						className="mb-3 w-100"
+						type="text"
+						placeholder="Display Name"
+						value={displayName}
+						onChange={(e) => {
+							setDisplayName(e.target.value);
+						}}
+					/>
+				</EditableOption>
+			</div>
+			<div className="col-12 col-md-6 mb-3">
+				<EditableOption className="p-4">
+					<Heading color="black" size="20px" bold>
+						Legal Name
+					</Heading>
+					<FormInput
+						id="forename"
+						className="mb-3 w-100"
+						type="text"
+						placeholder="Legal Name"
+						value={legalName}
+						onChange={(e) => {
+							setLegalName(e.target.value);
+						}}
+					/>
+				</EditableOption>
+			</div>
+			<div className="col-12 col-md-6 mb-3">
+				<EditableOption className="p-4">
+					<Heading color="black" size="20px" bold className="mb-3">
+						Date of Birth
+					</Heading>
+					<div className="row">
+						<div className="col-4">
+							<Heading color="black" size="20px" bold>
+								Day
+							</Heading>
+							<StyledDropdown
+								className="w-100"
+								value={birthDay}
+								onChange={(e) => setBirthDay(e.currentTarget.value)}
+								>
+									{birthDayOptions.map((option) => (
+										<option value={option}>{option}</option>
+									))}
+							</StyledDropdown>
+						</div>
+						<div className="col-4">
+							<Heading color="black" size="20px" bold>
+								Month
+							</Heading>
+							<StyledDropdown
+								className="w-100"
+								value={birthMonth}
+								onChange={(e) => setBirthMonth(e.currentTarget.value)}
+								>
+									{birthMonthOptions.map((option) => (
+										<option value={option}>{option}</option>
+									))}
+							</StyledDropdown>
+						</div>
+						<div className="col-4">
+							<Heading color="black" size="20px" bold>
+								Year
+							</Heading>
+							<StyledDropdown
+								className="w-100"
+								value={birthYear}
+								onChange={(e) => setBirthYear(e.currentTarget.value)}
+								>
+									{birthYearOptions(currentYear, currentYear - 90, -1).map((option) => (
+										<option value={option}>{option}</option>
+									))}
+							</StyledDropdown>
+						</div>
+					</div>
+				</EditableOption>
+			</div>
+			<div className="col-12 col-md-6 mb-3">
+				<EditableOption className="p-4 h-100">
+					<Heading color="black" size="20px" bold>
+						Street Address
+					</Heading>
+					<FormInput
+						id="streetaddress"
+						className="mb-3 w-100"
+						type="text"
+						placeholder="Street Address"
+						value={streetAdress}
+						onChange={(e) => {
+							setStreetAdress(e.target.value);
+						}}
+					/>
+				</EditableOption>
+			</div>
+			<div className="col-12 col-md-6 mb-3">
+				<EditableOption className="p-4">
+					<Heading color="black" size="20px" bold>
+						City/Town
+					</Heading>
+					<FormInput
+						id="citytown"
+						className="mb-3 w-100"
+						type="text"
+						placeholder="City/Town"
+						value={cityTown}
+						onChange={(e) => {
+							setCityTown(e.target.value);
+						}}
+					/>
+				</EditableOption>
+			</div>
+			<div className="col-12 col-md-6 mb-3 ">
+				<EditableOption className="p-4">
+					<Heading color="black" size="20px" bold>
+						State (if applicable)
+					</Heading>
+					<FormInput
+						id="citystate"
+						className="mb-3 w-100"
+						type="text"
+						placeholder="State"
+						value={cityState}
+						onChange={(e) => {
+							setCityState(e.target.value);
+						}}
+					/>
+				</EditableOption>
+			</div>
+			<div className="col-12 col-md-6 mb-3 ">
+				<EditableOption className="p-4">
+					<Heading color="black" size="20px" bold>
+						Postcode
+					</Heading>
+					<FormInput
+						id="postcode"
+						className="mb-3 w-100"
+						type="text"
+						placeholder="Postcode"
+						value={postCode}
+						onChange={(e) => {
+							setPostCode(e.target.value);
+						}}
+					/>
+				</EditableOption>
+			</div>
+			<div className="col-12 col-md-6 mb-3">
+				<EditableOption className="p-4 h-100">
+					<Heading color="black" size="20px" bold>
+						Country
+					</Heading>
+					<StyledDropdown
+						className="w-100"
+						value={country}
+						onChange={(e) => setCountry(e.currentTarget.value)}
+						>
+							{countryOptions.map((option) => (
+								<option value={option}>{option}</option>
+							))}
+					</StyledDropdown>
+				</EditableOption>
+			</div>
+			<div className="col-12 col-md-6 mb-3">
+				<PrimaryButton onClick={null} text="Save" />
+			</div>
+		</div>
+	</ContentTab>
+	);
+}
 
 const Profile = () => {
   const [selectedProfileTab, selectProfileTab] = useState(TAB_TITLE_BASIC);
