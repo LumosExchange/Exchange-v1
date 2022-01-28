@@ -15,13 +15,13 @@ function ChangePassword() {
   const [emailStatus, setEmailStatus] = useState(false);
 
   //send email verification
-  const sendEmailVerification = () => {
-    Axios.post("http://localhots:3001/2FAEmailVerificationSend", {});
+  const sendVerification = () => {
+    Axios.post("http://localhost:3001/2FAEmailVerificationSend", {});
   };
 
   //check email verification
   const emailVerification = () => {
-    Axios.post("http://localhost:3001/VerifyEmail2FA", {
+    Axios.post("http://localhost:3001/EmailVerification2FA", {
       passcode: userVerification,
     }).then((response) => {
       if (!response.data.auth) {
@@ -29,14 +29,17 @@ function ChangePassword() {
       } else {
         setEmailStatus(true);
       }
+      console.log("result of email verification: ", emailStatus);
     });
   };
-   //check old password is match for old password
+
+  //check old password is match for old password
   const checkOldPass = () => {
-    Axios.post("/checkChangePass", {
-      oldPassword: oldPassword
+    
+    Axios.post("http://localhost:3001/checkChangePass", {
+      oldPassword: oldPassword,
     }).then((response) => {
-      if (!response.data.auth) {     
+      if (!response.data.auth) {
         setPasswordStatus(false);
       } else {
         setPasswordStatus(true);
@@ -46,24 +49,20 @@ function ChangePassword() {
 
   //if both above are true then update user password
   const checkRequirements = () => {
+    
     //check both passwords are equal
     if (newPassword === checkNewPass) {
       //then check email verification and old passverification
       if (emailStatus === true && passwordStatus === true) {
         Axios.post("/updateUserPass", {
-          password: newPassword
+          password: newPassword,
         }).then((response) => {
-          //handle response here if we pass one 
-        })
+          //handle response here if we pass one
+        });
       }
-
-    }else {
-
-    };
-
+    } else {
+    }
   };
-
-
 
   // TODO - pass user input for email verifasction to setUserVerification
   //      - pass old password to setOldPassword
@@ -73,10 +72,30 @@ function ChangePassword() {
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 flex-column">
       <div className="container col-12 col-md-8 col-xl-5 col-xxl-4">
-        <Card radius="20px" color="darkerGrey" className="p-5 d-flex flex-column">
-          <Heading className="pb-4 text-center">
-            Change Password
-          </Heading>
+        <Card
+          radius="20px"
+          color="darkerGrey"
+          className="p-5 d-flex flex-column"
+        >
+          <Heading className="pb-4 text-center">Change Password</Heading>
+          <StyledLabel
+            htmlFor="emailVerification"
+            fontSize="20px"
+            padding="0"
+            bold
+          >
+            Please note you will be required to complete email verification and
+            know your current password before you will be allowed to change the
+            password on the account.
+          </StyledLabel>
+          <PrimaryButton
+            text="Get Code"
+            className="m-auto mt-3"
+            onClick={sendVerification}
+            type="check"
+            value="check"
+          />
+
           <div className="w-100">
             <form>
               <StyledLabel
@@ -84,85 +103,82 @@ function ChangePassword() {
                 fontSize="20px"
                 padding="0"
                 bold
-                >
-                  Enter email verification code
-                </StyledLabel>
-                <FormInput
-                  type="text"
-                  id="emailVerification"
-                  name="emailVerification"
-                  placeholder="Enter current email"
-                  onChange={(e) => {
-                    setUserVerification(e.target.value);
-                  }}
-                  className="w-100 mb-3"
-                />
+              >
+                Enter email verification code
+              </StyledLabel>
+              <FormInput
+                type="text"
+                id="emailVerification"
+                name="emailVerification"
+                placeholder="Enter current email"
+                onChange={(e) => {
+                  setUserVerification(e.target.value);
+                }}
+                className="w-100 mb-3"
+              />
+              <StyledLabel htmlFor="oldPass" fontSize="20px" padding="0" bold>
+                Enter old password
+              </StyledLabel>
+              <FormInput
+                type="text"
+                id="oldPass"
+                name="oldPass"
+                placeholder="Enter old password"
+                onChange={(e) => {
+                  setOldPassword(e.target.value);
+                }}
+                className="w-100 mb-3"
+              />
+              <StyledLabel htmlFor="newPass" fontSize="20px" padding="0" bold>
+                Enter new password
+              </StyledLabel>
+              <FormInput
+                type="text"
+                id="newPass"
+                name="newPass"
+                placeholder="Enter new password"
+                onChange={(e) => {
+                  setNewPassword(e.target.value);
+                }}
+                className="w-100 mb-3"
+              />
               <StyledLabel
-                htmlFor="oldPass"
+                htmlFor="repeatNewPass"
                 fontSize="20px"
                 padding="0"
                 bold
-                >
-                  Enter old password
-                </StyledLabel>
-                <FormInput
-                  type="text"
-                  id="oldPass"
-                  name="oldPass"
-                  placeholder="Enter old password"
-                  onChange={(e) => {
-                    setOldPassword(e.target.value);
+              >
+                Repeat new password
+              </StyledLabel>
+              <FormInput
+                type="text"
+                id="repeatNewPass"
+                name="repeatNewPass"
+                placeholder="Repeat new password"
+                onChange={(e) => {
+                  setCheckNewPass(e.target.value);
+                }}
+                className="w-100 mb-3"
+              />
+              <div className="col-12 p-0">
+                <PrimaryButton
+                  text="check"
+                  type="check"
+                  //FIX THIS TOMORROW
+                  onClick={(event) => {
+                    event.preventDefault();
+                    emailVerification();
+                    checkOldPass();
+                    checkRequirements();
                   }}
-                  className="w-100 mb-3"
+                  className="w-100 h-100"
                 />
-                <StyledLabel
-                  htmlFor="newPass"
-                  fontSize="20px"
-                  padding="0"
-                  bold
-                >
-                  Enter new password
-                </StyledLabel>
-                <FormInput
-                  type="text"
-                  id="newPass"
-                  name="newPass"
-                  placeholder="Enter new password"
-                  onChange={(e) => {
-                    setNewPassword(e.target.value);
-                  }}
-                  className="w-100 mb-3"
-                />
-                <StyledLabel
-                  htmlFor="repeatNewPass"
-                  fontSize="20px"
-                  padding="0"
-                  bold
-                >
-                  Repeat new password
-                </StyledLabel>
-                <FormInput
-                  type="text"
-                  id="repeatNewPass"
-                  name="repeatNewPass"
-                  placeholder="Repeat new password"
-                  onChange={(e) => {
-                    setCheckNewPass(e.target.value);
-                  }}
-                  className="w-100 mb-3"
-                />
-                <div className="col-12 p-0">
-                  <PrimaryButton
-                    text="Submit"
-                    type="submit"
-                    className="w-100 h-100"
-                  />
-                </div>
-              </form>
-            </div>
+              </div>
+            </form>
+          </div>
         </Card>
       </div>
-  </PageBody>
+    </PageBody>
   );
 }
 
