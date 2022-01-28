@@ -22,8 +22,7 @@ const StyledInput = styled.input(
       -webkit-text-fill-color: white;
       border-color: ${theme.colors.yellow};
     }
-  `
-);
+`);
 
 const RoundedInput = styled.input(
   ({ theme }) => css`
@@ -45,8 +44,7 @@ const RoundedInput = styled.input(
       -webkit-text-fill-color: white;
       border-color: ${theme.colors.yellow};
     }
-  `
-);
+`);
 
 const IconArea = styled.div(
   ({ theme }) => css`
@@ -54,8 +52,7 @@ const IconArea = styled.div(
     min-height: 60px;
     padding: 10px;
     border-radius: 10px 0 0 10px;
-  `
-);
+  `);
 
 export const FormInput = ({
   hasIcon,
