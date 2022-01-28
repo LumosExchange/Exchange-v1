@@ -227,9 +227,11 @@ const Register = () => {
 						>
 							Username
 						</StyledLabel>
-						<ValidationIcon className="material-icons ms-2" valid={validName}>
-							{validName ? 'check_circle' : 'cancel'}
-						</ValidationIcon>
+						{user.length > 0 && (
+							<ValidationIcon className="material-icons ms-2" valid={validName}>
+								{validName ? 'check_circle' : 'cancel'}
+							</ValidationIcon>
+						)}
 					</div>
 					<FormInput
 						type="text"
@@ -270,9 +272,11 @@ const Register = () => {
 							>
 								Password
 							</StyledLabel>
-							<ValidationIcon className="material-icons ms-2" valid={validPwd}>
-								{validPwd ? 'check_circle' : 'cancel'}
-							</ValidationIcon>
+							{pwd.length > 0 && (
+								<ValidationIcon className="material-icons ms-2" valid={validPwd}>
+									{validPwd ? 'check_circle' : 'cancel'}
+								</ValidationIcon>
+							)}
 						</div>
 						<FormInput
 							type="password"
@@ -323,9 +327,11 @@ const Register = () => {
 							>
 								Confirm Password
 							</StyledLabel>
-							<ValidationIcon className="material-icons ms-2" valid={validMatch && matchPwd}>
-								{validMatch && matchPwd  ? 'check_circle' : 'cancel'}
-							</ValidationIcon>
+							{matchPwd.length > 0 && (
+								<ValidationIcon className="material-icons ms-2" valid={validMatch && matchPwd}>
+									{validMatch && matchPwd  ? 'check_circle' : 'cancel'}
+								</ValidationIcon>
+							)}
 						</div>
 						<FormInput
 							type="password"
