@@ -13,6 +13,7 @@ const Nexmo = require("nexmo");
 const nodemailer = require("nodemailer");
 const SMTPPool = require("nodemailer/lib/smtp-pool");
 const crypto = require("crypto");
+const { Console } = require("console");
 
 require("dotenv").config();
 
@@ -571,6 +572,7 @@ app.post("/UpgradeBronze", (req, res) => {
 app.post("/2FAEmailVerificationSend", (req, res) => {
   //get user email and generate 6 digit code
   const email = req.session.user[0].email;
+  console.log('email to send to ', email);
   const text = crypto.randomInt(0, 1000000);
   const name =
     req.session.user[0].firstName + " " + req.session.user[0].lastName;
@@ -587,7 +589,7 @@ app.post("/2FAEmailVerificationSend", (req, res) => {
   //Send email
   transport.sendMail({
     from: process.env.MAIL_FROM,
-    to: req.body.email,
+    to: email,
     subject: "Lumos Email Verification",
     html: ` <table role="presentation" style="width:100%; border-collapse:collapse;border:0;border-spacing: 0;background: #131313;margin: 0 0 50px 0;">
     <tr>
@@ -644,7 +646,7 @@ app.post("/2FAEmailVerificationSend", (req, res) => {
 
   db.query(
     "INSERT INTO TempAuth (Email, Secret) VALUES (?,?)",
-    [req.body.email, text],
+    [req.session.user[0].email, text],
 
     (err, result) => {
       console.log(err);
@@ -653,7 +655,7 @@ app.post("/2FAEmailVerificationSend", (req, res) => {
 });
 
 //this email verification will be built for chnaging 2fa options
-app.post("/2FAEmailVerification", (req, res) => {
+app.post("/EmailVerification2FA", (req, res) => {
   const email = req.session.user[0].email;
   const userCode = req.body.passcode;
   let checkCode;
@@ -663,17 +665,23 @@ app.post("/2FAEmailVerification", (req, res) => {
     "SELECT * FROM TempAuth WHERE (email) = (?)",
     [email],
     (err, result) => {
+      //CANT FIND DB FOR SOME REASON
+      console.log('RESULT: ', result.Secret);
       checkCode = result[0].Secret;
     }
   );
+  console.log('db code: ',checkCode);
+  console.log('user code: ',userCode);
   let newcheckCode = toString(checkCode);
   let newuserCode = toString(userCode);
+ 
+
   //convert both to string before checking
 
   if (newcheckCode == newuserCode) {
     res.send({
       auth: true
-    })
+    }),
     //if true delete from temp db
     db.query(
       "DELETE * FROM TempAuth WHERE (email) = (?)",
@@ -683,8 +691,8 @@ app.post("/2FAEmailVerification", (req, res) => {
   } else {
     res.send({
       auth: false
-    })
-  }
+    });
+  };
 });
 
 //used for user to chnage password verification
@@ -703,7 +711,7 @@ app.post("/checkChangePass", (req, res) => {
       if (result.length > 0) {
         bcrypt.compare(password, result[0].password, (err, response) => {
           //if password match return auth as true
-          if (response) {           
+          if (response) {
             res.send({
               auth: true,
             });
@@ -729,18 +737,17 @@ app.post("/updateUserPass", (req, res) => {
   const user = req.session.user[0].userID;
   const password = req.body.password;
 
-  bcrypt.hash (password, saltRounds, (err, hash) => {
+  bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) {
       console.log(err);
     }
     db.query(
-      "UPDATE users SET password = ? WHERE userID = ?"
-      [hash, user],
+      "UPDATE users SET password = ? WHERE userID = ?"[(hash, user)],
       (err, result) => {
         console.log(err);
       }
-    )
-  })
+    );
+  });
 
 
 
