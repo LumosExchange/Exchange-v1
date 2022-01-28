@@ -124,11 +124,13 @@ export const FormInput = ({
 FormInput.propTypes = {
   color: PropTypes.string,
   textColor: PropTypes.string,
+  rounded: PropTypes.bool,
 };
 
 FormInput.defaultProps = {
   color: "grey",
   textColor: "white",
+  rounded: false,
 };
 
 const StyledCheckbox = styled.input(
@@ -167,19 +169,15 @@ export const FormCheckbox = ({ className, id, name }) => (
   />
 );
 
-export const StyledLabel = styled.label(
-  ({ theme, color, padding, fontSize, bold }) => css`
-    color: ${theme.colors[color]};
-    cursor: pointer;
-    font-size: ${fontSize};
-    padding: ${padding};
-    font-family: ${bold ? "THICCCBOI-BOLD" : "THICCBOI-REGULAR"};
+export const StyledLabel = styled.label(({ theme, color, padding, fontSize, bold }) => css`
+	color: ${theme.colors[color]};
+	cursor: pointer;
+	font-size: ${fontSize};
+	padding: ${padding};
+	font-family: ${bold ? 'THICCCBOI-BOLD' : 'THICCCBOI-REGULAR'};
 
-    a {
-      color: ${theme.colors.yellow};
-    }
-  `
-);
+	a { color: ${theme.colors.yellow}; }
+`);
 
 StyledLabel.propTypes = {
   color: PropTypes.string,
@@ -188,33 +186,39 @@ StyledLabel.propTypes = {
 };
 
 StyledLabel.defaultProps = {
-  color: "white",
-  padding: "0 0 0 10px",
-  fontSize: "18px",
-};
+  color: 'white',
+	padding: '0 0 0 10px',
+	fontSize: '18px',
+}
 
-export const PageBody = styled.div(
-  ({ theme }) => css`
-    background: ${theme.colors.black};
-    font-family: "THICCCBOI-REGULAR";
-    min-height: calc(100vh - 80px);
-  `
-);
+export const PageBody = styled.div(({ theme }) => css`
+	background: ${theme.colors.black};
+	font-family: 'THICCCBOI-REGULAR';
+	min-height: calc(100vh - 80px);
+`);
 
-export const StyledDropdown = styled.select(
-  ({ theme }) => css`
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    background: ${theme.colors.grey};
-    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAyNCAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIgMkwxMiAxMi45MDkxTDIyIDIiIHN0cm9rZT0iI0NFQ0VDRSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+Cg==);
-    background-position: 95%;
-    background-repeat: no-repeat;
-    border-radius: 10px;
-    border: 0;
-    color: ${theme.colors.white};
-    font-size: 20px;
-    outline: 0;
-    padding: 16px;
-  `
-);
+export const StyledDropdown = styled.select(({ theme, color, fontColor }) => css`
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	background: ${theme.colors[color]};
+	background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAyNCAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIgMkwxMiAxMi45MDkxTDIyIDIiIHN0cm9rZT0iI0NFQ0VDRSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+Cg==);
+	background-position: 95%;
+	background-repeat: no-repeat;
+	border-radius: 10px;
+	border: 0;
+	color: ${theme.colors[fontColor]};
+	font-size: 20px;
+	outline: 0;
+	padding: 16px;
+`);
+
+StyledDropdown.propTypes = {
+	color: PropTypes.string,
+	fontColor: PropTypes.string,
+}
+
+StyledDropdown.defaultProps = {
+    color: 'grey',
+	fontColor: 'white',
+}

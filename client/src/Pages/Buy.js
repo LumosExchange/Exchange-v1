@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import styled, { css } from 'styled-components';
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { PageBody } from "../Components/FormInputs";
+import { PageBody, StyledDropdown } from "../Components/FormInputs";
 import Card from "../Components/Card";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
 import GradientButton from "../Components/GradientButton";
 import PrimaryButton from "../Components/Buttons";
 import { convertAssetToIcon } from "./AirDrops";
+import { FormInput, StyledLabel } from "../Components/FormInputs";
 
 var TRADEID = "";
 var F4S = 0;
@@ -102,6 +103,18 @@ const Buy = () => {
 	const [selectedMode, selectMode] = useState('buy');
 	const [selectedCurrency, selectCurrency] = useState('£');
 
+	const [amountForSaleReg, setAmountForSaleReg] = useState("");
+	const [aboveOrBelowReg, setAboveOrBelowReg] = useState("");
+	const [changeReg, setChangeReg] = useState("");
+  
+	const addSale = () => {
+	  Axios.post("http://localhost:3001/sell", {
+		  amountForSale: amountForSaleReg,
+		  aboveOrBelow: aboveOrBelowReg,
+		  change: changeReg,
+		})
+  }
+
 	console.log(selectedCrypto, 'selected crypto');
 
   	const navigate = useNavigate();
@@ -124,10 +137,14 @@ const Buy = () => {
     });
   }
 
-  useEffect(() => {
+  const getAllListings = () => {
     Axios.get("http://localhost:3001/getAllListings").then((response) => {
       setAllListings(response.data);
     });
+  }
+
+  useEffect(() => {
+	getAllListings();
   }, []);
 
   return (
@@ -198,36 +215,107 @@ const Buy = () => {
 						</Card>
 					</div>
 					<div className="col-12 col-md-8">
-						<Heading size="26px">
-							<span style={{ textTransform: 'capitalize' }}>{selectedMode} </span>
-							{selectedCrypto} from these Sellers</Heading>
-						{allListings.map((val) => (
-							<Card className="p-4 mb-3">
-								<div className="row">
-									<div className="col-3">
-										<Heading size="24px">userName</Heading>
+						{selectedMode === 'sell' && (
+							<React.Fragment>
+								<Heading size="24px">List {selectedCrypto} for Sale</Heading>
+								<Card radius="20px" className="p-4">
+									<div className="row">
+										<div className="col-12 col-md-6 mb-3">
+											<StyledLabel padding="0 0 10px 0" for="amountForSale" bold>Amount of SOL for sale</StyledLabel>
+											<FormInput
+												type="text"
+												placeholder="amount"
+												name="amount"
+												color="white"
+												textColor="grey"
+												id="amount"
+												className="w-100"
+												onChange={(e) => {
+												setAmountForSaleReg(e.target.value);
+												}}
+												required
+											/>
+										</div>
+										<div className="col-12 col-md-6">
+											<StyledLabel padding="0 0 10px 0" for="aboveOrBelow" bold>Sell above or below market</StyledLabel>
+											<StyledDropdown
+												type="aboveOrBelow"
+												placeholder="aboveOrBelow"
+												name="aboveOrBelow"
+												id="aboveOrBelow"
+												color="white"
+												fontColor="grey"
+												onChange={(e) => {
+												setAboveOrBelowReg(e.target.value);
+												}}
+												className="w-100"
+												required
+											>
+												<option value="above">Above</option>
+												<option value="below">Below</option>
+											</StyledDropdown>
+										</div>
+										<div className="col-12 col-md-6">
+											<StyledLabel padding="0 0 10px 0" for="change" bold>Percentage Market</StyledLabel>
+											<FormInput
+												type="change"
+												placeholder="change"
+												name="change"
+												color="white"
+												textColor="grey"
+												id="change"
+												className="w-100"
+												onChange={(e) => {
+												setChangeReg(e.target.value);
+												}}
+												required
+											/>
+										</div>
+										<div className="col-12 col-md-6 d-flex align-items-end">
+											<PrimaryButton
+												value="sell"
+												text="List Sale"
+												onClick={addSale}
+												className="w-100"
+												size="lg"
+											/>
+										</div>
 									</div>
-									<div className="col-3">United States</div>
-									<div className="col-3">Oceanside, CA</div>
-									<div className="col-3">
-										<Heading size="24px" color="yellow">
-											{selectedCurrency}{val.amountForSale}
-										</Heading>
+								</Card>
+							</React.Fragment>
+						)}
+						{selectedMode === 'buy' && (
+							<React.Fragment>
+							<Heading size="24px">Buy {selectedCrypto} from these Sellers</Heading>
+							{allListings.map((val) => (
+								<Card className="p-4 mb-3">
+									<div className="row">
+										<div className="col-3">
+											<Heading size="24px">userName</Heading>
+										</div>
+										<div className="col-3">United States</div>
+										<div className="col-3">Oceanside, CA</div>
+										<div className="col-3">
+											<Heading size="24px" color="yellow">
+												{selectedCurrency}{val.amountForSale}
+											</Heading>
+										</div>
+										<div className="col-3">110 Trades</div>
+										<div className="col-3">Paypal</div>
+										<div className="col-3">
+											<Paragraph size="18px">
+												{val.percentChange}%
+												{' '}{val.aboveOrBelow}{' '}market
+											</Paragraph>
+										</div>
+										<div className="col-3">
+											<GradientButton text="Buy" fontSize="24px" padding="4px 20px" className="w-100" />
+										</div>
 									</div>
-									<div className="col-3">110 Trades</div>
-									<div className="col-3">Paypal</div>
-									<div className="col-3">
-										<Paragraph size="18px">
-											{val.percentChange}%
-											{' '}{val.aboveOrBelow}{' '}market
-										</Paragraph>
-									</div>
-									<div className="col-3">
-										<GradientButton text="Buy" fontSize="24px" padding="4px 20px" className="w-100" />
-									</div>
-								</div>
-							</Card>
-						))}
+								</Card>
+							))}
+							</React.Fragment>
+						)}
 					</div>
 				</div>
 			</div>

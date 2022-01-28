@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Axios from "axios";
+import { FormInput } from "../Components/FormInputs";
 
 function Sell() {
 
@@ -13,7 +14,6 @@ function Sell() {
         aboveOrBelow: aboveOrBelowReg,
         change: changeReg,
       })
-
 }
 
   return (
@@ -22,7 +22,7 @@ function Sell() {
         <label for="amountForSale">Amount of SOL for sale</label>
 
         <label for="amountForSale"></label>
-        <input
+        <FormInput
           type="text"
           placeholder="amount"
           name="amount"
