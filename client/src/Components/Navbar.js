@@ -102,7 +102,7 @@ const Navbar = ({ loginStatus }) => {
               </div>
               <div className="align-items-center d-none d-lg-flex">
                 <i className="material-icons me-3 text-white">notifications</i>
-                <ProfileLink>{userName}</ProfileLink>
+                <ProfileLink href="/Profile">{userName}</ProfileLink>
               </div>
             </React.Fragment>
           ) : (

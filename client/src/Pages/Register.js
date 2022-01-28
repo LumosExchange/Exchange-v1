@@ -1,148 +1,394 @@
-import React, { useState } from "react";
-import "../App.css";
+import { useRef, useState, useEffect } from "react";
+import {
+  faCheck,
+  faTimes,
+  faInfoCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Axios from "axios";
-import { useNavigate } from "react-router";
 import Heading from "../Components/Heading";
 import PrimaryButton from "../Components/Buttons";
-import { FormInput, FormCheckbox, StyledLabel, PageBody } from "../Components/FormInputs";
-import WarningTriangle from '../Images/icon-park-outline_caution.svg';
+import {
+  FormInput,
+  FormCheckbox,
+  StyledLabel,
+  PageBody,
+} from "../Components/FormInputs";
+import WarningTriangle from "../Images/icon-park-outline_caution.svg";
 import Paragraph from "../Components/Paragraph";
 import Buttons from "../Components/Buttons";
+import { useNavigate } from "react-router";
 
+const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const REGISTER_URL = "/register";
 
 const Register = () => {
-	const [emailReg, setEmailReg] = useState('');
-	const [passwordReg, setPasswordReg] = useState('');
+  const userRef = useRef();
+  const errRef = useRef();
 
-	/* Unused */
-	const [nationalityReg, setNationalityReg] = useState('');
-	const [firstNameReg, setFirstNameReg] = useState('');
-	const [lastNameReg, setLastNameReg] = useState('');
-	const [userNameReg, setUserNameReg] = useState('');
+  const [user, setUser] = useState("");
+  const [validName, setValidName] = useState(false);
+  const [userFocus, setUserFocus] = useState(false);
 
-	const [secret, setSecret] = useState([]);
+  const [pwd, setPwd] = useState("");
+  const [validPwd, setValidPwd] = useState(false);
+  const [pwdFocus, setPwdFocus] = useState(false);
 
-	const navigate = useNavigate();
+  const [matchPwd, setMatchPwd] = useState("");
+  const [validMatch, setValidMatch] = useState(false);
+  const [matchFocus, setMatchFocus] = useState(false);
 
+  const [errMsg, setErrMsg] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [emailReg, setEmailReg] = useState("");
+  const [passwordReg, setPasswordReg] = useState("");
 
-	const register = () => {
-		Axios.all([
-		Axios.post("http://localhost:3001/register", {
-			firstName: firstNameReg,
-			lastName: lastNameReg,
-			email: emailReg,
-			password: passwordReg,
-			nationality: nationalityReg,
-			userName: userNameReg
-		}),
-		Axios.post("http://localhost:3001/SendEmailVerification",{
-			email: emailReg,
-			firstName: firstNameReg,
-			lastName: lastNameReg
-		})
-		])
-		.then(Axios.spread((data1, data2) => {
-			console.log('data1', data1, 'data2', data2)
-			setSecret(data1);
-			console.log('2fa is : ', secret );
-		}));	
-			navigate("/EmailVerification", {
-				state: {
-					id: 1,
-					email: emailReg,
-				
-				}
-		
-			});
-	}
+  /* Unused */
+  const [nationalityReg, setNationalityReg] = useState("");
+  const [firstNameReg, setFirstNameReg] = useState("");
+  const [lastNameReg, setLastNameReg] = useState("");
+  const [userNameReg, setUserNameReg] = useState("");
 
-	
+  const [secret, setSecret] = useState([]);
 
+  const navigate = useNavigate();
+  const register = () => {
+    Axios.all([
+      Axios.post("http://localhost:3001/register", {
+        firstName: firstNameReg,
+        lastName: lastNameReg,
+        email: emailReg,
+        password: passwordReg,
+        nationality: nationalityReg,
+        userName: userNameReg,
+      }),
+      Axios.post("http://localhost:3001/SendEmailVerification", {
+        email: emailReg,
+        firstName: firstNameReg,
+        lastName: lastNameReg,
+      }),
+    ]).then(
+      Axios.spread((data1, data2) => {
+        console.log("data1", data1, "data2", data2);
+        setSecret(data1);
+        console.log("2fa is : ", secret);
+      })
+    );
+    navigate("/EmailVerification", {
+      state: {
+        id: 1,
+        email: emailReg,
+      },
+    });
+  };
 
-	return (
-		<PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid">
-			<div className="row">
-				<div className="col-11 col-md-6 d-flex flex-column m-auto">
-					<Heading size="36px" color="white" className="mt-5 mb-4 text-center">Sign up with an email address</Heading>
-					<Heading size="24px" color="white" className="mb-5 text-center">Enter your details to create an account.</Heading>
-					<form name="register">
-						<FormInput
-							id="firstName"
-							className="mb-3 w-100"
-							type="text"
-							placeholder="First Name"
-							form="register"
-							onChange={(e) => { setFirstNameReg(e.target.value); }}
-						/>
-						<FormInput
-							id="lastName"
-							className="mb-3 w-100"
-							type="text"
-							form="register"
-							placeholder="Last Name"
-							onChange={(e) => { setLastNameReg(e.target.value); }}
-						/>
-						<FormInput
-							id="userName"
-							className="mb-3 w-100"
-							type="text"
-							form="register"
-							placeholder="User Name"
-							onChange={(e) => { setUserNameReg(e.target.value); }}
-						/>
-						<FormInput
-							id="email"
-							className="mb-3 w-100"
-							type="text"
-							form="register"
-							placeholder="email"
-							onChange={(e) => { setEmailReg(e.target.value); }}
-						/>
-						<FormInput
-							id="password"
-							className="mb-3 w-100"
-							type="password"
-							form="register"
-							placeholder="password"
-							onChange={(e) => { setPasswordReg(e.target.value); }}
-						/>
-						<FormInput
-							id="nationality"
-							className="mb-3 w-100"
-							type="text"
-							form="register"
-							placeholder="Nationality"
-							onChange={(e) => { setNationalityReg(e.target.value); }}
-						/>
-						<div className="d-flex align-items-start mb-4 pt-2">
-							<img src={WarningTriangle} alt="Warning" className="me-3 pt-1" />
-							<div className="d-flex flex-column">
-								<Paragraph size="18px" color="yellow">Is your password secured?</Paragraph>
-								<Paragraph>Due to the nature of client-side encryption, Lumos Exchange are unable to recover a lost password at now. Please ensure you have your password noted down before continue!</Paragraph>
-							</div>
-						</div>
-						<div className="d-flex align-items-center mb-4">
-							<FormCheckbox type="checkbox" id="passNoted" name="passNoted" />
-							<StyledLabel htmlFor="passNoted" color="yellow">I've noted down my password</StyledLabel>
-						</div>
-						<div className="d-flex align-items-center mb-4">
-							<FormCheckbox type="checkbox" id="termsAgreed" name="termsAgreed" />
-							<StyledLabel htmlFor="termsAgreed" color="white">
-								I've read and agree with Lumos Exchange <a href="terms" alt="terms &amp; conditions">Service Terms</a> and <a href="terms" alt="terms &amp; conditions">Terms of Use.</a>
-							</StyledLabel>
-						</div>
-						<div className="d-flex align-items-center mb-4">
-							<FormCheckbox type="checkbox" id="newsletter" name="newsletter" className="me-4" />
-							<StyledLabel htmlFor="newsletter" color="white">
-								I would like to subscribe to the free newsletter to receive free crypto news digests.
-							</StyledLabel>
-						</div>
-						<PrimaryButton type="submit" className="m-auto" onClick={register} text="Create An Account" hasIcon />
-					</form>
-				</div>
-			</div>
-		</PageBody>
-	);
-}
+  useEffect(() => {
+    setValidName(USER_REGEX.test(user));
+    setValidPwd(PWD_REGEX.test(pwd));
+    setValidMatch(pwd === matchPwd);
+    setErrMsg("");
+  }, [user, pwd, matchPwd]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // if button enabled with JS hack
+    const v1 = USER_REGEX.test(user);
+    const v2 = PWD_REGEX.test(pwd);
+    if (!v1 || !v2) {
+      setErrMsg("Invalid Entry");
+      return;
+    }
+    try {
+      const response = await Axios.post(
+        REGISTER_URL,
+        JSON.stringify({ user, pwd }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      console.log(response?.data);
+      console.log(response?.accessToken);
+      console.log(JSON.stringify(response));
+      setSuccess(true);
+      //clear state and controlled inputs
+      //need value attrib on inputs for this
+      setUser("");
+      setPwd("");
+      setMatchPwd("");
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 409) {
+        setErrMsg("Username Taken");
+      } else {
+        setErrMsg("Registration Failed");
+      }
+      errRef.current.focus();
+    }
+  };
+
+  return (
+    <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid">
+      <div className="row">
+        <div className="col-11 col-md-6 d-flex flex-column m-auto">
+          <Heading size="36px" color="white" className="mt-5 mb-4 text-center">
+            Sign up with an email address
+          </Heading>
+          <Heading size="24px" color="white" className="mb-5 text-center">
+            Enter your details to create an account.
+          </Heading>
+          <form name="register">
+            {success ? (
+              <section>
+                <h1>Success!</h1>
+                <p>
+                  <a href="/Login">Login</a>
+                </p>
+              </section>
+            ) : (
+              <section>
+                <p
+                  ref={errRef}
+                  className={errMsg ? "errmsg" : "offscreen"}
+                  aria-live="assertive"
+                >
+                  {errMsg}
+                </p>
+                <h1>Register</h1>
+                <form onSubmit={handleSubmit}>
+                  <FormInput
+                    id="firstName"
+                    className="mb-3 w-100"
+                    type="text"
+                    placeholder="First Name"
+                    form="register"
+                    onChange={(e) => {
+                      setFirstNameReg(e.target.value);
+                    }}
+                  />
+                  <FormInput
+                    id="lastName"
+                    className="mb-3 w-100"
+                    type="text"
+                    form="register"
+                    placeholder="Last Name"
+                    onChange={(e) => {
+                      setLastNameReg(e.target.value);
+                    }}
+                  />
+                  <FormInput
+                    id="email"
+                    className="mb-3 w-100"
+                    type="text"
+                    form="register"
+                    placeholder="Email"
+                    onChange={(e) => {
+                      setEmailReg(e.target.value);
+                    }}
+                  />
+                  <FormInput
+                    id="nationality"
+                    className="mb-3 w-100"
+                    type="text"
+                    form="register"
+                    placeholder="Nationality"
+                    onChange={(e) => {
+                      setNationalityReg(e.target.value);
+                    }}
+                  />
+                  <label htmlFor="username">
+                    Username:
+                    <FontAwesomeIcon
+                      icon={faCheck}
+                      className={validName ? "valid" : "hide"}
+                    />
+                    <FontAwesomeIcon
+                      icon={faTimes}
+                      className={validName || !user ? "hide" : "invalid"}
+                    />
+                  </label>
+                  <FormInput
+                    type="text"
+                    id="username"
+                    className="mb-3 w-100"
+                    placeholder={"Username"}
+                    ref={userRef}
+                    autoComplete="off"
+                    onChange={(e) => setUser(e.target.value)}
+                    value={user}
+                    required
+                    aria-invalid={validName ? "false" : "true"}
+                    aria-describedby="uidnote"
+                    onFocus={() => setUserFocus(true)}
+                    onBlur={() => setUserFocus(false)}
+                  />
+                  <p
+                    id="uidnote"
+                    className={
+                      userFocus && user && !validName
+                        ? "instructions"
+                        : "offscreen"
+                    }
+                  >
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                    4 to 24 characters.
+                    <br />
+                    Must begin with a letter.
+                    <br />
+                    Letters, numbers, underscores, hyphens allowed.
+                  </p>
+
+                  <label htmlFor="password">
+                    Password:
+                    <FontAwesomeIcon
+                      icon={faCheck}
+                      className={validPwd ? "valid" : "hide"}
+                    />
+                    <FontAwesomeIcon
+                      icon={faTimes}
+                      className={validPwd || !pwd ? "hide" : "invalid"}
+                    />
+                  </label>
+                  <FormInput
+                    type="password"
+                    id="password"
+                    className="mb-3 w-100"
+                    placeholder={"Password"}
+                    onChange={(e) => setPwd(e.target.value)}
+                    value={pwd}
+                    required
+                    aria-invalid={validPwd ? "false" : "true"}
+                    aria-describedby="pwdnote"
+                    onFocus={() => setPwdFocus(true)}
+                    onBlur={() => setPwdFocus(false)}
+                  />
+                  <p
+                    id="pwdnote"
+                    className={
+                      pwdFocus && !validPwd ? "instructions" : "offscreen"
+                    }
+                  >
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                    8 to 24 characters.
+                    <br />
+                    Must include uppercase and lowercase letters, a number and a
+                    special character.
+                    <br />
+                    Allowed special characters:{" "}
+                    <span aria-label="exclamation mark">!</span>{" "}
+                    <span aria-label="at symbol">@</span>{" "}
+                    <span aria-label="hashtag">#</span>{" "}
+                    <span aria-label="dollar sign">$</span>{" "}
+                    <span aria-label="percent">%</span>
+                  </p>
+
+                  <label htmlFor="confirm_pwd">
+                    Confirm Password:
+                    <FontAwesomeIcon
+                      icon={faCheck}
+                      className={validMatch && matchPwd ? "valid" : "hide"}
+                    />
+                    <FontAwesomeIcon
+                      icon={faTimes}
+                      className={validMatch || !matchPwd ? "hide" : "invalid"}
+                    />
+                  </label>
+                  <FormInput
+                    type="password"
+                    id="confirm_pwd"
+                    className="mb-3 w-100"
+                    placeholder={"Confirm Password"}
+                    onChange={(e) => setMatchPwd(e.target.value)}
+                    value={matchPwd}
+                    required
+                    aria-invalid={validMatch ? "false" : "true"}
+                    aria-describedby="confirmnote"
+                    onFocus={() => setMatchFocus(true)}
+                    onBlur={() => setMatchFocus(false)}
+                  />
+                  <p
+                    id="confirmnote"
+                    className={
+                      matchFocus && !validMatch ? "instructions" : "offscreen"
+                    }
+                  >
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                    Must match the first password input field.
+                  </p>
+                </form>
+                <p>
+                  Already registered?
+                  <br />
+                  <span className="line">
+                    {/*put router link here*/}
+                    <a href="/Login">Login</a>
+                  </span>
+                </p>
+              </section>
+            )}
+            <div className="d-flex align-items-start mb-4 pt-2">
+              <img src={WarningTriangle} alt="Warning" className="me-3 pt-1" />
+              <div className="d-flex flex-column">
+                <Paragraph size="18px" color="yellow">
+                  Is your password secured?
+                </Paragraph>
+                <Paragraph>
+                  Due to the nature of client-side encryption, Lumos Exchange
+                  are unable to recover a lost password at now. Please ensure
+                  you have your password noted down before continue!
+                </Paragraph>
+              </div>
+            </div>
+            <div className="d-flex align-items-center mb-4">
+              <FormCheckbox type="checkbox" id="passNoted" name="passNoted" />
+              <StyledLabel htmlFor="passNoted" color="yellow">
+                I've noted down my password
+              </StyledLabel>
+            </div>
+            <div className="d-flex align-items-center mb-4">
+              <FormCheckbox
+                type="checkbox"
+                id="termsAgreed"
+                name="termsAgreed"
+              />
+              <StyledLabel htmlFor="termsAgreed" color="white">
+                I've read and agree with Lumos Exchange{" "}
+                <a href="terms" alt="terms &amp; conditions">
+                  Service Terms
+                </a>{" "}
+                and{" "}
+                <a href="terms" alt="terms &amp; conditions">
+                  Terms of Use.
+                </a>
+              </StyledLabel>
+            </div>
+            <div className="d-flex align-items-center mb-4">
+              <FormCheckbox
+                type="checkbox"
+                id="newsletter"
+                name="newsletter"
+                className="me-4"
+              />
+              <StyledLabel htmlFor="newsletter" color="white">
+                I would like to subscribe to the free newsletter to receive free
+                crypto news digests.
+              </StyledLabel>
+            </div>
+            <PrimaryButton
+              type="submit"
+              className="m-auto"
+              text="Create An Account"
+              onClick={register}
+              hasIcon
+              disabled={!validName || !validPwd || !validMatch ? true : false}
+            ></PrimaryButton>
+          </form>
+        </div>
+      </div>
+    </PageBody>
+  );
+};
 
 export default Register;

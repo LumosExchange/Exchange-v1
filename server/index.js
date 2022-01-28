@@ -711,7 +711,7 @@ app.post("/checkChangePass", (req, res) => {
       if (result.length > 0) {
         bcrypt.compare(password, result[0].password, (err, response) => {
           //if password match return auth as true
-          if (response) {           
+          if (response) {
             res.send({
               auth: true,
             });
@@ -737,13 +737,12 @@ app.post("/updateUserPass", (req, res) => {
   const user = req.session.user[0].userID;
   const password = req.body.password;
 
-  bcrypt.hash (password, saltRounds, (err, hash) => {
+  bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) {
       console.log(err);
     }
     db.query(
-      "UPDATE users SET password = ? WHERE userID = ?"
-      [hash, user],
+      "UPDATE users SET password = ? WHERE userID = ?"[(hash, user)],
       (err, result) => {
         console.log(err);
       }
