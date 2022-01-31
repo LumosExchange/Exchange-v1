@@ -35,6 +35,7 @@ import TradeHistory from "./Pages/TradeHistory";
 import EmailVerification from "./Pages/EmailVerification";
 import AirDrops from "./Pages/AirDrops";
 import Profile from "./Pages/Profile";
+import GoogleAuth from "./Pages/GoogleAuth";
 
 const theme = {
   colors: {
@@ -134,6 +135,7 @@ function App() {
             <Route path="/EmailVerification" element={<EmailVerification />} />
             <Route path="/AirDrops" element={<AirDrops />} />
             <Route path="/Profile" element={<Profile />} />
+            <Route path="/GoogleAuth" element={<GoogleAuth />} />
           </Routes>
         </Router>
         <Footer />

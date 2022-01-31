@@ -681,6 +681,8 @@ app.post("/EmailVerification2FA", (req, res) => {
       [email],
       (err, result) => {
         console.log("secret deleted")
+        console.log(result);
+        console.log(err);
       }
     )
     res.send({
@@ -755,7 +757,7 @@ app.post("/updateUserPass", (req, res) => {
         console.log('Password Updated');
         res.send({
           updated: true,
-          message: "no user exists",
+          message: "Succesfully updated password.",
         });
 
       }

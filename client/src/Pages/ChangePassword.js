@@ -31,8 +31,6 @@ function ChangePassword() {
 
   let emailVerified = false;
   let passwordVerified = false;
-  const [passwordStatus, setPasswordStatus] = useState(false);
-  const [emailStatus, setEmailStatus] = useState(false);
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [userEmail, setUserEmail] = useState('');
 
