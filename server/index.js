@@ -753,6 +753,11 @@ app.post("/updateUserPass", (req, res) => {
       (err, result) => {
         console.log(err);
         console.log('Password Updated');
+        res.send({
+          updated: true,
+          message: "no user exists",
+        });
+
       }
     );
   });

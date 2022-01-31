@@ -12,6 +12,8 @@ function ChangePassword() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [checkNewPass, setCheckNewPass] = useState("");
+  
+  let updateCompleted = false;
 
   let emailVerified = false;
   let passwordVerified = false;
@@ -27,48 +29,49 @@ function ChangePassword() {
     Axios.post("http://localhost:3001/EmailVerification2FA", {
       passcode: userVerification,
     }).then((response) => {
-      if (!response.data.auth) {  
-        console.log('Auth1: ', response.data.auth); 
+      if (!response.data.auth) {
+        console.log("Auth1: ", response.data.auth);
         emailVerified = false;
       } else {
-        console.log('Auth2: ', response.data.auth); 
+        console.log("Auth2: ", response.data.auth);
         emailVerified = true;
       }
-      console.log('email verification : ', emailVerified);
-    }
-    );
-    
-    
-    
+      console.log("email verification : ", emailVerified);
+    });
   };
 
   //check old password is match for old password
   const checkOldPass = () => {
-    
     Axios.post("http://localhost:3001/checkChangePass", {
       oldPassword: oldPassword,
     }).then((response) => {
       if (!response.data.auth) {
         passwordVerified = false;
       } else {
-        passwordVerified = true;;
+        passwordVerified = true;
       }
-      console.log('password verification : ', passwordVerified);
+      console.log("password verification : ", passwordVerified);
     });
-    
   };
 
   //if both above are true then update user password
   const checkRequirements = () => {
-    
     //check both passwords are equal
-    if ((newPassword == checkNewPass) || (emailVerified == true && passwordVerified == true)) {
+    if (
+      newPassword == checkNewPass ||
+      (emailVerified == true && passwordVerified == true)
+    ) {
       console.log("we get here");
-        Axios.post("http://localhost:3001/updateUserPass", {
-          password: newPassword,
-        }).then((response) => {
-          //handle response here if we pass one
-        });
+      Axios.post("http://localhost:3001/updateUserPass", {
+        password: newPassword,
+      }).then((response) => {
+        //handle response here
+        if(!response.data.updated) {
+          updateCompleted = true;
+        } else {
+          updateCompleted = false;
+        }
+      });
     } else {
     }
   };
@@ -77,6 +80,7 @@ function ChangePassword() {
   //      - pass old password to setOldPassword
   //      - pass new password to setNewPass
   //      - pass new password repeat to setCheckNewPass
+  //      - pass repsonse to updateCompleted 
 
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 flex-column">
