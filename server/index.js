@@ -658,52 +658,56 @@ app.post("/2FAEmailVerificationSend", (req, res) => {
 app.post("/EmailVerification2FA", (req, res) => {
   const email = req.session.user[0].email;
   const userCode = req.body.passcode;
-  let checkCode;
+  let checkCodee;
   let auth = false;
 
   db.query(
     "SELECT * FROM TempAuth WHERE (email) = (?)",
     [email],
     (err, result) => {
-      //CANT FIND DB FOR SOME REASON
-      console.log('RESULT: ', result.Secret);
-      checkCode = result[0].Secret;
-    }
+      checkCodee = result[0].Secret;
+      console.log('RESULT: ', result[0].Secret);
+      console.log('checkcode: ', checkCodee);
+      console.log('usercode: ', userCode);     
+    } 
   );
-  console.log('db code: ',checkCode);
-  console.log('user code: ',userCode);
-  let newcheckCode = toString(checkCode);
-  let newuserCode = toString(userCode);
- 
 
-  //convert both to string before checking
+  let newcheckCode = toString(checkCodee);
+  let newuserCode = toString(userCode);
 
   if (newcheckCode == newuserCode) {
-    res.send({
-      auth: true
-    }),
-    //if true delete from temp db
     db.query(
       "DELETE * FROM TempAuth WHERE (email) = (?)",
       [email],
-      (err, result) => {}
-    );
+      (err, result) => {
+        console.log("secret deleted")
+      }
+    )
+    res.send({
+      auth: true,
+    })
+    
+    //if true delete from temp db
+
   } else {
     res.send({
-      auth: false
+      auth: false,
     });
   };
+ 
+
 });
 
 //used for user to chnage password verification
 app.post("/checkChangePass", (req, res) => {
   const userName = req.session.user[0].userName;
-  const password = req.body.password;
+  const password = req.body.oldPassword;
   let auth = false;
 
+  console.log('userPassword: ' , password)
   db.query(
     "SELECT * FROM users WHERE userName = ?",
-    userName,
+    [userName],
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -711,23 +715,25 @@ app.post("/checkChangePass", (req, res) => {
       if (result.length > 0) {
         bcrypt.compare(password, result[0].password, (err, response) => {
           //if password match return auth as true
-          if (response) {
+          if (response) {          
             res.send({
               auth: true,
-            });
-          } else {
+            });       
+          } else { 
             res.send({
               auth: false,
               message: "Incorrect Password please try again",
             });
+            
           }
         });
-      } else {
-        res.send({
-          auth: false,
-          message: "no user exists",
-        });
-      }
+       } else {
+          res.send({
+            auth: false,
+            message: "no user exists",
+          });
+
+      }; 
     }
   );
 });
@@ -742,14 +748,14 @@ app.post("/updateUserPass", (req, res) => {
       console.log(err);
     }
     db.query(
-      "UPDATE users SET password = ? WHERE userID = ?"[(hash, user)],
+      "UPDATE users SET password = ? WHERE userID = ?",
+      [hash, user],
       (err, result) => {
         console.log(err);
+        console.log('Password Updated');
       }
     );
   });
-
-
 
 })
 
