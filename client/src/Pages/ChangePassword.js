@@ -1,11 +1,25 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
+import styled, { css } from "styled-components";
 import { PageBody } from "../Components/FormInputs";
 import { FormInput, StyledLabel } from "../Components/FormInputs";
 import PrimaryButton from "../Components/Buttons";
 import Card from "../Components/Card";
 import Heading from "../Components/Heading";
-import { useLocation } from "react-router";
+import Paragraph from "../Components/Paragraph";
+
+const CodeSentMessage = styled.div(({ theme }) => css`
+	background: ${theme.colors.valid};
+	color: ${theme.colors.white};
+	border: 2px solid ${theme.colors.valid};
+	padding: 10px;
+	border-radius: 10px;
+
+	i {
+		font-size: 70px;
+		padding-bottom: 10px;
+	};
+`);
 
 function ChangePassword() {
   const [userVerification, setUserVerification] = useState("");
@@ -17,11 +31,22 @@ function ChangePassword() {
 
   let emailVerified = false;
   let passwordVerified = false;
-  const { state } = useLocation();
+  const [passwordStatus, setPasswordStatus] = useState(false);
+  const [emailStatus, setEmailStatus] = useState(false);
+  const [isCodeSent, setIsCodeSent] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+
+  const getUserEmail = () => {
+	// get user email
+		Axios.get("http://localhost:3001/getUserEmail", {}).then((response) => {
+			setUserEmail(response.data);
+		});
+	}
 
   //send email verification
   const sendVerification = () => {
     Axios.post("http://localhost:3001/2FAEmailVerificationSend", {});
+    setIsCodeSent(true);
   };
 
   //check email verification
@@ -76,6 +101,12 @@ function ChangePassword() {
     }
   };
 
+  useEffect(() => {
+	getUserEmail(userEmail);
+  }, [userEmail]);
+
+  console.log('user email is:', userEmail)
+
   // TODO - pass user input for email verifasction to setUserVerification
   //      - pass old password to setOldPassword
   //      - pass new password to setNewPass
@@ -90,26 +121,33 @@ function ChangePassword() {
           color="darkerGrey"
           className="p-5 d-flex flex-column"
         >
-          <Heading className="pb-4 text-center">Change Password</Heading>
+          <Heading className="pb-4 text-center" bold>Change Password</Heading>
           <StyledLabel
             htmlFor="emailVerification"
             fontSize="20px"
             padding="0"
             bold
+			className={isCodeSent ? 'd-none' : 'd-block'}
           >
             Please note you will be required to complete email verification and
             know your current password before you will be allowed to change the
             password on the account.
           </StyledLabel>
-          <PrimaryButton
-            text="Get Code"
-            className="m-auto mt-3"
-            onClick={sendVerification}
-            type="check"
-            value="check"
-          />
-
-          <div className="w-100">
+          {!isCodeSent ? (
+            <PrimaryButton
+                text="Get Code"
+                className="m-auto my-3"
+                onClick={sendVerification}
+                type="check"
+                value="check"
+            />
+          ) : (
+			<CodeSentMessage className="d-flex my-4 align-items-center flex-column">
+				<i className="material-icons me-2">mark_email_read</i>
+				<Paragraph color="white" bold size="20px" className="mb-0">Code Sent to {userEmail}.</Paragraph>
+			</CodeSentMessage>
+          )}
+          <div className={`w-100 ${isCodeSent ? 'd-block' : 'd-none'}`}>
             <form>
               <StyledLabel
                 htmlFor="emailVerification"
@@ -175,7 +213,7 @@ function ChangePassword() {
               />
               <div className="col-12 p-0">
                 <PrimaryButton
-                  text="check"
+                  text="Change Password"
                   type="check"
                   //FIX THIS TOMORROW
                   onClick={(event) => {
@@ -184,7 +222,8 @@ function ChangePassword() {
                     checkOldPass();
                     checkRequirements();
                   }}
-                  className="w-100 h-100"
+                  className="w-100 h-100 mt-3"
+				  disabled={ !isCodeSent }
                 />
               </div>
             </form>

@@ -13,6 +13,7 @@ import {
   AccountTierCard, CheckIcon, ContentTab, ProfileInitials,
   EditableOption, LoadingState, ProfileTab
 } from "../Components/Profile";
+import { useNavigate } from "react-router";
 
 const TAB_TITLE_BASIC = "basic";
 const TAB_TITLE_SECURITY = "security";
@@ -42,7 +43,7 @@ const AccountTier = ({ tier, selectedTier, limit, title }) => (
 );
 
 const BasicTab = () => {
-	const [userSetting, setUserSettings] = useState("");
+	const [userSetting, setUserSettings] = useState([]);
 	const [userAccountLevel, setUserAccountLevel] = useState("");
 	const [selectedTheme, selectTheme] = useState("");
 	const [selectedTimezone, selectTimezone] = useState("");
@@ -239,6 +240,7 @@ const SecurityTab = () => {
   const [selectedEmail, selectEmail] = useState("");
   const [selectedPassword, selectPassword] = useState("");
   const [selectedAuthType, selectAuthType] = useState("");
+  const navigate = useNavigate();
 
   return (
     <ContentTab>
@@ -248,17 +250,10 @@ const SecurityTab = () => {
             <Heading color="black" size="20px" bold>
               Update Email
             </Heading>
-            <FormInput
-              id="email"
-              className="mb-3 w-100"
-              type="text"
-              placeholder="Email"
-              value={selectedEmail}
-              form="register"
-              onChange={(e) => {
-                selectEmail(e.target.value);
-              }}
-            />
+            <PrimaryButton
+				text="Update Email"
+				onClick={ () => navigate('/changeEmail', { replace: true })}
+			/>
           </EditableOption>
         </div>
         <div className="col-12 col-lg-4 my-3 my-lg-0">
@@ -266,17 +261,10 @@ const SecurityTab = () => {
             <Heading color="black" size="20px" bold>
               Update Password
             </Heading>
-            <FormInput
-              id="email"
-              className="mb-3 w-100"
-              type="password"
-              placeholder="Password"
-              value={selectedPassword}
-              form="register"
-              onChange={(e) => {
-                selectPassword(e.target.value);
-              }}
-            />
+            <PrimaryButton
+				text="Change Password"
+				onClick={ () => navigate('/ChangePassword')}
+			/>
           </EditableOption>
         </div>
       </div>

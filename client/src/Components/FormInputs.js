@@ -17,6 +17,12 @@ const StyledInput = styled.input(
       outline: none;
     }
 
+    :disabled {
+      opacity: 0.5;
+      border: 2px solid ${theme.colors.six9Grey};
+      cursor: not-allowed;
+    }
+
     &:-webkit-autofill {
       -webkit-box-shadow: 0 0 0 1000px ${theme.colors.grey} inset;
       -webkit-text-fill-color: white;
@@ -72,6 +78,7 @@ export const FormInput = ({
   onChange,
   onFocus,
   onBlur,
+  disabled,
 }) => (
   <div className="d-flex">
     {hasIcon && (
@@ -96,6 +103,7 @@ export const FormInput = ({
         onChange={onChange}
         onFocus={onFocus}
         onBlur={onBlur}
+        disabled={disabled}
       />
     ) : (
       <StyledInput
@@ -114,6 +122,7 @@ export const FormInput = ({
         onChange={onChange}
         onFocus={onFocus}
         onBlur={onBlur}
+        disabled={disabled}
       />
     )}
   </div>

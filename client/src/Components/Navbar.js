@@ -1,8 +1,9 @@
 // Core
 import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
-
+import { useNavigate } from "react-router";
 import Axios from "axios";
+import { InvisibleButton } from "./Buttons";
 
 // Images
 import Logo from "../Images/logo.png";
@@ -10,19 +11,16 @@ import GradientButton from "./GradientButton";
 import MobileMenuIcon from "../Images/mobile-menu.svg";
 
 // Components
-const Base = styled.div(
-  ({ theme }) => css`
+const Base = styled.div(({ theme }) => css`
     background: ${theme.colors.black};
     font-family: Arial, Helvetica, sans-serif;
 
     .fixedHeight {
       min-height: 80px;
     }
-  `
-);
+`);
 
-const NavLink = styled.a(
-  ({ theme }) => css`
+const NavLink = styled.a(({ theme }) => css`
     color: ${theme.colors.white};
     text-decoration: none;
     font-size: 18px;
@@ -31,11 +29,9 @@ const NavLink = styled.a(
     &:hover {
       color: ${theme.colors.yellow};
     }
-  `
-);
+`);
 
-const ProfileLink = styled.a(
-  ({ theme }) => css`
+const ProfileLink = styled.a(({ theme }) => css`
     color: ${theme.colors.yellow};
     text-decoration: none;
     font-size: 18px;
@@ -44,16 +40,20 @@ const ProfileLink = styled.a(
     &:hover {
       color: ${theme.colors.white};
     }
-  `
-);
+`);
 
-const MenuBase = styled.div(
-  ({ theme }) => css`
+const MenuBase = styled.div(({ theme }) => css`
     background: ${theme.colors.black};
     z-index: 2;
     color: ${theme.colors.yellow};
-  `
-);
+`);
+
+const LogoutButton = styled(InvisibleButton)(({ theme }) => css`
+    color: ${theme.colors.yellow};
+    &:hover {
+        color: ${theme.colors.white};
+    }
+`);
 
 
 const Navbar = ({ loginStatus }) => {
@@ -68,7 +68,17 @@ const Navbar = ({ loginStatus }) => {
       });
     }
 
-    console.log(loginStatus, 'login status');
+  const navigate = useNavigate();
+
+  const logOut = () => {
+    Axios.get("http://localhost:3001/logout", {
+    }).then((response) => {
+      console.log(response, 'response');
+      navigate('/Profile');
+      window.location.reload(true);
+      console.log('log out fired');
+    });
+  }
 
   useEffect(() => {
     if (loginStatus === true) {
@@ -101,8 +111,11 @@ const Navbar = ({ loginStatus }) => {
                 <NavLink href="/AirDrops">Airdrops</NavLink>
               </div>
               <div className="align-items-center d-none d-lg-flex">
-                <i className="material-icons me-3 text-white">notifications</i>
                 <ProfileLink href="/Profile">{userName}</ProfileLink>
+                <LogoutButton onClick={logOut} className="d-flex">
+					<i className="material-icons ms-3 me-1">logout</i>
+					<span>Log Out</span>
+                </LogoutButton>
               </div>
             </React.Fragment>
           ) : (

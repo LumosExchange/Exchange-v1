@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Axios from "axios";
 
-function Sell() {
 
+function Sell() {
   const [amountForSaleReg, setAmountForSaleReg] = useState("");
   const [aboveOrBelowReg, setAboveOrBelowReg] = useState("");
   const [changeReg, setChangeReg] = useState("");
@@ -13,7 +13,7 @@ function Sell() {
         aboveOrBelow: aboveOrBelowReg,
         change: changeReg,
       })
-
+      window.location.reload(true);
 }
 
   return (

@@ -52,7 +52,7 @@ const theme = {
     silver: "#B4B4B4",
     gold: "#C9B037",
     diamond: "#b9f2ff",
-    valid: "#64D06F",
+    valid: "#00CC66",
     invalid: "#D06464",
     gradients: {
       yellow: "#FCE608",
