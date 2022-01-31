@@ -67,9 +67,9 @@ function ChangePassword() {
       }).then((response) => {
         //handle response here
         if(!response.data.updated) {
-          updateCompleted = true;
-        } else {
           updateCompleted = false;
+        } else {
+          updateCompleted = true;
         }
       });
     } else {
