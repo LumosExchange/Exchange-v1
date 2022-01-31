@@ -5,14 +5,17 @@ import { FormInput, StyledLabel } from "../Components/FormInputs";
 import PrimaryButton from "../Components/Buttons";
 import Card from "../Components/Card";
 import Heading from "../Components/Heading";
+import { useLocation } from "react-router";
 
 function ChangePassword() {
   const [userVerification, setUserVerification] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [checkNewPass, setCheckNewPass] = useState("");
-  const [passwordStatus, setPasswordStatus] = useState(false);
-  const [emailStatus, setEmailStatus] = useState(false);
+
+  let emailVerified = false;
+  let passwordVerified = false;
+  const { state } = useLocation();
 
   //send email verification
   const sendVerification = () => {
@@ -24,13 +27,19 @@ function ChangePassword() {
     Axios.post("http://localhost:3001/EmailVerification2FA", {
       passcode: userVerification,
     }).then((response) => {
-      if (!response.data.auth) {
-        setEmailStatus(false);
+      if (!response.data.auth) {  
+        console.log('Auth1: ', response.data.auth); 
+        emailVerified = false;
       } else {
-        setEmailStatus(true);
+        console.log('Auth2: ', response.data.auth); 
+        emailVerified = true;
       }
-      console.log("result of email verification: ", emailStatus);
-    });
+      console.log('email verification : ', emailVerified);
+    }
+    );
+    
+    
+    
   };
 
   //check old password is match for old password
@@ -40,26 +49,26 @@ function ChangePassword() {
       oldPassword: oldPassword,
     }).then((response) => {
       if (!response.data.auth) {
-        setPasswordStatus(false);
+        passwordVerified = false;
       } else {
-        setPasswordStatus(true);
+        passwordVerified = true;;
       }
+      console.log('password verification : ', passwordVerified);
     });
+    
   };
 
   //if both above are true then update user password
   const checkRequirements = () => {
     
     //check both passwords are equal
-    if (newPassword === checkNewPass) {
-      //then check email verification and old passverification
-      if (emailStatus === true && passwordStatus === true) {
-        Axios.post("/updateUserPass", {
+    if ((newPassword == checkNewPass) || (emailVerified == true && passwordVerified == true)) {
+      console.log("we get here");
+        Axios.post("http://localhost:3001/updateUserPass", {
           password: newPassword,
         }).then((response) => {
           //handle response here if we pass one
         });
-      }
     } else {
     }
   };
