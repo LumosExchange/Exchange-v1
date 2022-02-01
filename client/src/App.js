@@ -53,7 +53,7 @@ const theme = {
     gold: "#C9B037",
     diamond: "#b9f2ff",
     valid: "#00CC66",
-    invalid: "#D06464",
+    invalid: "#EA5151",
     gradients: {
       yellow: "#FCE608",
       peach: "#FF7586",

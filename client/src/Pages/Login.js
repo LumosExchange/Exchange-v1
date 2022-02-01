@@ -12,18 +12,17 @@ import SolflareIcon from "../Images/solflare-icon.svg";
 import ExodusIcon from "../Images/exodus-icon.svg";
 import Link from "../Components/Link";
 
-const FormBackground = styled.div(
-  ({ theme }) => css`
+const FormBackground = styled.div(({ theme }) => css`
     background: ${theme.colors.darkerGrey};
     border-radius: 20px;
-  `
-);
+`);
 
 const Login = () => {
   const [userLog, setUserLog] = useState("");
 
   const [passwordLog, setPasswordLog] = useState("");
   const [loginStatus, setLoginStatus] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
   const navigate = useNavigate();
 
@@ -34,6 +33,7 @@ const Login = () => {
       userName: userLog,
       password: passwordLog,
     }).then((response) => {
+      console.log(response, 'response');
       if (!response.data.auth) {
         setLoginStatus(false);
       } else {
@@ -44,6 +44,8 @@ const Login = () => {
         navigate("/");
         window.location.reload(false);
       }
+    }).catch((err) => {
+        setLoginError(err.message);
     });
   };
 
@@ -66,6 +68,8 @@ const Login = () => {
       }
     });
   }, []);
+
+  console.log(loginError, 'error message');
 
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">
@@ -111,12 +115,17 @@ const Login = () => {
                 value="logIn"
                 hasIcon
               />
+              {loginError.length > 0 && (
+                  <Paragraph bold color="invalid" size="22px" className="mt-3 mb-0">
+                    {loginError}, Please try again.
+                  </Paragraph>
+              )}
             </form>
           </div>
+          {loginStatus && <button>Check if authenticated</button>}
           <Paragraph size="18px" className="text-center my-4">
             Or continue with these Solana wallets
           </Paragraph>
-          {loginStatus && <button>Check if authenticated</button>}
           <div className="d-flex justify-content-center">
             <ConnectWalletButton icon={PhantomIcon} onClick={null} />
             <ConnectWalletButton

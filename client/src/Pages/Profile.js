@@ -268,11 +268,6 @@ const SecurityTab = () => {
           </EditableOption>
         </div>
       </div>
-      <div className="d-flex px-4 row">
-        <div className="col-12 col-lg-2 pb-4">
-          <PrimaryButton text="Save" className="w-100" />
-        </div>
-      </div>
     </ContentTab>
   );
 };

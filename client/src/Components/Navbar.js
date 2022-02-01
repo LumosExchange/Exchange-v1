@@ -31,24 +31,13 @@ const NavLink = styled.a(({ theme }) => css`
     }
 `);
 
-const ProfileLink = styled.a(({ theme }) => css`
-    color: ${theme.colors.yellow};
-    text-decoration: none;
-    font-size: 18px;
-    font-family: "THICCCBOI-REGULAR";
-
-    &:hover {
-      color: ${theme.colors.white};
-    }
-`);
-
 const MenuBase = styled.div(({ theme }) => css`
     background: ${theme.colors.black};
     z-index: 2;
     color: ${theme.colors.yellow};
 `);
 
-const LogoutButton = styled(InvisibleButton)(({ theme }) => css`
+const NavActionButton = styled(InvisibleButton)(({ theme }) => css`
     color: ${theme.colors.yellow};
     &:hover {
         color: ${theme.colors.white};
@@ -111,11 +100,17 @@ const Navbar = ({ loginStatus }) => {
                 <NavLink href="/AirDrops">Airdrops</NavLink>
               </div>
               <div className="align-items-center d-none d-lg-flex">
-                <ProfileLink href="/Profile">{userName}</ProfileLink>
-                <LogoutButton onClick={logOut} className="d-flex">
-					<i className="material-icons ms-3 me-1">logout</i>
-					<span>Log Out</span>
-                </LogoutButton>
+                <NavActionButton
+                    className="d-flex align-items-center"
+                    onClick={ () => navigate('/Profile') }
+                  >
+                    <i className="material-icons me-1">person</i>
+                    <span>{userName}</span>
+                </NavActionButton>
+                <NavActionButton onClick={logOut} className="d-flex">
+                    <i className="material-icons ms-3 me-1">logout</i>
+                    <span>Log Out</span>
+                </NavActionButton>
               </div>
             </React.Fragment>
           ) : (
