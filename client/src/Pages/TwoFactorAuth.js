@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import Axios from "axios";
-import { useNavigate} from "react-router-dom";
 import qrcode from "qrcode";
 import { PageBody, FormInput } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
@@ -37,14 +36,12 @@ const QRCode = styled.img`
 `;
 
 function TwoFactorAuth() {
-  const navigate = useNavigate();
 
   const [secret, setSecret] = useState([]);
   const [Twofa, setTwofaCode] = useState("");
   const [verified, setVerifed] = useState("");
   const [toggled, setToggled] = useState(false);
 
-  const img = "";
   //get secret from back end
   useEffect(() => {
 
