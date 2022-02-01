@@ -7,9 +7,6 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  Link,
-  Switch,
-  useLocation,
 } from "react-router-dom";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
@@ -20,7 +17,6 @@ import RegisterCompany from "./Pages/RegisterCompany";
 import LoggedHome from "./Pages/LoggedHome";
 import ErrorPage from "./Pages/ErrorPage";
 import Trades from "./Pages/Trades";
-import Account from "./Pages/Account";
 import Buy from "./Pages/Buy";
 import Offer from "./Pages/Offer";
 import Feedback from "./Pages/Feedback";
@@ -113,7 +109,7 @@ function App() {
             <Route path="/UpgradeGold" element={<UpgradeGold />} />
             <Route path="/RegisterCompany" element={<RegisterCompany />} />
             <Route path="*" element={<ErrorPage />} />
-            //These need to be protected routes eventually
+            {/* These need to be protected routes eventually */}
             {!loginStatus ? (
               <Route path="/Home" element={<Home />} />
             ) : (
@@ -124,7 +120,6 @@ function App() {
             <Route path="/Buy" element={<Buy />} />
             <Route path="/Trades" element={<Trades />} />
             <Route path="/TradeHistory" element={<TradeHistory />} />
-            <Route path="/Account" element={<Account />} />
             <Route path="/Feedback" element={<Feedback />} />
             <Route path="/TwoFactorAuth" element={<TwoFactorAuth />} />
             <Route path="/ConnectWallet" element={<ConnectWallet />} />

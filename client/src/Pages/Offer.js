@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation, browserRouter } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Axios from "axios";
 import "../offer.css";
 
@@ -77,10 +77,10 @@ function Offer() {
   return (
     <div className="Offer">
     <div className="Left">
-      <h1>Create Offer:</h1>
-      <h2>Current Solana price : <h2 id="price"></h2></h2>
-      <h2>Trade amount</h2>
-      <h3>GBP</h3>
+      <h1 alt="Create Offer">Create Offer:</h1>
+      <h2 alt="Current Solana Price">Current Solana price : <h2 id="price"> </h2></h2>
+      <h2 alt="">Trade amount</h2>
+      <h3 alt="">GBP</h3>
       <label for="Offer"></label>
       <input
         type="text"
@@ -91,8 +91,8 @@ function Offer() {
       />
       <button onClick={Calculate}>Calculate</button>
 
-      <h2>You will recieve:</h2>
-      <h2 id="deal"></h2>
+      <h2 alt="">You will recieve:</h2>
+      <h2 id="deal" alt=""> </h2>
       <button>Open Trade</button>
       </div>
 
@@ -109,11 +109,11 @@ function Offer() {
         
         
         <h2>Sol for sale:</h2>
-        <h3 id="S4S"></h3>
+        <h3 id="S4S" alt=""> </h3>
         <h2>Above or Below</h2>
-        <h3 id="AOB"></h3>
+        <h3 id="AOB" alt=""> </h3>
         <h2>Percentage</h2>
-        <h3 id="PER"></h3>
+        <h3 id="PER" alt=""> </h3>
         
       </div>
      

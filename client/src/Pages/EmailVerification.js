@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Alert } from "react";
+import React, { useState, Alert } from "react";
 import { useLocation } from "react-router";
 import { PageBody } from "../Components/FormInputs";
 import PrimaryButton from "../Components/Buttons";
@@ -28,7 +28,7 @@ const EmailVerification = () => {
       email: state.email,
       passcode: Twofa,
     }).then((response) => {
-      if (response.data == true) {
+      if (response.data === true) {
         //Show popup with confirmation
 
         <Alert variant="filled" severity="success">

@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled, { css } from 'styled-components';
 import Axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { PageBody, StyledDropdown } from "../Components/FormInputs";
 import Card from "../Components/Card";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
 import GradientButton from "../Components/GradientButton";
 import PrimaryButton from "../Components/Buttons";
-import { convertAssetToIcon } from "./AirDrops";
 import { FormInput, StyledLabel } from "../Components/FormInputs";
-
-var TRADEID = "";
-var F4S = 0;
-var AOB = "";
-var PER = "";
-var USERID = "";
 
 const CRYPTO_KIN = 'KIN';
 const CRYPTO_SOL = 'SOL';
@@ -102,7 +94,6 @@ const Buy = () => {
 	const [selectedCrypto, selectCrypto] = useState(CRYPTO_SOL);
 	const [selectedMode, selectMode] = useState('buy');
 	const [selectedCurrency, selectCurrency] = useState('£');
-
 	const [amountForSaleReg, setAmountForSaleReg] = useState("");
 	const [aboveOrBelowReg, setAboveOrBelowReg] = useState("");
 	const [changeReg, setChangeReg] = useState("");
@@ -113,35 +104,15 @@ const Buy = () => {
 		  aboveOrBelow: aboveOrBelowReg,
 		  change: changeReg,
 		})
-  }
+  	}
 
 	console.log(selectedCrypto, 'selected crypto');
 
-  	const navigate = useNavigate();
- 
-
-  //pass variables we need here
-
-  const handleClick = () => {
-    navigate("/Offer", {
-      state: {
-        id: 1,
-        tradeID: TRADEID,
-        solForSale: F4S,
-        aboveOrBelow: AOB,
-        percentage: PER,
-        userID: USERID,
-      },
-     
-
-    });
-  }
-
-  const getAllListings = () => {
-    Axios.get("http://localhost:3001/getAllListings").then((response) => {
-      setAllListings(response.data);
-    });
-  }
+	const getAllListings = () => {
+		Axios.get("http://localhost:3001/getAllListings").then((response) => {
+		setAllListings(response.data);
+		});
+	}
 
   useEffect(() => {
 	getAllListings();
