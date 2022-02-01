@@ -22,7 +22,6 @@ import ErrorPage from "./Pages/ErrorPage";
 import Trades from "./Pages/Trades";
 import Account from "./Pages/Account";
 import Buy from "./Pages/Buy";
-import Sell from "./Pages/Sell";
 import Offer from "./Pages/Offer";
 import Feedback from "./Pages/Feedback";
 import Axios from "axios";
@@ -122,7 +121,6 @@ function App() {
             )}
             ;
             <Route path="/Offer" element={<Offer />} />
-            <Route path="/Sell" element={<Sell />} />
             <Route path="/Buy" element={<Buy />} />
             <Route path="/Trades" element={<Trades />} />
             <Route path="/TradeHistory" element={<TradeHistory />} />

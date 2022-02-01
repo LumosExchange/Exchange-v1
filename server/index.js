@@ -129,6 +129,13 @@ app.post("/register", (req, res) => {
         console.log(err);
       }
     );
+    db.query(
+      "INSERT INTO userAuth (Email) VALUES (?)",
+      [email],
+      (err, result) => {
+        console.log(err);
+      }
+    );
   });
 });
 
@@ -492,6 +499,8 @@ app.post("/SendEmailVerification", (req, res) => {
 
 app.post("/VerifyEmail2FA", (req, res) => {
   const email = req.body.email;
+  const user = req.session.user[0].userID;
+  const yes = "Yes";
 
   const userCode = req.body.passcode;
 
@@ -524,6 +533,14 @@ app.post("/VerifyEmail2FA", (req, res) => {
   } else {
     auth = false;
   }
+  //Add user to userAuth Table
+  db.query(
+    "UPDATE userAuth SET email = ? WHERE userID = ?",
+    [yes, user],
+    (err, result) => {
+      console.log(err);
+    }
+  );
   console.log("auth: ", auth);
   res.send(auth);
 
@@ -677,7 +694,7 @@ app.post("/EmailVerification2FA", (req, res) => {
 
   if (newcheckCode == newuserCode) {
     db.query(
-      "DELETE * FROM TempAuth WHERE (email) = (?)",
+      "DELETE FROM TempAuth WHERE email = ?",
       [email],
       (err, result) => {
         console.log("secret deleted")
@@ -706,7 +723,7 @@ app.post("/checkChangePass", (req, res) => {
   const password = req.body.oldPassword;
   let auth = false;
 
-  console.log('userPassword: ' , password)
+  console.log('userPassword: ' , password);
   db.query(
     "SELECT * FROM users WHERE userName = ?",
     [userName],
@@ -726,7 +743,6 @@ app.post("/checkChangePass", (req, res) => {
               auth: false,
               message: "Incorrect Password please try again",
             });
-            
           }
         });
        } else {

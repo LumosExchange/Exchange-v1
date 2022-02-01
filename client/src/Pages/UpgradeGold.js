@@ -3,7 +3,6 @@ import "../App.css";
 import Axios from "axios";
 import { FormInput, PageBody } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
-import { useNavigate } from "react-router";
 import PrimaryButton from "../Components/Buttons";
 
 function UpgradeGold() {

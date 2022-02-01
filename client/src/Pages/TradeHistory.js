@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import styled, { css } from "styled-components";
 import { PageBody, StyledLabel, StyledDropdown } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
-import Paragraph from "../Components/Paragraph";
+
 import StyledTable from "../Components/Tables";
 
 const FakeTableData = [

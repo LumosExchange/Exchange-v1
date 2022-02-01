@@ -4,7 +4,6 @@ import Axios from "axios";
 import { FormInput, PageBody } from "../Components/FormInputs";
 import PrimaryButton from "../Components/Buttons";
 import Heading from "../Components/Heading";
-import { useNavigate } from "react-router";
 
 function UpgradeBronze() {
   const [dateOfBirthReg, setDateOfBirthReg] = useState("");
