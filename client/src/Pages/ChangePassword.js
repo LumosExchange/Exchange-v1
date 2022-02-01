@@ -176,22 +176,6 @@ function ChangePassword() {
 							}}
 							className="w-100 mb-3"
 						/>
-						<div className="col-12 p-0">
-							<PrimaryButton
-								text="Verifiy Code"
-								type="check"
-								onClick={(event) => {
-									event.preventDefault();
-									emailVerification();
-									setCurrentStep(3)
-								}}
-								className="w-100 h-100 mt-3"
-							/>
-						</div>
-					</React.Fragment>
-				)}
-			  	{currentStep === 3 && (
-				  <React.Fragment>
 						<StyledLabel htmlFor="oldPass" fontSize="20px" padding="0" bold>
 							Enter old password
 						</StyledLabel>
@@ -205,6 +189,23 @@ function ChangePassword() {
 							}}
 							className="w-100 mb-3"
 						/>
+						<div className="col-12 p-0">
+							<PrimaryButton
+								text="Verifiy Code"
+								type="check"
+								onClick={(event) => {
+									event.preventDefault();
+									checkOldPass();
+									emailVerification();
+									setCurrentStep(3)
+								}}
+								className="w-100 h-100 mt-3"
+							/>
+						</div>
+					</React.Fragment>
+				)}
+			  	{currentStep === 3 && (
+				  <React.Fragment>
 						<StyledLabel htmlFor="newPass" fontSize="20px" padding="0" bold>
 							Enter new password
 						</StyledLabel>
@@ -244,7 +245,6 @@ function ChangePassword() {
 							onClick={(event) => {
 								event.preventDefault();
 								emailVerification();
-								checkOldPass();
 								checkRequirements();
 							}}
 							className="w-100 h-100 mt-3"
