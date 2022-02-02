@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import Axios from "axios";
 import qrcode from "qrcode";
-import { PageBody, FormInput } from "../Components/FormInputs";
-import Heading from "../Components/Heading";
-import PrimaryButton, { InvisibleButton } from "../Components/Buttons";
-import Card from "../Components/Card";
-import GoogleAuthLogo from '../Images/icon-google.png';
-import AuthyLogo from '../Images/icon-authy.png';
-import Paragraph from "../Components/Paragraph";
+import { PageBody, FormInput } from "../../Components/FormInputs";
+import Heading from "../../Components/Heading";
+import PrimaryButton, { InvisibleButton } from "../../Components/Buttons";
+import Card from "../../Components/Card";
+import GoogleAuthLogo from '../../Images/icon-google.png';
+import AuthyLogo from '../../Images/icon-authy.png';
+import Paragraph from "../../Components/Paragraph";
 import axios from "axios";
 
 const AuthIcon = styled.div(({ theme }) => css`
