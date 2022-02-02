@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { PageBody } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import GradientButton from "../Components/GradientButton";
-import PrimaryButton from "../Components/Buttons";
+import PrimaryButton, { SecondaryButton, LinkButton } from "../Components/Buttons";
 import Paragraph from "../Components/Paragraph";
 
 // Images
@@ -83,7 +83,7 @@ const Home = () => (
                             />
                         </div>
                         <div className="col-12 col-md-6">
-                            <PrimaryButton
+                            <SecondaryButton
                                 className="w-100"
                                 round
                                 color="navyGrey"
@@ -129,7 +129,7 @@ const Home = () => (
                         In Your Seize
                     </Heading>
                     <Paragraph size="22px">Lumos Exchange is the first non-custodial peer-to-peer platform for Solana. We allow users trade with each other in safety, and protects your wallet from theft.</Paragraph>
-                    <PrimaryButton
+                    <LinkButton
                         text="View The Marketplace"
                         className="mt-5 p-0"
                         color="black"

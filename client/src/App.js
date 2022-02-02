@@ -32,57 +32,15 @@ import AirDrops from "./Pages/AirDrops";
 import Profile from "./Pages/Profile";
 import GoogleAuth from "./Pages/Auth/GoogleAuth";
 import SMSAuth from "./Pages/Auth/SMSAuth";
+import ThemeToggler, { useDarkMode } from "./Components/ThemeToggler";
+import { darkTheme, lightTheme } from "./Constants/Theme";
 
-const theme = {
-  colors: {
-    black: "#131313",
-    white: "#FFF",
-    lightGrey: "#CECECE",
-    grey: "#3C3C3C",
-    darkerGrey: "#2E2E2E",
-    yellow: "#F1DF27",
-    blueGrey: "#b7b4c7",
-    navyGrey: "#212127",
-    six9Grey: "#696969",
-    tableGrey: "#3F3F3F",
-    bronze: "#AD8A56",
-    silver: "#B4B4B4",
-    gold: "#C9B037",
-    diamond: "#b9f2ff",
-    valid: "#00CC66",
-    invalid: "#EA5151",
-    gradients: {
-      yellow: "#FCE608",
-      peach: "#FF7586",
-      magenta: "#D12AFA",
-      sage: "#0EF1A9",
-      mauve: "#B372CE",
-      blue: "#6F86FF",
-      bluePurple: "#6F41E8",
-      grey: "#3C3C3C",
-      slate: "#94B3B5",
-    }
-  },
-  fonts: {
-    primary: "Arial, Helvetica, sans-serif",
-  },
-  breakpoints: {
-    sm: "576px",
-    md: "768px",
-    lg: "992px",
-    xl: "1200px",
-    xxl: "1400px",
-    xxxl: "1600px",
-    fhd: "1920px",
-    qhd: "2560px",
-    uhd: "3840px",
-  },
-};
+const App = () => {
+    const [theme, toggleTheme] = useDarkMode();
+    const themeMode = theme === 'light' ? lightTheme : darkTheme;
 
-function App() {
   //Check
   Axios.defaults.withCredentials = true;
-
   const [loginStatus, setLoginStatus] = useState(false);
 
   useEffect(() => {
@@ -99,8 +57,9 @@ function App() {
   console.log();
   return (
     <React.Fragment>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={themeMode}>
         <Router>
+          <ThemeToggler theme={theme} toggleTheme={toggleTheme} />
           <Navbar loginStatus={loginStatus} />
           <Routes>
             <Route path="/" element={<Home />} />

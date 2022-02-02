@@ -8,12 +8,12 @@ const ButtonBase = styled.div(({ theme, fontSize, padding, borderSize, dark }) =
 	background: linear-gradient(90deg, rgba(252,230,8,1) 0%, rgba(255,117,134,1) 33%, rgba(179,114,206,1) 66%, rgba(111,134,255,1) 100%);
 
 	.innerButton {
-		background: ${dark ? '#000' : '#202020'};
+		background: ${theme.colors.grad_button};
 		margin: ${borderSize};
 		border-radius: 50px;
 		font-size: ${fontSize};
 		padding: ${padding};
-		color: ${theme.colors.white};
+		color: ${theme.colors.actual_white};
 		border: 0;
 
 		&:disabled {
@@ -22,7 +22,7 @@ const ButtonBase = styled.div(({ theme, fontSize, padding, borderSize, dark }) =
 	}
 
 	&:hover { transform: scale(1.05); }
-	a, a:hover { color: #fff; }
+	a, a:hover { color: ${theme.colors.actual_white}; }
 `);
 
 const GradientButton = ({

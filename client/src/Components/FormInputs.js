@@ -13,26 +13,26 @@ const StyledInput = styled.input(
 
     :focus,
     :active {
-      border: 2px solid ${theme.colors.yellow};
+      border: 2px solid ${theme.colors.primary_cta};
       outline: none;
     }
 
     :disabled {
       opacity: 0.5;
-      border: 2px solid ${theme.colors.six9Grey};
+      border: 2px solid ${theme.colors.primary_cta};
       cursor: not-allowed;
     }
 
     &:-webkit-autofill {
       -webkit-box-shadow: 0 0 0 1000px ${theme.colors.grey} inset;
       -webkit-text-fill-color: white;
-      border-color: ${theme.colors.yellow};
+      border-color: ${theme.colors.primary_cta};
     }
 `);
 
 const RoundedInput = styled.input(
-  ({ theme }) => css`
-    background: ${theme.colors.navyGrey};
+  ({ theme, color }) => css`
+    background: ${theme.colors[color]};
     border-radius: 50px;
     border: 2px solid transparent;
     color: ${theme.colors.white};
