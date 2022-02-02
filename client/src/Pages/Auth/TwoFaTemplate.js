@@ -3,12 +3,12 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import qrcode from "qrcode";
 import styled, { css } from "styled-components";
-import { PageBody } from "../Components/FormInputs";
-import { FormInput, StyledLabel } from "../Components/FormInputs";
-import PrimaryButton from "../Components/Buttons";
-import Card from "../Components/Card";
-import Heading from "../Components/Heading";
-import Paragraph from "../Components/Paragraph";
+import { PageBody } from "../../Components/FormInputs";
+import { FormInput, StyledLabel } from "../../Components/FormInputs";
+import PrimaryButton from "../../Components/Buttons";
+import Card from "../../Components/Card";
+import Heading from "../../Components/Heading";
+import Paragraph from "../../Components/Paragraph";
 
 const CodeSentMessage = styled.div(
   ({ theme }) => css`
@@ -25,36 +25,35 @@ const CodeSentMessage = styled.div(
   `
 );
 
-function GoogleAuth() {
+function TwoFaTemplate() {
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userEmailVerification, setUserEmailVerification] = useState("");
   const [userPass, setUserPass] = useState("");
-  const [secret, setSecret] = useState([]);
 
   let emailVerified = false;
   let passwordVerified = false;
 
-  //Get User Email
+  //send email
   const getUserEmail = () => {
+    // get user email
     Axios.get("http://localhost:3001/getUserEmail", {}).then((response) => {
       setUserEmail(response.data);
     });
   };
 
-  //send email verification
   const sendVerification = () => {
     Axios.post("http://localhost:3001/2FAEmailVerificationSend", {});
     setIsCodeSent(true);
   };
 
-  //Check email verification 
+  //get email verification code and password and check if both true
+  //Check email verification
   const emailVerification = () => {
     Axios.post("http://localhost:3001/EmailVerification2FA", {
       passcode: userEmailVerification,
     }).then((response) => {
       if (!response.data.auth) {
-
         emailVerified = false;
       } else {
         emailVerified = true;
@@ -77,7 +76,6 @@ function GoogleAuth() {
   };
 
   //generate secret & save secret in db
-
 
   //display qr
 
@@ -148,7 +146,7 @@ function GoogleAuth() {
                 className="w-100 mb-3"
               />
               <StyledLabel htmlFor="oldPass" fontSize="20px" padding="0" bold>
-                Enter old password
+                Enter password
               </StyledLabel>
               <FormInput
                 type="text"
@@ -178,4 +176,4 @@ function GoogleAuth() {
   );
 }
 
-export default GoogleAuth;
+export default TwoFaTemplate;

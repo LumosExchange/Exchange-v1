@@ -22,7 +22,7 @@ import Offer from "./Pages/Offer";
 import Feedback from "./Pages/Feedback";
 import Axios from "axios";
 import Footer from "./Components/Footer";
-import TwoFactorAuth from "./Pages/TwoFactorAuth";
+import TwoFactorAuth from "./Pages/Auth/TwoFactorAuth";
 import ConnectWallet from "./Pages/ConnectWallet";
 import ChangePassword from "./Pages/ChangePassword";
 import MyWallet from "./Pages/MyWallet";
@@ -30,7 +30,8 @@ import TradeHistory from "./Pages/TradeHistory";
 import EmailVerification from "./Pages/EmailVerification";
 import AirDrops from "./Pages/AirDrops";
 import Profile from "./Pages/Profile";
-import GoogleAuth from "./Pages/GoogleAuth";
+import GoogleAuth from "./Pages/Auth/GoogleAuth";
+import SMSAuth from "./Pages/Auth/SMSAuth";
 
 const theme = {
   colors: {
@@ -129,6 +130,7 @@ function App() {
             <Route path="/AirDrops" element={<AirDrops />} />
             <Route path="/Profile" element={<Profile />} />
             <Route path="/GoogleAuth" element={<GoogleAuth />} />
+            <Route path="/SMSAuth" element={<SMSAuth />} />
           </Routes>
         </Router>
         <Footer />
