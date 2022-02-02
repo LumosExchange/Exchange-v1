@@ -34,7 +34,7 @@ const ShowcaseBase = styled.div(({ theme }) => css`
 `);
 
 const Card = styled.div(({ theme }) => css`
-    background: ${theme.colors.darkerGrey};
+    background: ${theme.colors.card_bg};
     border-radius: 20px;
 `);
 
@@ -42,8 +42,8 @@ const IconCard = ({ icon, title, text}) => (
     <div className="col-10 col-sm-6 col-md-6 col-xl-3 mb-4 mb-xl-0">
         <Card className="p-4 text-center mb-4 mb-xl-0 h-100">
             <img src={icon} alt={title}  className="mb-3" />
-            <Heading color="white" size="24px" bold>{title}</Heading>
-            <Paragraph color="white" size="14px">
+            <Heading size="24px" bold>{title}</Heading>
+            <Paragraph size="14px">
                 {text}
             </Paragraph>
         </Card>
@@ -69,11 +69,11 @@ const Home = () => (
         <div className="row pt-5 d-flex justify-content-center container m-auto">
             <div className="col-12 col-lg-6 d-flex align-items-center justify-content-center">
                 <div className="my-5">
-                    <Heading color="white" size="48px" bold>
+                    <Heading size="48px" bold>
                         Non-Custodial,<br />
                         Peer-to-Peer Trading
                     </Heading>
-					<GradientHeading color="white" size="48px" bold>For Solana</GradientHeading>
+					<GradientHeading size="48px" bold>For Solana</GradientHeading>
                     <div className="row mt-5 pt-5">
                         <div className="col-12 col-md-6">
                             <GradientButton

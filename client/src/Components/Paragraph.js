@@ -14,7 +14,7 @@ Paragraph.propTypes = {
 }
 
 Paragraph.defaultProps = {
-    color: 'white',
+    color: 'text_primary',
 	size: '16px',
 	bold: false,
 }

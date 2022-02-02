@@ -35,7 +35,7 @@ const RoundedInput = styled.input(
     background: ${theme.colors[color]};
     border-radius: 50px;
     border: 2px solid transparent;
-    color: ${theme.colors.white};
+    color: ${theme.colors.text_primary};
     font-size: 18px;
     padding: 10px;
 
@@ -48,7 +48,7 @@ const RoundedInput = styled.input(
     &:-webkit-autofill {
       -webkit-box-shadow: 0 0 0 1000px ${theme.colors.grey} inset;
       -webkit-text-fill-color: white;
-      border-color: ${theme.colors.yellow};
+      border-color: ${theme.colors.primary_cta};
     }
 `);
 
@@ -153,7 +153,7 @@ const StyledCheckbox = styled.input(
     appearance: none;
 
     &:checked {
-      background-color: ${theme.colors.yellow};
+      background-color: ${theme.colors.primary_cta};
 
       &::after {
         border-radius: 5px;
@@ -182,7 +182,7 @@ export const StyledLabel = styled.label(({ theme, color, padding, fontSize, bold
 	padding: ${padding};
 	font-family: ${bold ? 'THICCCBOI-BOLD' : 'THICCCBOI-REGULAR'};
 
-	a { color: ${theme.colors.yellow}; }
+	a { color: ${theme.colors.primary_cta}; }
 `);
 
 StyledLabel.propTypes = {
@@ -192,13 +192,13 @@ StyledLabel.propTypes = {
 };
 
 StyledLabel.defaultProps = {
-  color: 'white',
+  color: 'text_primary',
 	padding: '0 0 0 10px',
 	fontSize: '18px',
 }
 
 export const PageBody = styled.div(({ theme }) => css`
-	background: ${theme.colors.black};
+	background: ${theme.colors.base_bg};
 	font-family: 'THICCCBOI-REGULAR';
 	min-height: calc(100vh - 80px);
 `);

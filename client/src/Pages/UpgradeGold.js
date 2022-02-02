@@ -25,10 +25,10 @@ function UpgradeGold() {
     <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid">
       <div className="row">
         <div className="col-11 col-md-6 d-flex flex-column m-auto">
-          <Heading size="36px" color="white" className="mt-5 mb-4 text-center">
+          <Heading size="36px" className="mt-5 mb-4 text-center">
             Upgrade to gold
           </Heading>
-          <Heading size="24px" color="white" className="mb-5 text-center">
+          <Heading size="24px" className="mb-5 text-center">
             Enter your details to upgrade to gold.
           </Heading>
 

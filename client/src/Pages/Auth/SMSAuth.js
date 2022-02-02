@@ -10,10 +10,9 @@ import Card from "../../Components/Card";
 import Heading from "../../Components/Heading";
 import Paragraph from "../../Components/Paragraph";
 
-const CodeSentMessage = styled.div(
-  ({ theme }) => css`
+const CodeSentMessage = styled.div(({ theme }) => css`
     background: ${theme.colors.valid};
-    color: ${theme.colors.white};
+    color: ${theme.colors.text_primary};
     border: 2px solid ${theme.colors.valid};
     padding: 10px;
     border-radius: 10px;
@@ -120,7 +119,7 @@ function SMSAuth() {
           ) : (
             <CodeSentMessage className="d-flex my-4 align-items-center flex-column">
               <i className="material-icons me-2">mark_email_read</i>
-              <Paragraph color="white" bold size="20px" className="mb-0">
+              <Paragraph bold size="20px" className="mb-0">
                 Code Sent to {userEmail}.
               </Paragraph>
             </CodeSentMessage>

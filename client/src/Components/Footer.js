@@ -8,7 +8,7 @@ import LumosLogo from "./LumosLogo";
 import { FooterLink } from "./Link";
 
 const FooterBase = styled.footer(({ theme }) => css`
-	background: ${theme.colors.black};
+	background: ${theme.colors.base_bg};
 	border-top: 1px solid ${theme.colors.grey};
 
 	p {

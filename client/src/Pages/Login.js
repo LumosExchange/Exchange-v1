@@ -13,7 +13,7 @@ import ExodusIcon from "../Images/exodus-icon.svg";
 import Link from "../Components/Link";
 
 const FormBackground = styled.div(({ theme }) => css`
-    background: ${theme.colors.darkerGrey};
+    background: ${theme.colors.card_bg};
     border-radius: 20px;
 `);
 

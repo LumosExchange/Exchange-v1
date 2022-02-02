@@ -15,35 +15,35 @@ const CRYPTO_LRA = 'LRA';
 const CRYPTO_COPE = 'COPE';
 
 const ToggleButton = styled.button(({ theme }) => css`
-	background: ${theme.colors.six9Grey};
+	background: ${theme.colors.btn};
 	padding: 10px 0;
-	border: 2px solid ${theme.colors.yellow};
-	color: ${theme.colors.white};
+	border: 2px solid ${theme.colors.primary_cta};
+	color: ${theme.colors.text_primary};
 	font-size: 18px;
 
 	&.left { border-radius: 10px 0 0px 10px };
 	&.right { border-radius: 0 10px 10px 0 };
 
 	&.selected {
-		background: ${theme.colors.yellow};
+		background: ${theme.colors.primary_cta};
 		font-family: 'THICCCBOI-BOLD';
-		color: ${theme.colors.black};
+		color: ${theme.colors.base_bg};
 	}
 `);
 
 const QuadButton = styled.button(({ theme }) => css`
-	background: ${theme.colors.six9Grey};
+	background: ${theme.colors.btn};
 	padding: 10px 0;
 	border: 0;
 	border-radius: 10px;
-	color: ${theme.colors.white};
-	svg { fill: ${theme.colors.white}; }
+	color: ${theme.colors.text_primary};
+	svg { fill: ${theme.colors.text_primary}; }
 	font-size: 18px;
 
 	&.selected {
-		background: ${theme.colors.yellow};
+		background: ${theme.colors.primary_cta};
 		font-family: 'THICCCBOI-BOLD';
-		color: ${theme.colors.black};
+		color: ${theme.colors.base_bg};
 	}
 `);
 
@@ -197,8 +197,7 @@ const Buy = () => {
 												type="text"
 												placeholder="amount"
 												name="amount"
-												color="white"
-												textColor="grey"
+												color="btn"
 												id="amount"
 												className="w-100"
 												onChange={(e) => {
@@ -214,8 +213,7 @@ const Buy = () => {
 												placeholder="aboveOrBelow"
 												name="aboveOrBelow"
 												id="aboveOrBelow"
-												color="white"
-												fontColor="grey"
+												color="btn"
 												onChange={(e) => {
 												setAboveOrBelowReg(e.target.value);
 												}}
@@ -232,8 +230,7 @@ const Buy = () => {
 												type="change"
 												placeholder="change"
 												name="change"
-												color="white"
-												textColor="grey"
+												color="btn"
 												id="change"
 												className="w-100"
 												onChange={(e) => {
@@ -267,7 +264,7 @@ const Buy = () => {
 										<div className="col-3">United States</div>
 										<div className="col-3">Oceanside, CA</div>
 										<div className="col-3">
-											<Heading size="24px" color="yellow">
+											<Heading size="24px">
 												{selectedCurrency}{val.amountForSale}
 											</Heading>
 										</div>

@@ -1,15 +1,8 @@
 export const darkTheme = {
   colors: {
-    black: "#131313",
-    white: "#FFF",
     lightGrey: "#CECECE",
     grey: "#3C3C3C",
-    darkerGrey: "#2E2E2E",
-    yellow: "#F1DF27",
-    blueGrey: "#b7b4c7",
-    navyGrey: "#212127",
-    six9Grey: "#696969",
-    tableGrey: "#3F3F3F",
+
     bronze: "#AD8A56",
     silver: "#B4B4B4",
     gold: "#C9B037",
@@ -17,7 +10,7 @@ export const darkTheme = {
     valid: "#00CC66",
     invalid: "#EA5151",
 
-    // New colours
+    // Generic Theme Colors
 	base_bg: "#131313",
     primary_cta: "#F1DF27",
     secondary_cta: "#212127",
@@ -26,6 +19,10 @@ export const darkTheme = {
     secondary_link: "#b7b4c7",
     grad_button: "#131313",
     actual_white: "#FFF",
+	text_primary: "#FFF",
+	card_bg: "#2E2E2E",
+	btn: "#696969",
+	table_stripe: "#3F3F3F",
 
     gradients: {
       yellow: "#FCE608",
@@ -57,16 +54,9 @@ export const darkTheme = {
 
 export const lightTheme = {
   colors: {
-    black: "#fff",
-    white: "#131313",
     lightGrey: "#CECECE",
     grey: "#E5E5E5",
-    darkerGrey: "#F4F4F4",
-    yellow: "#F1DF27",
-    blueGrey: "#b7b4c7",
-    navyGrey: "#212127",
-    six9Grey: "#6F86FF",
-    tableGrey: "#F0F0F0",
+
     bronze: "#AD8A56",
     silver: "#B4B4B4",
     gold: "#C9B037",
@@ -74,6 +64,7 @@ export const lightTheme = {
     valid: "#00CC66",
     invalid: "#EA5151",
 
+	// Generic Theme Colors
 	base_bg: "#FFF",
     primary_cta: "#6F86FF",
     secondary_cta: "#F4F4F4",
@@ -82,6 +73,10 @@ export const lightTheme = {
     secondary_link: "#696969",
     grad_button: "#6F86FF",
     actual_white: "#FFF",
+	text_primary: "#3C3C3C",
+	card_bg: "#F4F4F4",
+	btn: "#E5E5E5",
+	table_stripe: "#F0F0F0",
 
     gradients: {
       yellow: "#FCE608",

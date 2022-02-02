@@ -21,7 +21,7 @@ const AirDropButton = styled.button(({ theme }) => css`
     border-radius: 10px;
     border: 0;
     background: ${theme.colors.grey};
-    color: ${theme.colors.white};
+    color: ${theme.colors.text_primary};
     width: 100%;
 
     &.active {

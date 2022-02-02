@@ -14,7 +14,7 @@ import MobileMenuIcon from "../Images/mobile-menu.svg";
 
 // Components
 const Base = styled.div(({ theme }) => css`
-    background: ${theme.colors.black};
+    background: ${theme.colors.base_bg};
     font-family: Arial, Helvetica, sans-serif;
 
     .fixedHeight {
@@ -27,15 +27,15 @@ const Base = styled.div(({ theme }) => css`
 `);
 
 const MenuBase = styled.div(({ theme }) => css`
-    background: ${theme.colors.black};
+    background: ${theme.colors.base_bg};
     z-index: 2;
-    color: ${theme.colors.yellow};
+    color: ${theme.colors.primary_cta};
 `);
 
 const NavActionButton = styled(InvisibleButton)(({ theme }) => css`
-    color: ${theme.colors.yellow};
+    color: ${theme.colors.primary_cta};
     &:hover {
-        color: ${theme.colors.white};
+        color: ${theme.colors.text_primary};
     }
 `);
 

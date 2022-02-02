@@ -15,7 +15,7 @@ Heading.propTypes = {
 
 Heading.defaultProps = {
 	size: '36px',
-	color: 'white',
+	color: 'text_primary',
 	bold: false,
 }
 

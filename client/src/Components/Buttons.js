@@ -20,7 +20,7 @@ const ButtonBase = styled.button(({
     &:hover { transform: scale(1.05); }
 
     &:disabled {
-        background: ${theme.colors.six9Grey};
+        background: ${theme.colors.secondary_link};
         cursor: not-allowed;
         &:hover { transform: none; }
     }
@@ -88,13 +88,14 @@ const SecondaryBase = styled.button(({ theme, bold, size }) => `
 	border: 0;
 	font-size: 20px;
     width: 100%;
-	color: ${theme.colors.white};
+	color: ${theme.colors.text_primary};
 	font-family: ${bold ? 'THICCCBOI-BOLD' : 'THICCCBOI-REGULAR'};
     padding: ${
 		(size === 'sm' && '8px')
 		|| (size === 'md' && '10px 30px')
 		|| (size === 'lg' && '16px')
 	};
+    &:hover { transform: scale(1.05); }
 `);
 
 export const SecondaryButton = ({
@@ -157,6 +158,7 @@ const LinkButtonBase = styled.button(({ theme, bold, size, fontSize }) => `
 
     &:hover {
         color: ${theme.colors.primary_link_hover};
+        transform: scale(1.05);
     }
 `);
 

@@ -131,10 +131,10 @@ const Register = () => {
     <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid">
       	<div className="row">
 			<div className="col-11 col-md-6 d-flex flex-column m-auto">
-				<Heading size="36px" color="white" className="mt-5 mb-4 text-center">
+				<Heading size="36px" className="mt-5 mb-4 text-center">
 					Register with an email address
 				</Heading>
-				<Heading size="24px" color="white" className="mb-5 text-center">
+				<Heading size="24px" className="mb-5 text-center">
 					Enter your details to create an account.
 				</Heading>
 				<Paragraph
@@ -356,7 +356,7 @@ const Register = () => {
 						<div className="d-flex align-items-start mb-4 pt-2">
 							<img src={WarningTriangle} alt="Warning" className="me-3 pt-1" />
 							<div className="d-flex flex-column">
-								<Paragraph size="18px" color="yellow">
+								<Paragraph size="18px" color="primary_cta">
 								Is your password secured?
 								</Paragraph>
 								<Paragraph>
@@ -368,7 +368,7 @@ const Register = () => {
 						</div>
 						<div className="d-flex align-items-center mb-4">
 							<FormCheckbox type="checkbox" id="passNoted" name="passNoted" />
-							<StyledLabel htmlFor="passNoted" color="yellow">
+							<StyledLabel htmlFor="passNoted" color="primary_cta">
 								I've noted down my password
 							</StyledLabel>
 						</div>
@@ -378,7 +378,7 @@ const Register = () => {
 								id="termsAgreed"
 								name="termsAgreed"
 							/>
-							<StyledLabel htmlFor="termsAgreed" color="white">
+							<StyledLabel htmlFor="termsAgreed" >
 								I've read and agree with Lumos Exchange{" "}
 								<a href="terms" alt="terms &amp; conditions">
 								Service Terms
@@ -396,7 +396,7 @@ const Register = () => {
 								name="newsletter"
 								className="me-4"
 							/>
-							<StyledLabel htmlFor="newsletter" color="white">
+							<StyledLabel htmlFor="newsletter" >
 								I would like to subscribe to the free newsletter to receive free
 								crypto news digests.
 							</StyledLabel>

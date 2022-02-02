@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const Card = styled.div(({ theme, color, radius }) => css`
     background: ${theme.colors[color]};
-    color: ${theme.colors.white};
+    color: ${theme.colors.text_primary};
     border-radius: ${radius};
 `);
 
@@ -13,7 +13,7 @@ Card.propTypes = {
 }
 
 Card.defaultProps = {
-    color: 'grey',
+    color: 'card_bg',
     radius: '20px',
 }
 

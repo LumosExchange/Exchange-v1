@@ -23,7 +23,7 @@ const ToggleIcon = styled.img(({ toggled }) => css`
 `);
 
 const Divider = styled.hr(({ theme }) => css`
-	background ${theme.colors.six9Grey};
+	background ${theme.colors.secondary_link};
 	width: 100%;
 	opacity: 1;
 `);
@@ -65,9 +65,9 @@ const MyWallet = () => {
 					</div>
 					<div className="col-12 col-lg-4">
 						<Card className="p-4 flex-column">
-							<Heading size="24px" color="lightGrey">Reward Pool</Heading>
+							<Heading size="24px" color="text_primary">Reward Pool</Heading>
 							<div className="d-flex justify-content-between align-items-center">
-								<Heading size="28px" color="white" className="mb-0">0.05 SOL</Heading>
+								<Heading size="28px" className="mb-0">0.05 SOL</Heading>
 								<GradientButton text="Claim" fontSize="20px" />
 							</div>
 						</Card>
@@ -88,10 +88,10 @@ const MyWallet = () => {
 							<div className="col-9 col-lg-8 d-flex flex-column">
 								<div className="d-flex">
 									<img src={SolanaIcon} alt="Solana Icon" className="inline me-2 d-lg-none" />
-									<Heading size="36px" bold className="mb-0">Solana</Heading>
+									<Heading color="actual_white" size="36px" bold className="mb-0">Solana</Heading>
 								</div>
-								<Heading size="36px" bold>11,000 SOL</Heading>
-								<Paragraph size="18px" className="mb-0 text-break">
+								<Heading size="36px" bold color="actual_white">11,000 SOL</Heading>
+								<Paragraph color="actual_white" size="18px" className="mb-0 text-break">
 									383196VqKiMLqS74qZtA4U1DEzEQgpH6P3
 								</Paragraph>
 							</div>
@@ -182,7 +182,7 @@ const MyWallet = () => {
 							onClick={ () => expandRewards((prev) => !prev)}
 							className="d-flex align-items-center pt-2"
 						>
-							<Heading size="24px" color="white" className="mb-0">Reward History</Heading>
+							<Heading size="24px" className="mb-0">Reward History</Heading>
 							<ToggleIcon src={DropdownIcon} toggled={rewardsExpanded} alt="Dropdown" className="small ms-3" />
 						</InvisibleButton>
 					</div>

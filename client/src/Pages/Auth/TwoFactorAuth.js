@@ -12,12 +12,12 @@ import Paragraph from "../../Components/Paragraph";
 import axios from "axios";
 
 const AuthIcon = styled.div(({ theme }) => css`
-	border: 2px solid ${theme.colors.white};
+	border: 2px solid ${theme.colors.text_primary};
 	border-radius: 50px;
 	padding: 10px;
 	i {
 		font-size: 50px;
-		color: ${theme.colors.white};
+		color: ${theme.colors.text_primary};
 	}
 
 	img {
@@ -26,7 +26,7 @@ const AuthIcon = styled.div(({ theme }) => css`
 	}
 
 	&:hover {
-		border: 2px solid ${theme.colors.yellow};
+		border: 2px solid ${theme.colors.primary_cta};
 	}
 `);
 
