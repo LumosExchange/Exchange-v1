@@ -82,10 +82,10 @@ var secret = speakeasy.generateSecret({
 
 // Connection deatils for DB
 const db = mysql.createConnection({
-  host: "sql4.freemysqlhosting.net",
-  user: "sql4453277",
-  password: "YC9x3dNeWI",
-  database: "sql4453277",
+  host: "remotemysql.com",
+  user: "zEPptCpVyR",
+  password: "qmZ0jhRFE5",
+  database: "zEPptCpVyR",
 });
 
 //Register
@@ -130,8 +130,8 @@ app.post("/register", (req, res) => {
       }
     );
     db.query(
-      "INSERT INTO userAuth (Email) VALUES (?)",
-      [email],
+      "INSERT INTO userAuth (Email, emailVerified, SMS, google, googleSecret) VALUES (? ,?,?,?,?)",
+      [email, "NO", "NO",  "NO", "NO"],
       (err, result) => {
         console.log(err);
       }
@@ -499,7 +499,6 @@ app.post("/SendEmailVerification", (req, res) => {
 
 app.post("/VerifyEmail2FA", (req, res) => {
   const email = req.body.email;
-  const user = req.session.user[0].userID;
   const yes = "Yes";
 
   const userCode = req.body.passcode;
@@ -535,8 +534,8 @@ app.post("/VerifyEmail2FA", (req, res) => {
   }
   //Add user to userAuth Table
   db.query(
-    "UPDATE userAuth SET email = ? WHERE userID = ?",
-    [yes, user],
+    "UPDATE userAuth SET emailVerified = ? WHERE Email = ?",
+    [yes, email ],
     (err, result) => {
       console.log(err);
     }
