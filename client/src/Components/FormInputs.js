@@ -52,13 +52,16 @@ const RoundedInput = styled.input(
     }
 `);
 
-const IconArea = styled.div(
-  ({ theme }) => css`
+const IconArea = styled.div(({ theme }) => css`
     background: ${theme.colors.grey};
     min-height: 60px;
     padding: 10px;
     border-radius: 10px 0 0 10px;
-  `);
+
+    i {
+      color: ${theme.colors.text_primary};
+    }
+`);
 
 export const FormInput = ({
   hasIcon,
@@ -83,7 +86,7 @@ export const FormInput = ({
   <div className="d-flex">
     {hasIcon && (
       <IconArea className="d-flex align-items-center">
-        <i className="material-icons text-white">{icon}</i>
+        <i className="material-icons">{icon}</i>
       </IconArea>
     )}
     {rounded ? (
@@ -135,7 +138,7 @@ FormInput.propTypes = {
 
 FormInput.defaultProps = {
   color: "grey",
-  textColor: "white",
+  textColor: "text-primary",
   rounded: false,
 };
 
