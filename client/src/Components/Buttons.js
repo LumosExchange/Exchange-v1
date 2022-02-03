@@ -2,14 +2,13 @@ import PropTypes from 'prop-types';
 import styled, { css } from "styled-components";
 
 const ButtonBase = styled.button(({ 
-    theme, round, size, color, textColor, boldText, fontSize
+    theme, round, size, textColor, boldText, fontSize
 }) => css`
 	background: ${theme.colors.primary_cta};
 	border-radius: ${round ? '50px' : '20px'};
 	border: 0;
 	font-size: ${fontSize ? fontSize : '20px'};
     width: 100%;
-	color: ${theme.colors[textColor]};
 	font-family: ${boldText ? 'THICCCBOI-BOLD' : 'THICCCBOI-REGULAR'};
 	padding: ${
 		(size === 'sm' && '8px')
@@ -25,6 +24,7 @@ const ButtonBase = styled.button(({
         &:hover { transform: none; }
     }
 
+    span, i { color: ${theme.colors.base_bg}; };
 
     @media screen and (min-width: ${theme.breakpoints.md}) {
         width: auto;
@@ -39,14 +39,14 @@ const PrimaryButton = ({
 }) => (
     <ButtonBase
         onClick={onClick} type={type} form={form} value={value}
-        size={size} color={color} textColor={textColor} disabled={disabled}
+        size={size} textColor={textColor} disabled={disabled}
         round={round} boldText={boldText} fontSize={fontSize}
         className={`d-flex align-items-center justify-content-center ${className ? className : ''}`}
     >
         {(hasIcon) && (iconPosition === 'left') && (
             <i className="material-icons me-3">{iconName}</i>
         )}
-        <span>{text}</span>
+        <span textColor={textColor}>{text}</span>
         {(hasIcon) && (iconPosition === 'right') && (
             <i className="material-icons ms-3">{iconName}</i>
         )}
@@ -58,7 +58,6 @@ PrimaryButton.propTypes = {
 	round: PropTypes.bool,
     text: PropTypes.string,
     hasIcon: PropTypes.bool,
-    color: PropTypes.string,
     textColor: PropTypes.string,
     boldText: PropTypes.bool,
 }
@@ -70,8 +69,7 @@ PrimaryButton.defaultProps = {
     hasIcon: false,
     iconPosition: 'right',
     iconName: 'arrow_forward',
-    color: 'yellow',
-    textColor: 'black',
+    textColor: 'text-primary',
     boldText: true,
 }
 

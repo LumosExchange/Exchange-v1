@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { PageBody } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import GradientButton from "../Components/GradientButton";
-import PrimaryButton, { SecondaryButton, LinkButton } from "../Components/Buttons";
+import { SecondaryButton, LinkButton } from "../Components/Buttons";
 import Paragraph from "../Components/Paragraph";
 
 // Images
@@ -12,10 +12,13 @@ import IconSolana from '../Images/icon-circle-solana.svg';
 import IconLumosRewards from '../Images/icon-circle-lumos-rewards.svg';
 import IconKin from '../Images/icon-circle-kin.svg';
 import IconCope from '../Images/icon-circle-cope.svg';
-import IconMiddleMan from '../Images/icon-middleman.svg';
-import IconNonCustodial from '../Images/icon-none-custodial.svg';
-import IconWorldwide from '../Images/icon-worldwide.svg';
-import IconSecured from '../Images/icon-secured.svg';
+import {
+    HandShakeIcon,
+    GlobeIcon,
+    DoubleDipIcon,
+    FeeJarIcon
+} from '../Components/SVGComponents';
+
 
 const ShowcaseBase = styled.div(({ theme }) => css`
     min-height: 600px;
@@ -143,9 +146,9 @@ const Home = () => (
                     <div className="row">
                         <div className="col-12 col-lg-6 mb-3">
                             <Card className="d-flex p-4 h-100">
-                                <img src={IconMiddleMan} alt="Middleman" />
+                                <HandShakeIcon alt="Non Custodial" />
                                 <div className="ms-4 d-flex flex-column justify-content-center">
-                                    <Heading size="24px">No Middlemen</Heading>
+                                    <Heading size="24px">Non-custodial</Heading>
                                     <Paragraph size="18px">
                                         You exchange directly with another person, fast and easy. Say goodbye to slow middleman.
                                     </Paragraph>
@@ -154,9 +157,9 @@ const Home = () => (
                         </div>
                         <div className="col-12 col-lg-6 mb-3">
                             <Card className="d-flex p-4 h-100">
-                                <img src={IconNonCustodial} alt="Non Custodial" />
+                                <FeeJarIcon alt="No Trading Fee" />
                                 <div className="ms-4 d-flex flex-column justify-content-center">
-                                    <Heading size="24px">None Custodial</Heading>
+                                    <Heading size="24px">No Trading Fee</Heading>
                                     <Paragraph size="18px">
                                     No more handling fee and custody. You have full control over your wallet.
                                     </Paragraph>
@@ -165,9 +168,9 @@ const Home = () => (
                         </div>
                         <div className="col-12 col-lg-6 mb-3">
                             <Card className="d-flex p-4 h-100">
-                                <img src={IconWorldwide} alt="Worldwide" />
+                                <GlobeIcon alt="Worldwide" />
                                 <div className="ms-4 d-flex flex-column justify-content-center">
-                                    <Heading size="24px">Worldwide</Heading>
+                                    <Heading size="24px">Trade the Network</Heading>
                                     <Paragraph size="18px">
                                         Our service is available around the world with 30+ ways to pay, including bank transfer, PayPal and more.
                                     </Paragraph>
@@ -176,9 +179,9 @@ const Home = () => (
                         </div>
                         <div className="col-12 col-lg-6 mb-3">
                             <Card className="d-flex p-4 h-100">
-                                <img src={IconSecured} alt="Secured" />
+                                <DoubleDipIcon alt="Secured" />
                                 <div className="ms-4 d-flex flex-column justify-content-center">
-                                    <Heading size="24px">Everything Secured</Heading>
+                                    <Heading size="24px">Double Dip Income</Heading>
                                     <Paragraph size="18px">
                                         All users are protected by end-to-end encrypted message and escrow accounts. Trade safely!
                                     </Paragraph>
