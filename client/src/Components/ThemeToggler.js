@@ -31,7 +31,7 @@ const ThemeToggler = ({ theme, toggleTheme }) => {
   return (
 		<ThemeBarContainer isLight={isLight} className="pt-3">
 			<div className="container">
-				<InvisibleButton onClick={toggleTheme} >
+				<InvisibleButton onClick={toggleTheme} className="p-0">
 					{isLight ? (
 						<div className="inner d-flex align-items-center p-0">
 							<CircleToggle isLight={isLight}>

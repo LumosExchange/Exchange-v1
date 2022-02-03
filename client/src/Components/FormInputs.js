@@ -7,7 +7,7 @@ const StyledInput = styled.input(
     background: ${theme.colors[color]};
     border-radius: ${hasIcon ? "0 10px 10px 0" : "10px"};
     border: 2px solid transparent;
-    color: ${theme.colors[textColor]};
+    color: ${theme.colors.text_primary};
     font-size: 24px;
     padding: 10px;
 

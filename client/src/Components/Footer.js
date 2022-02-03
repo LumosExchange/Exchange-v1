@@ -86,7 +86,7 @@ const Footer = () => (
 						<a href="/home">
 							<LumosLogo width="150px" alt="Logo" className="me-1 w-50" />
 						</a>
-						<Paragraph color="blueGrey">&copy; 2022 Lumos Exchange</Paragraph>
+						<Paragraph>&copy; 2022 Lumos Exchange</Paragraph>
 					</div>
 				</div>
 		</div>
