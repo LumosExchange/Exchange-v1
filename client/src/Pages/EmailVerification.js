@@ -50,34 +50,34 @@ const EmailVerification = () => {
 
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">
-      <Card radius="20px" color="darkerGrey" className="p-5 d-flex flex-column">
+      <Card radius="20px" className="p-5 d-flex flex-column" style={{ maxWidth: '600px' }}>
         <Heading className="pb-4 text-center">
           Please enter your email 2FA code below
         </Heading>
-        <div className="w-100 row">
-          <div className="col-12 col-md-8">
-          <form>
-              <FormInput
-                type="text"
-                id="Code"
-                name="code"
-                placeholder="Enter 2FA Code"
-                onChange={(e) => {
-                  setTwofaCode(e.target.value);
-                }}
-                className="w-100"
-              />
-              <div className="col-12 col-md-4 p-0">
-                <PrimaryButton
-                  text="Submit"
-                  type="submit"
-                  onClick={VerifyEmailAuth}
-                  className="w-100 h-100"
+        <form>
+          <div className="w-100 row">
+            <div className="col-12 col-md-8">
+                <FormInput
+                  type="text"
+                  id="Code"
+                  name="code"
+                  placeholder="Enter 2FA Code"
+                  onChange={(e) => {
+                    setTwofaCode(e.target.value);
+                  }}
+                  className="w-100"
                 />
-              </div>
-            </form>
-          </div>
-        </div>
+                </div>
+                <div className="col-12 col-md-4 p-0">
+                  <PrimaryButton
+                    text="Submit"
+                    type="submit"
+                    onClick={VerifyEmailAuth}
+                    className="w-100 h-100"
+                  />
+                </div>
+            </div>
+          </form>
       </Card>
     </PageBody>
   );
