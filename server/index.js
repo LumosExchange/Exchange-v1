@@ -334,6 +334,15 @@ app.post("/getSecret", (req, res) => {
   var secret = speakeasy.generateSecret({
     name: "Lumos Exchange",
   });
+
+  const user = req.session.user[0].userID;
+  db.query(
+    "UPDATE userAuth SET googleSecret = ? WHERE userID = ?",
+    [secret, user],
+    (err, result) => {
+      console.log(err);
+    }
+  );
   console.log("secret is: " + secret);
   res.send(secret);
 });
