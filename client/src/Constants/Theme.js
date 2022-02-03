@@ -11,7 +11,7 @@ export const darkTheme = {
     invalid: "#EA5151",
 
     // Generic Theme Colors
-	base_bg: "#131313",
+	  base_bg: "#131313",
     primary_cta: "#F1DF27",
     secondary_cta: "#212127",
     primary_link: "#F1DF27",
@@ -19,10 +19,10 @@ export const darkTheme = {
     secondary_link: "#b7b4c7",
     grad_button: "#131313",
     actual_white: "#FFF",
-	text_primary: "#FFF",
-	card_bg: "#2E2E2E",
-	btn: "#696969",
-	table_stripe: "#3F3F3F",
+    text_primary: "#FFF",
+    card_bg: "#2E2E2E",
+    btn: "#696969",
+    table_stripe: "#3F3F3F",
 
     gradients: {
       yellow: "#FCE608",
@@ -65,7 +65,7 @@ export const lightTheme = {
     invalid: "#EA5151",
 
 	// Generic Theme Colors
-	base_bg: "#FFF",
+	  base_bg: "#FFF",
     primary_cta: "#6F86FF",
     secondary_cta: "#F4F4F4",
     primary_link: "#6F86FF",
@@ -73,10 +73,10 @@ export const lightTheme = {
     secondary_link: "#696969",
     grad_button: "#6F86FF",
     actual_white: "#FFF",
-	text_primary: "#3C3C3C",
-	card_bg: "#F4F4F4",
-	btn: "#E5E5E5",
-	table_stripe: "#F0F0F0",
+    text_primary: "#3C3C3C",
+    card_bg: "#F4F4F4",
+    btn: "#E5E5E5",
+    table_stripe: "#F0F0F0",
 
     gradients: {
       yellow: "#FCE608",

@@ -21,6 +21,21 @@ const ValidationIcon = styled.i(({ theme, valid }) => css`
 	color: ${valid ? theme.colors.valid : theme.colors.invalid};
 `);
 
+const WarningIconBase = styled.svg(({ theme }) => css`
+	min-width: 48px;
+	height: 48px;
+
+	path { stroke: ${theme.colors.primary_cta}; }
+`);
+
+const Warning = () => (
+	<WarningIconBase width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="me-3 mt-1">
+		<path d="M24 5L2 43H46L24 5Z" strokeWidth="4" strokeLinejoin="round"/>
+		<path d="M24 35V36" strokeWidth="4" strokeLinecap="round"/>
+		<path d="M24 19L24.008 29" strokeWidth="4" strokeLinecap="round"/>
+	</WarningIconBase>
+);
+
 const Register = () => {
   const userRef = useRef();
   const errRef = useRef();
@@ -354,7 +369,7 @@ const Register = () => {
 							<Paragraph>Must match the first password input field.</Paragraph>
 						</div>
 						<div className="d-flex align-items-start mb-4 pt-2">
-							<img src={WarningTriangle} alt="Warning" className="me-3 pt-1" />
+							<Warning alt="Warning" />
 							<div className="d-flex flex-column">
 								<Paragraph size="18px" color="primary_cta">
 								Is your password secured?
