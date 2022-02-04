@@ -10,7 +10,8 @@ import Card from "../../Components/Card";
 import Heading from "../../Components/Heading";
 import Paragraph from "../../Components/Paragraph";
 
-const CodeSentMessage = styled.div(({ theme }) => css`
+const CodeSentMessage = styled.div(
+  ({ theme }) => css`
     background: ${theme.colors.valid};
     color: ${theme.colors.text_primary};
     border: 2px solid ${theme.colors.valid};
@@ -29,6 +30,7 @@ function SMSAuth() {
   const [userEmail, setUserEmail] = useState("");
   const [userEmailVerification, setUserEmailVerification] = useState("");
   const [userPass, setUserPass] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState('');
 
   let emailVerified = false;
   let passwordVerified = false;
@@ -74,8 +76,8 @@ function SMSAuth() {
     });
   };
 
-//send user phonenumber to vonage api request
-//save the user phone number in a db
+  //send user phonenumber to vonage api request
+  //save the user phone number in a db
 
   useEffect(() => {
     getUserEmail(userEmail);
@@ -158,11 +160,44 @@ function SMSAuth() {
                 <PrimaryButton
                   text="Check"
                   type="check"
-                  //FIX THIS TOMORROW
-                  //  onClick={}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    emailVerification();
+                    passwordVerification();
+                  }}
                   className="w-100 h-100 mt-3"
                   disabled={!isCodeSent}
                 />
+
+                <div className="col-12 m-auto text-center flex-column">
+                  <Paragraph size="18px" className="mb-0">
+                    Please enter phone number
+                  </Paragraph>
+                </div>
+              </div>
+              <div className="w-100 row mt-4">
+                <div className="col-12 col-md-8">
+                  <FormInput
+                    type="text"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    placeholder="Enter Phone Number"
+                    onChange={(e) => {
+                      setPhoneNumber(e.target.value);
+                    }}
+                    className="w-100"
+                  />
+                </div>
+                <div className="col-12 col-md-4 p-0">
+                  <PrimaryButton
+                    type="Send"
+                    text="Get Code"
+                    //Need to create functionality to send phone number to sms api endpoint
+                    // and store user phonenumber in db
+                   // onClick={}
+                    className="w-100 h-100"
+                  />
+                </div>
               </div>
             </form>
           </div>

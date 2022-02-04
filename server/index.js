@@ -130,8 +130,8 @@ app.post("/register", (req, res) => {
       }
     );
     db.query(
-      "INSERT INTO userAuth (Email, emailVerified, SMS, google, googleSecret) VALUES (? ,?,?,?,?)",
-      [email, "NO", "NO",  "NO", "NO"],
+      "INSERT INTO userAuth (Email, emailVerified, SMS, google, googleSecret, phoneNumber) VALUES (?,?,?,?,?,?)",
+      [email, "NO", "NO", "NO", "NO", "0"],
       (err, result) => {
         console.log(err);
       }
@@ -347,17 +347,15 @@ app.post("/getSecret", (req, res) => {
   res.send(secret);
 });
 
-
- //Get 6 digit passcode from user & get base32
+//Get 6 digit passcode from user & get base32
 app.get("/VerifyGoogle2FA", (req, res) => {
- 
   const user = req.session.user[0].userID;
 
   db.query(
     "SELECT googleSecret FROM userAuth WHERE (userID) = (?)",
     [user],
     (err, result) => {
-      secret  = result;
+      secret = result;
     }
   );
 
@@ -370,7 +368,6 @@ app.get("/VerifyGoogle2FA", (req, res) => {
     encoding: "base32",
     token: token,
   });
-  
 
   console.log("user is verfiedd: " + verified);
   res.send(verified);
@@ -378,6 +375,8 @@ app.get("/VerifyGoogle2FA", (req, res) => {
 
 //maybe chnage this to post
 app.get("VonageSMSRequest", (req, res) => {
+
+  const user = req.session.user[0].userID;
   //verify the user has specified a number
   if (!req.body.number) {
     res
@@ -398,6 +397,15 @@ app.get("VonageSMSRequest", (req, res) => {
         res.status(500).send(err.error_text);
         return;
       }
+      //Store user phone number in db
+
+      db.query(
+        "UPDATE userAuth SET phoneNumber = ? WHERE userID = ?",
+        [req.body.number, user],
+        (err, result) => {
+          console.log(err);
+        }
+      );
       //send back request ID as need for the verify step
       const requestId = result.request_id;
       res.send(requestId);
@@ -555,7 +563,7 @@ app.post("/VerifyEmail2FA", (req, res) => {
   //Add user to userAuth Table
   db.query(
     "UPDATE userAuth SET emailVerified = ? WHERE Email = ?",
-    [yes, email ],
+    [yes, email],
     (err, result) => {
       console.log(err);
     }
@@ -565,7 +573,6 @@ app.post("/VerifyEmail2FA", (req, res) => {
 
   //once verified delete 2fa from db
 });
-
 
 //UpgradeGold
 app.post("/UpgradeGold", (req, res) => {
@@ -605,7 +612,7 @@ app.post("/UpgradeBronze", (req, res) => {
 app.post("/2FAEmailVerificationSend", (req, res) => {
   //get user email and generate 6 digit code
   const email = req.session.user[0].email;
-  console.log('email to send to ', email);
+  console.log("email to send to ", email);
   const text = crypto.randomInt(0, 1000000);
   const name =
     req.session.user[0].firstName + " " + req.session.user[0].lastName;
@@ -698,35 +705,29 @@ app.post("/EmailVerification2FA", (req, res) => {
     "SELECT * FROM TempAuth WHERE (email) = (?)",
     [email],
     (err, result) => {
-      checkCodee = result[0].Secret;      console.log('DB 2FA code: ', checkCodee);
-      console.log('userInput Code: ', userCode);     
-    } 
+      checkCodee = result[0].Secret;
+      console.log("DB 2FA code: ", checkCodee);
+      console.log("userInput Code: ", userCode);
+    }
   );
 
   let newcheckCode = toString(checkCodee);
   let newuserCode = toString(userCode);
 
   if (newcheckCode == newuserCode) {
-    db.query(
-      "DELETE FROM TempAuth WHERE email = ?",
-      [email],
-      (err, result) => {
-        console.log("Email Validation Success and temp secret deleted")
-      }
-    )
+    db.query("DELETE FROM TempAuth WHERE email = ?", [email], (err, result) => {
+      console.log("Email Validation Success and temp secret deleted");
+    });
     res.send({
       auth: true,
-    })
-    
-    //if true delete from temp db
+    });
 
+    //if true delete from temp db
   } else {
     res.send({
       auth: false,
     });
-  };
- 
-
+  }
 });
 
 //used for user to chnage password verification
@@ -735,7 +736,7 @@ app.post("/checkChangePass", (req, res) => {
   const password = req.body.oldPassword;
   let auth = false;
 
-  console.log('userPassword: ' , password);
+  console.log("userPassword: ", password);
   db.query(
     "SELECT * FROM users WHERE userName = ?",
     [userName],
@@ -746,24 +747,23 @@ app.post("/checkChangePass", (req, res) => {
       if (result.length > 0) {
         bcrypt.compare(password, result[0].password, (err, response) => {
           //if password match return auth as true
-          if (response) {          
+          if (response) {
             res.send({
               auth: true,
-            });       
-          } else { 
+            });
+          } else {
             res.send({
               auth: false,
               message: "Incorrect Password please try again",
             });
           }
         });
-       } else {
-          res.send({
-            auth: false,
-            message: "no user exists",
-          });
-
-      }; 
+      } else {
+        res.send({
+          auth: false,
+          message: "no user exists",
+        });
+      }
     }
   );
 });
@@ -782,17 +782,15 @@ app.post("/updateUserPass", (req, res) => {
       [hash, user],
       (err, result) => {
         console.log(err);
-        console.log('Password Updated');
+        console.log("Password Updated");
         res.send({
           updated: true,
           message: "Succesfully updated password.",
         });
-
       }
     );
   });
-
-})
+});
 
 app.listen(3001, () => {
   console.log("running on port 3001");
