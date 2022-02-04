@@ -73,7 +73,7 @@ function TwoFactorAuth() {
 
     Axios.get("http://localhost:3001/VerifyGoogle2FA", {
       params: {
-        secret: secret.base32,
+        secret: toString(secret.base32),
         passcode: Twofa,
       },
 

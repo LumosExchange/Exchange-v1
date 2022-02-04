@@ -361,10 +361,10 @@ app.get("/VerifyGoogle2FA", (req, res) => {
 
   token = req.query.passcode;
 
-  console.log("Secret: " + secret + " Token is: " + token);
+  console.log("Secret: " + secret);
 
   var verified = speakeasy.totp.verify({
-    secret: secret,
+    secret: toString(secret),
     encoding: "base32",
     token: token,
   });
@@ -703,10 +703,10 @@ app.post("/EmailVerification2FA", (req, res) => {
   let auth = false;
 
   db.query(
-    "SELECT * FROM TempAuth WHERE (email) = (?)",
+    "SELECT Secret FROM TempAuth WHERE (email) = (?)",
     [email],
     (err, result) => {
-      checkCodee = result[0].Secret;
+      checkCodee = result.Secret;
       console.log("DB 2FA code: ", checkCodee);
       console.log("userInput Code: ", userCode);
     }
