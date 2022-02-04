@@ -41,10 +41,11 @@ const Card = styled.div(({ theme }) => css`
     border-radius: 20px;
 `);
 
-const IconCard = ({ icon, title, text}) => (
+const IconCard = ({ icon, title, text, children }) => (
     <div className="col-10 col-sm-6 col-md-6 col-xl-3 mb-4 mb-xl-0">
         <Card className="p-4 text-center mb-4 mb-xl-0 h-100">
-            <img src={icon} alt={title}  className="mb-3" />
+            {children}
+            {/* Make these icons tomorrow */}
             <Heading size="24px" bold>{title}</Heading>
             <Paragraph size="14px">
                 {text}

@@ -61,6 +61,7 @@ function GoogleAuth() {
   const [Twofa, setTwofaCode] = useState("");
   const [verified, setVerifed] = useState(false);
   const [toggled, setToggled] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
 
   let emailVerified = false;
   let passwordVerified = false;
@@ -76,6 +77,7 @@ function GoogleAuth() {
   const sendVerification = () => {
     Axios.post("http://localhost:3001/2FAEmailVerificationSend", {});
     setIsCodeSent(true);
+    setCurrentStep(2);
   };
 
   //Check email verification
@@ -119,9 +121,9 @@ function GoogleAuth() {
   }, [secret]);
 
   //display qr
-  function ShowGoogleAuthQR() {
-    var originalImg = document.getElementById("QRCode");
-    setToggled(true);
+  const ShowGoogleAuthQR = () => {
+    const originalImg = document.getElementById("QRCode");
+	console.log(originalImg, 'is original image found?');
 
     qrcode.toDataURL(secret.otpauth_url, function (err, data_url) {
       originalImg.src = data_url;
@@ -165,122 +167,126 @@ function GoogleAuth() {
       <div className="container col-12 col-md-8 col-xl-5 col-xxl-4">
         <Card
           radius="20px"
-          color="darkerGrey"
           className="p-5 d-flex flex-column"
         >
           <Heading className="pb-4 text-center" bold>
             Add Google Auth
           </Heading>
-          <StyledLabel
-            htmlFor="emailVerification"
-            fontSize="20px"
-            padding="0"
-            bold
-            className={isCodeSent ? "d-none" : "d-block"}
-          >
-            Please note you will be required to complete email verification and
-            know your current password before you will be allowed to add google
-            auth to your account.
-          </StyledLabel>
-          {!isCodeSent ? (
-            <PrimaryButton
-              text="Get Code"
-              className="m-auto my-3"
-              onClick={sendVerification}
-              type="check"
-              value="check"
-            />
-          ) : (
-            <CodeSentMessage className="d-flex my-4 align-items-center flex-column">
-              <i className="material-icons me-2">mark_email_read</i>
-              <Paragraph bold size="20px" className="mb-0">
-                Code Sent to {userEmail}.
-              </Paragraph>
-            </CodeSentMessage>
-          )}
-          <div className={`w-100 ${isCodeSent ? "d-block" : "d-none"}`}>
-            <form>
+          {currentStep === 1 && (
+            <React.Fragment>
               <StyledLabel
                 htmlFor="emailVerification"
                 fontSize="20px"
                 padding="0"
                 bold
               >
-                Enter email verification code
+                Please note you will be required to complete email verification and
+                know your current password before you will be allowed to add google
+                auth to your account.
               </StyledLabel>
-              <FormInput
-                type="text"
-                id="emailVerification"
-                name="emailVerification"
-                placeholder="Enter current email"
-                onChange={(e) => {
-                  setUserEmailVerification(e.target.value);
-                }}
-                className="w-100 mb-3"
+              <PrimaryButton
+                text="Get Code"
+                className="m-auto my-3"
+                onClick={sendVerification}
+                type="check"
+                value="check"
               />
-              <StyledLabel htmlFor="oldPass" fontSize="20px" padding="0" bold>
-                Enter old password
-              </StyledLabel>
-              <FormInput
-                type="text"
-                id="Pass"
-                name="Pass"
-                placeholder="Enter password"
-                onChange={(e) => {
-                  setUserPass(e.target.value);
-                }}
-                className="w-100 mb-3"
-              />
-              <div className="col-12 p-0">
-                <PrimaryButton
-                  text="Check"
-                  type="check"
-                  //FIX THIS TOMORROW
-                  onClick={(event) => {
-                    event.preventDefault();
-                    emailVerification();
-                    passwordVerification();
-                    ShowGoogleAuthQR();
-                  }}
-                  className="w-100 h-100 mt-3"
-                  disabled={!isCodeSent}
-                />
-              </div>
-
-              <div
-                className={`w-100 justify-content-center py-4 flex-column ${
-                  toggled ? "d-flex" : "d-none"
-                }`}
-              >
-                <div className="col-12 m-auto text-center flex-column">
-                  <QRCode id="QRCode" alt="QR Code" className="m-auto mb-3" />
-                  <Paragraph size="18px" className="mb-0">
-                    Please enter 6 digit 2FA code below
-                  </Paragraph>
-                </div>
-              </div>
-              <div className="w-100 row mt-4">
-                <div className="col-12 col-md-8">
-                  <FormInput
-                    type="text"
-                    id="Code"
-                    name="code"
-                    placeholder="Enter 2FA Code"
-                    onChange={(e) => {
-                      setTwofaCode(e.target.value);
-                    }}
-                    className="w-100"
-                  />
-                </div>
-                <div className="col-12 col-md-4 p-0">
-                  <PrimaryButton
-                    type="submit"
-                    text="Submit"
-                    onClick={checkRequirements}
-                    className="w-100 h-100"
-                  />
-                </div>
-              </div>
+            </React.Fragment>
+            )}
+          <div className="w-100">
+            <form>
+			{currentStep === 2 && (
+				<React.Fragment>
+				<CodeSentMessage className="d-flex my-4 align-items-center flex-column">
+					<i className="material-icons me-2">mark_email_read</i>
+					<Paragraph bold size="20px" className="mb-0">
+						Code Sent to {userEmail}.
+					</Paragraph>
+				</CodeSentMessage>
+				<StyledLabel
+					htmlFor="emailVerification"
+					fontSize="20px"
+					padding="0"
+					bold
+				>
+					Enter email verification code
+				</StyledLabel>
+				<FormInput
+					type="text"
+					id="emailVerification"
+					name="emailVerification"
+					placeholder="Enter 2FA Code"
+					onChange={(e) => {
+					setUserEmailVerification(e.target.value);
+					}}
+					className="w-100 mb-3"
+				/>
+				<StyledLabel htmlFor="oldPass" fontSize="20px" padding="0" bold>
+					Enter old password
+				</StyledLabel>
+				<FormInput
+					type="text"
+					id="Pass"
+					name="Pass"
+					placeholder="Enter password"
+					onChange={(e) => {
+					setUserPass(e.target.value);
+					}}
+					className="w-100 mb-3"
+				/>
+				<div className="col-12 p-0">
+					<PrimaryButton
+					text="Check"
+					type="check"
+					className="w-100 h-100 mt-3"
+					disabled={!isCodeSent}
+					onClick={(event) => {
+						event.preventDefault();
+						emailVerification();
+						passwordVerification();
+						ShowGoogleAuthQR();
+						setCurrentStep(3);
+					}}
+					/>
+				</div>
+			  </React.Fragment>
+			)}
+				<React.Fragment>
+					<div className="w-100 justify-content-center py-4 flex-column">
+						<div className="col-12 m-auto text-center flex-column">
+						<QRCode id="QRCode" src="" alt="QR Code" className={`m-auto mb-3 ${currentStep === 3 ? 'd-block' : 'd-none'}`}/>
+							{currentStep === 3 && (
+								<Paragraph size="18px" className="mb-0">
+									Please enter 6 digit 2FA code below
+								</Paragraph>
+							)}
+						</div>
+					</div>
+					{currentStep === 3 && (
+						<div className="w-100 row mt-4">
+							<div className="col-12 col-md-8">
+							<FormInput
+								type="text"
+								id="Code"
+								name="code"
+								placeholder="Enter 2FA Code"
+								onChange={(e) => {
+								setTwofaCode(e.target.value);
+								}}
+								className="w-100"
+							/>
+							</div>
+							<div className="col-12 col-md-4 p-0">
+							<PrimaryButton
+								type="submit"
+								text="Submit"
+								onClick={checkRequirements}
+								className="w-100 h-100"
+							/>
+							</div>
+						</div>
+					)}
+			  	</React.Fragment>
             </form>
           </div>
         </Card>
