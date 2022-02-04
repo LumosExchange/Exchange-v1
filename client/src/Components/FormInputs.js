@@ -2,8 +2,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 
-const StyledInput = styled.input(
-  ({ theme, hasIcon, color, textColor }) => css`
+const StyledInput = styled.input(({ theme, hasIcon, color }) => css`
     background: ${theme.colors[color]};
     border-radius: ${hasIcon ? "0 10px 10px 0" : "10px"};
     border: 2px solid transparent;
@@ -24,14 +23,13 @@ const StyledInput = styled.input(
     }
 
     &:-webkit-autofill {
-      -webkit-box-shadow: 0 0 0 1000px ${theme.colors.grey} inset;
-      -webkit-text-fill-color: white;
-      border-color: ${theme.colors.primary_cta};
+		-webkit-box-shadow: 0 0 0 1000px ${theme.colors.grey} inset;
+		-webkit-text-fill-color: ${theme.colors.text_primary};
+		border-color: ${theme.colors.primary_cta};
     }
 `);
 
-const RoundedInput = styled.input(
-  ({ theme, color }) => css`
+const RoundedInput = styled.input(({ theme, color }) => css`
     background: ${theme.colors[color]};
     border-radius: 50px;
     border: 2px solid transparent;
@@ -41,14 +39,14 @@ const RoundedInput = styled.input(
 
     :focus,
     :active {
-      border: 2px solid rgba(255, 255, 255, 0.1);
-      outline: none;
+		border: 2px solid rgba(255, 255, 255, 0.1);
+		outline: none;
     }
 
     &:-webkit-autofill {
-      -webkit-box-shadow: 0 0 0 1000px ${theme.colors.grey} inset;
-      -webkit-text-fill-color: white;
-      border-color: ${theme.colors.primary_cta};
+		-webkit-box-shadow: 0 0 0 1000px ${theme.colors.grey} inset;
+		-webkit-text-fill-color: ${theme.colors.text_primary};
+		border-color: ${theme.colors.primary_cta};
     }
 `);
 
@@ -130,6 +128,7 @@ export const FormInput = ({
     )}
   </div>
 );
+
 FormInput.propTypes = {
   color: PropTypes.string,
   textColor: PropTypes.string,
@@ -142,8 +141,7 @@ FormInput.defaultProps = {
   rounded: false,
 };
 
-const StyledCheckbox = styled.input(
-  ({ theme }) => css`
+const StyledCheckbox = styled.input(({ theme }) => css`
     -webkit-appearance: none;
     background-color: ${theme.colors.grey};
     border-radius: 5px;
@@ -166,8 +164,7 @@ const StyledCheckbox = styled.input(
         width: 100%;
       }
     }
-  `
-);
+`);
 
 export const FormCheckbox = ({ className, id, name }) => (
   <StyledCheckbox

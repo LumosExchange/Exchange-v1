@@ -64,7 +64,7 @@ export const lightTheme = {
     valid: "#00CC66",
     invalid: "#EA5151",
 
-	// Generic Theme Colors
+	  // Generic Theme Colors
 	  base_bg: "#FFF",
     primary_cta: "#6F86FF",
     secondary_cta: "#F4F4F4",
