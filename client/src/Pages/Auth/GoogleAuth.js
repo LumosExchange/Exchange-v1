@@ -157,6 +157,7 @@ function GoogleAuth() {
       Axios.get("http://localhost:3001/VerifyGoogle2FA", {
         params: {
           passcode: Twofa,
+          secret: secret.base32
         },
 
         //Check response for validation if no response
@@ -164,6 +165,9 @@ function GoogleAuth() {
         console.log("Result", response.data);
         setVerifed(response.data);
         if (verified === true) {
+          //store secret.base32 in db
+
+      
           console.log("result: ", verified);
           setCurrentStep(4);
           //redirect user and display some success message

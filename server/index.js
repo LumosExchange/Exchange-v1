@@ -335,36 +335,19 @@ app.post("/getSecret", (req, res) => {
     name: "Lumos Exchange",
   });
 
-  const user = req.session.user[0].userID;
-  db.query(
-    "UPDATE userAuth SET googleSecret = ? WHERE userID = ?",
-    [secret.base32, user],
-    (err, result) => {
-      console.log(err);
-    }
-  );
-  console.log("secret is: " + secret);
   res.send(secret);
 });
 
 //Get 6 digit passcode from user & get base32
 app.get("/VerifyGoogle2FA", (req, res) => {
-  const user = req.session.user[0].userID;
+ 
+  secret = req.query.secret;
 
-  db.query(
-    "SELECT googleSecret FROM userAuth WHERE (userID) = (?)",
-    [user],
-    (err, result) => {
-      secret = result;
-    }
-  );
 
   token = req.query.passcode;
 
-  console.log("Secret: " + secret);
-
   var verified = speakeasy.totp.verify({
-    secret: toString(secret),
+    secret: secret,
     encoding: "base32",
     token: token,
   });
@@ -372,6 +355,7 @@ app.get("/VerifyGoogle2FA", (req, res) => {
   console.log("user is verfiedd: " + verified);
   res.send(verified);
 });
+
 
 //maybe chnage this to post
 app.get("VonageSMSRequest", (req, res) => {
@@ -538,10 +522,11 @@ app.post("/VerifyEmail2FA", (req, res) => {
   let auth = false;
 
   db.query(
-    "SELECT * FROM TempAuth WHERE (email) = (?)",
+    "SELECT Secret FROM TempAuth WHERE (email) = (?)",
     [email],
     (err, result) => {
-      checkCode = result[0].Secret;
+      //changed this
+      checkCode = result;
       console.log("Checkcode from db: ", checkCode);
       console.log("Passcode from  user: ", userCode);
     }
@@ -706,7 +691,8 @@ app.post("/EmailVerification2FA", (req, res) => {
     "SELECT Secret FROM TempAuth WHERE (email) = (?)",
     [email],
     (err, result) => {
-      checkCodee = result.Secret;
+      //chnaged this
+      checkCodee = result;
       console.log("DB 2FA code: ", checkCodee);
       console.log("userInput Code: ", userCode);
     }
