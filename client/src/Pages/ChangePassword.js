@@ -18,7 +18,7 @@ const GrabAttention = keyframes`
 const CodeSentMessage = styled.div(({ theme }) => css`
 	background: url(${VerifyBG});
 	background-size: contain;
-	color: ${theme.colors.text_primary};
+	color: ${theme.colors.actual_white};
 	border: 2px solid transparent;
 	padding: 10px;
 	border-radius: 10px;
@@ -28,6 +28,8 @@ const CodeSentMessage = styled.div(({ theme }) => css`
 		font-size: 70px;
 		padding-bottom: 10px;
 	};
+
+	p { color: inherit };
 `);
 
 function ChangePassword() {
@@ -104,6 +106,7 @@ function ChangePassword() {
           updateCompleted = false;
         } else {
           updateCompleted = true;
+		  setCurrentStep(4);
         }
       });
     } else {
@@ -127,7 +130,6 @@ function ChangePassword() {
       <div className="container col-12 col-md-8 col-xl-5 col-xxl-4">
         <Card
           radius="20px"
-          color="darkerGrey"
           className="p-5 d-flex flex-column"
         >
           <Heading className="pb-3 text-center" bold>Change Password</Heading>
@@ -180,7 +182,7 @@ function ChangePassword() {
 							Enter old password
 						</StyledLabel>
 						<FormInput
-							type="text"
+							type="password"
 							id="oldPass"
 							name="oldPass"
 							placeholder="Enter old password"
@@ -252,6 +254,14 @@ function ChangePassword() {
 							/>
 						</div>
 					</React.Fragment>
+				)}
+				{currentStep === 4 && (
+					<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+						<i className="material-icons me-2">check_circle</i>
+						<Paragraph bold size="20px" className="mb-0">
+							Password changed successfully!
+						</Paragraph>
+					</CodeSentMessage>
 				)}
             </form>
           </div>

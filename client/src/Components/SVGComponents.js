@@ -70,20 +70,20 @@ export const FeeJarIcon = () => (
     <QuadIconBase width="72px" height="72px" viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" className="moneyjar">
         <title>free-trading</title>
         <g id="free-trading" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-            <rect id="Rectangle" strokeWidth="3" x="32.5" y="60.5" width="18" height="5" rx="2.5"></rect>
-            <rect id="Rectangle-Copy-3" strokeWidth="3" x="38.5" y="54.5" width="18" height="5" rx="2.5"></rect>
-            <rect id="Rectangle-Copy-4" strokeWidth="3" x="37.5" y="49.5" width="18" height="5" rx="2.5"></rect>
-            <rect id="Rectangle-Copy-5" strokeWidth="3" x="37.5" y="43.5" width="18" height="5" rx="2.5"></rect>
-            <rect id="Rectangle-Copy-6" strokeWidth="3" x="33.5" y="38.5" width="18" height="5" rx="2.5"></rect>
-            <rect id="Rectangle-Copy-7" strokeWidth="3" transform="translate(27.500000, 38.000000) rotate(-50.000000) translate(-27.500000, -38.000000) " x="18.5" y="35.5" width="18" height="5" rx="2.5"></rect>
-            <rect id="Rectangle-Copy-8" strokeWidth="3" transform="translate(22.500000, 54.000000) rotate(50.000000) translate(-22.500000, -54.000000) " x="13.5" y="51.5" width="18" height="5" rx="2.5"></rect>
-            <rect id="Rectangle" className="fill"  x="18" y="16" width="3" height="3"></rect>
-            <rect id="Rectangle-Copy-2" className="fill"  x="51" y="16" width="3" height="3"></rect>
-            <rect id="Base" className="fill"  x="0" y="68" width="72" height="4" rx="2"></rect>
-            <rect id="Rectangle" strokeWidth="3" x="12.5" y="20.5" width="47" height="50" rx="8"></rect>
-            <rect id="Rectangle-Copy" strokeWidth="3" x="16.5" y="8.5" width="39" height="7" rx="3"></rect>
-            <circle id="Oval" strokeWidth="3" cx="5.5" cy="16.5" r="4"></circle>
-            <circle id="Oval-Copy" strokeWidth="3" cx="66" cy="6" r="4.5"></circle>
+            <rect id="Rectangle" strokeWidth="2" x="32.5" y="60.5" width="18" height="5" rx="2.5"></rect>
+            <rect id="Rectangle-Copy-3" strokeWidth="2" x="38.5" y="54.5" width="18" height="5" rx="2.5"></rect>
+            <rect id="Rectangle-Copy-4" strokeWidth="2" x="37.5" y="49.5" width="18" height="5" rx="2.5"></rect>
+            <rect id="Rectangle-Copy-5" strokeWidth="2" x="37.5" y="43.5" width="18" height="5" rx="2.5"></rect>
+            <rect id="Rectangle-Copy-6" strokeWidth="2" x="33.5" y="38.5" width="18" height="5" rx="2.5"></rect>
+            <rect id="Rectangle-Copy-7" strokeWidth="2" transform="translate(27.500000, 38.000000) rotate(-50.000000) translate(-27.500000, -38.000000) " x="18.5" y="35.5" width="18" height="5" rx="2.5"></rect>
+            <rect id="Rectangle-Copy-8" strokeWidth="2" transform="translate(22.500000, 54.000000) rotate(50.000000) translate(-22.500000, -54.000000) " x="13.5" y="51.5" width="18" height="5" rx="2.5"></rect>
+            <rect id="Rectangle" className="fill"  x="18" y="16" width="3" height="4"></rect>
+            <rect id="Rectangle-Copy-2" className="fill"  x="51" y="16" width="3" height="4"></rect>
+            <rect id="Base" className="fill"  x="0" y="70" width="72" height="2" rx="2"></rect>
+            <rect id="Rectangle" strokeWidth="2" x="12.5" y="20.5" width="47" height="50" rx="8"></rect>
+            <rect id="Rectangle-Copy" strokeWidth="2" x="16.5" y="8.5" width="39" height="7" rx="3"></rect>
+            <circle id="Oval" strokeWidth="2" cx="5.5" cy="16.5" r="4"></circle>
+            <circle id="Oval-Copy" strokeWidth="2" cx="66" cy="6" r="4.5"></circle>
         </g>
     </QuadIconBase>
 );
@@ -92,16 +92,16 @@ export const GlobeIcon = () => (
     <QuadIconBase width="72px" height="72px" viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" className="globe">
         <title>globe</title>
         <g id="globe" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-            <circle id="Oval-Copy-2" strokeWidth="3" cx="5" cy="36" r="3.5"></circle>
-            <circle id="Oval-Copy" strokeWidth="3" cx="67" cy="36" r="3.5"></circle>
-            <circle id="Oval" strokeWidth="3" cx="36" cy="66" r="3.5"></circle>
-            <circle id="Oval-Copy-3"  strokeWidth="3" cx="36" cy="5" r="3.5"></circle>
-            <path d="M5,67 C10.8946726,65.7897131 15.6992703,63.2609774 19.4137931,59.4137931 C23.1283159,55.5666088 25.6570515,50.7620111 27,45" id="Path-6-Copy-2"  strokeWidth="3" transform="translate(16.000000, 56.000000) rotate(90.000000) translate(-16.000000, -56.000000) "></path>
-            <path d="M45,67 C51.2933996,65.8447261 56.2129398,63.430933 59.7586207,59.7586207 C63.3043015,56.0863084 65.7180946,51.1667681 67,45" id="Path-6-Copy-3"  strokeWidth="3" transform="translate(56.000000, 56.000000) scale(-1, 1) rotate(90.000000) translate(-56.000000, -56.000000) "></path>
-            <path d="M5,27 C10.8946726,25.7897131 15.6992703,23.2609774 19.4137931,19.4137931 C23.1283159,15.5666088 25.6570515,10.7620111 27,5" id="Path-6-Copy-5"  strokeWidth="3" transform="translate(16.000000, 16.000000) scale(1, -1) rotate(90.000000) translate(-16.000000, -16.000000) "></path>
-            <path d="M45,27 C50.8946726,25.7897131 55.6992703,23.2609774 59.4137931,19.4137931 C63.1283159,15.5666088 65.6570515,10.7620111 67,5" id="Path-6-Copy-4"  strokeWidth="3" transform="translate(56.000000, 16.000000) scale(-1, -1) rotate(90.000000) translate(-56.000000, -16.000000) "></path>
+            <circle id="Oval-Copy-2" strokeWidth="2" cx="5" cy="36" r="3.5"></circle>
+            <circle id="Oval-Copy" strokeWidth="2" cx="67" cy="36" r="3.5"></circle>
+            <circle id="Oval" strokeWidth="2" cx="36" cy="66" r="3.5"></circle>
+            <circle id="Oval-Copy-3"  strokeWidth="2" cx="36" cy="5" r="3.5"></circle>
+            <path d="M5,67 C10.8946726,65.7897131 15.6992703,63.2609774 19.4137931,59.4137931 C23.1283159,55.5666088 25.6570515,50.7620111 27,45" id="Path-6-Copy-2"  strokeWidth="2" transform="translate(16.000000, 56.000000) rotate(90.000000) translate(-16.000000, -56.000000) "></path>
+            <path d="M45,67 C51.2933996,65.8447261 56.2129398,63.430933 59.7586207,59.7586207 C63.3043015,56.0863084 65.7180946,51.1667681 67,45" id="Path-6-Copy-3"  strokeWidth="2" transform="translate(56.000000, 56.000000) scale(-1, 1) rotate(90.000000) translate(-56.000000, -56.000000) "></path>
+            <path d="M5,27 C10.8946726,25.7897131 15.6992703,23.2609774 19.4137931,19.4137931 C23.1283159,15.5666088 25.6570515,10.7620111 27,5" id="Path-6-Copy-5"  strokeWidth="2" transform="translate(16.000000, 16.000000) scale(1, -1) rotate(90.000000) translate(-16.000000, -16.000000) "></path>
+            <path d="M45,27 C50.8946726,25.7897131 55.6992703,23.2609774 59.4137931,19.4137931 C63.1283159,15.5666088 65.6570515,10.7620111 67,5" id="Path-6-Copy-4"  strokeWidth="2" transform="translate(56.000000, 16.000000) scale(-1, -1) rotate(90.000000) translate(-56.000000, -16.000000) "></path>
             <g id="Group-2" transform="translate(14.000000, 14.000000)" >
-                <circle id="Oval" strokeWidth="3" cx="22" cy="22" r="20.5"></circle>
+                <circle id="Oval" strokeWidth="2" cx="22" cy="22" r="20.5"></circle>
                 <polyline id="Path-7" strokeWidth="2" points="32.195122 37.5609756 32.195122 30.0487805 26.8292683 30.0487805 25.7560976 26.8292683 25.7560976 22.5365854 27.902439 20.3902439 30.0487805 20.3902439 33.2682927 21.4634146 36.4878049 21.4634146 38.6341463 22.5365854 39.7073171 24.6829268 40.7804878 26.8292683"></polyline>
                 <polyline id="Path-8" strokeWidth="2" points="16.097561 40.7804878 18.2439024 37.5609756 19.3170732 35.4146341 20.3902439 33.2682927 19.3170732 31.1219512 15.0243902 28.9756098 12.8780488 27.902439 9.65853659 27.902439 9.65853659 31.1219512 9.65853659 33.2682927 11.804878 35.4146341 12.8780488 36.4878049 12.8780488 37.5609756 12.8780488 39.7073171"></polyline>
                 <path d="M3.2195122,24.6829268 L5.36585366,24.6829268 L7.51219512,23.6097561 L9.65853659,21.4634146 L11.804878,20.3902439 L13.9512195,18.2439024 L15.0243902,17.1707317 L16.097561,15.0243902 L16.097561,12.8780488 L13.9512195,12.8780488 L12.8780488,12.8780488 L11.804878,12.8780488 L10.7317073,13.9512195 L8.58536585,12.8780488 L8.58536585,11.804878 C9.30081301,11.0894309 9.65853659,10.7317073 9.65853659,10.7317073 C9.65853659,10.7317073 10.3739837,10.3739837 11.804878,9.65853659 L11.804878,8.58536585 L13.9512195,7.51219512 C15.3821138,6.79674797 16.097561,6.43902439 16.097561,6.43902439 C16.097561,6.43902439 16.097561,7.15447154 16.097561,8.58536585 L17.1707317,9.65853659 L17.1707317,4.29268293 L19.3170732,8.58536585 L20.3902439,9.65853659 L22.5365854,9.65853659 L23.6097561,7.51219512 L24.6829268,6.43902439 L24.6829268,5.36585366 C25.398374,4.6504065 25.7560976,4.29268293 25.7560976,4.29268293 C25.7560976,4.29268293 26.1138211,3.93495935 26.8292683,3.2195122" id="Path-9" strokeWidth="2"></path>
@@ -115,22 +115,22 @@ export const DoubleDipIcon = () => (
     <QuadIconBase width="72px" height="72px" viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" className="double-dip">
         <title>double-dip</title>
         <g id="double-dip" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-            <circle id="Oval" stroke="#F1DF27" strokeWidth="3" cx="9.5" cy="62.5" r="3"></circle>
-            <circle id="Oval-Copy-7" stroke="#F1DF27" strokeWidth="3" cx="65" cy="59" r="2.5"></circle>
-            <circle id="Oval-Copy-8" stroke="#F1DF27" strokeWidth="3" cx="65" cy="7" r="2.5"></circle>
-            <circle id="Oval-Copy-9" stroke="#F1DF27" strokeWidth="3" cx="11.5" cy="6.5" r="4"></circle>
+            <circle id="Oval" stroke="#F1DF27" strokeWidth="2" cx="9.5" cy="62.5" r="3"></circle>
+            <circle id="Oval-Copy-7" stroke="#F1DF27" strokeWidth="2" cx="65" cy="59" r="2.5"></circle>
+            <circle id="Oval-Copy-8" stroke="#F1DF27" strokeWidth="2" cx="65" cy="7" r="2.5"></circle>
+            <circle id="Oval-Copy-9" stroke="#F1DF27" strokeWidth="2" cx="11.5" cy="6.5" r="4"></circle>
             <circle id="Oval-Copy" cx="18" cy="66" r="2" className="fill"></circle>
             <circle id="Oval-Copy-2" cx="6" cy="51" r="2" className="fill"></circle>
             <circle id="Oval-Copy-3" cx="2.5" cy="16.5" r="1.5" className="fill"></circle>
             <circle id="Oval-Copy-4" cx="22.5" cy="2.5" r="1.5" className="fill"></circle>
             <circle id="Oval-Copy-5" cx="55.5" cy="5.5" r="1.5" className="fill"></circle>
             <circle id="Oval-Copy-6" cx="55.5" cy="64.5" r="1.5" className="fill"></circle>
-            <path d="M36,70 C31.3333333,67.3333333 26,63.3333333 20,58 C12.0497343,50.9330971 8,44.6336553 8,41 C8,25.6666667 8,17 8,15 C14.5914196,15.183168 19.924753,14.183168 24,12 C28.075247,9.81683195 32.075247,6.48349862 36,2 M36,70 C40.6666667,67.3333333 46,63.3333333 52,58 C59.9502657,50.9330971 64,44.6336553 64,41 C64,25.6666667 64,17 64,15 C57.4085804,15.183168 52.075247,14.183168 48,12 C43.924753,9.81683195 39.924753,6.48349862 36,2" id="Combined-Shape" stroke="#F1DF27" strokeWidth="3" stroke-linecap="round" stroke-linejoin="round"></path>
-            <g id="Group" transform="translate(25.000000, 23.000000)" fillRule="nonzero" stroke="#F1DF27" strokeWidth="3">
+            <path d="M36,70 C31.3333333,67.3333333 26,63.3333333 20,58 C12.0497343,50.9330971 8,44.6336553 8,41 C8,25.6666667 8,17 8,15 C14.5914196,15.183168 19.924753,14.183168 24,12 C28.075247,9.81683195 32.075247,6.48349862 36,2 M36,70 C40.6666667,67.3333333 46,63.3333333 52,58 C59.9502657,50.9330971 64,44.6336553 64,41 C64,25.6666667 64,17 64,15 C57.4085804,15.183168 52.075247,14.183168 48,12 C43.924753,9.81683195 39.924753,6.48349862 36,2" id="Combined-Shape" stroke="#F1DF27" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <g id="Group" transform="translate(25.000000, 23.000000)" fillRule="nonzero" stroke="#F1DF27" strokeWidth="2">
                 <path d="M11,1.5 C12.243125,1.5 13.3682151,2.00328544 14.1824648,2.81753517 C14.9967146,3.6317849 15.5,4.756875 15.5,6 C15.5,7.243125 14.9967146,8.3682151 14.1824648,9.18246483 C13.3682151,9.99671456 12.243125,10.5 11,10.5 C9.756875,10.5 8.6317849,9.99671456 7.81753517,9.18246483 C7.00328544,8.3682151 6.5,7.243125 6.5,6 C6.5,4.756875 7.00328544,3.6317849 7.81753517,2.81753517 C8.6317849,2.00328544 9.756875,1.5 11,1.5 Z" id="Path"></path>
                 <path d="M11,12.5 C12.8540977,12.5 15.7576175,13.5090493 17.8887144,15.4464101 C19.3814295,16.8034238 20.5,18.6477669 20.5,21 L20.5,21 L20.5,23 C20.5,23.4142136 20.3321068,23.7892136 20.0606602,24.0606602 C19.7892136,24.3321068 19.4142136,24.5 19,24.5 L19,24.5 L3,24.5 C2.58578644,24.5 2.21078644,24.3321068 1.93933983,24.0606602 C1.66789322,23.7892136 1.5,23.4142136 1.5,23 L1.5,23 L1.5,21 C1.5,18.6477669 2.61857051,16.8034238 4.11128562,15.4464101 C6.24238246,13.5090493 9.14590234,12.5 11,12.5 L11,12.5 Z" id="Path"></path>
             </g>
-            <path d="M36,61 C32.6666667,59.0392157 28.8571429,56.0980392 24.5714286,52.1764706 C18.8926673,46.9802185 16,42.348276 16,39.6764706 C16,28.4019608 16,22.0294118 16,20.5588235 C20.7081569,20.6935059 24.5176807,19.9582118 27.4285714,18.3529412 C30.3394622,16.7476706 33.196605,14.2966902 36,11 M36,61 C39.3333333,59.0392157 43.1428571,56.0980392 47.4285714,52.1764706 C53.1073327,46.9802185 56,42.348276 56,39.6764706 C56,28.4019608 56,22.0294118 56,20.5588235 C51.2918431,20.6935059 47.4823193,19.9582118 44.5714286,18.3529412 C41.6605378,16.7476706 38.803395,14.2966902 36,11" id="Combined-Shape" stroke="#F1DF27" strokeWidth="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M36,61 C32.6666667,59.0392157 28.8571429,56.0980392 24.5714286,52.1764706 C18.8926673,46.9802185 16,42.348276 16,39.6764706 C16,28.4019608 16,22.0294118 16,20.5588235 C20.7081569,20.6935059 24.5176807,19.9582118 27.4285714,18.3529412 C30.3394622,16.7476706 33.196605,14.2966902 36,11 M36,61 C39.3333333,59.0392157 43.1428571,56.0980392 47.4285714,52.1764706 C53.1073327,46.9802185 56,42.348276 56,39.6764706 C56,28.4019608 56,22.0294118 56,20.5588235 C51.2918431,20.6935059 47.4823193,19.9582118 44.5714286,18.3529412 C41.6605378,16.7476706 38.803395,14.2966902 36,11" id="Combined-Shape" stroke="#F1DF27" strokeWidth="2" stroke-linecap="round" stroke-linejoin="round"></path>
             <rect id="Rectangle" x="45" y="32" width="7" height="2" rx="1" className="fill"></rect>
             <rect id="Rectangle-Copy" x="45" y="29" width="7" height="2" rx="1" className="fill"></rect>
             <rect id="Rectangle-Copy-3" x="20" y="32" width="7" height="2" rx="1" className="fill"></rect>

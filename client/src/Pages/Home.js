@@ -9,7 +9,7 @@ import Paragraph from "../Components/Paragraph";
 // Images
 import ShowCaseMobile from '../Images/showcase-mobile.svg';
 import IconSolana from '../Images/icon-circle-solana.svg';
-import IconLumosRewards from '../Images/icon-circle-lumos-rewards.svg';
+import IconLumosRewards from '../Images/icon-circle-lumos.svg';
 import IconKin from '../Images/icon-circle-kin.svg';
 import {
     HandShakeIcon,
@@ -73,7 +73,7 @@ const Home = () => (
         <div className="row pt-5 d-flex justify-content-center container m-auto">
             <div className="col-12 col-lg-6 d-flex align-items-center justify-content-center">
                 <div className="my-5">
-                    <Heading size="48px" bold>
+                    <Heading size="48px" bold className="mb-0">
                         Non-Custodial,<br />
                         Peer-to-Peer Trading
                     </Heading>
