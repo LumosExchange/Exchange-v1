@@ -80,9 +80,12 @@ const Register = () => {
 		<PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid">
 			<div className="row">
 				<div className="col-11 col-md-6 d-flex flex-column m-auto">
-					<Heading size="36px" color="white" className="mt-5 mb-4 text-center">Sign up with an email address</Heading>
-					<Heading size="24px" color="white" className="mb-5 text-center">Enter your details to create an account.</Heading>
+					<Heading size="36px" className="mt-5 mb-4 text-center">Sign up with an email address</Heading>
+					<Heading size="24px" className="mb-5 text-center">Enter your details to create an account.</Heading>
 					<form name="register">
+						<StyledLabel htmlFor="firstName" padding="0 0 5px 0" bold fontSize="20px">
+							First Name
+						</StyledLabel>
 						<FormInput
 							id="firstName"
 							className="mb-3 w-100"
@@ -91,6 +94,9 @@ const Register = () => {
 							form="register"
 							onChange={(e) => { setFirstNameReg(e.target.value); }}
 						/>
+						<StyledLabel htmlFor="lastName" padding="0 0 5px 0" bold fontSize="20px">
+							Last Name
+						</StyledLabel>
 						<FormInput
 							id="lastName"
 							className="mb-3 w-100"
@@ -99,6 +105,9 @@ const Register = () => {
 							placeholder="Last Name"
 							onChange={(e) => { setLastNameReg(e.target.value); }}
 						/>
+						<StyledLabel htmlFor="userName" padding="0 0 5px 0" bold fontSize="20px">
+							Username
+						</StyledLabel>
 						<FormInput
 							id="userName"
 							className="mb-3 w-100"
@@ -107,6 +116,9 @@ const Register = () => {
 							placeholder="User Name"
 							onChange={(e) => { setUserNameReg(e.target.value); }}
 						/>
+						<StyledLabel htmlFor="email" padding="0 0 5px 0" bold fontSize="20px">
+							Email
+						</StyledLabel>
 						<FormInput
 							id="email"
 							className="mb-3 w-100"
@@ -115,6 +127,9 @@ const Register = () => {
 							placeholder="email"
 							onChange={(e) => { setEmailReg(e.target.value); }}
 						/>
+						<StyledLabel htmlFor="password" padding="0 0 5px 0" bold fontSize="20px">
+							Password
+						</StyledLabel>
 						<FormInput
 							id="password"
 							className="mb-3 w-100"
@@ -123,6 +138,9 @@ const Register = () => {
 							placeholder="password"
 							onChange={(e) => { setPasswordReg(e.target.value); }}
 						/>
+						<StyledLabel htmlFor="nationality" padding="0 0 5px 0" bold fontSize="20px">
+							Nationality
+						</StyledLabel>
 						<FormInput
 							id="nationality"
 							className="mb-3 w-100"
@@ -134,23 +152,23 @@ const Register = () => {
 						<div className="d-flex align-items-start mb-4 pt-2">
 							<Warning alt="Warning" />
 							<div className="d-flex flex-column">
-								<Paragraph size="18px" color="yellow">Is your password secured?</Paragraph>
+								<Paragraph size="18px">Is your password secured?</Paragraph>
 								<Paragraph>Due to the nature of client-side encryption, Lumos Exchange are unable to recover a lost password at now. Please ensure you have your password noted down before continue!</Paragraph>
 							</div>
 						</div>
 						<div className="d-flex align-items-center mb-4">
 							<FormCheckbox type="checkbox" id="passNoted" name="passNoted" />
-							<StyledLabel htmlFor="passNoted" color="yellow">I've noted down my password</StyledLabel>
+							<StyledLabel htmlFor="passNoted">I've noted down my password</StyledLabel>
 						</div>
 						<div className="d-flex align-items-center mb-4">
 							<FormCheckbox type="checkbox" id="termsAgreed" name="termsAgreed" />
-							<StyledLabel htmlFor="termsAgreed" color="white">
+							<StyledLabel htmlFor="termsAgreed">
 								I've read and agree with Lumos Exchange <a href="terms" alt="terms &amp; conditions">Service Terms</a> and <a href="terms" alt="terms &amp; conditions">Terms of Use.</a>
 							</StyledLabel>
 						</div>
 						<div className="d-flex align-items-center mb-4">
 							<FormCheckbox type="checkbox" id="newsletter" name="newsletter" className="me-4" />
-							<StyledLabel htmlFor="newsletter" color="white">
+							<StyledLabel htmlFor="newsletter">
 								I would like to subscribe to the free newsletter to receive free crypto news digests.
 							</StyledLabel>
 						</div>
