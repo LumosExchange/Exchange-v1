@@ -10,7 +10,7 @@ import Card from "../../Components/Card";
 import Heading from "../../Components/Heading";
 import Paragraph from "../../Components/Paragraph";
 import GoogleAuthLogo from "../../Images/icon-google.png";
-import VerifyBG from '../../Images/verifybg.svg';
+import VerifyBG from "../../Images/verifybg.svg";
 
 const GrabAttention = keyframes`
   0% { transform: scale(1); }
@@ -18,24 +18,29 @@ const GrabAttention = keyframes`
   100% { transform: scale(1); }
 `;
 
-const CodeSentMessage = styled.div(({ theme }) => css`
-	background: url(${VerifyBG});
-	background-size: contain;
-	color: ${theme.colors.actual_white};
-	border: 2px solid transparent;
-	padding: 10px;
-	border-radius: 10px;
-	animation: ${GrabAttention} 0.5s 1 linear;
+const CodeSentMessage = styled.div(
+  ({ theme }) => css`
+    background: url(${VerifyBG});
+    background-size: contain;
+    color: ${theme.colors.actual_white};
+    border: 2px solid transparent;
+    padding: 10px;
+    border-radius: 10px;
+    animation: ${GrabAttention} 0.5s 1 linear;
 
-	i {
-		font-size: 70px;
-		padding-bottom: 10px;
-	};
+    i {
+      font-size: 70px;
+      padding-bottom: 10px;
+    }
 
-	p { color: inherit };
-`);
+    p {
+      color: inherit;
+    }
+  `
+);
 
-const AuthIcon = styled.div(({ theme }) => css`
+const AuthIcon = styled.div(
+  ({ theme }) => css`
     border: 2px solid ${theme.colors.text_primary};
     border-radius: 50px;
     padding: 10px;
@@ -70,9 +75,8 @@ function GoogleAuth() {
   const [verified, setVerifed] = useState(false);
   const [toggled, setToggled] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-
-  let emailVerified = false;
-  let passwordVerified = false;
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [passwordVerified, setPasswordVerified] = useState(false);
 
   //Get User Email
   const getUserEmail = () => {
@@ -93,12 +97,12 @@ function GoogleAuth() {
     Axios.post("http://localhost:3001/EmailVerification2FA", {
       passcode: userEmailVerification,
     }).then((response) => {
-      if (!response.data.auth) {
-        emailVerified = false;
+      console.log('response email', response.data.auth);
+      if (response.data.auth == true) {
+        setEmailVerified(true);
       } else {
-        emailVerified = true;
+        setEmailVerified(false);
       }
-      console.log("email verification : ", emailVerified);
     });
   };
   //check password verification
@@ -106,12 +110,12 @@ function GoogleAuth() {
     Axios.post("http://localhost:3001/checkChangePass", {
       oldPassword: userPass,
     }).then((response) => {
-      if (!response.data.auth) {
-        passwordVerified = false;
+      console.log('response pass', response.data.auth);
+      if (response.data.auth == true) {
+        setPasswordVerified(true);
       } else {
-        passwordVerified = true;
+        setPasswordVerified(false);
       }
-      console.log("password verification : ", passwordVerified);
     });
   };
 
@@ -131,33 +135,37 @@ function GoogleAuth() {
   //display qr
   const ShowGoogleAuthQR = () => {
     const originalImg = document.getElementById("QRCode");
-	console.log(originalImg, 'is original image found?');
+    console.log(originalImg, "is original image found?");
 
     qrcode.toDataURL(secret.otpauth_url, function (err, data_url) {
       originalImg.src = data_url;
     });
-  }
+  };
 
   const checkRequirements = () => {
-
     //Check email verification, password verification
 
-    console.log('email verified: ', emailVerified, 'passwordVerified: ', passwordVerified);
+    console.log(
+      "email verified: ",
+      emailVerified,
+      "passwordVerified: ",
+      passwordVerified
+    );
     if (emailVerified === true && passwordVerified === true) {
       //check google auth code
-      
+
       Axios.get("http://localhost:3001/VerifyGoogle2FA", {
         params: {
           passcode: Twofa,
         },
-        
+
         //Check response for validation if no response
       }).then((response) => {
-        console.log('Result', response.data);
+        console.log("Result", response.data);
         setVerifed(response.data);
         if (verified === true) {
           console.log("result: ", verified);
-		  setCurrentStep(4);
+          setCurrentStep(4);
           //redirect user and display some success message
         } else {
           //display error message incorrect 2FA code
@@ -175,10 +183,7 @@ function GoogleAuth() {
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 flex-column">
       <div className="container col-12 col-md-8 col-xl-5 col-xxl-4">
-        <Card
-          radius="20px"
-          className="p-5 d-flex flex-column"
-        >
+        <Card radius="20px" className="p-5 d-flex flex-column">
           <Heading className="pb-4 text-center" bold>
             Add Google Auth
           </Heading>
@@ -190,9 +195,9 @@ function GoogleAuth() {
                 padding="0"
                 bold
               >
-                Please note you will be required to complete email verification and
-                know your current password before you will be allowed to add google
-                auth to your account.
+                Please note you will be required to complete email verification
+                and know your current password before you will be allowed to add
+                google auth to your account.
               </StyledLabel>
               <PrimaryButton
                 text="Get Code"
@@ -202,112 +207,127 @@ function GoogleAuth() {
                 value="check"
               />
             </React.Fragment>
-            )}
+          )}
           <div className="w-100">
             <form>
-			{currentStep === 2 && (
-				<React.Fragment>
-				<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
-					<i className="material-icons me-2">mark_email_read</i>
-					<Paragraph bold size="20px" className="mb-0">
-						Code Sent to {userEmail}.
-					</Paragraph>
-				</CodeSentMessage>
-				<StyledLabel
-					htmlFor="emailVerification"
-					fontSize="20px"
-					padding="0"
-					bold
-				>
-					Enter email verification code
-				</StyledLabel>
-				<FormInput
-					type="text"
-					id="emailVerification"
-					name="emailVerification"
-					placeholder="Enter 2FA Code"
-					onChange={(e) => {
-					setUserEmailVerification(e.target.value);
-					}}
-					className="w-100 mb-3"
-				/>
-				<StyledLabel htmlFor="oldPass" fontSize="20px" padding="0" bold>
-					Enter your password
-				</StyledLabel>
-				<FormInput
-					type="password"
-					id="Pass"
-					name="Pass"
-					placeholder="Enter password"
-					onChange={(e) => {
-					setUserPass(e.target.value);
-					}}
-					className="w-100 mb-3"
-				/>
-				<div className="col-12 p-0">
-					<PrimaryButton
-					text="Check"
-					type="check"
-					className="w-100 h-100 mt-3"
-					disabled={!isCodeSent}
-					onClick={(event) => {
-						event.preventDefault();
-						emailVerification();
-						passwordVerification();
-						ShowGoogleAuthQR();
-						setCurrentStep(3);
-					}}
-					/>
-				</div>
-			  </React.Fragment>
-			)}
-				<React.Fragment>
-					<div className={`w-100 justify-content-center flex-column ${currentStep === 3 ? 'd-block' : 'd-none'}`}>
-						<div className="col-12 m-auto text-center flex-column">
-						<QRCode id="QRCode" src="" alt="QR Code" className="m-auto mb-3"/>
-							{currentStep === 3 && (
-								<Paragraph size="18px" className="mb-0">
-									Please scan the QR code with Google Authenticator, once added it will provide a 6 digit 2FA code to enter below.
-								</Paragraph>
-							)}
-						</div>
-					</div>
-					{currentStep === 3 && (
-						<div className="w-100 row mt-4">
-							<div className="col-12 col-md-8">
-							<FormInput
-								type="text"
-								id="Code"
-								name="code"
-								placeholder="Enter 2FA Code"
-								onChange={(e) => {
-								setTwofaCode(e.target.value);
-								}}
-								className="w-100"
-							/>
-							</div>
-							<div className="col-12 col-md-4 p-0">
-							<PrimaryButton
-								type="submit"
-								text="Submit"
-								onClick={(event) =>  {
-                  event.preventDefault();
-                  checkRequirements();
-                }}
-								className="w-100 h-100"
-							/>
-							</div>
-						</div>
-					)}
-					{currentStep === 4 && (
-						<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
-							<i className="material-icons me-2">check_circle</i>
-							<Paragraph bold size="20px" className="mb-0">
-								Google Auth Successfully added
-							</Paragraph>
-						</CodeSentMessage>
-					)}
-			  	</React.Fragment>
+              {currentStep === 2 && (
+                <React.Fragment>
+                  <CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+                    <i className="material-icons me-2">mark_email_read</i>
+                    <Paragraph bold size="20px" className="mb-0">
+                      Code Sent to {userEmail}.
+                    </Paragraph>
+                  </CodeSentMessage>
+                  <StyledLabel
+                    htmlFor="emailVerification"
+                    fontSize="20px"
+                    padding="0"
+                    bold
+                  >
+                    Enter email verification code
+                  </StyledLabel>
+                  <FormInput
+                    type="text"
+                    id="emailVerification"
+                    name="emailVerification"
+                    placeholder="Enter 2FA Code"
+                    onChange={(e) => {
+                      setUserEmailVerification(e.target.value);
+                    }}
+                    className="w-100 mb-3"
+                  />
+                  <StyledLabel
+                    htmlFor="oldPass"
+                    fontSize="20px"
+                    padding="0"
+                    bold
+                  >
+                    Enter your password
+                  </StyledLabel>
+                  <FormInput
+                    type="password"
+                    id="Pass"
+                    name="Pass"
+                    placeholder="Enter password"
+                    onChange={(e) => {
+                      setUserPass(e.target.value);
+                    }}
+                    className="w-100 mb-3"
+                  />
+                  <div className="col-12 p-0">
+                    <PrimaryButton
+                      text="Check"
+                      type="check"
+                      className="w-100 h-100 mt-3"
+                      disabled={!isCodeSent}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        emailVerification();
+                        passwordVerification();
+                        ShowGoogleAuthQR();
+                        setCurrentStep(3);
+                      }}
+                    />
+                  </div>
+                </React.Fragment>
+              )}
+              <React.Fragment>
+                <div
+                  className={`w-100 justify-content-center flex-column ${
+                    currentStep === 3 ? "d-block" : "d-none"
+                  }`}
+                >
+                  <div className="col-12 m-auto text-center flex-column">
+                    <QRCode
+                      id="QRCode"
+                      src=""
+                      alt="QR Code"
+                      className="m-auto mb-3"
+                    />
+                    {currentStep === 3 && (
+                      <Paragraph size="18px" className="mb-0">
+                        Please scan the QR code with Google Authenticator, once
+                        added it will provide a 6 digit 2FA code to enter below.
+                      </Paragraph>
+                    )}
+                  </div>
+                </div>
+                {currentStep === 3 && (
+                  <div className="w-100 row mt-4">
+                    <div className="col-12 col-md-8">
+                      <FormInput
+                        type="text"
+                        id="Code"
+                        name="code"
+                        placeholder="Enter 2FA Code"
+                        onChange={(e) => {
+                          setTwofaCode(e.target.value);
+                        }}
+                        className="w-100"
+                      />
+                    </div>
+                    <div className="col-12 col-md-4 p-0">
+                      <PrimaryButton
+                        type="submit"
+                        text="Submit"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          checkRequirements();
+                        }}
+                        className="w-100 h-100"
+                      />
+                    </div>
+                  </div>
+                )}
+                {currentStep === 4 && (
+                  <CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+                    <i className="material-icons me-2">check_circle</i>
+                    <Paragraph bold size="20px" className="mb-0">
+                      Google Auth Successfully added
+                    </Paragraph>
+                  </CodeSentMessage>
+                )}
+              </React.Fragment>
             </form>
           </div>
         </Card>
