@@ -338,7 +338,7 @@ app.post("/getSecret", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
     "UPDATE userAuth SET googleSecret = ? WHERE userID = ?",
-    [secret, user],
+    [secret.base32, user],
     (err, result) => {
       console.log(err);
     }
@@ -347,9 +347,19 @@ app.post("/getSecret", (req, res) => {
   res.send(secret);
 });
 
+
+ //Get 6 digit passcode from user & get base32
 app.get("/VerifyGoogle2FA", (req, res) => {
-  //Get 6 digit passcode from user & get base32
-  secret = req.query.secret;
+ 
+  const user = req.session.user[0].userID;
+
+  db.query(
+    "SELECT googleSecret FROM userAuth WHERE (userID) = (?)",
+    [user],
+    (err, result) => {
+      secret  = result;
+    }
+  );
 
   token = req.query.passcode;
 
@@ -360,6 +370,7 @@ app.get("/VerifyGoogle2FA", (req, res) => {
     encoding: "base32",
     token: token,
   });
+  
 
   console.log("user is verfiedd: " + verified);
   res.send(verified);
@@ -555,9 +566,6 @@ app.post("/VerifyEmail2FA", (req, res) => {
   //once verified delete 2fa from db
 });
 
-//app.get('/', (req, res)=> {
-
-//});
 
 //UpgradeGold
 app.post("/UpgradeGold", (req, res) => {
@@ -690,10 +698,8 @@ app.post("/EmailVerification2FA", (req, res) => {
     "SELECT * FROM TempAuth WHERE (email) = (?)",
     [email],
     (err, result) => {
-      checkCodee = result[0].Secret;
-      console.log('RESULT: ', result[0].Secret);
-      console.log('checkcode: ', checkCodee);
-      console.log('usercode: ', userCode);     
+      checkCodee = result[0].Secret;      console.log('DB 2FA code: ', checkCodee);
+      console.log('userInput Code: ', userCode);     
     } 
   );
 
@@ -705,9 +711,7 @@ app.post("/EmailVerification2FA", (req, res) => {
       "DELETE FROM TempAuth WHERE email = ?",
       [email],
       (err, result) => {
-        console.log("secret deleted")
-        console.log(result);
-        console.log(err);
+        console.log("Email Validation Success and temp secret deleted")
       }
     )
     res.send({

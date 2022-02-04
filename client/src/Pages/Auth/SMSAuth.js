@@ -74,11 +74,8 @@ function SMSAuth() {
     });
   };
 
-  //generate secret & save secret in db
-
-  //display qr
-
-  //check google auth code
+//send user phonenumber to vonage api request
+//save the user phone number in a db
 
   useEffect(() => {
     getUserEmail(userEmail);

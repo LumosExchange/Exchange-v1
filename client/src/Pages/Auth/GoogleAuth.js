@@ -9,7 +9,7 @@ import PrimaryButton from "../../Components/Buttons";
 import Card from "../../Components/Card";
 import Heading from "../../Components/Heading";
 import Paragraph from "../../Components/Paragraph";
-import GoogleAuthLogo from '../../Images/icon-google.png';
+import GoogleAuthLogo from "../../Images/icon-google.png";
 
 const CodeSentMessage = styled.div(
   ({ theme }) => css`
@@ -26,28 +26,30 @@ const CodeSentMessage = styled.div(
   `
 );
 
-const AuthIcon = styled.div(({ theme }) => css`
-	border: 2px solid ${theme.colors.text_primary};
-	border-radius: 50px;
-	padding: 10px;
-	i {
-		font-size: 50px;
-		color: ${theme.colors.text_primary};
-	}
+const AuthIcon = styled.div(
+  ({ theme }) => css`
+    border: 2px solid ${theme.colors.text_primary};
+    border-radius: 50px;
+    padding: 10px;
+    i {
+      font-size: 50px;
+      color: ${theme.colors.text_primary};
+    }
 
-	img {
-		width: 50px;
-		height: 50px;
-	}
+    img {
+      width: 50px;
+      height: 50px;
+    }
 
-	&:hover {
-		border: 2px solid ${theme.colors.primary_cta};
-	}
-`);
+    &:hover {
+      border: 2px solid ${theme.colors.primary_cta};
+    }
+  `
+);
 
 const QRCode = styled.img`
-	width: 100%;
-	max-width: 200px;
+  width: 100%;
+  max-width: 200px;
 `;
 
 function GoogleAuth() {
@@ -103,7 +105,7 @@ function GoogleAuth() {
     });
   };
 
-  //generate secret 
+  //generate secret
   useEffect(() => {
     async function getSecret() {
       const response = await Axios.post("http://localhost:3001/getSecret");
@@ -116,8 +118,6 @@ function GoogleAuth() {
     }
   }, [secret]);
 
-  
-  
   //display qr
   function ShowGoogleAuthQR() {
     var originalImg = document.getElementById("QRCode");
@@ -128,38 +128,37 @@ function GoogleAuth() {
     });
   }
 
+  async function checkRequirements(event) {
 
-  const checkRequirements = () => {
-
-  //Check email verification, password verification
-  if (emailVerified === true && passwordVerified === true) {
-
-    //check google auth code
-
-    Axios.get("http://localhost:3001/VerifyGoogle2FA", {
-      params: {
-        secret: secret.base32,
-        passcode: Twofa,
-      },
-
-      //Check response for validation if no response 
-    }).then((response) => {
-      if (response.data === true) {
-        setVerifed(true);
-
-      
-      } else {
-        setVerifed(false);
-      }
-    });
-
-  }
-  }
+    event.preventDefault();
+    //Check email verification, password verification
+    if (emailVerified === true && passwordVerified === true) {
+      //check google auth code
+      console.log("we get here");
+      Axios.get("http://localhost:3001/VerifyGoogle2FA", {
+        params: {
+          passcode: Twofa,
+        },
+        
+        //Check response for validation if no response
+      }).then((response) => {
+        console.log('Result', response.data);
+        setVerifed(response.data);
+        if (verified === true) {
+          console.log("result: ", verified);
+          //redirect user and display some success message
+        } else {
+          //display error message incorrect 2FA code
+          console.log(response.err);
+        }
+      });
+    } else {
+    }
+  };
 
   useEffect(() => {
     getUserEmail(userEmail);
   }, [userEmail]);
-
 
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 flex-column">
@@ -237,17 +236,16 @@ function GoogleAuth() {
                   text="Check"
                   type="check"
                   //FIX THIS TOMORROW
-                  //  onClick={}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    emailVerification();
+                    passwordVerification();
+                    ShowGoogleAuthQR();
+                  }}
                   className="w-100 h-100 mt-3"
                   disabled={!isCodeSent}
                 />
               </div>
-
-
-
-              <img src={GoogleAuthLogo} alt="Google Authenticator" />
-
-
 
               <div
                 className={`w-100 justify-content-center py-4 flex-column ${
