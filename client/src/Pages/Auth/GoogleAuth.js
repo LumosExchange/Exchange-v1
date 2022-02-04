@@ -138,13 +138,14 @@ function GoogleAuth() {
     });
   }
 
-  async function checkRequirements(event) {
+  const checkRequirements = () => {
 
-    event.preventDefault();
     //Check email verification, password verification
+
+    console.log('email verified: ', emailVerified, 'passwordVerified: ', passwordVerified);
     if (emailVerified === true && passwordVerified === true) {
       //check google auth code
-      console.log("we get here");
+      
       Axios.get("http://localhost:3001/VerifyGoogle2FA", {
         params: {
           passcode: Twofa,
@@ -289,7 +290,10 @@ function GoogleAuth() {
 							<PrimaryButton
 								type="submit"
 								text="Submit"
-								onClick={checkRequirements}
+								onClick={(event) =>  {
+                  event.preventDefault();
+                  checkRequirements();
+                }}
 								className="w-100 h-100"
 							/>
 							</div>

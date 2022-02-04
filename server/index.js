@@ -404,6 +404,7 @@ app.get("VonageSMSRequest", (req, res) => {
         [req.body.number, user],
         (err, result) => {
           console.log(err);
+          console.log('Phone number added to db');
         }
       );
       //send back request ID as need for the verify step
