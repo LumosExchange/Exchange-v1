@@ -78,16 +78,14 @@ export const lightTheme = {
     btn: "#E5E5E5",
     table_stripe: "#F0F0F0",
 
+    // Hide the gradient on light theme
     gradients: {
-      yellow: "#FCE608",
-      peach: "#FF7586",
-      magenta: "#D12AFA",
-      sage: "#0EF1A9",
-      mauve: "#B372CE",
+      yellow: "#6F86FF",
+      peach: "#6F86FF",
+      magenta: "#6F86FF",
+      sage: "#6F86FF",
+      mauve: "#6F86FF",
       blue: "#6F86FF",
-      bluePurple: "#6F41E8",
-      grey: "#3C3C3C",
-      slate: "#94B3B5",
     },
   },
   fonts: {

@@ -5,7 +5,12 @@ import PropTypes from 'prop-types';
 const ButtonBase = styled.div(({ theme, fontSize, padding, borderSize, dark }) => css`
 	border-radius: 50px;
 	background: rgba(46, 46, 46, 0.5);
-	background: linear-gradient(90deg, rgba(252,230,8,1) 0%, rgba(255,117,134,1) 33%, rgba(179,114,206,1) 66%, rgba(111,134,255,1) 100%);
+	background: linear-gradient(90deg,
+				${theme.colors.gradients.yellow} 0%,
+				${theme.colors.gradients.peach} 33%,
+				${theme.colors.gradients.mauve} 66%,
+				${theme.colors.gradients.blue} 100%
+			);
 
 	.innerButton {
 		background: ${theme.colors.grad_button};
