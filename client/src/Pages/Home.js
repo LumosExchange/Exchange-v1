@@ -73,7 +73,7 @@ const Home = () => (
         <div className="row pt-5 d-flex justify-content-center container m-auto">
             <div className="col-12 col-lg-6 d-flex align-items-center justify-content-center">
                 <div className="my-5">
-                    <Heading size="48px" bold>
+                    <Heading size="48px" bold className="mb-0">
                         Non-Custodial,<br />
                         Peer-to-Peer Trading
                     </Heading>
