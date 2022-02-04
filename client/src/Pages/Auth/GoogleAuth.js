@@ -154,7 +154,7 @@ function GoogleAuth() {
     if (emailVerified === true && passwordVerified === true) {
       //check google auth code
 
-      Axios.get("http://localhost:3001/VerifyGoogle2FA", {
+      Axios.get("http://localhost:3001/VerifyGoogle2FASetup", {
         params: {
           passcode: Twofa,
           secret: secret.base32

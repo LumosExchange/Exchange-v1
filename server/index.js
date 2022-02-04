@@ -339,11 +339,9 @@ app.post("/getSecret", (req, res) => {
 });
 
 //Get 6 digit passcode from user & get base32
-app.get("/VerifyGoogle2FA", (req, res) => {
- 
+app.get("/VerifyGoogle2FASetup", (req, res) => {
+  const user = req.session.user[0].userID;
   secret = req.query.secret;
-
-
   token = req.query.passcode;
 
   var verified = speakeasy.totp.verify({
@@ -353,13 +351,18 @@ app.get("/VerifyGoogle2FA", (req, res) => {
   });
 
   console.log("user is verfiedd: " + verified);
+  db.query(
+    "UPDATE userAuth SET googleSecret = ? WHERE userID = ?",
+    [secret, user],
+    (err, result) => {
+      console.log(err);
+    }
+  );
   res.send(verified);
 });
 
-
 //maybe chnage this to post
 app.get("VonageSMSRequest", (req, res) => {
-
   const user = req.session.user[0].userID;
   //verify the user has specified a number
   if (!req.body.number) {
@@ -388,7 +391,7 @@ app.get("VonageSMSRequest", (req, res) => {
         [req.body.number, user],
         (err, result) => {
           console.log(err);
-          console.log('Phone number added to db');
+          console.log("Phone number added to db");
         }
       );
       //send back request ID as need for the verify step
