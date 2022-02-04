@@ -162,18 +162,14 @@ function GoogleAuth() {
 
         //Check response for validation if no response
       }).then((response) => {
-        console.log("Result", response.data);
-        setVerifed(response.data);
-        if (verified === true) {
-          //store secret.base32 in db
-
-      
-          console.log("result: ", verified);
+        if (response.data === true) {
+          setVerifed(true);
           setCurrentStep(4);
-          //redirect user and display some success message
         } else {
-          //display error message incorrect 2FA code
-          console.log(response.err);
+          console.log("Result", response.data);
+          setVerifed(false);
+
+          //handle anything else here
         }
       });
     } else {
