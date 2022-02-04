@@ -15,7 +15,7 @@ const StyledTable = styled.table(({ theme }) => css`
     }
 
     span {
-        color: ${theme.colors.primary_link};
+        color: ${theme.colors.primary_cta};
     }
 `);
 

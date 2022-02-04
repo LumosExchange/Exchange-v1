@@ -146,7 +146,7 @@ const LinkButtonBase = styled.button(({ theme, bold, size, fontSize }) => `
 	border: 0;
 	font-size: ${fontSize};
     width: 100%;
-	color: ${theme.colors.primary_link};
+	color: ${theme.colors.primary_cta};
 	font-family: ${bold ? 'THICCCBOI-BOLD' : 'THICCCBOI-REGULAR'};
     padding: ${
 		(size === 'sm' && '8px')
@@ -155,7 +155,7 @@ const LinkButtonBase = styled.button(({ theme, bold, size, fontSize }) => `
 	};
 
     &:hover {
-        color: ${theme.colors.primary_link_hover};
+        color: ${theme.colors.primary_cta_hover};
         transform: scale(1.05);
     }
 `);

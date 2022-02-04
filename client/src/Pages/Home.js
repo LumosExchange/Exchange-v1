@@ -9,7 +9,7 @@ import Paragraph from "../Components/Paragraph";
 // Images
 import ShowCaseMobile from '../Images/showcase-mobile.svg';
 import IconSolana from '../Images/icon-circle-solana.svg';
-import IconLumosRewards from '../Images/icon-circle-lumos-rewards.svg';
+import IconLumosRewards from '../Images/icon-circle-lumos.svg';
 import IconKin from '../Images/icon-circle-kin.svg';
 import {
     HandShakeIcon,
