@@ -9,6 +9,7 @@ import PrimaryButton from "../../Components/Buttons";
 import Card from "../../Components/Card";
 import Heading from "../../Components/Heading";
 import Paragraph from "../../Components/Paragraph";
+import GoogleAuthLogo from "../../Images/icon-google.png";
 
 const CodeSentMessage = styled.div(
   ({ theme }) => css`
@@ -25,12 +26,41 @@ const CodeSentMessage = styled.div(
   `
 );
 
+const AuthIcon = styled.div(
+  ({ theme }) => css`
+    border: 2px solid ${theme.colors.text_primary};
+    border-radius: 50px;
+    padding: 10px;
+    i {
+      font-size: 50px;
+      color: ${theme.colors.text_primary};
+    }
+
+    img {
+      width: 50px;
+      height: 50px;
+    }
+
+    &:hover {
+      border: 2px solid ${theme.colors.primary_cta};
+    }
+  `
+);
+
+const QRCode = styled.img`
+  width: 100%;
+  max-width: 200px;
+`;
+
 function GoogleAuth() {
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userEmailVerification, setUserEmailVerification] = useState("");
   const [userPass, setUserPass] = useState("");
   const [secret, setSecret] = useState([]);
+  const [Twofa, setTwofaCode] = useState("");
+  const [verified, setVerifed] = useState(false);
+  const [toggled, setToggled] = useState(false);
 
   let emailVerified = false;
   let passwordVerified = false;
@@ -48,13 +78,12 @@ function GoogleAuth() {
     setIsCodeSent(true);
   };
 
-  //Check email verification 
+  //Check email verification
   const emailVerification = () => {
     Axios.post("http://localhost:3001/EmailVerification2FA", {
       passcode: userEmailVerification,
     }).then((response) => {
       if (!response.data.auth) {
-
         emailVerified = false;
       } else {
         emailVerified = true;
@@ -76,18 +105,60 @@ function GoogleAuth() {
     });
   };
 
-  //generate secret & save secret in db
+  //generate secret
+  useEffect(() => {
+    async function getSecret() {
+      const response = await Axios.post("http://localhost:3001/getSecret");
+      console.log(response.data.base32, "response from getSecret2");
+      setSecret(response.data);
+    }
 
+    if (secret.length === 0) {
+      getSecret();
+    }
+  }, [secret]);
 
   //display qr
+  function ShowGoogleAuthQR() {
+    var originalImg = document.getElementById("QRCode");
+    setToggled(true);
 
-  //check google auth code
+    qrcode.toDataURL(secret.otpauth_url, function (err, data_url) {
+      originalImg.src = data_url;
+    });
+  }
+
+  async function checkRequirements(event) {
+
+    event.preventDefault();
+    //Check email verification, password verification
+    if (emailVerified === true && passwordVerified === true) {
+      //check google auth code
+      console.log("we get here");
+      Axios.get("http://localhost:3001/VerifyGoogle2FA", {
+        params: {
+          passcode: Twofa,
+        },
+        
+        //Check response for validation if no response
+      }).then((response) => {
+        console.log('Result', response.data);
+        setVerifed(response.data);
+        if (verified === true) {
+          console.log("result: ", verified);
+          //redirect user and display some success message
+        } else {
+          //display error message incorrect 2FA code
+          console.log(response.err);
+        }
+      });
+    } else {
+    }
+  };
 
   useEffect(() => {
     getUserEmail(userEmail);
   }, [userEmail]);
-
-  console.log("user email is:", userEmail);
 
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 flex-column">
@@ -165,10 +236,50 @@ function GoogleAuth() {
                   text="Check"
                   type="check"
                   //FIX THIS TOMORROW
-                  //  onClick={}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    emailVerification();
+                    passwordVerification();
+                    ShowGoogleAuthQR();
+                  }}
                   className="w-100 h-100 mt-3"
                   disabled={!isCodeSent}
                 />
+              </div>
+
+              <div
+                className={`w-100 justify-content-center py-4 flex-column ${
+                  toggled ? "d-flex" : "d-none"
+                }`}
+              >
+                <div className="col-12 m-auto text-center flex-column">
+                  <QRCode id="QRCode" alt="QR Code" className="m-auto mb-3" />
+                  <Paragraph size="18px" className="mb-0">
+                    Please enter 6 digit 2FA code below
+                  </Paragraph>
+                </div>
+              </div>
+              <div className="w-100 row mt-4">
+                <div className="col-12 col-md-8">
+                  <FormInput
+                    type="text"
+                    id="Code"
+                    name="code"
+                    placeholder="Enter 2FA Code"
+                    onChange={(e) => {
+                      setTwofaCode(e.target.value);
+                    }}
+                    className="w-100"
+                  />
+                </div>
+                <div className="col-12 col-md-4 p-0">
+                  <PrimaryButton
+                    type="submit"
+                    text="Submit"
+                    onClick={checkRequirements}
+                    className="w-100 h-100"
+                  />
+                </div>
               </div>
             </form>
           </div>
