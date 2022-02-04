@@ -138,3 +138,25 @@ export const DoubleDipIcon = () => (
         </g>
     </QuadIconBase>
 );
+
+const Cope = styled.svg(({ theme }) => css`
+    min-width: 90px;
+    margin: auto;
+
+    g {
+        .fill { fill: ${theme.colors.text_primary} }
+        .stroke { stroke: ${theme.colors.text_primary} }
+    }
+`);
+
+export const CopeIcon = () => (
+    <Cope width="90px" height="90px" viewBox="0 0 90 90" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <title>Artboard</title>
+        <g id="Artboard" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+            <circle id="Oval" className="stroke" strokeWidth="2" cx="45" cy="45" r="44"></circle>
+            <circle id="Oval" className="fill" cx="30" cy="45" r="5"></circle>
+            <circle id="Oval-Copy" className="fill" cx="45" cy="45" r="5"></circle>
+            <circle id="Oval-Copy-2" className="fill" cx="60" cy="45" r="5"></circle>
+        </g>
+    </Cope>
+);

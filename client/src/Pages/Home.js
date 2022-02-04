@@ -11,12 +11,12 @@ import ShowCaseMobile from '../Images/showcase-mobile.svg';
 import IconSolana from '../Images/icon-circle-solana.svg';
 import IconLumosRewards from '../Images/icon-circle-lumos-rewards.svg';
 import IconKin from '../Images/icon-circle-kin.svg';
-import IconCope from '../Images/icon-circle-cope.svg';
 import {
     HandShakeIcon,
     GlobeIcon,
     DoubleDipIcon,
-    FeeJarIcon
+    FeeJarIcon,
+    CopeIcon,
 } from '../Components/SVGComponents';
 
 
@@ -109,22 +109,29 @@ const Home = () => (
                     title="Solana"
                     icon={IconSolana}
                     text="The open-source crypto with the fastest responsive speed and rapidly growing ecosystem."
-                />
+                >
+                    <img src={IconSolana} alt="Solana" className="mb-3" />
+                </IconCard>
                 <IconCard
                     title="Lumos Rewards"
-                    icon={IconLumosRewards}
                     text="Our SPL asset focused on providing users an incentive to trade regularly, event participation & referrals."
-                />
+                >
+                    <img src={IconLumosRewards} alt="Lumos" className="mb-3" />
+                </IconCard>
                 <IconCard
                     title="KIN"
-                    icon={IconKin}
                     text="The open-source crypto with the fastest responsive speed and rapidly growing ecosystem."
-                />
+                >
+                    <img src={IconKin} alt="KIN" className="mb-3" />
+                </IconCard>
                 <IconCard
                     title="COPE"
-                    icon={IconCope}
                     text="The open-source crypto with the fastest responsive speed and rapidly growing ecosystem."
-                />
+                >
+                    <div className="mb-3">
+                        <CopeIcon />
+                    </div>
+                </IconCard>
             </div>
             <div className="row justify-content-between align-items-center py-6">
                 <div className="col-12 col-xl-4 mb-5 mb-xl-0">

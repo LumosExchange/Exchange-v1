@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import qrcode from "qrcode";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { PageBody } from "../../Components/FormInputs";
 import { FormInput, StyledLabel } from "../../Components/FormInputs";
 import PrimaryButton from "../../Components/Buttons";
@@ -10,24 +10,32 @@ import Card from "../../Components/Card";
 import Heading from "../../Components/Heading";
 import Paragraph from "../../Components/Paragraph";
 import GoogleAuthLogo from "../../Images/icon-google.png";
+import VerifyBG from '../../Images/verifybg.svg';
 
-const CodeSentMessage = styled.div(
-  ({ theme }) => css`
-    background: ${theme.colors.valid};
-    color: ${theme.colors.text_primary};
-    border: 2px solid ${theme.colors.valid};
-    padding: 10px;
-    border-radius: 10px;
+const GrabAttention = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.050); }
+  100% { transform: scale(1); }
+`;
 
-    i {
-      font-size: 70px;
-      padding-bottom: 10px;
-    }
-  `
-);
+const CodeSentMessage = styled.div(({ theme }) => css`
+	background: url(${VerifyBG});
+	background-size: contain;
+	color: ${theme.colors.actual_white};
+	border: 2px solid transparent;
+	padding: 10px;
+	border-radius: 10px;
+	animation: ${GrabAttention} 0.5s 1 linear;
 
-const AuthIcon = styled.div(
-  ({ theme }) => css`
+	i {
+		font-size: 70px;
+		padding-bottom: 10px;
+	};
+
+	p { color: inherit };
+`);
+
+const AuthIcon = styled.div(({ theme }) => css`
     border: 2px solid ${theme.colors.text_primary};
     border-radius: 50px;
     padding: 10px;
@@ -148,6 +156,7 @@ function GoogleAuth() {
         setVerifed(response.data);
         if (verified === true) {
           console.log("result: ", verified);
+		  setCurrentStep(4);
           //redirect user and display some success message
         } else {
           //display error message incorrect 2FA code
@@ -197,7 +206,7 @@ function GoogleAuth() {
             <form>
 			{currentStep === 2 && (
 				<React.Fragment>
-				<CodeSentMessage className="d-flex my-4 align-items-center flex-column">
+				<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
 					<i className="material-icons me-2">mark_email_read</i>
 					<Paragraph bold size="20px" className="mb-0">
 						Code Sent to {userEmail}.
@@ -222,10 +231,10 @@ function GoogleAuth() {
 					className="w-100 mb-3"
 				/>
 				<StyledLabel htmlFor="oldPass" fontSize="20px" padding="0" bold>
-					Enter old password
+					Enter your password
 				</StyledLabel>
 				<FormInput
-					type="text"
+					type="password"
 					id="Pass"
 					name="Pass"
 					placeholder="Enter password"
@@ -252,12 +261,12 @@ function GoogleAuth() {
 			  </React.Fragment>
 			)}
 				<React.Fragment>
-					<div className="w-100 justify-content-center py-4 flex-column">
+					<div className={`w-100 justify-content-center flex-column ${currentStep === 3 ? 'd-block' : 'd-none'}`}>
 						<div className="col-12 m-auto text-center flex-column">
-						<QRCode id="QRCode" src="" alt="QR Code" className={`m-auto mb-3 ${currentStep === 3 ? 'd-block' : 'd-none'}`}/>
+						<QRCode id="QRCode" src="" alt="QR Code" className="m-auto mb-3"/>
 							{currentStep === 3 && (
 								<Paragraph size="18px" className="mb-0">
-									Please enter 6 digit 2FA code below
+									Please scan the QR code with Google Authenticator, once added it will provide a 6 digit 2FA code to enter below.
 								</Paragraph>
 							)}
 						</div>
@@ -285,6 +294,14 @@ function GoogleAuth() {
 							/>
 							</div>
 						</div>
+					)}
+					{currentStep === 4 && (
+						<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+							<i className="material-icons me-2">check_circle</i>
+							<Paragraph bold size="20px" className="mb-0">
+								Google Auth Successfully added
+							</Paragraph>
+						</CodeSentMessage>
 					)}
 			  	</React.Fragment>
             </form>

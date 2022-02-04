@@ -1,14 +1,16 @@
-<svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<circle cx="45" cy="45" r="45" fill="url(#paint0_linear_378_203)"/>
-<rect x="11" y="11" width="68" height="68" fill="url(#pattern0)"/>
-<defs>
-<pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
-<use xlink:href="#image0_378_203" transform="scale(0.0107527)"/>
-</pattern>
-<linearGradient id="paint0_linear_378_203" x1="11.5" y1="90" x2="84" y2="12.5" gradientUnits="userSpaceOnUse">
-<stop stop-color="#6F41E8"/>
-<stop offset="1" stop-color="#8B63F1"/>
-</linearGradient>
-<image id="image0_378_203" width="93" height="93" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAF0AAABdCAYAAADHcWrDAAAACXBIWXMAAC4jAAAuIwF4pT92AAAF8mlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4wLWMwMDAgNzkuMTM1N2M5ZSwgMjAyMS8wNy8xNC0wMDozOTo1NiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIyLjUgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMS0wNy0yNVQyMzo1NToxNiswODowMCIgeG1wOk1vZGlmeURhdGU9IjIwMjEtMDgtMzFUMTU6MTk6NDQrMDg6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjEtMDgtMzFUMTU6MTk6NDQrMDg6MDAiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiBwaG90b3Nob3A6SUNDUHJvZmlsZT0ic1JHQiBJRUM2MTk2Ni0yLjEiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6YTA5YzY0MDYtMzhhOC04ZjQ0LTk3YTgtZTc3MzcwMTVhZTAzIiB4bXBNTTpEb2N1bWVudElEPSJhZG9iZTpkb2NpZDpwaG90b3Nob3A6MjdiYjIwMWEtMGFhYy0yZTRjLTg4MWYtYTJkYjNjNmUxZWViIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6MTc3ZjRjNDMtMjE1NS1iYzRkLTkxYjMtMmNmZjQzMmI2YzNjIj4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0iY3JlYXRlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDoxNzdmNGM0My0yMTU1LWJjNGQtOTFiMy0yY2ZmNDMyYjZjM2MiIHN0RXZ0OndoZW49IjIwMjEtMDctMjVUMjM6NTU6MTYrMDg6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMi41IChXaW5kb3dzKSIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6YTA5YzY0MDYtMzhhOC04ZjQ0LTk3YTgtZTc3MzcwMTVhZTAzIiBzdEV2dDp3aGVuPSIyMDIxLTA4LTMxVDE1OjE5OjQ0KzA4OjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjIuNSAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPC9yZGY6U2VxPiA8L3htcE1NOkhpc3Rvcnk+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+i9LeRwAAAkBJREFUeJztm0tOw0AQBd8gFnAM2HAFuBB3Ai4EN2DFFdgiIWVYkIgQ8fHYHlc7/UrKJnKsVuXFM5rulFqrzLKc0AVkxNIBLB3A0gEsHcDSASwdwNIBLB3A0gFOG6/vfWZQOt+/V/1vks6HXpwi6ZuN7tU3MGctF5fGA6+1Jn2JU73BtWdIerhj1AzSw2HpAJYOYOkAlg5g6QCWDmDpAJYOYOkAlg5g6QDHLv2dLuAnokmf+0SwtUmzCNGkz8kdXcBvRGti7JijmbH0OfrqmxhThYVrXOwTVbo0XhwhvOmXGVm6JNVa9Tz0WgVP+I7o0lWKrvQltEp63Xb3Xw/ep2hef6IupOGpVU+l6HrMZ0PuY0EGp7ZM2F9Z+ie9J8u+kV36orJ3hF9IO4IIl/JKx4RLeaWjZJSOplzKKR3H0gEsHcDSASwdwNIBLB3A0gEySsd7Ahml42SVjqY9q3QJFJ9ZugSJzy5dAqYJsrfr9mkVP/qI2EkfT9XIIdU1SS9/vChut4NPTaxh2KhFKrUjOZpZxjEpLrXqqUcx/9D0ZUdN+qRHRq16KUUXcxUzkFXPpz9OvUEpupyjkF5ETPqcC+OSz/jVJn1yytdANOk3M9+veTu3BNEeLz323OEW/2hJT4GlA1g6gKUDWDqApQNYOoClA1g6gKUDWDrA0UvfbPRA13BIhgMvKVgf4OiTvgX/G+M+rdJ7Ft9bTM9xjab7jpnwCpWaEeD1Z3m8hMLSASwdwNIBLB3A0gEsHcDSASwd4AN3fmLKvBuINQAAAABJRU5ErkJggg=="/>
-</defs>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="90px" height="90px" viewBox="0 0 90 90" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Artboard Copy 2</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#8C57F5" offset="0%"></stop>
+            <stop stop-color="#7C3EF0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Artboard-Copy-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-3">
+            <circle id="Oval-Copy-3" fill="url(#linearGradient-1)" cx="45" cy="45" r="45"></circle>
+            <path d="M19,69 L19,20 L19,20 L36,20 C36,23.3333333 36,26.3333333 36,29 C36,33 39,37 43,37 C47,37 51,34 51,29 C51,27 51,25 51,23 C51,20.790861 52.790861,19 55,19 L69,19 C69.5522847,19 70,19.4477153 70,20 L70,33 C70,35.7614237 67.7614237,38 65,38 L59,38 C56.2385763,38 54,40.2385763 54,43 L54,47.3027439 C54,49.9430603 56.052934,52.1283084 58.6881086,52.2930068 L64.3742697,52.6483919 C67.5364792,52.84603 70,55.4683276 70,58.6367073 L70,68 C70,70.209139 68.209139,72 66,72 L56,72 C53.2385763,72 51,69.7614237 51,67 C51,65.3333333 51,63.6666667 51,62 C51,59 49,54 44,54 C39,54 36,57 36,62 C36,64.3333333 36,66.6666667 36,69 C36,70.6568542 34.6568542,72 33,72 L22,72 C20.3431458,72 19,70.6568542 19,69 Z" id="Path-6" fill="#FFFFFF"></path>
+        </g>
+    </g>
 </svg>
