@@ -7,7 +7,7 @@ const Link = styled.a(({ theme }) => css`
     font-family: "THICCCBOI-REGULAR";
 
 	&:hover, &:focus, &:active {
-		color: ${theme.colors.primary_cta_hover};
+		color: ${theme.colors.text_primary};
 		text-decoration: underline;	
 	}
 `);
