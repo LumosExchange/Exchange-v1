@@ -32,6 +32,7 @@ import AirDrops from "./Pages/AirDrops";
 import Profile from "./Pages/Profile";
 import GoogleAuth from "./Pages/Auth/GoogleAuth";
 import SMSAuth from "./Pages/Auth/SMSAuth";
+import AuthyAuth from "./Pages/Auth/AuthyAuth";
 import ThemeToggler, { useDarkMode } from "./Components/ThemeToggler";
 import { darkTheme, lightTheme } from "./Constants/Theme";
 
@@ -90,6 +91,7 @@ const App = () => {
             <Route path="/Profile" element={<Profile />} />
             <Route path="/GoogleAuth" element={<GoogleAuth />} />
             <Route path="/SMSAuth" element={<SMSAuth />} />
+            <Route path="/AuthyAuth" element={<AuthyAuth />} />
           </Routes>
         </Router>
         <Footer />

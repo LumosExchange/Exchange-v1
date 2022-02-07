@@ -98,7 +98,7 @@ function GoogleAuth() {
       passcode: userEmailVerification,
     }).then((response) => {
       console.log('response email', response.data.auth);
-      if (response.data.auth == true) {
+      if (response.data.auth === true) {
         setEmailVerified(true);
       } else {
         setEmailVerified(false);
@@ -111,7 +111,7 @@ function GoogleAuth() {
       oldPassword: userPass,
     }).then((response) => {
       console.log('response pass', response.data.auth);
-      if (response.data.auth == true) {
+      if (response.data.auth === true) {
         setPasswordVerified(true);
       } else {
         setPasswordVerified(false);
