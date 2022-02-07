@@ -141,7 +141,7 @@ export const TwoFAOption = ({ id, option, onClick, selected, linkTo }) => (
                         <Heading size="20px" className="mb-0">{option}</Heading>
                     </div>
                     {!selected && (
-                        <StyledLinkTo to={linkTo}>Set Up</StyledLinkTo>
+                        <StyledLinkTo to={linkTo} target="_blank" rel="noopener noreferrer">Set Up</StyledLinkTo>
                     )}
                 </TwoFACard>
             </div>
