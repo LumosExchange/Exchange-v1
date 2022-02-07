@@ -362,7 +362,7 @@ app.get("/VerifyGoogle2FASetup", (req, res) => {
 });
 
 //maybe chnage this to post
-app.get("VonageSMSRequest", (req, res) => {
+app.post("/VonageSMSRequest", (req, res) => {
   const user = req.session.user[0].userID;
   //verify the user has specified a number
   if (!req.body.number) {
@@ -382,9 +382,11 @@ app.get("VonageSMSRequest", (req, res) => {
       if (err) {
         //if error let the user know
         res.status(500).send(err.error_text);
+        console.log('error: ', err);
         return;
       }
       //Store user phone number in db
+     
 
       db.query(
         "UPDATE userAuth SET phoneNumber = ? WHERE userID = ?",
@@ -401,10 +403,10 @@ app.get("VonageSMSRequest", (req, res) => {
   );
 });
 
-app.get("VonageSMSVerify", (req, res) => {
+app.post("/VonageSMSVerify", (req, res) => {
   //user needs to send request id and code for authetication
 
-  if (!requestId || !userCode) {
+  if (!req.body.requestId || !req.body.userCode) {
     res.status(400).send("You must supply a code");
     return;
   }
@@ -781,6 +783,18 @@ app.post("/updateUserPass", (req, res) => {
     );
   });
 });
+
+app.post("/getUser2FAOptions", (req, res) => {
+  const user = req.session.user[0].userID;
+
+  db.query(
+    "SELECT * FROM userAuth WHERE (userID) = (?)",
+    [user],
+    (err, result) => {
+    res.send(result);
+    }
+  );
+})
 
 app.listen(3001, () => {
   console.log("running on port 3001");
