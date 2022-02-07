@@ -12,7 +12,7 @@ import SolanaIcon from '../Images/icon-solana.svg';
 import DropdownIcon from '../Images/icon-dropdown.svg';
 import StyledTable from "../Components/Tables";
 
-const ToggleIcon = styled.img(({ toggled }) => css`
+const ToggleIconBase = styled.svg(({ toggled, theme }) => css`
 	transform: ${toggled && 'rotate(180deg)'};
 
 	&.small {
@@ -20,7 +20,25 @@ const ToggleIcon = styled.img(({ toggled }) => css`
 		min-height: 40px;
 		min-width: 40px;
 	}
+
+	circle, path {
+		stroke: ${theme.colors.text_primary};
+	}
 `);
+
+const ToggleIcon = ({ className, toggled }) => (
+	<ToggleIconBase
+		width="71"
+		height="71"
+		viewBox="0 0 71 71" fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		className={className}
+		toggled={toggled}
+	>
+		<circle cx="35.5" cy="35.5" r="34" strokeWidth="3"/>
+		<path d="M25.5 33L36.5 44L47.5 33" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+	</ToggleIconBase>
+);
 
 const Divider = styled.hr(({ theme }) => css`
 	background ${theme.colors.secondary_link};
@@ -88,16 +106,16 @@ const MyWallet = () => {
 							<div className="col-9 col-lg-8 d-flex flex-column">
 								<div className="d-flex">
 									<img src={SolanaIcon} alt="Solana Icon" className="inline me-2 d-lg-none" />
-									<Heading color="actual_white" size="36px" bold className="mb-0">Solana</Heading>
+									<Heading size="36px" bold className="mb-0">Solana</Heading>
 								</div>
-								<Heading size="36px" bold color="actual_white">11,000 SOL</Heading>
-								<Paragraph color="actual_white" size="18px" className="mb-0 text-break">
+								<Heading size="36px" bold>11,000 SOL</Heading>
+								<Paragraph size="18px" className="mb-0 text-break">
 									383196VqKiMLqS74qZtA4U1DEzEQgpH6P3
 								</Paragraph>
 							</div>
 							<div className="col-3 col-lg-2 d-flex justify-content-end">
 								<InvisibleButton onClick={ () => expandWallet((prev) => !prev) }>
-									<ToggleIcon src={DropdownIcon} toggled={walletExpanded} alt="Dropdown" className="w-100" />
+									<ToggleIcon toggled={walletExpanded} alt="Dropdown" className="w-100" />
 								</InvisibleButton>
 							</div>
 						</GradientCard>
@@ -110,11 +128,11 @@ const MyWallet = () => {
 								<div className="col-12 col-md-6">
 									<Heading size="24px">Send</Heading>
 									<Paragraph size="18px">To address</Paragraph>
-									<FormInput color="six9Grey" padding="3px 10px" className="w-100" />
+									<FormInput padding="3px 10px" className="w-100" />
 								</div>
 								<div className="col-12 col-md-6 d-flex flex-column mt-3 mt-md-0">
 									<Paragraph size="18px">Amount (SOL)</Paragraph>
-									<FormInput color="six9Grey" padding="3px 10px" className="w-100" />
+									<FormInput padding="3px 10px" className="w-100" />
 								</div>
 								<div className="col-12 d-flex justify-content-end align-items-start pt-5">
 									<PrimaryButton
@@ -143,9 +161,15 @@ const MyWallet = () => {
 				<div className="row w-100 mt-4">
 					<div className="col-12 col-lg-4">
 						<GradientCard
-							stops={ 2 }
-							stopOne="grey"
-							stopTwo="grey"
+							stops={ 4 }
+							stopOne="yellow"
+							stopTwo="peach"
+							stopTwoPosition="30"
+							stopThree="mauve"
+							stopThreePosition="50"
+							stopFour="blue"
+							stopFourPosition="70"
+							gradientAngle="45"
 							padding="35px"
 							className="d-flex align-items-center justify-content-center"
 						>

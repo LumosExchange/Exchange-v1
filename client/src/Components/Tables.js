@@ -5,7 +5,7 @@ const StyledTable = styled.table(({ theme }) => css`
     font-size: 18px;
     
     thead th {
-        background: ${theme.colors.secondary_link};
+        background: ${theme.colors.table_head};
         padding: 20px;
         color: ${theme.colors.actual_white};
         font-family: 'THICCCBOI-BOLD';
