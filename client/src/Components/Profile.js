@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
 import styled, { css, keyframes } from "styled-components";
 import LoadingSpinner from '../Images/loading-spinner.png';
 import { LinkButton } from "./Buttons";
 import Heading from "./Heading";
+import PropTypes from 'prop-types';
 
 export const ContentTab = styled.div(({ theme }) => css`
 	background: ${theme.colors.grey};
@@ -118,21 +120,41 @@ const StyledRadio = styled.input(({ theme }) => css`
 	display: none;
 `);
 
-export const TwoFAOption = ({ id, option, onClick, selected }) => (
-	<div className={selected && 'selected'} onClick={onClick} selected={selected}>
-		<label htmlFor={id} className="w-100 text-center">
-			<StyledRadio id={id} type="radio" name="2faSelection" />
-			<div>
-				<TwoFACard className="d-flex p-3 justify-content-between" selected={selected}>
-					<div className="d-flex align-items-center">
+const StyledLinkTo = styled(Link)(({ theme }) => css`
+    color: ${theme.colors.primary_cta};
+    text-decoration: none;
+    font-size: 18px;
+
+    &:hover {
+        color: ${theme.colors.primary_link_hover};
+    }
+`);
+
+export const TwoFAOption = ({ id, option, onClick, selected, linkTo }) => (
+    <div className={selected && 'selected'} onClick={onClick} selected={selected}>
+        <label htmlFor={id} className="w-100 text-center">
+            <StyledRadio id={id} type="radio" name="2faSelection" />
+            <div>
+                <TwoFACard className="d-flex p-3 justify-content-between" selected={selected}>
+                    <div className="d-flex align-items-center">
                         <i className="material-icons me-2">{selected ? 'check_circle' : 'radio_button_unchecked'}</i>
                         <Heading size="20px" className="mb-0">{option}</Heading>
                     </div>
                     {!selected && (
-                        <LinkButton text="Set up" className="w-auto p-0" />
+                        <StyledLinkTo to={linkTo} target="_blank" rel="noopener noreferrer">Set Up</StyledLinkTo>
                     )}
-				</TwoFACard>
-			</div>
-		</label>
-	</div>
+                </TwoFACard>
+            </div>
+        </label>
+    </div>
 );
+
+TwoFAOption.propTypes = {
+    linkTo: PropTypes.string,
+    option: PropTypes.string.isRequired,
+    selected: PropTypes.bool.isRequired,
+}
+
+TwoFAOption.defaultProps = {
+    linkTo: "/",
+}
