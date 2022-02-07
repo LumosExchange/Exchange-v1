@@ -130,8 +130,8 @@ app.post("/register", (req, res) => {
       }
     );
     db.query(
-      "INSERT INTO userAuth (Email, emailVerified, SMS, google, googleSecret, phoneNumber) VALUES (?,?,?,?,?,?)",
-      [email, "NO", "NO", "NO", "NO", "0"],
+      "INSERT INTO userAuth (Email, emailVerified, SMS, google, googleSecret, Authy phoneNumber) VALUES (?,?,?,?,?,?,?)",
+      [email, "False", "False", "False", "False", "False", "0"],
       (err, result) => {
         console.log(err);
       }
@@ -554,7 +554,7 @@ app.post("/VerifyEmail2FA", (req, res) => {
   //Add user to userAuth Table
   db.query(
     "UPDATE userAuth SET emailVerified = ? WHERE Email = ?",
-    [yes, email],
+    [TRUE, email],
     (err, result) => {
       console.log(err);
     }
@@ -788,7 +788,7 @@ app.post("/getUser2FAOptions", (req, res) => {
   const user = req.session.user[0].userID;
 
   db.query(
-    "SELECT * FROM userAuth WHERE (userID) = (?)",
+    "SELECT emailVerified, SMS, google FROM userAuth WHERE (userID) = (?)",
     [user],
     (err, result) => {
     res.send(result);
