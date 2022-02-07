@@ -11,7 +11,7 @@ import Paragraph from "../Components/Paragraph";
 import Axios from "axios";
 import {
   AccountTierCard, CheckIcon, ContentTab, ProfileInitials,
-  EditableOption, LoadingState, ProfileTab
+  EditableOption, LoadingState, ProfileTab, TwoFAOption
 } from "../Components/Profile";
 import { useNavigate } from "react-router";
 
@@ -176,7 +176,6 @@ const BasicTab = () => {
 			/>
         </div>
       </div>
-
 	  {/* Account Limit Section */}
 
       <div className="d-flex px-4 row py-4">
@@ -242,6 +241,17 @@ const SecurityTab = () => {
   const [selectedAuthType, selectAuthType] = useState("");
   const navigate = useNavigate();
 
+  const getUser2FAOptions = () => {
+	// get user settings from usersettings db
+		Axios.get("http://localhost:3001/getUser2FAOptions", {}).then((response) => {
+			console.log(response, '2fa options response');
+		});
+	}
+
+  useEffect(() => {
+	getUser2FAOptions();
+  }, []);
+
   return (
     <ContentTab>
       <div className="d-flex p-4 row">
@@ -268,6 +278,34 @@ const SecurityTab = () => {
           </EditableOption>
         </div>
       </div>
+	  	<div className="d-flex p-4 row">
+        	<div className="col-12">
+				<Heading color="black" size="20px" bold>
+					2FA Options
+				</Heading>
+			</div>
+			<div className="col-12 mb-2 mb-lg-0 col-md-6 col-lg-4">
+				<TwoFAOption
+					option="Email"
+					selected
+				/>
+			</div>
+			<div className="col-12 mb-2 mb-lg-0 col-md-6 col-lg-4">
+				<TwoFAOption
+					option="SMS"
+				/>
+			</div>
+			<div className="col-12 mb-2 col-md-6 col-lg-4">
+				<TwoFAOption
+					option="Google Auth"
+				/>
+			</div>
+			<div className="col-12 mb-2 mb-lg-0 col-md-6 col-lg-4">
+				<TwoFAOption
+					option="Authy"
+				/>
+			</div>
+		</div>
     </ContentTab>
   );
 };

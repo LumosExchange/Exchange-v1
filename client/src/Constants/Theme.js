@@ -22,6 +22,7 @@ export const darkTheme = {
     card_bg: "#2E2E2E",
     btn: "#696969",
     table_stripe: "#3F3F3F",
+    table_head: "#696969",
 
     gradients: {
       yellow: "#FCE608",
@@ -33,6 +34,17 @@ export const darkTheme = {
       bluePurple: "#6F41E8",
       grey: "#3C3C3C",
       slate: "#94B3B5",
+      shared: {
+        yellow: "#FCE608",
+        peach: "#FF7586",
+        magenta: "#D12AFA",
+        sage: "#0EF1A9",
+        mauve: "#B372CE",
+        blue: "#6F86FF",
+        bluePurple: "#6F41E8",
+        grey: "#3C3C3C",
+        slate: "#94B3B5",
+      }
     },
   },
   fonts: {
@@ -75,6 +87,7 @@ export const lightTheme = {
     card_bg: "#F4F4F4",
     btn: "#E5E5E5",
     table_stripe: "#F0F0F0",
+    table_head: "#6F86FF",
 
     // Hide the gradient on light theme
     gradients: {
@@ -84,6 +97,17 @@ export const lightTheme = {
       sage: "#6F86FF",
       mauve: "#6F86FF",
       blue: "#6F86FF",
+      shared: {
+        yellow: "#FCE608",
+        peach: "#FF7586",
+        magenta: "#D12AFA",
+        sage: "#0EF1A9",
+        mauve: "#B372CE",
+        blue: "#6F86FF",
+        bluePurple: "#6F41E8",
+        grey: "#3C3C3C",
+        slate: "#94B3B5",
+      }
     },
   },
   fonts: {

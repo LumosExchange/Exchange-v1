@@ -1,5 +1,7 @@
 import styled, { css, keyframes } from "styled-components";
 import LoadingSpinner from '../Images/loading-spinner.png';
+import { LinkButton } from "./Buttons";
+import Heading from "./Heading";
 
 export const ContentTab = styled.div(({ theme }) => css`
 	background: ${theme.colors.grey};
@@ -31,6 +33,7 @@ export const ProfileInitials = styled.div(({ theme }) => css`
   
   export const ProfileTab = styled.button(({ theme }) => css`
       background: ${theme.colors.btn};
+      color: ${theme.colors.text_primary};
       padding: 10px 30px;
       border-radius: 5px 5px 0 0;
       border: 0;
@@ -38,6 +41,8 @@ export const ProfileInitials = styled.div(({ theme }) => css`
   
       &.active {
         background: ${theme.colors.primary_cta};
+        color: ${theme.colors.base_bg};
+        
         font-family: "THICCCBOI-BOLD";
       }
 `);
@@ -95,4 +100,39 @@ export const LoadingState = () => (
 	<FixedBackground className="position-absolute d-flex align-items-center justify-content-center w-100 h-100">
 		<img src={LoadingSpinner} alt="Loading" />
 	</FixedBackground>
+);
+
+const TwoFACard = styled.span(({ theme, selected }) => css`
+	background: ${theme.colors.card_bg};
+	border-radius: 10px;
+	cursor: pointer;
+    border: 2px solid ${selected ? theme.colors.valid : '#c4c4c4'};
+
+    .material-icons {
+        font-size: 28px;
+        color: ${selected ? theme.colors.valid : '#c4c4c4'};
+    }
+`);
+
+const StyledRadio = styled.input(({ theme }) => css`
+	display: none;
+`);
+
+export const TwoFAOption = ({ id, option, onClick, selected }) => (
+	<div className={selected && 'selected'} onClick={onClick} selected={selected}>
+		<label htmlFor={id} className="w-100 text-center">
+			<StyledRadio id={id} type="radio" name="2faSelection" />
+			<div>
+				<TwoFACard className="d-flex p-3 justify-content-between" selected={selected}>
+					<div className="d-flex align-items-center">
+                        <i className="material-icons me-2">{selected ? 'check_circle' : 'radio_button_unchecked'}</i>
+                        <Heading size="20px" className="mb-0">{option}</Heading>
+                    </div>
+                    {!selected && (
+                        <LinkButton text="Set up" className="w-auto p-0" />
+                    )}
+				</TwoFACard>
+			</div>
+		</label>
+	</div>
 );
