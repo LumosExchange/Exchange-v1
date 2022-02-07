@@ -131,6 +131,7 @@ const AuthyAuth = () => {
 
   //generate secret
   useEffect(() => {
+	getUserEmail();
     async function getSecret() {
       const response = await Axios.post("http://localhost:3001/getSecret");
       console.log(response.data.base32, "response from getSecret2");
@@ -250,7 +251,7 @@ const AuthyAuth = () => {
                     />
                     {currentStep === 3 && (
                       <Paragraph size="18px" className="mb-0">
-                        Please scan the QR code with Google Authenticator, once
+                        Please scan the QR code with Authy, once
                         added it will provide a 6 digit 2FA code to enter below.
                       </Paragraph>
                     )}
