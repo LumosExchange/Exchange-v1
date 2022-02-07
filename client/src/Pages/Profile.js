@@ -239,18 +239,25 @@ const SecurityTab = () => {
   const [selectedEmail, selectEmail] = useState("");
   const [selectedPassword, selectPassword] = useState("");
   const [selectedAuthType, selectAuthType] = useState("");
+  const [twoFaOptions, setTwoFaOptions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const getUser2FAOptions = () => {
 	// get user settings from usersettings db
-		Axios.get("http://localhost:3001/getUser2FAOptions", {}).then((response) => {
+		Axios.post("http://localhost:3001/getUser2FAOptions", {}).then((response) => {
 			console.log(response, '2fa options response');
+			if (response.data.length > 0) {
+				setTwoFaOptions(response.data);
+			} else { setIsLoading(true) }
 		});
 	}
 
   useEffect(() => {
 	getUser2FAOptions();
   }, []);
+
+  console.log(twoFaOptions, '2fa options');
 
   return (
     <ContentTab>
@@ -287,22 +294,27 @@ const SecurityTab = () => {
 			<div className="col-12 mb-2 mb-lg-0 col-md-6 col-lg-4">
 				<TwoFAOption
 					option="Email"
-					selected
+					selected={twoFaOptions[0]?.emailVerified === 1}
 				/>
 			</div>
 			<div className="col-12 mb-2 mb-lg-0 col-md-6 col-lg-4">
 				<TwoFAOption
 					option="SMS"
+					selected={twoFaOptions[0]?.SMS === 1}
+					linkTo="/SMSAuth"
 				/>
 			</div>
 			<div className="col-12 mb-2 col-md-6 col-lg-4">
 				<TwoFAOption
 					option="Google Auth"
+					selected={twoFaOptions[0]?.google === 1}
+					linkTo="/GoogleAuth"
 				/>
 			</div>
 			<div className="col-12 mb-2 mb-lg-0 col-md-6 col-lg-4">
 				<TwoFAOption
 					option="Authy"
+					linkTo="/AuthyAuth"
 				/>
 			</div>
 		</div>
