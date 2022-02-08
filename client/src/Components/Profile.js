@@ -47,34 +47,36 @@ export const ProfileTab = styled.button(({ theme }) => css`
 `);
 
 export const ProfileTabLink = styled.a(({ theme }) => css`
-      background: ${theme.colors.btn};
-      color: ${theme.colors.text_primary};
-      padding: 10px 30px;
-      border-radius: 5px 5px 0 0;
-      border-top: 2px solid ${theme.colors.btn};
+        background: ${theme.colors.btn};
+        color: ${theme.colors.text_primary};
+        padding: 10px 30px;
+        border-radius: 5px 5px 0 0;
+        border-top: 2px solid ${theme.colors.btn};
         border-left: 2px solid ${theme.colors.btn};
         border-right: 2px solid ${theme.colors.btn};
         border-bottom: 2px solid ${theme.colors.btn};
-      margin-right: 16px;
-      text-decoration: none;
+        margin-right: 16px;
+        text-decoration: none;
 
-      &:hover {
-          border-top: 2px solid ${theme.colors.primary_cta};
-          border-left: 2px solid ${theme.colors.primary_cta};
-          border-right: 2px solid ${theme.colors.primary_cta};
-      }
-  
-      &.selected {
-        background: ${theme.colors.primary_cta};
-        color: ${theme.colors.base_bg};
-        border: 2px solid ${theme.colors.primary_cta};
-        font-family: "THICCCBOI-BOLD";
-      }
+        &:hover {
+            border-top: 2px solid ${theme.colors.primary_cta};
+            border-left: 2px solid ${theme.colors.primary_cta};
+            border-right: 2px solid ${theme.colors.primary_cta};
+            color: ${theme.colors.primary_cta};
+            font-family: "THICCCBOI-BOLD";
+        }
+
+        &.selected {
+            background: ${theme.colors.primary_cta};
+            color: ${theme.colors.base_bg};
+            border: 2px solid ${theme.colors.primary_cta};
+            font-family: "THICCCBOI-BOLD";
+        }
 `);
 
-export const Tabs = styled.div(({ theme }) => css`
+export const Tabs = styled.div`
       padding: 0 0 9px 9px;
-`);
+`;
   
 export const AccountTierCard = styled.div(({ theme, tier }) => css`
       background: ${theme.colors[tier]};
