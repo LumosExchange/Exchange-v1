@@ -20,12 +20,6 @@ require("dotenv").config();
 //Change this to randomly generate salt
 const saltRounds = 10;
 
-//create nexmo request
-const nexmo = new Nexmo({
-  apiKey: process.env.NEXMO_API_KEY,
-  apiSecret: process.env.NEXMO_API_KEY,
-});
-
 
 //needed to avoid cors errors
 app.use(function (req, res, next) {
@@ -362,6 +356,13 @@ app.get("/VerifyGoogle2FASetup", (req, res) => {
   res.send(verified);
 });
 
+//create nexmo request
+const nexmo = new Nexmo({
+  apiKey:process.env.NEXMO_API_KEY,
+  apiSecret:process.env.NEXMO_API_SECRET,
+});
+
+
 //maybe chnage this to post
 app.post("/VonageSMSRequest", (req, res) => {
   const user = req.session.user[0].userID;
@@ -378,7 +379,7 @@ app.post("/VonageSMSRequest", (req, res) => {
     {
       number: req.body.number,
       brand: "Lumos Exchange",
-      code_length: "6",
+      code_length: "6"
     },
     (err, result) => {
       if (err) {
@@ -388,7 +389,7 @@ app.post("/VonageSMSRequest", (req, res) => {
         return;
       }
       const requestId = result.request_id;
-      console.log('Request ID: ',result.request_id);
+      console.log('result' , result);
 
 
 
@@ -404,7 +405,7 @@ app.post("/VonageSMSRequest", (req, res) => {
         }
       );
       //send back request ID as need for the verify step
-      res.send(requestId);
+      res.send({requestId});
     }
   );
 });
@@ -421,15 +422,22 @@ app.post("/VonageSMSVerify", (req, res) => {
   nexmo.verify.check(
     {
       request_id: req.body.requestId,
-      code: req.body.code,
+      code: req.body.userCode,
     },
     (err, result) => {
       if (err) {
         res.status(500).send(err.error_text);
+        console.log('error:', err)
         return;
+      } else {
+        if(result && result.status == '0') {
+          res.send({message: 'Account Verified! '});
+        } else {
+
+          //handle the error wrong pin
+        }
       }
-      res.send(result);
-    }
+      }  
   );
 });
 
