@@ -20,7 +20,6 @@ require("dotenv").config();
 //Change this to randomly generate salt
 const saltRounds = 10;
 
-
 //needed to avoid cors errors
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
@@ -431,7 +430,7 @@ app.post("/VonageSMSVerify", (req, res) => {
         return;
       } else {
         if(result && result.status == '0') {
-          res.send({message: 'Account Verified! '});
+          res.send({message: 'SMS Verified! '});
         } else {
 
           //handle the error wrong pin
