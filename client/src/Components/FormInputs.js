@@ -203,7 +203,7 @@ export const PageBody = styled.div(({ theme }) => css`
 	min-height: calc(100vh - 80px);
 `);
 
-export const StyledDropdown = styled.select(({ theme, color, fontColor }) => css`
+export const StyledDropdown = styled.select(({ theme, color }) => css`
 	-moz-appearance: none;
 	-webkit-appearance: none;
 	appearance: none;
@@ -213,7 +213,7 @@ export const StyledDropdown = styled.select(({ theme, color, fontColor }) => css
 	background-repeat: no-repeat;
 	border-radius: 10px;
 	border: 0;
-	color: ${theme.colors[fontColor]};
+	color: ${theme.colors.text_primary};
 	font-size: 20px;
 	outline: 0;
 	padding: 16px;
@@ -221,10 +221,46 @@ export const StyledDropdown = styled.select(({ theme, color, fontColor }) => css
 
 StyledDropdown.propTypes = {
 	color: PropTypes.string,
-	fontColor: PropTypes.string,
 }
 
 StyledDropdown.defaultProps = {
     color: 'grey',
-	fontColor: 'white',
 }
+
+export const InlineInput = styled.input(({ theme, hasIcon, color }) => css`
+    background: ${theme.colors.base_bg};
+    border-radius: ${hasIcon ? "0 10px 10px 0" : "10px"};
+    border: 2px solid ${theme.colors.primary_cta};
+    color: ${theme.colors.text_primary};
+    font-size: 24px;
+    padding: 10px;
+    max-height: 50px;
+
+    :focus,
+    :active {
+      border: 2px solid ${theme.colors.primary_cta};
+      outline: none;
+    }
+
+    :disabled {
+      opacity: 0.5;
+      border: 2px solid ${theme.colors.primary_cta};
+      cursor: not-allowed;
+    }
+
+    &:-webkit-autofill {
+		-webkit-box-shadow: 0 0 0 1000px ${theme.colors.grey} inset;
+		-webkit-text-fill-color: ${theme.colors.text_primary};
+		border-color: ${theme.colors.primary_cta};
+    }
+`);
+
+InlineInput.propTypes = {
+  textColor: PropTypes.string,
+  rounded: PropTypes.bool,
+};
+
+InlineInput.defaultProps = {
+  textColor: "text-primary",
+  rounded: false,
+};

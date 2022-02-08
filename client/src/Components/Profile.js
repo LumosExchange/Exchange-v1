@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
 import styled, { css, keyframes } from "styled-components";
-import LoadingSpinner from '../Images/loading-spinner.png';
-import { LinkButton } from "./Buttons";
 import Heading from "./Heading";
 import PropTypes from 'prop-types';
 
 export const ContentTab = styled.div(({ theme }) => css`
-	background: ${theme.colors.grey};
+	background: ${theme.colors.panel_bg};
 	border-radius: 3px;
 	border: 2px solid ${theme.colors.primary_cta};
 
@@ -16,7 +14,6 @@ export const ContentTab = styled.div(({ theme }) => css`
 `);
   
 export const EditableOption = styled.div(({ theme }) => css`
-    background: ${theme.colors.text_primary};
     border-radius: 3px;
 `);
   
@@ -33,7 +30,7 @@ export const ProfileInitials = styled.div(({ theme }) => css`
 	font-family: "THICCCBOI-BOLD";
 `);
   
-  export const ProfileTab = styled.button(({ theme }) => css`
+export const ProfileTab = styled.button(({ theme }) => css`
       background: ${theme.colors.btn};
       color: ${theme.colors.text_primary};
       padding: 10px 30px;
@@ -47,6 +44,36 @@ export const ProfileInitials = styled.div(({ theme }) => css`
         
         font-family: "THICCCBOI-BOLD";
       }
+`);
+
+export const ProfileTabLink = styled.a(({ theme }) => css`
+      background: ${theme.colors.btn};
+      color: ${theme.colors.text_primary};
+      padding: 10px 30px;
+      border-radius: 5px 5px 0 0;
+      border-top: 2px solid ${theme.colors.btn};
+        border-left: 2px solid ${theme.colors.btn};
+        border-right: 2px solid ${theme.colors.btn};
+        border-bottom: 2px solid ${theme.colors.btn};
+      margin-right: 16px;
+      text-decoration: none;
+
+      &:hover {
+          border-top: 2px solid ${theme.colors.primary_cta};
+          border-left: 2px solid ${theme.colors.primary_cta};
+          border-right: 2px solid ${theme.colors.primary_cta};
+      }
+  
+      &.selected {
+        background: ${theme.colors.primary_cta};
+        color: ${theme.colors.base_bg};
+        border: 2px solid ${theme.colors.primary_cta};
+        font-family: "THICCCBOI-BOLD";
+      }
+`);
+
+export const Tabs = styled.div(({ theme }) => css`
+      padding: 0 0 9px 9px;
 `);
   
 export const AccountTierCard = styled.div(({ theme, tier }) => css`
@@ -82,25 +109,42 @@ export const Rotate = keyframes`
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 `;
-  
+
+const LoadingSpinner = () => (
+    <svg width="66px" height="65px" viewBox="0 0 66 65" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <g id="HiFi" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+            <g id="Group" transform="translate(1.000000, 1.000000)">
+                <circle id="Oval" stroke="#FF0000" strokeWidth="5" cx="32" cy="32" r="29.5"></circle>
+                <path d="M61.5,32 C61.5,15.7075999 48.2924001,2.5 32,2.5 C15.7075999,2.5 2.5,15.7075999 2.5,32" id="Oval-Copy" stroke="#FFEF00" strokeWidth="6"></path>
+            </g>
+        </g>
+    </svg>
+);
+
 export const FixedBackground = styled.div(({ theme }) => css`
       background: ${theme.colors.base_bg};
       z-index: 2;
-      margin-left: -12px;
   
-      img {
+      svg {
           width: 64px;
           height: 64px;
           min-width: 64px;
           min-height: 64px;
-          animation: ${Rotate} 1s linear infinite;
+          animation: ${Rotate} 1.5s linear infinite;
+
+          g circle {
+              stroke: ${theme.colors.primary_cta};
+          }
+          g path {
+            stroke: ${theme.colors.base_bg};
+          }
       }
 `);
   
   
 export const LoadingState = () => (
 	<FixedBackground className="position-absolute d-flex align-items-center justify-content-center w-100 h-100">
-		<img src={LoadingSpinner} alt="Loading" />
+		<LoadingSpinner alt="Loading" />
 	</FixedBackground>
 );
 
@@ -134,17 +178,15 @@ export const TwoFAOption = ({ id, option, onClick, selected, linkTo }) => (
     <div className={selected && 'selected'} onClick={onClick} selected={selected}>
         <label htmlFor={id} className="w-100 text-center">
             <StyledRadio id={id} type="radio" name="2faSelection" />
-            <div>
-                <TwoFACard className="d-flex p-3 justify-content-between" selected={selected}>
-                    <div className="d-flex align-items-center">
-                        <i className="material-icons me-2">{selected ? 'check_circle' : 'radio_button_unchecked'}</i>
-                        <Heading size="20px" className="mb-0">{option}</Heading>
-                    </div>
-                    {!selected && (
-                        <StyledLinkTo to={linkTo} target="_blank" rel="noopener noreferrer">Set Up</StyledLinkTo>
-                    )}
-                </TwoFACard>
-            </div>
+            <TwoFACard className="d-flex p-3 justify-content-between" selected={selected}>
+                <div className="d-flex align-items-center">
+                    <i className="material-icons me-2">{selected ? 'check_circle' : 'radio_button_unchecked'}</i>
+                    <Heading size="20px" className="mb-0">{option}</Heading>
+                </div>
+                {!selected && (
+                    <StyledLinkTo to={linkTo} target="_blank" rel="noopener noreferrer">Set Up</StyledLinkTo>
+                )}
+            </TwoFACard>
         </label>
     </div>
 );
@@ -158,3 +200,8 @@ TwoFAOption.propTypes = {
 TwoFAOption.defaultProps = {
     linkTo: "/",
 }
+
+export const TopBanner = styled.span(({ theme }) => css`
+    background: ${theme.colors.panel_accent};
+    border-bottom: 1px solid ${theme.colors.grey};
+`);

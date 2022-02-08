@@ -29,12 +29,14 @@ import MyWallet from "./Pages/MyWallet";
 import TradeHistory from "./Pages/TradeHistory";
 import EmailVerification from "./Pages/EmailVerification";
 import AirDrops from "./Pages/AirDrops";
-import Profile from "./Pages/Profile";
 import GoogleAuth from "./Pages/Auth/GoogleAuth";
 import SMSAuth from "./Pages/Auth/SMSAuth";
 import AuthyAuth from "./Pages/Auth/AuthyAuth";
 import ThemeToggler, { useDarkMode } from "./Components/ThemeToggler";
 import { darkTheme, lightTheme } from "./Constants/Theme";
+import ProfileSecurity from "./Pages/Profile/Security";
+import ProfileBasic from "./Pages/Profile/Basic";
+import ProfileKYC from "./Pages/Profile/KnowYourCustomer";
 
 const App = () => {
     const [theme, toggleTheme] = useDarkMode();
@@ -88,10 +90,12 @@ const App = () => {
             <Route path="/MyWallet" element={<MyWallet />} />
             <Route path="/EmailVerification" element={<EmailVerification />} />
             <Route path="/AirDrops" element={<AirDrops />} />
-            <Route path="/Profile" element={<Profile />} />
             <Route path="/GoogleAuth" element={<GoogleAuth />} />
             <Route path="/SMSAuth" element={<SMSAuth />} />
             <Route path="/AuthyAuth" element={<AuthyAuth />} />
+            <Route path="/Profile/Security" element={<ProfileSecurity />} />
+            <Route path="/Profile/Basic" element={<ProfileBasic />} />
+            <Route path="/Profile/KYC" element={<ProfileKYC />} />
           </Routes>
         </Router>
         <Footer />
