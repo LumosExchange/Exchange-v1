@@ -26,7 +26,6 @@ const nexmo = new Nexmo({
   apiSecret: process.env.NEXMO_API_KEY,
 });
 
-
 //needed to avoid cors errors
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
@@ -330,6 +329,39 @@ app.post("/updateUserSettings", (req, res) => {
   );
 });
 
+app.post("/userInfo", (req, res) => {
+  const LegalName = req.body.LegalName;
+  const BirthDay = req.body.BirthDay;
+  const BirthMonth = req.body.BirthMonth;
+  const BirthYear = req.body.BirthYear;
+  const DisplayName = req.body.DisplayName;
+  const StreetAdress = req.body.StreetAdress;
+  const CityTown = req.body.CityTown;
+  const CityState = req.body.CityState;
+  const PostCode = req.body.PostCode;
+  const Country = req.body.Country;
+  const Document = req.body.Document;
+
+  db.query(
+    "INSERT INTO  userInfo (legalName, birthDay, birthMonth, birthYear, displayName, streetAdress, cityTown, cityState, postCode, country, document) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+    [
+      LegalName,
+      BirthDay,
+      BirthMonth,
+      BirthYear,
+      DisplayName,
+      StreetAdress,
+      CityTown,
+      CityState,
+      PostCode,
+      Country,
+      Document,
+    ],
+    (err, result) => {
+      console.log(err);
+    }
+  );
+});
 //creates secret for 2fa app
 app.post("/getSecret", (req, res) => {
   var secret = speakeasy.generateSecret({
@@ -366,7 +398,7 @@ app.get("/VerifyGoogle2FASetup", (req, res) => {
 app.post("/VonageSMSRequest", (req, res) => {
   const user = req.session.user[0].userID;
   //verify the user has specified a number
-  console.log('user phone number: ',req.body.number);
+  console.log("user phone number: ", req.body.number);
   if (!req.body.number) {
     res
       .status(400)
@@ -384,16 +416,13 @@ app.post("/VonageSMSRequest", (req, res) => {
       if (err) {
         //if error let the user know
         res.status(500).send(err.error_text);
-        console.log('error: ', err);
+        console.log("error: ", err);
         return;
       }
       const requestId = result.request_id;
-      console.log('Request ID: ',result.request_id);
-
-
+      console.log("Request ID: ", result.request_id);
 
       //Store user phone number in db
-     
 
       db.query(
         "UPDATE userAuth SET phoneNumber = ? WHERE userID = ?",
@@ -797,10 +826,10 @@ app.post("/getUser2FAOptions", (req, res) => {
     "SELECT emailVerified, SMS, google FROM userAuth WHERE (userID) = (?)",
     [user],
     (err, result) => {
-    res.send(result);
+      res.send(result);
     }
   );
-})
+});
 
 app.listen(3001, () => {
   console.log("running on port 3001");

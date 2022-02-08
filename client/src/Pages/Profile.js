@@ -611,17 +611,33 @@ const countryOptions = [
 ];
 
 const KycTab = () => {
-  const [legalName, setLegalName] = useState("");
-  const [birthDay, setBirthDay] = useState(0);
-  const [birthMonth, setBirthMonth] = useState("");
-  const [birthYear, setBirthYear] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [streetAdress, setStreetAdress] = useState("");
-  const [cityTown, setCityTown] = useState("");
-  const [cityState, setCityState] = useState("");
-  const [postCode, setPostCode] = useState("");
-  const [country, setCountry] = useState("");
-  const [document, setDocument] = useState("");
+  const [legalNameReg, setLegalNameReg] = useState("");
+  const [birthDayReg, setBirthDayReg] = useState("");
+  const [birthMonthReg, setBirthMonthReg] = useState("");
+  const [birthYearReg, setBirthYearReg] = useState("");
+  const [displayNameReg, setDisplayNameReg] = useState("");
+  const [streetAdressReg, setStreetAdressReg] = useState("");
+  const [cityTownReg, setCityTownReg] = useState("");
+  const [cityStateReg, setCityStateReg] = useState("");
+  const [postCodeReg, setPostCodeReg] = useState("");
+  const [countryReg, setCountryReg] = useState("");
+  const [documentReg, setDocumentReg] = useState("");
+
+  const userInfo = () => {
+    Axios.post("http://localhost:3001/userInfo", {
+      LegalName: legalNameReg,
+      BirthDay: birthDayReg,
+      BirthMonth: birthMonthReg,
+      BirthYear: birthYearReg,
+      DisplayName: displayNameReg,
+      StreetAdress: streetAdressReg,
+      CityTown: cityTownReg,
+      CityState: cityStateReg,
+      PostCode: postCodeReg,
+      Country: countryReg,
+      Document: documentReg,
+    });
+  };
 
   return (
     <ContentTab className="text-white">
@@ -632,13 +648,12 @@ const KycTab = () => {
               Display Name
             </Heading>
             <FormInput
-              id="displayname"
+              id="DisplayName"
               className="mb-3 w-100"
               type="text"
               placeholder="Display Name"
-              value={displayName}
               onChange={(e) => {
-                setDisplayName(e.target.value);
+                setDisplayNameReg(e.target.value);
               }}
             />
           </EditableOption>
@@ -649,13 +664,12 @@ const KycTab = () => {
               Legal Name
             </Heading>
             <FormInput
-              id="forename"
+              id="legalName"
               className="mb-3 w-100"
               type="text"
               placeholder="Legal Name"
-              value={legalName}
               onChange={(e) => {
-                setLegalName(e.target.value);
+                setLegalNameReg(e.target.value);
               }}
             />
           </EditableOption>
@@ -672,8 +686,7 @@ const KycTab = () => {
                 </Heading>
                 <StyledDropdown
                   className="w-100"
-                  value={birthDay}
-                  onChange={(e) => setBirthDay(e.currentTarget.value)}
+                  onChange={(e) => setBirthDayReg(e.currentTarget.value)}
                 >
                   {birthDayOptions.map((option) => (
                     <option value={option}>{option}</option>
@@ -686,8 +699,7 @@ const KycTab = () => {
                 </Heading>
                 <StyledDropdown
                   className="w-100"
-                  value={birthMonth}
-                  onChange={(e) => setBirthMonth(e.currentTarget.value)}
+                  onChange={(e) => setBirthMonthReg(e.currentTarget.value)}
                 >
                   {birthMonthOptions.map((option) => (
                     <option value={option}>{option}</option>
@@ -700,8 +712,7 @@ const KycTab = () => {
                 </Heading>
                 <StyledDropdown
                   className="w-100"
-                  value={birthYear}
-                  onChange={(e) => setBirthYear(e.currentTarget.value)}
+                  onChange={(e) => setBirthYearReg(e.currentTarget.value)}
                 >
                   {birthYearOptions(currentYear, currentYear - 90, -1).map(
                     (option) => (
@@ -723,9 +734,8 @@ const KycTab = () => {
               className="mb-3 w-100"
               type="text"
               placeholder="Street Address"
-              value={streetAdress}
               onChange={(e) => {
-                setStreetAdress(e.target.value);
+                setStreetAdressReg(e.target.value);
               }}
             />
           </EditableOption>
@@ -741,9 +751,8 @@ const KycTab = () => {
               className="mb-3 w-100"
               type="text"
               placeholder="City/Town"
-              value={cityTown}
               onChange={(e) => {
-                setCityTown(e.target.value);
+                setCityTownReg(e.target.value);
               }}
             />
           </EditableOption>
@@ -758,9 +767,8 @@ const KycTab = () => {
               className="mb-3 w-100"
               type="text"
               placeholder="State"
-              value={cityState}
               onChange={(e) => {
-                setCityState(e.target.value);
+                setCityStateReg(e.target.value);
               }}
             />
           </EditableOption>
@@ -775,9 +783,8 @@ const KycTab = () => {
               className="mb-3 w-100"
               type="text"
               placeholder="Postcode"
-              value={postCode}
               onChange={(e) => {
-                setPostCode(e.target.value);
+                setPostCodeReg(e.target.value);
               }}
             />
           </EditableOption>
@@ -789,8 +796,7 @@ const KycTab = () => {
             </Heading>
             <StyledDropdown
               className="w-100"
-              value={country}
-              onChange={(e) => setCountry(e.currentTarget.value)}
+              onChange={(e) => setCountryReg(e.currentTarget.value)}
             >
               {countryOptions.map((option) => (
                 <option value={option}>{option}</option>
@@ -809,15 +815,14 @@ const KycTab = () => {
               className="mb-3 w-100"
               type="file"
               placeholder="Postcode"
-              value={document}
               onChange={(e) => {
-                setDocument(e.target.value);
+                setDocumentReg(e.target.value);
               }}
             />
           </EditableOption>
         </div>
         <div className="col-12 col-md-6 mb-3">
-          <PrimaryButton onClick={null} text="Save" />
+          <PrimaryButton onClick={userInfo} className="w-100" text="Save" />
         </div>
       </div>
     </ContentTab>
