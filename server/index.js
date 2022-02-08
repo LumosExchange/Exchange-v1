@@ -26,6 +26,7 @@ const nexmo = new Nexmo({
   apiSecret: process.env.NEXMO_API_KEY,
 });
 
+
 //needed to avoid cors errors
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
@@ -131,7 +132,7 @@ app.post("/register", (req, res) => {
     );
     db.query(
       "INSERT INTO userAuth (Email, emailVerified, SMS, google, googleSecret, Authy phoneNumber) VALUES (?,?,?,?,?,?,?)",
-      [email, "False", "False", "False", "False", "False", "0"],
+      [email, 0, 0, 0, 0, 0, "0"],
       (err, result) => {
         console.log(err);
       }
@@ -365,6 +366,7 @@ app.get("/VerifyGoogle2FASetup", (req, res) => {
 app.post("/VonageSMSRequest", (req, res) => {
   const user = req.session.user[0].userID;
   //verify the user has specified a number
+  console.log('user phone number: ',req.body.number);
   if (!req.body.number) {
     res
       .status(400)
@@ -385,6 +387,11 @@ app.post("/VonageSMSRequest", (req, res) => {
         console.log('error: ', err);
         return;
       }
+      const requestId = result.request_id;
+      console.log('Request ID: ',result.request_id);
+
+
+
       //Store user phone number in db
      
 
@@ -397,7 +404,6 @@ app.post("/VonageSMSRequest", (req, res) => {
         }
       );
       //send back request ID as need for the verify step
-      const requestId = result.request_id;
       res.send(requestId);
     }
   );
