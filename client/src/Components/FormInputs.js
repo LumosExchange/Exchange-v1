@@ -264,3 +264,23 @@ InlineInput.defaultProps = {
   textColor: "text-primary",
   rounded: false,
 };
+
+const CustomFileInput = styled.input(({ theme }) => css`
+      border: 1px solid red;
+      display: none;
+
+      + label {
+        border: 1px solid red;
+        background: ${theme.colors.primary_cta};
+        height: 50px;
+        color: ${theme.colors.text_primary};
+      }
+`);
+
+export const FileInput = ({ id, children }) => (
+  <React.Fragment>
+    <CustomFileInput id={id} type="file" />
+    <label htmlFor={id} className="w-100">{children}</label>
+  </React.Fragment>
+);
+

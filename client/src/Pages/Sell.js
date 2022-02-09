@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { css } from 'styled-components';
 import Axios from "axios";
 import { PageBody, StyledDropdown } from "../Components/FormInputs";
@@ -90,13 +90,26 @@ export const convertAssetToSvg = (asset) => {
     if (asset === ''){ return <i className="material-icons">token</i> }
 }
 
-const Buy = () => {
+const Sell = () => {
 	const [allListings, setAllListings] = useState([]);
 	const [selectedCrypto, selectCrypto] = useState(CRYPTO_SOL);
 	const [selectedMode, selectMode] = useState('buy');
 	const [selectedCurrency, selectCurrency] = useState('£');
+	const [amountForSaleReg, setAmountForSaleReg] = useState("");
+	const [aboveOrBelowReg, setAboveOrBelowReg] = useState("");
+	const [changeReg, setChangeReg] = useState("");
   
 	const navigate = useNavigate();
+
+	const addSale = () => {
+	  Axios.post("http://localhost:3001/sell", {
+		  amountForSale: amountForSaleReg,
+		  aboveOrBelow: aboveOrBelowReg,
+		  change: changeReg,
+		})
+  	}
+
+	console.log(selectedCrypto, 'selected crypto');
 
 	const getAllListings = () => {
 		Axios.get("http://localhost:3001/getAllListings").then((response) => {
@@ -104,9 +117,13 @@ const Buy = () => {
 		});
 	}
 
-	useMemo(() => {
-		getAllListings();
-	}, []);
+	const switchMode = () => {
+		navigate("/Buy");
+	}
+
+  useEffect(() => {
+	getAllListings();
+  }, []);
 
   return (
 		<PageBody>
@@ -117,15 +134,15 @@ const Buy = () => {
 						<div className="d-flex">
 							<div className="col-md-6">
 								<ToggleButton
-									className="left w-100 selected"
+									onClick={() => switchMode()}
+									className="left w-100"
 								>
 									Buy
 								</ToggleButton>
 							</div>
 							<div className="col-md-6">
 								<ToggleButton
-									onClick={() => navigate("/Sell")}
-									className="right w-100"
+									className="right w-100 selected"
 								>
 									Sell
 								</ToggleButton>
@@ -175,34 +192,68 @@ const Buy = () => {
 						</Card>
 					</div>
 					<div className="col-12 col-md-8">
-							<Heading size="24px">Buy {selectedCrypto} from these Sellers</Heading>
-							{allListings.map((val) => (
-								<Card className="p-4 mb-3">
-									<div className="row">
-										<div className="col-3">
-											<Heading size="24px">{val.userID}</Heading>
-										</div>
-										<div className="col-3">United States</div>
-										<div className="col-3">Oceanside, CA</div>
-										<div className="col-3">
-											<Heading size="24px">
-												{selectedCurrency}{val.amountForSale}
-											</Heading>
-										</div>
-										<div className="col-3">110 Trades</div>
-										<div className="col-3">Paypal</div>
-										<div className="col-3">
-											<Paragraph size="18px">
-												{val.percentChange}%
-												{' '}{val.aboveOrBelow}{' '}market
-											</Paragraph>
-										</div>
-										<div className="col-3">
-											<GradientButton text="Buy" fontSize="24px" padding="4px 20px" className="w-100" />
-										</div>
-									</div>
-								</Card>
-							))}
+						<Heading size="24px">List {selectedCrypto} for Sale</Heading>
+						<Card radius="20px" className="p-4">
+							<div className="row">
+								<div className="col-12 col-md-6 mb-3">
+									<StyledLabel padding="0 0 10px 0" for="amountForSale" bold>Amount of SOL for sale</StyledLabel>
+									<FormInput
+										type="text"
+										placeholder="amount"
+										name="amount"
+										color="btn"
+										id="amount"
+										className="w-100"
+										onChange={(e) => {
+										setAmountForSaleReg(e.target.value);
+										}}
+										required
+									/>
+								</div>
+								<div className="col-12 col-md-6">
+									<StyledLabel padding="0 0 10px 0" for="aboveOrBelow" bold>Sell above or below market</StyledLabel>
+									<StyledDropdown
+										type="aboveOrBelow"
+										placeholder="aboveOrBelow"
+										name="aboveOrBelow"
+										id="aboveOrBelow"
+										color="btn"
+										onChange={(e) => {
+										setAboveOrBelowReg(e.target.value);
+										}}
+										className="w-100"
+										required
+									>
+										<option value="above">Above</option>
+										<option value="below">Below</option>
+									</StyledDropdown>
+								</div>
+								<div className="col-12 col-md-6">
+									<StyledLabel padding="0 0 10px 0" for="change" bold>Percentage Market</StyledLabel>
+									<FormInput
+										type="change"
+										placeholder="change"
+										name="change"
+										color="btn"
+										id="change"
+										className="w-100"
+										onChange={(e) => {
+										setChangeReg(e.target.value);
+										}}
+										required
+									/>
+								</div>
+								<div className="col-12 col-md-6 d-flex align-items-end">
+									<PrimaryButton
+										value="sell"
+										text="List Sale"
+										onClick={addSale}
+										className="w-100"
+										size="lg"
+									/>
+								</div>
+							</div>
+						</Card>
 					</div>
 				</div>
 			</div>
@@ -210,5 +261,4 @@ const Buy = () => {
   );
 }
 
-
-export default Buy;
+export default Sell;

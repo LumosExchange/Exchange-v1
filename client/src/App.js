@@ -18,6 +18,7 @@ import LoggedHome from "./Pages/LoggedHome";
 import ErrorPage from "./Pages/ErrorPage";
 import Trades from "./Pages/Trades";
 import Buy from "./Pages/Buy";
+import Sell from "./Pages/Sell";
 import Offer from "./Pages/Offer";
 import Feedback from "./Pages/Feedback";
 import Axios from "axios";
@@ -81,6 +82,7 @@ const App = () => {
             ;
             <Route path="/Offer" element={<Offer />} />
             <Route path="/Buy" element={<Buy />} />
+            <Route path="/Sell" element={<Sell />} />
             <Route path="/Trades" element={<Trades />} />
             <Route path="/TradeHistory" element={<TradeHistory />} />
             <Route path="/Feedback" element={<Feedback />} />
