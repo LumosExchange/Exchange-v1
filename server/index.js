@@ -251,6 +251,8 @@ app.post("/sell", (req, res) => {
   const change = req.body.change;
   const userName = req.session.user[0].userName;
   const id = req.session.user[0].userID;
+  const payment1 = req.body.payment1;
+  const payment2 = req.body.payment2;
 
   let country;
   let town;
@@ -264,8 +266,8 @@ app.post("/sell", (req, res) => {
       let town = result[0].Town;
 
       db.query(
-        "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town) VALUES (?,?,?,?,?,?,?)",
-        [id, amountForSale, aboveOrBelow, change, userName, country, town],
+        "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethord1, paymentMethord2) VALUES (?,?,?,?,?,?,?,?,?)",
+        [id, amountForSale, aboveOrBelow, change, userName, country, town, payment1, payment2],
         (err, result) => {
           console.log(err);
           res.send(result);
