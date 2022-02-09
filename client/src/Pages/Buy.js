@@ -180,10 +180,10 @@ const Buy = () => {
 								<Card className="p-4 mb-3">
 									<div className="row">
 										<div className="col-3">
-											<Heading size="24px">{val.userID}</Heading>
+											<Heading size="24px">{val.userName}</Heading>
 										</div>
-										<div className="col-3">United States</div>
-										<div className="col-3">Oceanside, CA</div>
+										<div className="col-3">{val.Country}</div>
+										<div className="col-3">{val.Town}</div>
 										<div className="col-3">
 											<Heading size="24px">
 												{selectedCurrency}{val.amountForSale}
