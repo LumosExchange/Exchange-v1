@@ -59,7 +59,7 @@ export const convertAssetToSvg = (asset) => {
     if (asset === 'LRA'){ return (
 		<svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
 			<title>icon-airdrop-asset-lumos</title>
-			<g id="icon-airdrop-asset-lumos" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+			<g id="icon-airdrop-asset-lumos" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
 				<g id="Group" transform="translate(0.000000, 3.000000)" fill="currentColor">
 					<path d="M20.4615385,0 L28,8.10526316 L14,22 L0,8.10526316 L7.53846154,0 L20.4615385,0 Z M16.3333333,0 L7,9.33333333 L11.6666667,9.33333333 L11.6666667,9.33333333 L11.6666667,14 L11.6666667,14 L11.8993536,13.767313 C11.9338258,13.7328409 11.9721282,13.6945385 12.0142608,13.6524059 L12.1521494,13.5145173 C12.3513218,13.3153449 12.611778,13.0548887 12.933518,12.7331487 L13.6085975,12.0580691 C13.7579768,11.9086899 13.9159741,11.7506925 14.0825895,11.5840772 L14.9874833,10.6791833 C15.4432817,10.223385 15.9460005,9.72066619 16.4956397,9.17102698 L17.2281728,8.4384939 C17.3967033,8.26996341 17.569064,8.09760268 17.745255,7.92141172 L18.2853186,7.38134811 C18.46917,7.19749667 18.6568517,7.00981499 18.8483636,6.81830307 L21,4.66666667 L16.3333333,4.66666667 L16.3333333,0 Z" id="Combined-Shape"></path>
 				</g>
@@ -69,7 +69,7 @@ export const convertAssetToSvg = (asset) => {
     if (asset === 'KIN'){ return (
 		<svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
 			<title>icon-airdrop-asset-kin</title>
-			<g id="icon-airdrop-asset-kin" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+			<g id="icon-airdrop-asset-kin" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
 				<g id="Kin-(KIN)" transform="translate(3.000000, 3.000000)" fill="currentColor">
 					<path d="M14.9107237,10.9320288 L14.9107237,11.0679712 C14.9107237,13.0051493 16.5377707,14.5911432 18.5250924,14.5911432 L20.5124142,14.5911432 C21.3375594,14.5911432 22,15.2368692 22,16.0411946 L22,21.9886715 L15.7939778,21.9886715 C14.9688325,21.9886715 14.306392,21.3429454 14.306392,20.53862 L14.306392,18.1029866 C14.306392,16.1658084 12.679345,14.5798146 10.6920232,14.5798146 L10.5525621,14.5798146 C8.56524036,14.5798146 6.93819334,16.1658084 6.93819334,18.1029866 L6.93819334,22 L0,22 L0,0 L6.93819334,0 L6.93819334,3.9423275 C6.93819334,5.87950566 8.56524036,7.46549949 10.5525621,7.46549949 L10.6920232,7.46549949 C12.679345,7.46549949 14.306392,5.87950566 14.306392,3.9423275 L14.306392,1.45005149 C14.306392,0.645726056 14.9688325,0 15.7939778,0 L22,0 L22,5.94747683 C22,6.75180227 21.3375594,7.39752832 20.5124142,7.39752832 L18.5250924,7.39752832 C16.5377707,7.40885685 14.9107237,8.99485067 14.9107237,10.9320288 Z" id="Path"></path>
 				</g>
@@ -79,8 +79,8 @@ export const convertAssetToSvg = (asset) => {
     if (asset === 'COPE'){ return (
 		<svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
 			<title>icon-airdrop-asset-cope</title>
-			<g id="icon-airdrop-asset-cope" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-				<circle id="Oval" stroke="currentColor" stroke-width="1.5" cx="14" cy="14" r="10.25"></circle>
+			<g id="icon-airdrop-asset-cope" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+				<circle id="Oval" stroke="currentColor" strokeWidth="1.5" cx="14" cy="14" r="10.25"></circle>
 				<circle id="Oval" fill="currentColor" cx="9.5" cy="13.5" r="1.5"></circle>
 				<circle id="Oval-Copy" fill="currentColor" cx="14" cy="13.5" r="1.5"></circle>
 				<circle id="Oval-Copy-2" fill="currentColor" cx="18.5" cy="13.5" r="1.5"></circle>
@@ -90,14 +90,18 @@ export const convertAssetToSvg = (asset) => {
     if (asset === ''){ return <i className="material-icons">token</i> }
 }
 
+const PaymentMethods = [
+	"UK Bank Transfer",
+	"EU Bank Transfer",
+	"International Wire Transfer",
+];
+
 const Sell = () => {
-	const [allListings, setAllListings] = useState([]);
 	const [selectedCrypto, selectCrypto] = useState(CRYPTO_SOL);
-	const [selectedMode, selectMode] = useState('buy');
-	const [selectedCurrency, selectCurrency] = useState('£');
 	const [amountForSaleReg, setAmountForSaleReg] = useState("");
 	const [aboveOrBelowReg, setAboveOrBelowReg] = useState("");
 	const [changeReg, setChangeReg] = useState("");
+	const [preferredPayment, setPreferredPayment] = useState("");
   
 	const navigate = useNavigate();
 
@@ -108,21 +112,11 @@ const Sell = () => {
 		  change: changeReg,
 		})
   	}
-
-	console.log(selectedCrypto, 'selected crypto');
-
-	const getAllListings = () => {
-		Axios.get("http://localhost:3001/getAllListings").then((response) => {
-		setAllListings(response.data);
-		});
-	}
-
 	const switchMode = () => {
 		navigate("/Buy");
 	}
 
   useEffect(() => {
-	getAllListings();
   }, []);
 
   return (
@@ -196,7 +190,7 @@ const Sell = () => {
 						<Card radius="20px" className="p-4">
 							<div className="row">
 								<div className="col-12 col-md-6 mb-3">
-									<StyledLabel padding="0 0 10px 0" for="amountForSale" bold>Amount of SOL for sale</StyledLabel>
+									<StyledLabel padding="0 0 10px 0" htmlFor="amount" bold>Amount of SOL for sale</StyledLabel>
 									<FormInput
 										type="text"
 										placeholder="amount"
@@ -205,31 +199,32 @@ const Sell = () => {
 										id="amount"
 										className="w-100"
 										onChange={(e) => {
-										setAmountForSaleReg(e.target.value);
+											setAmountForSaleReg(e.target.value);
 										}}
 										required
 									/>
 								</div>
 								<div className="col-12 col-md-6">
-									<StyledLabel padding="0 0 10px 0" for="aboveOrBelow" bold>Sell above or below market</StyledLabel>
+									<StyledLabel padding="0 0 10px 0" htmlFor="aboveOrBelow" bold>Sell above or below market</StyledLabel>
 									<StyledDropdown
+										autofocus="true"
 										type="aboveOrBelow"
 										placeholder="aboveOrBelow"
 										name="aboveOrBelow"
 										id="aboveOrBelow"
 										color="btn"
 										onChange={(e) => {
-										setAboveOrBelowReg(e.target.value);
+											setAboveOrBelowReg(e.target.value);
 										}}
 										className="w-100"
 										required
 									>
-										<option value="above">Above</option>
 										<option value="below">Below</option>
+										<option value="above">Above</option>
 									</StyledDropdown>
 								</div>
 								<div className="col-12 col-md-6">
-									<StyledLabel padding="0 0 10px 0" for="change" bold>Percentage Market</StyledLabel>
+									<StyledLabel padding="0 0 10px 0" htmlFor="change" bold>Percentage Market</StyledLabel>
 									<FormInput
 										type="change"
 										placeholder="change"
@@ -238,10 +233,47 @@ const Sell = () => {
 										id="change"
 										className="w-100"
 										onChange={(e) => {
-										setChangeReg(e.target.value);
+											setChangeReg(e.target.value);
 										}}
 										required
 									/>
+								</div>
+								<div className="col-12 col-md-6 mb-3">
+									<StyledLabel padding="0 0 10px 0" htmlFor="preferredPayment" bold>Preferred Payment</StyledLabel>
+									<StyledDropdown
+										type="change"
+										placeholder="preferredPayment"
+										name="preferredPayment"
+										id="preferredPayment"
+										color="btn"
+										onChange={(e) => {
+											setPreferredPayment(e.target.value);
+										}}
+										className="w-100"
+										required
+									>
+										{PaymentMethods.map((data) => (
+											<option value={data}>{data}</option>
+										))}
+									</StyledDropdown>
+								</div>
+								<div className="col-12 col-md-6">
+									<StyledLabel padding="0 0 10px 0" htmlFor="secondaryPayment" bold>Secondary Payment</StyledLabel>
+									<StyledDropdown
+										placeholder="aboveOrBelow"
+										name="secondaryPayment"
+										id="secondaryPayment"
+										color="btn"
+										onChange={(e) => {
+											setPreferredPayment(e.target.value);
+										}}
+										className="w-100"
+										required
+									>
+										{PaymentMethods.map((data) => (
+											<option value={data}>{data}</option>
+										))}
+									</StyledDropdown>
 								</div>
 								<div className="col-12 col-md-6 d-flex align-items-end">
 									<PrimaryButton

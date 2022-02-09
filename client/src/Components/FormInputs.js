@@ -212,11 +212,16 @@ export const StyledDropdown = styled.select(({ theme, color }) => css`
 	background-position: 95%;
 	background-repeat: no-repeat;
 	border-radius: 10px;
-	border: 0;
+	border: 2px solid ${theme.colors.grey};
 	color: ${theme.colors.text_primary};
 	font-size: 20px;
 	outline: 0;
-	padding: 16px;
+	padding: 13px;
+
+  :focus, :active {
+      border: 2px solid ${theme.colors.primary_cta};
+      outline: none;
+  }
 `);
 
 StyledDropdown.propTypes = {
