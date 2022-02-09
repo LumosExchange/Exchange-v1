@@ -57,7 +57,7 @@ const Navbar = ({ loginStatus }) => {
     Axios.get("http://localhost:3001/logout", {
     }).then((response) => {
       console.log(response, 'response');
-      navigate('/Profile');
+      navigate('/Profile/Basic');
       window.location.reload(true);
       console.log('log out fired');
     });
@@ -96,7 +96,7 @@ const Navbar = ({ loginStatus }) => {
               <div className="align-items-center d-none d-lg-flex">
                 <NavActionButton
                     className="d-flex align-items-center"
-                    onClick={ () => navigate('/Profile') }
+                    onClick={ () => navigate('/Profile/Basic') }
                   >
                     <i className="material-icons me-1">person</i>
                     <span>{userName}</span>

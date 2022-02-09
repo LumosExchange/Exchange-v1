@@ -133,6 +133,41 @@ app.post("/register", (req, res) => {
   });
 });
 
+//KYC TAB
+app.post("/userInfo", (req, res) => {
+  const LegalName = req.body.LegalName;
+  const BirthDay = req.body.BirthDay;
+  const BirthMonth = req.body.BirthMonth;
+  const BirthYear = req.body.BirthYear;
+  const DisplayName = req.body.DisplayName;
+  const StreetAdress = req.body.StreetAdress;
+  const CityTown = req.body.CityTown;
+  const CityState = req.body.CityState;
+  const PostCode = req.body.PostCode;
+  const Country = req.body.Country;
+  const Document = req.body.Document;
+
+  db.query(
+    "INSERT INTO  userInfo (legalName, birthDay, birthMonth, birthYear, displayName, streetAdress, cityTown, cityState, postCode, country, document) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+    [
+      LegalName,
+      BirthDay,
+      BirthMonth,
+      BirthYear,
+      DisplayName,
+      StreetAdress,
+      CityTown,
+      CityState,
+      PostCode,
+      Country,
+      Document,
+    ],
+    (err, result) => {
+      console.log(err);
+    }
+  );
+});
+
 //Login functionality
 //check logged in state
 app.get("/login", (req, res) => {

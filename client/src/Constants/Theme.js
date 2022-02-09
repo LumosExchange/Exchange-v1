@@ -23,6 +23,8 @@ export const darkTheme = {
     btn: "#696969",
     table_stripe: "#3F3F3F",
     table_head: "#696969",
+    panel_bg: "#2d2d2d",
+    panel_accent: "#404040",
 
     gradients: {
       yellow: "#FCE608",
@@ -88,6 +90,8 @@ export const lightTheme = {
     btn: "#E5E5E5",
     table_stripe: "#F0F0F0",
     table_head: "#6F86FF",
+    panel_bg: "#FFF",
+    panel_accent: "#F4F4F4",
 
     // Hide the gradient on light theme
     gradients: {

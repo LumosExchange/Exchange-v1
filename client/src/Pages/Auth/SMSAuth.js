@@ -32,9 +32,10 @@ function SMSAuth() {
   const [userPass, setUserPass] = useState("");
   const [phoneNumber, setPhoneNumber] = useState('');
   const [userEmailVerification, setUserEmailVerification] = useState('');
-const [requestId, setRequestId] = useState('');
+  const [requestId, setRequestId] = useState('');
   const [userSMSCode, setUserSMSCode] = useState('');
   const [passwordVerified, setPasswordVerified] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
 
 
 
@@ -49,6 +50,7 @@ const [requestId, setRequestId] = useState('');
   const sendVerification = () => {
     Axios.post("http://localhost:3001/2FAEmailVerificationSend", {});
     setIsCodeSent(true);
+	setCurrentStep(2);
   };
 
   //get email verification code and password and check if both true
@@ -64,6 +66,7 @@ const [requestId, setRequestId] = useState('');
       }
     });
   };
+
   //check password verification
   const passwordVerification = () => {
     Axios.post("http://localhost:3001/checkChangePass", {
@@ -113,73 +116,67 @@ const [requestId, setRequestId] = useState('');
       <div className="container col-12 col-md-8 col-xl-5 col-xxl-4">
         <Card
           radius="20px"
-          color="darkerGrey"
           className="p-5 d-flex flex-column"
         >
           <Heading className="pb-4 text-center" bold>
-            Add Google Auth
+            Add SMS Auth
           </Heading>
-          <StyledLabel
-            htmlFor="emailVerification"
-            fontSize="20px"
-            padding="0"
-            bold
-            className={isCodeSent ? "d-none" : "d-block"}
-          >
-            Please note you will be required to complete email verification and
-            know your current password before you will be allowed to add SMS
-            auth to your account.
-          </StyledLabel>
-          {!isCodeSent ? (
-            <PrimaryButton
-              text="Get Code"
-              className="m-auto my-3"
-              onClick={sendVerification}
-              type="check"
-              value="check"
-            />
-          ) : (
-            <CodeSentMessage className="d-flex my-4 align-items-center flex-column">
-              <i className="material-icons me-2">mark_email_read</i>
-              <Paragraph bold size="20px" className="mb-0">
-                Code Sent to {userEmail}.
-              </Paragraph>
-            </CodeSentMessage>
+          {currentStep === 1 && (
+			<React.Fragment>
+				<StyledLabel
+					htmlFor="emailVerification"
+					fontSize="20px"
+					padding="0"
+					bold
+				>
+					Please note you will be required to complete email verification and
+					know your current password before you will be allowed to add SMS
+					auth to your account.
+				</StyledLabel>
+				<PrimaryButton
+					text="Get Code"
+					className="m-auto my-3"
+					onClick={sendVerification}
+					type="check"
+					value="check"
+				/>
+            </React.Fragment>
           )}
-          <div className={`w-100 ${isCodeSent ? "d-block" : "d-none"}`}>
+          <div className="w-100">
             <form>
-              <StyledLabel
-                htmlFor="emailVerification"
-                fontSize="20px"
-                padding="0"
-                bold
-              >
-                Enter email verification code
-              </StyledLabel>
-              <FormInput
-                type="text"
-                id="emailVerification"
-                name="emailVerification"
-                placeholder="Enter current email"
-                onChange={(e) => {
-                  setUserEmailVerification(e.target.value);
-                }}
-                className="w-100 mb-3"
-              />
-              <StyledLabel htmlFor="oldPass" fontSize="20px" padding="0" bold>
-                Enter password
-              </StyledLabel>
-              <FormInput
-                type="text"
-                id="Pass"
-                name="Pass"
-                placeholder="Enter password"
-                onChange={(e) => {
-                  setUserPass(e.target.value);
-                }}
-                className="w-100 mb-3"
-              />
-              <div className="col-12 p-0">
+				{currentStep === 2 && (
+					<React.Fragment>
+				<StyledLabel
+					htmlFor="emailVerification"
+					fontSize="20px"
+					padding="0"
+					bold
+				>
+					Enter email verification code
+				</StyledLabel>
+				<FormInput
+					type="text"
+					id="emailVerification"
+					name="emailVerification"
+					placeholder="Enter 2FA code"
+					onChange={(e) => {
+						setUserEmailVerification(e.target.value);
+					}}
+					className="w-100 mb-3"
+				/>
+				<StyledLabel htmlFor="oldPass" fontSize="20px" padding="0" bold>
+					Enter password
+				</StyledLabel>
+				<FormInput
+					type="password"
+					id="Pass"
+					name="Pass"
+					placeholder="Enter password"
+					onChange={(e) => {
+						setUserPass(e.target.value);
+					}}
+					className="w-100 mb-3"
+				/>
                 <PrimaryButton
                   text="Check"
                   type="check"
@@ -187,65 +184,82 @@ const [requestId, setRequestId] = useState('');
                     event.preventDefault();
                     emailVerification();
                     passwordVerification();
+					setCurrentStep(3);
                   }}
                   className="w-100 h-100 mt-3"
-                  disabled={!isCodeSent}
                 />
-
-                <div className="col-12 m-auto text-center flex-column">
-                  <Paragraph size="18px" className="mb-0">
-                    Please enter phone number
-                  </Paragraph>
-                </div>
-              </div>
+				</React.Fragment>
+				)}
               <div className="w-100 row mt-4">
-                <div className="col-12 col-md-8">
-                  <FormInput
-                    type="text"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    placeholder="Enter Phone Number"
-                    onChange={(e) => {
-                      setPhoneNumber(e.target.value);
-                    }}
-                    className="w-100"
-                  />
-                </div>
-                <div className="col-12 col-md-4 p-0">
-                  <PrimaryButton
-                    type="Send"
-                    text="Get Code"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      SendSMS();
-                    }}
-                    className="w-100 h-100"
-                  />
-                </div>
-                <div className="col-12 col-md-8">
-                  <FormInput
-                    type="text"
-                    id="userNumber"
-                    name="userNumber"
-                    placeholder="Enter SMS verification code"
-                    onChange={(e) => {
-                      setUserSMSCode(e.target.value);
-                    }}
-                    className="w-100"
-                  />
-                </div>
-                <div className="col-12 col-md-4 p-0">
-                  <PrimaryButton
-                    type="Verify"
-                    text="Verify"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      verify();
-                    }}
-                    className="w-100 h-100"
-                  />
-                </div>
-              </div>
+			  {currentStep === 3 && (
+				  <React.Fragment>
+					<div className="col-12">
+					<StyledLabel htmlFor="phoneNumber" fontSize="20px" padding="0" bold>
+						Enter Your Phone Number
+					</StyledLabel>
+						<FormInput
+							type="text"
+							id="phoneNumber"
+							name="phoneNumber"
+							placeholder="Enter Phone Number"
+							onChange={(e) => {
+								setPhoneNumber(e.target.value);
+							}}
+							className="w-100 mb-3"
+						/>
+					</div>
+					<div className="col-12">
+						<PrimaryButton
+							type="Send"
+							text="Get Code"
+							onClick={(event) => {
+								event.preventDefault();
+								SendSMS();
+								setCurrentStep(4);
+							}}
+							className="w-100 h-100"
+							disabled={phoneNumber.length < 1}
+						/>
+					</div>
+				</React.Fragment>
+			  )}
+			  {currentStep === 4 && (
+			  	<React.Fragment>
+					<div className="col-12 col-md-8">
+					<FormInput
+						type="text"
+						id="userNumber"
+						name="userNumber"
+						placeholder="Enter SMS verification code"
+						onChange={(e) => {
+							setUserSMSCode(e.target.value);
+						}}
+						className="w-100"
+					/>
+					</div>
+					<div className="col-12 col-md-4 p-0">
+					<PrimaryButton
+						type="Verify"
+						text="Verify"
+						onClick={(event) => {
+						event.preventDefault();
+							verify();
+							setCurrentStep(5);
+						}}
+						className="w-100 h-100"
+					/>
+					</div>
+				</React.Fragment>
+				)}
+                {currentStep === 5 && (
+                  <CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+                    <i className="material-icons me-2">check_circle</i>
+                    <Paragraph bold size="20px" className="mb-0">
+                      	SMS Auth Successfully added
+                    </Paragraph>
+                  </CodeSentMessage>
+                )}
+			</div>
             </form>
           </div>
         </Card>
