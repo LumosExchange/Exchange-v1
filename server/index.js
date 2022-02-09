@@ -249,18 +249,32 @@ app.post("/sell", (req, res) => {
   const amountForSale = req.body.amountForSale;
   const aboveOrBelow = req.body.aboveOrBelow;
   const change = req.body.change;
-
+  const userName = req.session.user[0].userName;
   const id = req.session.user[0].userID;
 
-  db.query(
-    "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange) VALUES (?,?,?,?)",
-    [id, amountForSale, aboveOrBelow, change],
+  let country;
+  let town;
 
+  db.query(
+    "SELECT Country, Town FROM userInformation WHERE (userID) = (?)",
+    [id],
     (err, result) => {
-      console.log(err);
+      console.log('result: ', result);
+      let country = result[0].Country;
+      let town = result[0].Town;
+
+      db.query(
+        "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town) VALUES (?,?,?,?,?,?,?)",
+        [id, amountForSale, aboveOrBelow, change, userName, country, town],
+        (err, result) => {
+          console.log(err);
+          res.send(result);
+        }
+      )
     }
   );
-});
+}
+);
 
 //Get users open listings
 app.get("/getListings", (req, res) => {
@@ -425,10 +439,9 @@ app.post("/VonageSMSRequest", (req, res) => {
       console.log("result", result);
 
       //Store user phone number in db
-
       db.query(
-        "UPDATE userAuth SET phoneNumber = ? WHERE userID = ?",
-        [req.body.number, user],
+        "UPDATE userAuth SET phoneNumber = ?, SMS = ? WHERE userID = ?",
+        [req.body.number, 1, user],
         (err, result) => {
           console.log(err);
           console.log("Phone number added to db");
