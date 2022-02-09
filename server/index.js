@@ -214,18 +214,32 @@ app.post("/sell", (req, res) => {
   const amountForSale = req.body.amountForSale;
   const aboveOrBelow = req.body.aboveOrBelow;
   const change = req.body.change;
-
+  const userName = req.session.user[0].userName;
   const id = req.session.user[0].userID;
 
-  db.query(
-    "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange) VALUES (?,?,?,?)",
-    [id, amountForSale, aboveOrBelow, change],
+  let country;
+  let town;
 
+  db.query(
+    "SELECT Country, Town FROM userInformation WHERE (userID) = (?)",
+    [id],
     (err, result) => {
-      console.log(err);
+      console.log('result: ', result);
+      let country = result[0].Country;
+      let town = result[0].Town;
+
+      db.query(
+        "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town) VALUES (?,?,?,?,?,?,?)",
+        [id, amountForSale, aboveOrBelow, change, userName, country, town],
+        (err, result) => {
+          console.log(err);
+          res.send(result);
+        }
+      )
     }
   );
-});
+}
+);
 
 //Get users open listings
 app.get("/getListings", (req, res) => {
@@ -357,16 +371,15 @@ app.get("/VerifyGoogle2FASetup", (req, res) => {
 
 //create nexmo request
 const nexmo = new Nexmo({
-  apiKey:process.env.NEXMO_API_KEY,
-  apiSecret:process.env.NEXMO_API_SECRET,
+  apiKey: process.env.NEXMO_API_KEY,
+  apiSecret: process.env.NEXMO_API_SECRET,
 });
-
 
 //maybe chnage this to post
 app.post("/VonageSMSRequest", (req, res) => {
   const user = req.session.user[0].userID;
   //verify the user has specified a number
-  console.log('user phone number: ',req.body.number);
+  console.log("user phone number: ", req.body.number);
   if (!req.body.number) {
     res
       .status(400)
@@ -378,33 +391,29 @@ app.post("/VonageSMSRequest", (req, res) => {
     {
       number: req.body.number,
       brand: "Lumos Exchange",
-      code_length: "6"
+      code_length: "6",
     },
     (err, result) => {
       if (err) {
         //if error let the user know
         res.status(500).send(err.error_text);
-        console.log('error: ', err);
+        console.log("error: ", err);
         return;
       }
       const requestId = result.request_id;
-      console.log('result' , result);
-
-
+      console.log("result", result);
 
       //Store user phone number in db
-     
-
       db.query(
-        "UPDATE userAuth SET phoneNumber = ? WHERE userID = ?",
-        [req.body.number, user],
+        "UPDATE userAuth SET phoneNumber = ?, SMS = ? WHERE userID = ?",
+        [req.body.number, 1, user],
         (err, result) => {
           console.log(err);
           console.log("Phone number added to db");
         }
       );
       //send back request ID as need for the verify step
-      res.send({requestId});
+      res.send({ requestId });
     }
   );
 });
@@ -426,17 +435,16 @@ app.post("/VonageSMSVerify", (req, res) => {
     (err, result) => {
       if (err) {
         res.status(500).send(err.error_text);
-        console.log('error:', err)
+        console.log("error:", err);
         return;
       } else {
-        if(result && result.status == '0') {
-          res.send({message: 'SMS Verified! '});
+        if (result && result.status == "0") {
+          res.send({ message: "SMS Verified! " });
         } else {
-
           //handle the error wrong pin
         }
       }
-      }  
+    }
   );
 });
 
@@ -804,10 +812,10 @@ app.post("/getUser2FAOptions", (req, res) => {
     "SELECT emailVerified, SMS, google FROM userAuth WHERE (userID) = (?)",
     [user],
     (err, result) => {
-    res.send(result);
+      res.send(result);
     }
   );
-})
+});
 
 app.listen(3001, () => {
   console.log("running on port 3001");
