@@ -102,6 +102,7 @@ const Sell = () => {
 	const [aboveOrBelowReg, setAboveOrBelowReg] = useState("");
 	const [changeReg, setChangeReg] = useState("");
 	const [preferredPayment, setPreferredPayment] = useState("");
+	const [secondaryPayment, setSecondaryPayment] = useState("");
   
 	const navigate = useNavigate();
 
@@ -265,7 +266,7 @@ const Sell = () => {
 										id="secondaryPayment"
 										color="btn"
 										onChange={(e) => {
-											setPreferredPayment(e.target.value);
+											setSecondaryPayment(e.target.value);
 										}}
 										className="w-100"
 										required
