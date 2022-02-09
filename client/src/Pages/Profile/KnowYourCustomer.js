@@ -68,8 +68,7 @@ const KnowYourCustomer = () => {
         <ContentTab className="text-white">
           <div className="d-flex p-4 row">
             <div className="col-12 col-md-6 mb-3">
-              <EditableOption className="p-4">
-                <Heading color="black" size="20px" bold>
+                <Heading size="20px" bold>
                   Display Name
                 </Heading>
                 <FormInput
@@ -81,11 +80,9 @@ const KnowYourCustomer = () => {
                     setDisplayNameReg(e.target.value);
                   }}
                 />
-              </EditableOption>
             </div>
             <div className="col-12 col-md-6 mb-3">
-              <EditableOption className="p-4">
-                <Heading color="black" size="20px" bold>
+                <Heading size="20px" bold>
                   Legal Name
                 </Heading>
                 <FormInput
@@ -97,16 +94,11 @@ const KnowYourCustomer = () => {
                     setLegalNameReg(e.target.value);
                   }}
                 />
-              </EditableOption>
             </div>
             <div className="col-12 col-md-6 mb-3">
-              <EditableOption className="p-4">
-                <Heading color="black" size="20px" bold className="mb-3">
-                  Date of Birth
-                </Heading>
                 <div className="row">
                   <div className="col-4">
-                    <Heading color="black" size="20px" bold>
+                    <Heading size="20px" bold>
                       Day
                     </Heading>
                     <StyledDropdown
@@ -119,7 +111,7 @@ const KnowYourCustomer = () => {
                     </StyledDropdown>
                   </div>
                   <div className="col-4">
-                    <Heading color="black" size="20px" bold>
+                    <Heading size="20px" bold>
                       Month
                     </Heading>
                     <StyledDropdown
@@ -132,7 +124,7 @@ const KnowYourCustomer = () => {
                     </StyledDropdown>
                   </div>
                   <div className="col-4">
-                    <Heading color="black" size="20px" bold>
+                    <Heading size="20px" bold>
                       Year
                     </Heading>
                     <StyledDropdown
@@ -147,11 +139,9 @@ const KnowYourCustomer = () => {
                     </StyledDropdown>
                   </div>
                 </div>
-              </EditableOption>
             </div>
             <div className="col-12 col-md-6 mb-3">
-              <EditableOption className="p-4 h-100">
-                <Heading color="black" size="20px" bold>
+                <Heading size="20px" bold>
                   Street Address
                 </Heading>
                 <FormInput
@@ -163,12 +153,9 @@ const KnowYourCustomer = () => {
                     setStreetAdressReg(e.target.value);
                   }}
                 />
-              </EditableOption>
             </div>
-
             <div className="col-12 col-md-6 mb-3">
-              <EditableOption className="p-4">
-                <Heading color="black" size="20px" bold>
+                <Heading size="20px" bold>
                   City/Town
                 </Heading>
                 <FormInput
@@ -180,11 +167,9 @@ const KnowYourCustomer = () => {
                     setCityTownReg(e.target.value);
                   }}
                 />
-              </EditableOption>
             </div>
             <div className="col-12 col-md-6 mb-3 ">
-              <EditableOption className="p-4">
-                <Heading color="black" size="20px" bold>
+                <Heading size="20px" bold>
                   State (if applicable)
                 </Heading>
                 <FormInput
@@ -196,11 +181,9 @@ const KnowYourCustomer = () => {
                     setCityStateReg(e.target.value);
                   }}
                 />
-              </EditableOption>
             </div>
             <div className="col-12 col-md-6 mb-3 ">
-              <EditableOption className="p-4">
-                <Heading color="black" size="20px" bold>
+                <Heading size="20px" bold>
                   Postcode
                 </Heading>
                 <FormInput
@@ -212,11 +195,9 @@ const KnowYourCustomer = () => {
                     setPostCodeReg(e.target.value);
                   }}
                 />
-              </EditableOption>
             </div>
             <div className="col-12 col-md-6 mb-3">
-              <EditableOption className="p-4 h-100">
-                <Heading color="black" size="20px" bold>
+                <Heading size="20px" bold>
                   Country
                 </Heading>
                 <StyledDropdown
@@ -227,12 +208,9 @@ const KnowYourCustomer = () => {
                     <option value={option}>{option}</option>
                   ))}
                 </StyledDropdown>
-              </EditableOption>
             </div>
             <div className="col-12 col-md-6 mb-3 ">
-              <b>Upload your document below</b>
-              <EditableOption className="p-4">
-                <Heading color="black" size="20px" bold>
+                <Heading size="20px" bold>
                   Upload Document
                 </Heading>
                 <FormInput
@@ -244,10 +222,9 @@ const KnowYourCustomer = () => {
                     setDocumentReg(e.target.value);
                   }}
                 />
-              </EditableOption>
             </div>
             <div className="col-12 col-md-6 mb-3">
-              <PrimaryButton onClick={userInfo} className="w-100" text="Save" />
+              <PrimaryButton onClick={userInfo} className="w-auto mt-5" text="Save" />
             </div>
           </div>
         </ContentTab>
