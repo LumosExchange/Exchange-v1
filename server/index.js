@@ -854,6 +854,63 @@ app.post("/getUser2FAOptions", (req, res) => {
   );
 });
 
+//SETTING UP PAYMENT TO BANKS
+
+app.post("/RegisterUkBank", (req, res) => {
+  const user = req.session.user[0].userID;
+  const name = req.body.name;
+  const sortCode = req.body.sortCode;
+  const accountNumber = req.body.accountNumber;
+
+  db.query(
+    "INSERT into UKBankAccounts (userID, Name, sortCode, accountNumber) WHERE (?,?,?,?)",
+    [user, name, sortCode, accountNumber],
+    (err, result) =>{
+      res.send({message: "Bank account added"});
+    }
+  )
+});
+
+app.post("/RegisterEUBank", (req, res) => {
+  const user = req.session.user[0].userID;
+  const name = req.body.name;
+  const BIC = req.body.BIC;
+  const IBAN = req.body.IBAN;
+
+  db.query(
+    "INSERT into EUBankAccounts (userID, Name, BIC, IBAN) WHERE (?,?,?,?)",
+    [user, name, BIC, IBAN],
+    (err, result) =>{
+      res.send({message: "Bank account added"});
+    }
+  )
+});
+
+
+app.post("/RegisterInternationalBank", (req, res) => {
+  const user = req.session.user[0].userID;
+  const bankName = req.body.bankName;
+  const bankCity = req.body.bankCity;
+  const bankCountry = req.body.bankCountry;
+  const SWIFTCode = req.body.SWIFTCode;
+  const payeesName = req.body.payeesName;
+  const interBankName = req.body.interBankName;
+  const interBankCity = req.body.interBankCity;
+  const interBankCountry = req.body.interBankCountry;
+  const interBankAccountNumber = req.body.interBankAccountNumber;
+  const interABA_RoutingNumber = req.body.bankName;
+
+  db.query(
+    "INSERT into UKBankAccounts (userID, Name, BIC, IBAN) WHERE (?,?,?,?)",
+    [user, bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interABA_RoutingNumber],
+    (err, result) =>{
+      res.send({message: "Bank account added"});
+    }
+  )
+});
+
+
+
 app.listen(3001, () => {
   console.log("running on port 3001");
 });
