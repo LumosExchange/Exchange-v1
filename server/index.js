@@ -876,12 +876,12 @@ app.post("/RegisterUkBank", (req, res) => {
 //register EU bank account
 app.post("/RegisterEUBank", (req, res) => {
   const user = req.session.user[0].userID;
-  const name = req.session.user[0].firstName + ' ' + req.session.user[0].lastName;
+  const name = req.body.bankName;
   const BIC = req.body.BIC;
   const IBAN = req.body.IBAN;
 
   db.query(
-    "INSERT INTO EUBankAccounts (userID, Name, BIC, IBAN) VALUES (?,?,?,?)",
+    "INSERT INTO EUBankAccounts (userID, bankName, BIC, IBAN) VALUES (?,?,?,?)",
     [user, name, BIC, IBAN],
     (err, result) =>{
       res.send({message: "Bank account added"});
@@ -915,7 +915,6 @@ app.post("/RegisterInternationalBank", (req, res) => {
 //get User bank details for Profile
 app.post("/getUkBankDetails", (req, res) => {
   const user = req.session.user[0].userID;
-
   db.query(
     "SELECT accountNumber, sortCode FROM UKBankAccounts WHERE (userID) = (?)",
     [user],
@@ -933,7 +932,31 @@ app.post("/getUkBankDetails", (req, res) => {
       }
     }
   )
-})
+});
+
+app.post("getEUBankDetails", (req,res) => {
+  const user = req.session.user[0].userID;
+  db.query(
+    "SELECT BIC, IBAN, bankName FROM EUBankAccounts WHERE (userID) = (?)",
+    [user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('errors: ' , err);
+      } else {
+        res.send({
+          type: "eubank",
+          name: "EU Bank Account",
+          bankName: result.bankName,
+          account: result.accountNumber,
+          sort: result.sortCode
+        });
+      }
+    }
+  )
+});
+
+
 
 app.listen(3001, () => {
   console.log("running on port 3001");
