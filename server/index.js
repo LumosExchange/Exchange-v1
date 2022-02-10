@@ -934,6 +934,7 @@ app.post("/getUkBankDetails", (req, res) => {
   )
 });
 
+//get user EU Bank details for profile
 app.post("getEUBankDetails", (req,res) => {
   const user = req.session.user[0].userID;
   db.query(
@@ -948,8 +949,8 @@ app.post("getEUBankDetails", (req,res) => {
           type: "eubank",
           name: "EU Bank Account",
           bankName: result.bankName,
-          account: result.accountNumber,
-          sort: result.sortCode
+          BIC: result.BIC,
+          IBAN: result.IBAN
         });
       }
     }
