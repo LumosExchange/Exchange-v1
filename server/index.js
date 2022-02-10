@@ -926,8 +926,8 @@ app.post("/getUkBankDetails", (req, res) => {
         res.send({
           type: "ukbank",
           name: "UK Bank Account",
-          account: result.accountNumber,
-          sort: result.sortCode
+          account: result[0].accountNumber,
+          sort: result[0].sortCode
         });
       }
     }
@@ -948,9 +948,9 @@ app.post("getEUBankDetails", (req,res) => {
         res.send({
           type: "eubank",
           name: "EU Bank Account",
-          bankName: result.bankName,
-          BIC: result.BIC,
-          IBAN: result.IBAN
+          bankName: result[0].bankName,
+          BIC: result[0].BIC,
+          IBAN: result[0].IBAN
         });
       }
     }
