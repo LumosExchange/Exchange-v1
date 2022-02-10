@@ -72,6 +72,20 @@ const PaymentMethodCard = styled.div(({ theme }) => css`
 	border-radius: 3px;
 `);
 
+const StyledModal = styled(Modal)(({ theme }) => css`
+	.modal-content {
+		border: 2px solid ${theme.colors.primary_cta};
+		background: ${theme.colors.base_bg};
+		color: ${theme.colors.text_primary};
+	}
+	.modal-body{
+		button { color: inherit };
+	}
+	.modal-title {
+		display: flex;
+	}
+`);
+
 // **** TODO ****
 // Map type to icon
 // Add remove button
@@ -90,10 +104,26 @@ const PaymentMethods = () => {
 	const [sortCode, setSortCode] = useState("");
 	const [accountNumber, setAccountNumber] = useState("");
 
+	// Set EU Bank Accounts
+	const [bankName, setBankName] = useState("");
+	const [IBAN, setIBAN] = useState("");
+	const [BIC, setBIC] = useState("");
+
 	const addUKBank = () => {
 		Axios.post("http://localhost:3001/RegisterUkBank", {
 			sortCode,
 			accountNumber
+		}).then((response) => {
+			console.log(response, 'response');
+			setModal(!modal);
+			setModalMode('initial');
+	})}
+
+	const addEUBank = () => {
+		Axios.post("http://localhost:3001/RegisterUkBank", {
+			bankName,
+			IBAN,
+			BIC,
 		}).then((response) => {
 			console.log(response, 'response');
 			setModal(!modal);
@@ -148,12 +178,23 @@ const PaymentMethods = () => {
 					</div>
 				</div>
 				</div>
-				<Modal
+				<StyledModal
 					centered
 					isOpen={modal}
 					toggle={toggle}
 				>
-				<ModalHeader>Add a Payment Method</ModalHeader>
+				<ModalHeader className="d-flex align-items-center">
+					{modalMode !== "initial" && (
+						<InvisibleButton
+							onClick={() => setModalMode("initial")}
+							className="d-flex align-items-center"
+						>
+							<i className="material-icons">arrow_back</i>
+						</InvisibleButton>
+					)}
+					<div>Add a Payment Method</div>
+				</ModalHeader>
+				
 				{modalMode === 'initial' && (
 					<ModalBody className="row">
 						<InvisibleButton onClick={() => setModalMode("card")} className="mb-2" disabled>
@@ -166,7 +207,7 @@ const PaymentMethods = () => {
 								Add UK Bank Acount
 							</div>
 						</InvisibleButton>
-						<InvisibleButton onClick={() => setModalMode("eubank")} className="mb-2" disabled>
+						<InvisibleButton onClick={() => setModalMode("eubank")} className="mb-2">
 							<div className="col-12 py-4 border rounded">
 								Add EU Bank Acount
 							</div>
@@ -221,7 +262,73 @@ const PaymentMethods = () => {
 						</div>
 					</ModalBody>
 				)}
-			</Modal>
+				{modalMode === 'eubank' && (
+					<ModalBody className="p-4">
+						<div className="col-12 mb-3">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+							>
+								Bank Name
+							</StyledLabel>
+							<FormInput
+								type="text"
+								id="bankName"
+								name="bankName"
+								placeholder="Enter bank name"
+								onChange={(e) => {
+									setBankName(e.target.value);
+								}}
+								className="w-100"
+						/>
+						</div>
+						<div className="col-12 mb-3">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+							>
+								IBAN
+							</StyledLabel>
+							<FormInput
+								type="text"
+								id="IBAN"
+								name="IBAN"
+								placeholder="Enter IBAN"
+								onChange={(e) => {
+									setIBAN(e.target.value);
+								}}
+								className="w-100"
+							/>
+						</div>
+						<div className="col-12 mb-4">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+							>
+								BIC
+							</StyledLabel>
+							<FormInput
+								type="text"
+								id="BIC"
+								name="BIC"
+								placeholder="Enter BIC/SWIFT"
+								onChange={(e) => {
+									setBIC(e.target.value);
+								}}
+								className="w-100"
+							/>
+						</div>
+						<div className="col-12">
+							<PrimaryButton
+								text="Add Bank Account"
+								className="w-100"
+								disabled={ (sortCode.length > 6) || (accountNumber.length < 8)}
+								onClick={ addEUBank }
+							/>
+						</div>
+					</ModalBody>
+				)}
+			</StyledModal>
 			</ContentTab>
 		</div>
 		</PageBody>
