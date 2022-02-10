@@ -80,6 +80,10 @@ const StyledModal = styled(Modal)(({ theme }) => css`
 	}
 	.modal-body{
 		button { color: inherit };
+
+		.showError {
+			color: ${theme.colors.invalid};
+		}
 	}
 	.modal-title {
 		display: flex;
@@ -95,10 +99,26 @@ const PaymentMethods = () => {
 
 	const [modalMode, setModalMode] = useState("initial")
     const [modal, setModal] = useState(false);
+
+	const resetValues = () => {
+		setSortCode('');
+		setAccountNumber('');
+		setIBAN('');
+		setBankName('');
+		setBIC('');
+	}
+
     const toggle = () => {
 		setModal(!modal);
 		setModalMode('initial');
+		resetValues();
 	}
+
+	const goBack = () => {
+		setModalMode("initial");
+		resetValues()
+	}
+
 
 	// Set Bank Accounts
 	const [sortCode, setSortCode] = useState("");
@@ -128,6 +148,9 @@ const PaymentMethods = () => {
 			console.log(response, 'response');
 			setModal(!modal);
 			setModalMode('initial');
+			setIBAN('');
+			setBankName('');
+			setBIC('');
 	})}
 
   	useEffect(() => {}, []);
@@ -186,7 +209,7 @@ const PaymentMethods = () => {
 				<ModalHeader className="d-flex align-items-center">
 					{modalMode !== "initial" && (
 						<InvisibleButton
-							onClick={() => setModalMode("initial")}
+							onClick={() => goBack() }
 							className="d-flex align-items-center"
 						>
 							<i className="material-icons">arrow_back</i>
@@ -287,7 +310,7 @@ const PaymentMethods = () => {
 								padding="0 0 10px 0"
 								bold
 							>
-								IBAN
+								IBAN {IBAN.length > 0 && <span className={IBAN.length > 32 && 'showError'}> - {IBAN.length}/32</span>}
 							</StyledLabel>
 							<FormInput
 								type="text"
@@ -305,7 +328,7 @@ const PaymentMethods = () => {
 								padding="0 0 10px 0"
 								bold
 							>
-								BIC
+								BIC {BIC.length > 0 && <span className={BIC.length > 11 && 'showError'}> - {BIC.length}/11</span>}
 							</StyledLabel>
 							<FormInput
 								type="text"
@@ -322,7 +345,11 @@ const PaymentMethods = () => {
 							<PrimaryButton
 								text="Add Bank Account"
 								className="w-100"
-								disabled={ (sortCode.length > 6) || (accountNumber.length < 8)}
+								disabled={
+									(IBAN.length === 0 || IBAN.length > 32)
+									|| (BIC.length > 11 || BIC.length < 8)
+									|| (bankName.length === 0)
+								}
 								onClick={ addEUBank }
 							/>
 						</div>
