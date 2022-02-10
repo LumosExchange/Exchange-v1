@@ -38,6 +38,7 @@ import { darkTheme, lightTheme } from "./Constants/Theme";
 import ProfileSecurity from "./Pages/Profile/Security";
 import ProfileBasic from "./Pages/Profile/Basic";
 import ProfileKYC from "./Pages/Profile/KnowYourCustomer";
+import PaymentMethods from "./Pages/Profile/PaymentMethods";
 
 const App = () => {
     const [theme, toggleTheme] = useDarkMode();
@@ -98,6 +99,7 @@ const App = () => {
             <Route path="/Profile/Security" element={<ProfileSecurity />} />
             <Route path="/Profile/Basic" element={<ProfileBasic />} />
             <Route path="/Profile/KYC" element={<ProfileKYC />} />
+            <Route path="/Profile/PaymentMethods" element={<PaymentMethods />} />
           </Routes>
         </Router>
         <Footer />

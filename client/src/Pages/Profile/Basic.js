@@ -120,6 +120,7 @@ const AccountTier = ({ tier, selectedTier, limit, title }) => (
         <ProfileTabLink href="/Profile/Basic" className="selected">Basic</ProfileTabLink>
         <ProfileTabLink href="/Profile/Security">Security</ProfileTabLink>
         <ProfileTabLink href="/Profile/KYC">KYC</ProfileTabLink>
+        <ProfileTabLink href="/Profile/PaymentMethods">Payment Methods</ProfileTabLink>
     </Tabs>
       <ContentTab className="position-relative">
         {isLoading && <LoadingState />}

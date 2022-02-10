@@ -858,9 +858,11 @@ app.post("/getUser2FAOptions", (req, res) => {
 
 app.post("/RegisterUkBank", (req, res) => {
   const user = req.session.user[0].userID;
-  const name = req.body.name;
+  const name = req.session.user[0].firstName + ' ' + req.session.user[0].lastName;
   const sortCode = req.body.sortCode;
   const accountNumber = req.body.accountNumber;
+
+  console.log(res.error, 'response errors');
 
   db.query(
     "INSERT into UKBankAccounts (userID, Name, sortCode, accountNumber) WHERE (?,?,?,?)",

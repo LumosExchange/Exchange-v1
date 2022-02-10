@@ -64,6 +64,7 @@ const KnowYourCustomer = () => {
           <ProfileTabLink href="/Profile/KYC" className="selected">
             KYC
           </ProfileTabLink>
+          <ProfileTabLink href="/Profile/PaymentMethods">Payment Methods</ProfileTabLink>
         </Tabs>
         <ContentTab className="text-white">
           <div className="d-flex p-4 row">

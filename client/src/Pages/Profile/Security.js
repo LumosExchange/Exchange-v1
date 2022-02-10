@@ -61,6 +61,7 @@ const Security = () => {
 				<ProfileTabLink href="/Profile/Basic">Basic</ProfileTabLink>
 				<ProfileTabLink href="/Profile/Security" className="selected">Security</ProfileTabLink>
 				<ProfileTabLink href="/Profile/KYC">KYC</ProfileTabLink>
+				<ProfileTabLink href="/Profile/PaymentMethods">Payment Methods</ProfileTabLink>
 			</Tabs>
 			<ContentTab>
 				<div className="d-flex p-4 row">

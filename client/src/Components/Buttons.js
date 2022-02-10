@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { Children } from 'react';
 import styled, { css } from "styled-components";
 
 const ButtonBase = styled.button(({ 
@@ -69,7 +70,7 @@ PrimaryButton.defaultProps = {
     hasIcon: false,
     iconPosition: 'right',
     iconName: 'arrow_forward',
-    textColor: 'text-primary',
+    textColor: 'text_primary',
     boldText: true,
 }
 
@@ -203,3 +204,16 @@ LinkButton.defaultProps = {
     textColor: 'black',
     boldText: true,
 }
+
+const InlineButtonBase = styled.button(({ theme }) => `
+    background: ${theme.colors.primary_cta};
+    border-radius: 3px;
+    color: ${theme.colors.base_bg};
+    padding: 10px 30px;
+`);
+
+export const InlineButton = ({ children, onClick }) => (
+    <InlineButtonBase className="border-0 w-100" onClick={onClick}>
+        {children}
+    </InlineButtonBase>
+);
