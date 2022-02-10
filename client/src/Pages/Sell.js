@@ -111,6 +111,8 @@ const Sell = () => {
 		  amountForSale: amountForSaleReg,
 		  aboveOrBelow: aboveOrBelowReg,
 		  change: changeReg,
+		  payment1: preferredPayment,
+		  payment2: secondaryPayment
 		})
   	}
 	const switchMode = () => {
