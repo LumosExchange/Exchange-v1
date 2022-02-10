@@ -912,6 +912,29 @@ app.post("/RegisterInternationalBank", (req, res) => {
   )
 });
 
+//get User bank details for Profile
+app.post("/getUkBankDetails", (req, res) => {
+  const user = req.session.user[0].userID;
+
+  db.query(
+    "SELECT accountNumber, sortCode FROM UKBankAccounts WHERE (userID) = (?)",
+    [user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('errors: ' , err);
+      } else {
+        res.send({
+          type: "ukbank",
+          name: "UK Bank Account",
+          account: result.accountNumber,
+          sort: result.sortCode
+        });
+      }
+    }
+  )
+})
+
 app.listen(3001, () => {
   console.log("running on port 3001");
 });
