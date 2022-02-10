@@ -855,32 +855,33 @@ app.post("/getUser2FAOptions", (req, res) => {
 });
 
 //SETTING UP PAYMENT TO BANKS
-
+//register uk bank account
 app.post("/RegisterUkBank", (req, res) => {
   const user = req.session.user[0].userID;
   const name = req.session.user[0].firstName + ' ' + req.session.user[0].lastName;
   const sortCode = req.body.sortCode;
   const accountNumber = req.body.accountNumber;
 
-  console.log(res.error, 'response errors');
-
   db.query(
-    "INSERT into UKBankAccounts (userID, Name, sortCode, accountNumber) WHERE (?,?,?,?)",
+    "INSERT INTO UKBankAccounts (userID, Name, sortCode, accountNumber) VALUES (?,?,?,?)",
     [user, name, sortCode, accountNumber],
     (err, result) =>{
+      console.log('errors: ' , err)
       res.send({message: "Bank account added"});
     }
+
   )
 });
 
+//register EU bank account
 app.post("/RegisterEUBank", (req, res) => {
   const user = req.session.user[0].userID;
-  const name = req.body.name;
+  const name = req.session.user[0].firstName + ' ' + req.session.user[0].lastName;
   const BIC = req.body.BIC;
   const IBAN = req.body.IBAN;
 
   db.query(
-    "INSERT into EUBankAccounts (userID, Name, BIC, IBAN) WHERE (?,?,?,?)",
+    "INSERT INTO EUBankAccounts (userID, Name, BIC, IBAN) VALUES (?,?,?,?)",
     [user, name, BIC, IBAN],
     (err, result) =>{
       res.send({message: "Bank account added"});
@@ -888,7 +889,7 @@ app.post("/RegisterEUBank", (req, res) => {
   )
 });
 
-
+//Register International bank account
 app.post("/RegisterInternationalBank", (req, res) => {
   const user = req.session.user[0].userID;
   const bankName = req.body.bankName;
@@ -903,7 +904,7 @@ app.post("/RegisterInternationalBank", (req, res) => {
   const interABA_RoutingNumber = req.body.bankName;
 
   db.query(
-    "INSERT into UKBankAccounts (userID, Name, BIC, IBAN) WHERE (?,?,?,?)",
+    "INSERT INTO UKBankAccounts (userID, Name, BIC, IBAN) VALUES (?,?,?,?)",
     [user, bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interABA_RoutingNumber],
     (err, result) =>{
       res.send({message: "Bank account added"});
