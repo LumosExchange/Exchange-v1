@@ -35,11 +35,11 @@ const userPaymentMethods = [
         sort: "00-00-00",
     },
     {
-      type: "eubank",
-      name: "EU Bank Account",
-      bankName: "Lloyds Bank",
-      bic: "BINAADADXXX",
-      iban: "FR7630006000011234567890189",
+		type: "eubank",
+		name: "EU Bank Account",
+		bankName: "Lloyds Bank",
+		bic: "BINAADADXXX",
+		iban: "FR7630006000011234567890189",
   },
     {
         type: "paypal",
@@ -98,10 +98,7 @@ const AddBankButton = styled(InvisibleButton)(({ theme }) => css`
 		p, i { color: ${theme.colors.text_primary} };
 
 		&:hover, &:focus {
-			i {
-				font-size: 30px;
-				color:  ${theme.colors.primary_cta};
-			}
+			i.arrow { color:  ${theme.colors.primary_cta}; }
 		}
 	}
 `);
@@ -113,8 +110,35 @@ const AddBankButton = styled(InvisibleButton)(({ theme }) => css`
 
 const PaymentMethods = () => {
 
+	// Modal Controls
 	const [modalMode, setModalMode] = useState("initial")
     const [modal, setModal] = useState(false);
+
+	// Set Bank Accounts
+	const [sortCode1, setSortCode1] = useState("");
+	const [sortCode2, setSortCode2] = useState("");
+	const [sortCode3, setSortCode3] = useState("");
+	const [accountNumber, setAccountNumber] = useState("");
+	const sortCode = sortCode1 + sortCode2 + sortCode3;
+
+	// Set EU Bank Accounts
+	const [bankName, setBankName] = useState("");
+	const [IBAN, setIBAN] = useState("");
+	const [BIC, setBIC] = useState("");
+
+	// Set Int Back Accounts
+	const [bankCity, setBankCity] = useState("");
+	const [bankCountry, setBankCountry] = useState("");
+	const [payeeName, setPayeeName] = useState("");
+	const [interBankCity, setInterBankCity] = useState("");
+	const [interBankCountry, setInterBankCountry] = useState("");
+	const [interBankAccountNumber, setInterBankAccountNumber] = useState("");
+	const [interBankRoutingNumber, setInterBankRoutingNumber] = useState("");
+	const [interBankName, setInterBankName] = useState("");
+
+	// PayPal & Skrill
+	const [payPalEmail, setPayPalEmail] = useState("");
+	const [skrillEmail, setSkrillEmail] = useState("");
 
 	const resetValues = () => {
 		setSortCode1('');
@@ -143,32 +167,8 @@ const PaymentMethods = () => {
 		} else {
 			setModalMode("initial");
 			resetValues()
-		}
-		
+		}	
 	}
-
-	// Set Bank Accounts
-	const [sortCode1, setSortCode1] = useState("");
-	const [sortCode2, setSortCode2] = useState("");
-	const [sortCode3, setSortCode3] = useState("");
-	const [accountNumber, setAccountNumber] = useState("");
-
-	const sortCode = sortCode1 + sortCode2 + sortCode3;
-
-	// Set EU Bank Accounts
-	const [bankName, setBankName] = useState("");
-	const [IBAN, setIBAN] = useState("");
-	const [BIC, setBIC] = useState("");
-
-	// Set Int Back Accounts
-	const [bankCity, setBankCity] = useState("");
-	const [bankCountry, setBankCountry] = useState("");
-	const [payeeName, setPayeeName] = useState("");
-	const [interBankCity, setInterBankCity] = useState("");
-	const [interBankCountry, setInterBankCountry] = useState("");
-	const [interBankAccountNumber, setInterBankAccountNumber] = useState("");
-	const [interBankRoutingNumber, setInterBankRoutingNumber] = useState("");
-	const [interBankName, setInterBankName] = useState("");
 
 	const addUKBank = () => {
 		Axios.post("http://localhost:3001/RegisterUkBank", {
@@ -179,7 +179,8 @@ const PaymentMethods = () => {
 			setModal(!modal);
 			setModalMode('initial');
 			resetValues()
-	})}
+		})
+	}
 
 	const addEUBank = () => {
 		Axios.post("http://localhost:3001/RegisterUkBank", {
@@ -191,7 +192,8 @@ const PaymentMethods = () => {
 			setModal(!modal);
 			setModalMode('initial');
 			resetValues()
-	})}
+		})
+	}
 
 	const addIntBank = () => {
 		Axios.post("http://localhost:3001/RegisterInternationalBank", {
@@ -210,7 +212,30 @@ const PaymentMethods = () => {
 			setModal(!modal);
 			setModalMode('initial');
 			resetValues()
-	})}
+		})
+	}
+
+	const addPayPal = () => {
+		Axios.post("http://localhost:3001/RegisterPaypal", {
+			payPalEmail
+		}).then((response) => {
+			console.log(response, 'response');
+			setModal(!modal);
+			setModalMode('initial');
+			resetValues()
+		})
+	}
+
+	const addSkrill = () => {
+		Axios.post("http://localhost:3001/RegisterSkrill", {
+			skrillEmail
+		}).then((response) => {
+			console.log(response, 'response');
+			setModal(!modal);
+			setModalMode('initial');
+			resetValues()
+		})
+	}
 
 	console.log(sortCode, 'sort code');
 
@@ -282,6 +307,8 @@ const PaymentMethods = () => {
 						|| (modalMode === "intbank" && 'Add International Bank Account (1/2)')
 						|| (modalMode === "intbankPage2" && 'Add International Bank Account (2/2)')
 						|| (modalMode === "card" && 'Add Credit/Debit Card')
+						|| (modalMode === "paypal" && 'Add PayPal Account')
+						|| (modalMode === "skrill" && 'Add Skrill Account')
 					}
 					</div>
 				</ModalHeader>
@@ -289,26 +316,55 @@ const PaymentMethods = () => {
 					<ModalBody className="row">
 						<AddBankButton onClick={() => setModalMode("card")} className="mb-2" disabled>
 							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
-								<Paragraph size="20px" className="mb-0">Add Credit/Debit Card</Paragraph>
-								<i className="material-icons">arrow_forward</i>
+								<div className="d-flex">
+									<i className="material-icons me-2">credit_card</i>
+									<Paragraph size="20px" className="mb-0">Add Credit/Debit Card</Paragraph>
+								</div>
 							</div>
 						</AddBankButton>
 						<AddBankButton onClick={() => setModalMode("ukbank")} className="mb-2">
 							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
-								<Paragraph size="20px" className="mb-0">Add UK Bank Account</Paragraph>
-								<i className="material-icons">arrow_forward</i>
+								<div className="d-flex">
+									<i className="material-icons me-2">account_balance</i>
+									<Paragraph size="20px" className="mb-0">Add UK Bank Account</Paragraph>
+								</div>
+								<i className="material-icons arrow">arrow_forward</i>
 							</div>
 						</AddBankButton>
 						<AddBankButton onClick={() => setModalMode("eubank")} className="mb-2">
 							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
-								<Paragraph size="20px" className="mb-0">Add EU Bank Account</Paragraph>
-								<i className="material-icons">arrow_forward</i>
+								<div className="d-flex">
+									<i className="material-icons me-2">account_balance</i>
+									<Paragraph size="20px" className="mb-0">Add EU Bank Account</Paragraph>
+								</div>
+								<i className="material-icons arrow">arrow_forward</i>
 							</div>
 						</AddBankButton>
 						<AddBankButton onClick={() => setModalMode("intbank")} className="mb-2">
 							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
-								<Paragraph size="20px" className="mb-0">Add International Bank Account</Paragraph>
-								<i className="material-icons">arrow_forward</i>
+								<div className="d-flex">
+									<i className="material-icons me-2">account_balance</i>
+									<Paragraph size="20px" className="mb-0">Add International Bank Account</Paragraph>
+								</div>
+								<i className="material-icons arrow">arrow_forward</i>
+							</div>
+						</AddBankButton>
+						<AddBankButton onClick={() => setModalMode("paypal")} className="mb-2">
+							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
+								<div className="d-flex">
+									<i className="material-icons me-2">account_balance_wallet</i>
+									<Paragraph size="20px" className="mb-0">Add PayPal Account</Paragraph>
+								</div>
+								<i className="material-icons arrow">arrow_forward</i>
+							</div>
+						</AddBankButton>
+						<AddBankButton onClick={() => setModalMode("skrill")} className="mb-2">
+							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
+								<div className="d-flex">
+									<i className="material-icons me-2">account_balance_wallet</i>
+									<Paragraph size="20px" className="mb-0">Add Skrill Account</Paragraph>
+								</div>
+								<i className="material-icons arrow">arrow_forward</i>
 							</div>
 						</AddBankButton>
 					</ModalBody>
@@ -699,7 +755,73 @@ const PaymentMethods = () => {
 						</div>
 					</ModalBody>
 				)}
-			</StyledModal>
+				{modalMode === "paypal" && (
+					<ModalBody className="p-4">
+						<form>
+							<div className="col-12 mb-3">
+								<StyledLabel
+									padding="0 0 10px 0"
+									bold
+									htmlFor="email"
+								>
+									PayPal Email
+								</StyledLabel>
+								<FormInput
+									type="text"
+									id="email"
+									name="email"
+									placeholder="Enter PayPal Email"
+									onChange={(e) => {
+										setPayPalEmail(e.target.value);
+									}}
+									className="w-100"
+							/>
+							</div>
+							<div className="col-12">
+								<PrimaryButton
+									text="Add PayPal"
+									className="w-100"
+									disabled={ payPalEmail.length === 0}
+									onClick={ addPayPal }
+								/>
+							</div>
+						</form>
+					</ModalBody>
+				)}
+				{modalMode === "skrill" && (
+					<ModalBody className="p-4">
+						<form>
+							<div className="col-12 mb-3">
+								<StyledLabel
+									padding="0 0 10px 0"
+									bold
+									htmlFor="email"
+								>
+									Skrill Email
+								</StyledLabel>
+								<FormInput
+									type="text"
+									id="email"
+									name="email"
+									placeholder="Enter Skrill Email"
+									onChange={(e) => {
+										setSkrillEmail(e.target.value);
+									}}
+									className="w-100"
+							/>
+							</div>
+							<div className="col-12">
+								<PrimaryButton
+									text="Add PayPal"
+									className="w-100"
+									disabled={ payPalEmail.length === 0}
+									onClick={ addSkrill }
+								/>
+							</div>
+						</form>
+					</ModalBody>
+				)}
+				</StyledModal>
 			</ContentTab>
 		</div>
 		</PageBody>
