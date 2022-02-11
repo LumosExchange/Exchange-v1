@@ -19,7 +19,7 @@ import {
 import Paragraph from "../../Components/Paragraph";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 
-const userPaymentMethods = [
+const fakeUserPaymentMethods = [
 	{
         type: "card",
         name: "Primary Card",
@@ -123,7 +123,7 @@ const ShowAddedPaymentMethods = () => {
 	const [userPaymentMethods, setUserPaymentMethods] = useState([]);
 
 	const getUserPaymentMethods = () => {
-		Axios.get("http://localhost:3001/getUserPaymentMethods", {
+		Axios.post("http://localhost:3001/getInterBankDetails", {
 		}).then((response) => {
 		  console.log('get payment methods fired');
 		  	setUserPaymentMethods(response?.data);
@@ -132,12 +132,11 @@ const ShowAddedPaymentMethods = () => {
 	}
 	
 	useEffect(() => {
-		getUserPaymentMethods();
 	});
 
 	return (
 		<React.Fragment>
-		{userPaymentMethods.map((data) => (
+		{fakeUserPaymentMethods.map((data) => (
 			<PaymentMethodCard className="p-4 mb-3 d-flex align-items-center row">
 				<div className="col-12 d-flex col-lg-4">
 				{convertMethodToIcon(data.type)}
@@ -191,7 +190,7 @@ const PaymentMethods = () => {
 	const [interBankName, setInterBankName] = useState("");
 
 	// PayPal & Skrill
-	const [payPalEmail, setPayPalEmail] = useState("");
+	const [paypalEmail, setPayPalEmail] = useState("");
 	const [skrillEmail, setSkrillEmail] = useState("");
 
 	const resetValues = () => {
@@ -237,7 +236,7 @@ const PaymentMethods = () => {
 	}
 
 	const addEUBank = () => {
-		Axios.post("http://localhost:3001/RegisterUkBank", {
+		Axios.post("http://localhost:3001/RegisterEUBank", {
 			bankName,
 			IBAN,
 			BIC,
@@ -271,7 +270,7 @@ const PaymentMethods = () => {
 
 	const addPayPal = () => {
 		Axios.post("http://localhost:3001/RegisterPaypal", {
-			payPalEmail
+			paypalEmail
 		}).then((response) => {
 			console.log(response, 'response');
 			setModal(!modal);
@@ -473,6 +472,7 @@ const PaymentMethods = () => {
 								id="accountNumber"
 								name="accountNumber"
 								placeholder="Enter account number"
+								maxLength="8"
 								onChange={(e) => {
 									setAccountNumber(e.target.value);
 								}}
@@ -483,7 +483,7 @@ const PaymentMethods = () => {
 							<PrimaryButton
 								text="Add Bank Account"
 								className="w-100"
-								disabled={ (sortCode.length > 6) || (accountNumber.length < 8)}
+								disabled={ (sortCode.length > 6 || sortCode.length < 6) || (accountNumber.length < 8)}
 								onClick={ addUKBank }
 							/>
 						</div>
@@ -815,7 +815,7 @@ const PaymentMethods = () => {
 								<PrimaryButton
 									text="Add PayPal"
 									className="w-100"
-									disabled={ payPalEmail.length === 0}
+									disabled={ paypalEmail.length === 0}
 									onClick={ addPayPal }
 								/>
 							</div>
