@@ -244,8 +244,8 @@ const PaymentMethods = () => {
 						))}
 					</div>
 				</div>
-				</div>
-				<StyledModal
+			</div>
+			<StyledModal
 					centered
 					isOpen={modal}
 					toggle={toggle}
@@ -270,7 +270,6 @@ const PaymentMethods = () => {
 					}
 					</div>
 				</ModalHeader>
-				
 				{modalMode === 'initial' && (
 					<ModalBody className="row">
 						<InvisibleButton onClick={() => setModalMode("card")} className="mb-2" disabled>
@@ -392,6 +391,7 @@ const PaymentMethods = () => {
 							<StyledLabel
 								padding="0 0 10px 0"
 								bold
+								htmlFor="bankName"
 							>
 								Bank Name
 							</StyledLabel>
@@ -410,6 +410,7 @@ const PaymentMethods = () => {
 							<StyledLabel
 								padding="0 0 10px 0"
 								bold
+								htmlFor="IBAN"
 							>
 								IBAN {IBAN.length > 0 && <span className={IBAN.length > 32 && 'showError'}> - {IBAN.length}/32</span>}
 							</StyledLabel>
@@ -428,6 +429,7 @@ const PaymentMethods = () => {
 							<StyledLabel
 								padding="0 0 10px 0"
 								bold
+								htmlFor="BIC"
 							>
 								BIC {BIC.length > 0 && <span className={BIC.length > 11 && 'showError'}> - {BIC.length}/11</span>}
 							</StyledLabel>
@@ -462,6 +464,7 @@ const PaymentMethods = () => {
 							<StyledLabel
 								padding="0 0 10px 0"
 								bold
+								htmlFor="bankName"
 							>
 								Bank Name
 							</StyledLabel>
@@ -480,6 +483,7 @@ const PaymentMethods = () => {
 							<StyledLabel
 								padding="0 0 10px 0"
 								bold
+								htmlFor="bankCity"
 							>
 								Bank City
 							</StyledLabel>
@@ -498,6 +502,7 @@ const PaymentMethods = () => {
 							<StyledLabel
 								padding="0 0 10px 0"
 								bold
+								htmlFor="bankCountry"
 							>
 								Bank Country
 							</StyledLabel>
@@ -512,10 +517,11 @@ const PaymentMethods = () => {
 								className="w-100"
 							/>
 						</div>
-						<div className="col-12 mb-4">
+						<div className="col-12 mb-3">
 							<StyledLabel
 								padding="0 0 10px 0"
 								bold
+								htmlFor="BIC"
 							>
 								Bank BIC/SWIFT code
 							</StyledLabel>
@@ -534,6 +540,7 @@ const PaymentMethods = () => {
 							<StyledLabel
 								padding="0 0 10px 0"
 								bold
+								htmlFor="payeeName"
 							>
 								Payee Name
 							</StyledLabel>
@@ -570,6 +577,7 @@ const PaymentMethods = () => {
 							<StyledLabel
 								padding="0 0 10px 0"
 								bold
+								htmlFor="intermediateBankName"
 							>
 								Intermediate Bank Name
 							</StyledLabel>
@@ -588,6 +596,7 @@ const PaymentMethods = () => {
 							<StyledLabel
 								padding="0 0 10px 0"
 								bold
+								htmlFor="intermediateBankCity"
 							>
 								Intermediate Bank City
 							</StyledLabel>
@@ -606,6 +615,7 @@ const PaymentMethods = () => {
 							<StyledLabel
 								padding="0 0 10px 0"
 								bold
+								htmlFor="intermediateBankCountry"
 							>
 								Intermediate Bank Country
 							</StyledLabel>
@@ -624,6 +634,7 @@ const PaymentMethods = () => {
 							<StyledLabel
 								padding="0 0 10px 0"
 								bold
+								htmlFor="intermediateBankAccountNumber"
 							>
 								Intermediate Bank Account Number
 							</StyledLabel>
@@ -642,6 +653,7 @@ const PaymentMethods = () => {
 							<StyledLabel
 								padding="0 0 10px 0"
 								bold
+								htmlFor="intermediateBankRoutingNumber"
 							>
 								Intermediate ABA/Routing Number
 							</StyledLabel>
@@ -661,9 +673,11 @@ const PaymentMethods = () => {
 								text="Add Bank Account"
 								className="w-100"
 								disabled={
-									(IBAN.length === 0 || IBAN.length > 32)
-									|| (BIC.length > 11 || BIC.length < 8)
-									|| (bankName.length === 0)
+									interBankName.length === 0
+									|| interBankCity.length === 0
+									|| interBankCountry.length === 0
+									|| interBankAccountNumber.length === 0
+									|| interBankRoutingNumber.length === 0
 								}
 								onClick={ addIntBank }
 							/>
