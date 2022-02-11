@@ -74,14 +74,17 @@ const PaymentMethodCard = styled.div(({ theme }) => css`
 
 const StyledModal = styled(Modal)(({ theme }) => css`
 	.modal-content {
-		border: 1px solid ${theme.colors.primary_link_hover};
-		background: ${theme.colors.base_bg};
+		border: 1px solid ${theme.colors.panel_accent};
+		background: ${theme.colors.modal_bg};
 		color: ${theme.colors.text_primary};
 	}
 	.modal-body{
 		.showError {
 			color: ${theme.colors.invalid};
 		}
+	}
+	.modal-header {
+		border: 0;
 	}
 	.modal-title {
 		display: flex;
@@ -258,9 +261,9 @@ const PaymentMethods = () => {
 				</div>
 			</div>
 			<StyledModal
-					centered
-					isOpen={modal}
-					toggle={toggle}
+				centered
+				isOpen={modal}
+				toggle={toggle}
 				>
 				<ModalHeader className="d-flex align-items-center">
 					{modalMode !== "initial" && (
