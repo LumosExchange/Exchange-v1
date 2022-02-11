@@ -1046,6 +1046,7 @@ app.post("getSkrillDetails", (req,res) => {
       } else {
         res.send({
           type: "skrill",
+          name: "Skrill",
           email: result[0].skrillEmail,
         });
       }
