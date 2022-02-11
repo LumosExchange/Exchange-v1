@@ -1023,6 +1023,7 @@ app.post("getPaypalDeails", (req, res) => {
       } else {
         res.send({
           type: "paypal",
+          name: "PayPal",
           email: result[0].paypalEmail,
         });
       }
