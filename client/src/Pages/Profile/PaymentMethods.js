@@ -317,7 +317,7 @@ const PaymentMethods = () => {
 						<AddBankButton onClick={() => setModalMode("card")} className="mb-2" disabled>
 							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 								<div className="d-flex">
-									<i className="material-icons me-2">credit_card</i>
+									<i className="material-icons me-2 d-flex align-items-center">credit_card</i>
 									<Paragraph size="20px" className="mb-0">Add Credit/Debit Card</Paragraph>
 								</div>
 							</div>
@@ -325,7 +325,7 @@ const PaymentMethods = () => {
 						<AddBankButton onClick={() => setModalMode("ukbank")} className="mb-2">
 							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 								<div className="d-flex">
-									<i className="material-icons me-2">account_balance</i>
+									<i className="material-icons me-2 d-flex align-items-center">account_balance</i>
 									<Paragraph size="20px" className="mb-0">Add UK Bank Account</Paragraph>
 								</div>
 								<i className="material-icons arrow">arrow_forward</i>
@@ -334,7 +334,7 @@ const PaymentMethods = () => {
 						<AddBankButton onClick={() => setModalMode("eubank")} className="mb-2">
 							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 								<div className="d-flex">
-									<i className="material-icons me-2">account_balance</i>
+									<i className="material-icons me-2 d-flex align-items-center">account_balance</i>
 									<Paragraph size="20px" className="mb-0">Add EU Bank Account</Paragraph>
 								</div>
 								<i className="material-icons arrow">arrow_forward</i>
@@ -343,7 +343,7 @@ const PaymentMethods = () => {
 						<AddBankButton onClick={() => setModalMode("intbank")} className="mb-2">
 							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 								<div className="d-flex">
-									<i className="material-icons me-2">account_balance</i>
+									<i className="material-icons me-2 d-flex align-items-center">account_balance</i>
 									<Paragraph size="20px" className="mb-0">Add International Bank Account</Paragraph>
 								</div>
 								<i className="material-icons arrow">arrow_forward</i>
@@ -352,7 +352,7 @@ const PaymentMethods = () => {
 						<AddBankButton onClick={() => setModalMode("paypal")} className="mb-2">
 							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 								<div className="d-flex">
-									<i className="material-icons me-2">account_balance_wallet</i>
+									<i className="material-icons me-2 d-flex align-items-center">mail_outline</i>
 									<Paragraph size="20px" className="mb-0">Add PayPal Account</Paragraph>
 								</div>
 								<i className="material-icons arrow">arrow_forward</i>
@@ -361,7 +361,7 @@ const PaymentMethods = () => {
 						<AddBankButton onClick={() => setModalMode("skrill")} className="mb-2">
 							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 								<div className="d-flex">
-									<i className="material-icons me-2">account_balance_wallet</i>
+									<i className="material-icons me-2 d-flex align-items-center">mail_outline</i>
 									<Paragraph size="20px" className="mb-0">Add Skrill Account</Paragraph>
 								</div>
 								<i className="material-icons arrow">arrow_forward</i>
@@ -812,7 +812,7 @@ const PaymentMethods = () => {
 							</div>
 							<div className="col-12">
 								<PrimaryButton
-									text="Add PayPal"
+									text="Add Skrill"
 									className="w-100"
 									disabled={ payPalEmail.length === 0}
 									onClick={ addSkrill }
