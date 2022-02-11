@@ -912,6 +912,39 @@ app.post("/RegisterInternationalBank", (req, res) => {
   )
 });
 
+//Register paypal
+app.post("/RegisterPaypal", (req, res) => {
+  const user = req.session.user[0].userID;
+  const paypalEmail = req.body.paypalEmail;
+
+  
+  db.query(
+    "INSERT INTO paypalAccounts (userID, paypalEmail) VALUES (?,?)",
+    [user, paypalEmail],
+    (err, result) =>{
+      console.log('errors: ' , err)
+      res.send({message: "Paypal account added"});
+    }
+  )
+});
+
+//Register Skrill address
+app.post("/RegisterSkrill", (req,res) => {
+
+  const user = req.session.user[0].userID;
+  const skrillEmail = req.body.skrillEmail;
+  db.query(
+    "INSERT INTO skrillAccounts (userID, skrillEmail) VALUES (?,?)",
+    [user, paypalEmail],
+    (err, result) =>{
+      console.log('errors: ' , err)
+      res.send({message: "Skrill account added"});
+    }
+  )
+
+})
+
+
 //get User bank details for Profile
 app.post("/getUkBankDetails", (req, res) => {
   const user = req.session.user[0].userID;
@@ -956,6 +989,69 @@ app.post("getEUBankDetails", (req,res) => {
     }
   )
 });
+
+//get international bank details for profile FINISH THIS
+app.post("getInterBankDetails", (req, res) => {
+  const user = req.session.user[0].userID;
+  db.query(
+    "SELECT BIC, FROM internationalBankAccounts WHERE (userID) = (?)",
+    [user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('errors: ' , err);
+      } else {
+        res.send({
+          type: "",
+          name: "",
+        });
+      }
+    }
+  )
+});
+
+//get Paypal details for profile
+app.post("getPaypalDeails", (req, res) => {
+  const user = req.session.user[0].userID;
+  db.query(
+    "SELECT paypalEmail, FROM paypalAccounts WHERE (userID) = (?)",
+    [user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('errors: ' , err);
+      } else {
+        res.send({
+          type: "paypal",
+          email: result[0].paypalEmail,
+        });
+      }
+    }
+  )
+});
+
+//Get Skrill details for profile
+
+app.post("getSkrillDetails", (req,res) => {
+  const user = req.session.user[0].userID
+
+  db.query(
+    "SELECT skrillEmail, FROM skrillAccounts WHERE (userID) = (?)",
+    [user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('errors: ' , err);
+      } else {
+        res.send({
+          type: "skrill",
+          email: result[0].skrillEmail,
+        });
+      }
+    }
+  )
+});
+
 
 
 
