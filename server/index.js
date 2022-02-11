@@ -1005,7 +1005,7 @@ app.post("getInterBankDetails", (req, res) => {
           type: "internationalBank",
           name: "International Bank",
           bankName: result[0].bankName,
-          swift: result[0].SWIFTCode,
+          bic: result[0].SWIFTCode,
         });
       }
     }
