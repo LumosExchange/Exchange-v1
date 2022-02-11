@@ -901,13 +901,13 @@ app.post("/RegisterInternationalBank", (req, res) => {
   const interBankCity = req.body.interBankCity;
   const interBankCountry = req.body.interBankCountry;
   const interBankAccountNumber = req.body.interBankAccountNumber;
-  const interABA_RoutingNumber = req.body.bankName;
+  const interBankRoutingNumber = req.body.bankName;
 
   db.query(
-    "INSERT INTO UKBankAccounts (userID, Name, BIC, IBAN) VALUES (?,?,?,?)",
-    [user, bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interABA_RoutingNumber],
+    "INSERT INTO internatalBankAccounts (userID, bankName, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber) VALUES (?,?,?,?,?,?,?,?,?,?)",
+    [user, bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber],
     (err, result) =>{
-      res.send({message: "Bank account added"});
+      res.send({message: "International Bank account added"});
     }
   )
 });
