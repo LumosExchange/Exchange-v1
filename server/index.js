@@ -994,7 +994,7 @@ app.post("getEUBankDetails", (req,res) => {
 app.post("getInterBankDetails", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
-    "SELECT BIC, FROM internationalBankAccounts WHERE (userID) = (?)",
+    "SELECT bankName, SWIFTCode FROM internationalBankAccounts WHERE (userID) = (?)",
     [user],
     (err, result) =>{
       if (err) {
@@ -1002,8 +1002,10 @@ app.post("getInterBankDetails", (req, res) => {
         console.log('errors: ' , err);
       } else {
         res.send({
-          type: "",
-          name: "",
+          type: "internationalBank",
+          name: "International Bank",
+          bankName: result[0].bankName,
+          swift: result[0].SWIFTCode,
         });
       }
     }
