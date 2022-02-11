@@ -130,6 +130,13 @@ app.post("/register", (req, res) => {
         console.log(err);
       }
     );
+    db.query(
+      "INSERT INTO userPaymentAccounts (EUBank, UKBank, InterBank, Paypal, Skrill) VALUES (?,?,?,?,?)",
+      [0,0,0,0,0],
+      (err, result) => {
+        console.log(err);
+      }
+    );
   });
 });
 
@@ -904,7 +911,7 @@ app.post("/RegisterInternationalBank", (req, res) => {
   const interBankRoutingNumber = req.body.bankName;
 
   db.query(
-    "INSERT INTO internatalBankAccounts (userID, bankName, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber) VALUES (?,?,?,?,?,?,?,?,?,?)",
+    "INSERT INTO internationalBankAccounts (userID, bankName, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber) VALUES (?,?,?,?,?,?,?,?,?,?)",
     [user, bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber],
     (err, result) =>{
       res.send({message: "International Bank account added"});
@@ -1055,6 +1062,30 @@ app.post("getSkrillDetails", (req,res) => {
     }
   )
 });
+
+//return all user payment methords
+app.post("getUserPaymentMethords", (req,res) => {
+  const user = req.session.user[0].userID
+
+  db.query(
+    "SELECT EUBank, UKBank, InterBank, Paypal, Skrill, FROM userPaymentAccounts WHERE (userID) = (?)",
+    [user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('errors: ' , err);
+      } else {
+        res.send({
+          UKBank: result[0].EUBank,
+          InterBank: result[0].InterBank,
+          Paypal: result[0].Paypal,
+          Skrill: result[0].Skrill
+        });
+      }
+    }
+  )
+});
+
 
 
 
