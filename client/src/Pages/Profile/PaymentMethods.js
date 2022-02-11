@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Heading from "../../Components/Heading";
 import PrimaryButton, { InlineButton, InvisibleButton } from "../../Components/Buttons";
 import styled, { css } from "styled-components";
@@ -74,7 +74,7 @@ const PaymentMethodCard = styled.div(({ theme }) => css`
 
 const StyledModal = styled(Modal)(({ theme }) => css`
 	.modal-content {
-		border: 2px solid ${theme.colors.primary_cta};
+		border: 0;
 		background: ${theme.colors.base_bg};
 		color: ${theme.colors.text_primary};
 	}
@@ -101,7 +101,9 @@ const PaymentMethods = () => {
     const [modal, setModal] = useState(false);
 
 	const resetValues = () => {
-		setSortCode('');
+		setSortCode1('');
+		setSortCode2('');
+		setSortCode3('');
 		setAccountNumber('');
 		setIBAN('');
 		setBankName('');
@@ -110,24 +112,48 @@ const PaymentMethods = () => {
 
     const toggle = () => {
 		setModal(!modal);
-		setModalMode('initial');
-		resetValues();
+
+		if (modalMode === "intbankPage2"){
+			setModalMode("intbank");
+		} else {
+			setModalMode("initial");
+			resetValues()
+		}
 	}
 
 	const goBack = () => {
-		setModalMode("initial");
-		resetValues()
+		if (modalMode === "intbankPage2"){
+			setModalMode("intbank");
+		} else {
+			setModalMode("initial");
+			resetValues()
+		}
+		
 	}
 
 
 	// Set Bank Accounts
-	const [sortCode, setSortCode] = useState("");
+	const [sortCode1, setSortCode1] = useState("");
+	const [sortCode2, setSortCode2] = useState("");
+	const [sortCode3, setSortCode3] = useState("");
 	const [accountNumber, setAccountNumber] = useState("");
+
+	const sortCode = sortCode1 + sortCode2 + sortCode3;
 
 	// Set EU Bank Accounts
 	const [bankName, setBankName] = useState("");
 	const [IBAN, setIBAN] = useState("");
 	const [BIC, setBIC] = useState("");
+
+	// Set Int Back Accounts
+	const [bankCity, setBankCity] = useState("");
+	const [bankCountry, setBankCountry] = useState("");
+	const [payeeName, setPayeeName] = useState("");
+	const [interBankCity, setInterBankCity] = useState("");
+	const [interBankCountry, setInterBankCountry] = useState("");
+	const [interBankAccountNumber, setInterBankAccountNumber] = useState("");
+	const [interBankRoutingNumber, setInterBankRoutingNumber] = useState("");
+	const [interBankName, setInterBankName] = useState("");
 
 	const addUKBank = () => {
 		Axios.post("http://localhost:3001/RegisterUkBank", {
@@ -137,6 +163,7 @@ const PaymentMethods = () => {
 			console.log(response, 'response');
 			setModal(!modal);
 			setModalMode('initial');
+			resetValues()
 	})}
 
 	const addEUBank = () => {
@@ -148,10 +175,29 @@ const PaymentMethods = () => {
 			console.log(response, 'response');
 			setModal(!modal);
 			setModalMode('initial');
-			setIBAN('');
-			setBankName('');
-			setBIC('');
+			resetValues()
 	})}
+
+	const addIntBank = () => {
+		Axios.post("http://localhost:3001/RegisterInternationalBank", {
+			bankName,
+			bankCity,
+			bankCountry,
+			BIC,
+			payeeName,
+			interBankName,
+			interBankCity,
+			interBankCountry,
+			interBankAccountNumber,
+			interBankRoutingNumber,
+		}).then((response) => {
+			console.log(response, 'response');
+			setModal(!modal);
+			setModalMode('initial');
+			resetValues()
+	})}
+
+	console.log(sortCode, 'sort code');
 
   	useEffect(() => {}, []);
 
@@ -170,34 +216,32 @@ const PaymentMethods = () => {
 					<div className="d-flex justify-content-between align-items-center">
 						<Heading size="18px" bold className="mb-0">Payment Methods</Heading>
 						<div className="col-3">
-							<InlineButton onClick={toggle}>Add a Payment Method</InlineButton>
+							<InlineButton onClick={toggle}>
+								Add a Payment Method</InlineButton>
 						</div>
 					</div>
 					<div className="d-flex p-4 row">
-						{userPaymentMethods.map((data) => {
-							console.log(data.type);
-							return (
-								<PaymentMethodCard className="p-4 mb-3 d-flex align-items-center row">
-									<div className="col-12 d-flex col-lg-4">
-									{convertMethodToIcon(data.type)}
-										<Heading
-											size="20px"
-											className="mb-0 ms-2"
-										>
-											{data.name}
-										</Heading>
-									</div>
-									<div className="col-12 col-lg-6">
-										<Paragraph className="mb-0">
-											{data.account || data.iban || data.email}
-										</Paragraph>
-									</div>
-									<div className="col-12 col-lg-2">
-										<InlineButton>Edit</InlineButton>
-									</div>
-								</PaymentMethodCard>
-							);
-						})}
+						{userPaymentMethods.map((data) => (
+							<PaymentMethodCard className="p-4 mb-3 d-flex align-items-center row">
+								<div className="col-12 d-flex col-lg-4">
+								{convertMethodToIcon(data.type)}
+									<Heading
+										size="20px"
+										className="mb-0 ms-2"
+									>
+										{data.name}
+									</Heading>
+								</div>
+								<div className="col-12 col-lg-6">
+									<Paragraph className="mb-0">
+										{data.account || data.iban || data.email}
+									</Paragraph>
+								</div>
+								<div className="col-12 col-lg-2">
+									<InlineButton>Edit</InlineButton>
+								</div>
+							</PaymentMethodCard>
+						))}
 					</div>
 				</div>
 				</div>
@@ -215,52 +259,108 @@ const PaymentMethods = () => {
 							<i className="material-icons">arrow_back</i>
 						</InvisibleButton>
 					)}
-					<div>Add a Payment Method</div>
+					<div>
+					{
+						(modalMode === "initial" && 'Add a Payment Method')
+						|| (modalMode === "ukbank" && 'Add UK Bank Account')
+						|| (modalMode === "eubank" && 'Add EU Bank Account')
+						|| (modalMode === "intbank" && 'Add International Bank Account (1/2)')
+						|| (modalMode === "intbankPage2" && 'Add International Bank Account (2/2)')
+						|| (modalMode === "card" && 'Add Credit/Debit Card')
+					}
+					</div>
 				</ModalHeader>
 				
 				{modalMode === 'initial' && (
 					<ModalBody className="row">
 						<InvisibleButton onClick={() => setModalMode("card")} className="mb-2" disabled>
-							<div className="col-12 py-4 border rounded">
-								Add Credit/Debit Card
+							<div className="col-12 p-4 border rounded d-flex justify-content-between align-items-center">
+								<Paragraph size="20px" className="mb-0">Add Credit/Debit Card</Paragraph>
+								<i className="material-icons">arrow_forward</i>
 							</div>
 						</InvisibleButton>
 						<InvisibleButton onClick={() => setModalMode("ukbank")} className="mb-2">
-							<div className="col-12 py-4 border rounded">
-								Add UK Bank Acount
+							<div className="col-12 p-4 border rounded d-flex justify-content-between align-items-center">
+								<Paragraph size="20px" className="mb-0">Add UK Bank Account</Paragraph>
+								<i className="material-icons">arrow_forward</i>
 							</div>
 						</InvisibleButton>
 						<InvisibleButton onClick={() => setModalMode("eubank")} className="mb-2">
-							<div className="col-12 py-4 border rounded">
-								Add EU Bank Acount
+							<div className="col-12 p-4 border rounded d-flex justify-content-between align-items-center">
+								<Paragraph size="20px" className="mb-0">Add EU Bank Account</Paragraph>
+								<i className="material-icons">arrow_forward</i>
+							</div>
+						</InvisibleButton>
+						<InvisibleButton onClick={() => setModalMode("intbank")} className="mb-2">
+							<div className="col-12 p-4 border rounded d-flex justify-content-between align-items-center">
+								<Paragraph size="20px" className="mb-0">Add International Bank Account</Paragraph>
+								<i className="material-icons">arrow_forward</i>
 							</div>
 						</InvisibleButton>
 					</ModalBody>
 				)}
 				{modalMode === 'ukbank' && (
 					<ModalBody className="p-4">
-						<div className="col-12 mb-3">
-							<StyledLabel
-								padding="0 0 10px 0"
-								bold
-							>
-								Sort Code
-							</StyledLabel>
-							<FormInput
-								type="text"
-								id="Code"
-								name="code"
-								placeholder="Enter sort code"
-								onChange={(e) => {
-									setSortCode(e.target.value);
-								}}
-								className="w-100"
-						/>
+						<form>
+						<div className="col-12 mb-3 row">
+							<div className="col-12">
+								<StyledLabel
+									padding="0 0 10px 0"
+									bold
+									htmlFor="sort-part-1"
+								>
+									Sort Code
+								</StyledLabel>
+							</div>
+							<div className="col-3">
+								<FormInput
+									type="tel"
+									id="sort-part-1"
+									name="sort-part-1"
+									placeholder=""
+									onChange={(e) => {
+										setSortCode1(e.target.value);
+									}}
+									onInput={(e) => { e.target.value = e.target.value.slice(0, 2) }}
+									className="w-100 text-center"
+								/>
+							</div>
+							<div className="col-1 d-flex align-items-center">&mdash;</div>
+							<div className="col-3">
+								<FormInput
+									type="tel"
+									id="sort-part-2"
+									name="sort-part-2"
+									placeholder=""
+									onChange={(e) => {
+										setSortCode2(e.target.value);
+									}}
+									onInput={(e) => { e.target.value = e.target.value.slice(0, 2) }}
+									className="w-100 text-center"
+									
+								/>
+							</div>
+							<div className="col-1 d-flex align-items-center">&mdash;</div>
+							<div className="col-3">
+								<FormInput
+									type="tel"
+									onInput={(e) => { e.target.value = e.target.value.slice(0, 2) }}
+									id="sort-part-3"
+									maxLength="2"
+									name="sort-part-3"
+									placeholder=""
+									onChange={(e) => {
+										setSortCode3(e.target.value);
+									}}
+									className="w-100 text-center"
+								/>
+							</div>
 						</div>
 						<div className="col-12 mb-4">
 							<StyledLabel
 								padding="0 0 10px 0"
 								bold
+								htmlFor="accountNumber"
 							>
 								Account Number
 							</StyledLabel>
@@ -283,6 +383,7 @@ const PaymentMethods = () => {
 								onClick={ addUKBank }
 							/>
 						</div>
+						</form>
 					</ModalBody>
 				)}
 				{modalMode === 'eubank' && (
@@ -351,6 +452,220 @@ const PaymentMethods = () => {
 									|| (bankName.length === 0)
 								}
 								onClick={ addEUBank }
+							/>
+						</div>
+					</ModalBody>
+				)}
+				{modalMode === 'intbank' && (
+					<ModalBody className="p-4">
+						<div className="col-12 mb-3">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+							>
+								Bank Name
+							</StyledLabel>
+							<FormInput
+								type="text"
+								id="bankName"
+								name="bankName"
+								placeholder="Enter bank name"
+								onChange={(e) => {
+									setBankName(e.target.value);
+								}}
+								className="w-100"
+						/>
+						</div>
+						<div className="col-12 mb-3">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+							>
+								Bank City
+							</StyledLabel>
+							<FormInput
+								type="text"
+								id="bankCity"
+								name="bankCity"
+								placeholder="Enter Bank City"
+								onChange={(e) => {
+									setBankCity(e.target.value);
+								}}
+								className="w-100"
+							/>
+						</div>
+						<div className="col-12 mb-3">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+							>
+								Bank Country
+							</StyledLabel>
+							<FormInput
+								type="text"
+								id="bankCountry"
+								name="bankCountry"
+								placeholder="Enter Bank Country"
+								onChange={(e) => {
+									setBankCountry(e.target.value);
+								}}
+								className="w-100"
+							/>
+						</div>
+						<div className="col-12 mb-4">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+							>
+								Bank BIC/SWIFT code
+							</StyledLabel>
+							<FormInput
+								type="text"
+								id="BIC"
+								name="BIC"
+								placeholder="Enter BIC/SWIFT"
+								onChange={(e) => {
+									setBIC(e.target.value);
+								}}
+								className="w-100"
+							/>
+						</div>
+						<div className="col-12 mb-4">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+							>
+								Payee Name
+							</StyledLabel>
+							<FormInput
+								type="text"
+								id="payeeName"
+								name="payeeName"
+								placeholder="Enter Payee Name"
+								onChange={(e) => {
+									setPayeeName(e.target.value);
+								}}
+								className="w-100"
+							/>
+						</div>
+						<div className="col-12">
+							<PrimaryButton
+								text="Next"
+								className="w-100"
+								onClick={ () => setModalMode("intbankPage2")}
+								disabled={
+									bankName.length === 0
+									|| bankCity.length === 0
+									|| bankCountry.length === 0
+									|| BIC.length === 0
+									|| payeeName.length === 0
+								}
+							/>
+						</div>
+					</ModalBody>
+				)}
+				{modalMode === "intbankPage2" && (
+					<ModalBody className="p-4">
+						<div className="col-12 mb-4">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+							>
+								Intermediate Bank Name
+							</StyledLabel>
+							<FormInput
+								type="text"
+								id="intermediateBankName"
+								name="intermediateBankName"
+								placeholder="Intermediate Bank Name"
+								onChange={(e) => {
+									setInterBankName(e.target.value);
+								}}
+								className="w-100"
+							/>
+						</div>
+						<div className="col-12 mb-4">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+							>
+								Intermediate Bank City
+							</StyledLabel>
+							<FormInput
+								type="text"
+								id="intermediateBankCity"
+								name="intermediateBankCity"
+								placeholder="Intermediate Bank City"
+								onChange={(e) => {
+									setInterBankCity(e.target.value);
+								}}
+								className="w-100"
+							/>
+						</div>
+						<div className="col-12 mb-4">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+							>
+								Intermediate Bank Country
+							</StyledLabel>
+							<FormInput
+								type="text"
+								id="intermediateBankCountry"
+								name="intermediateBankCountry"
+								placeholder="Intermediate Bank Country"
+								onChange={(e) => {
+									setInterBankCountry(e.target.value);
+								}}
+								className="w-100"
+							/>
+						</div>
+						<div className="col-12 mb-4">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+							>
+								Intermediate Bank Account Number
+							</StyledLabel>
+							<FormInput
+								type="text"
+								id="intermediateBankAccountNumber"
+								name="intermediateBankAccountNumber"
+								placeholder="Intermediate Bank Account Number"
+								onChange={(e) => {
+									setInterBankAccountNumber(e.target.value);
+								}}
+								className="w-100"
+							/>
+						</div>
+						<div className="col-12 mb-4">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+							>
+								Intermediate ABA/Routing Number
+							</StyledLabel>
+							<FormInput
+								type="text"
+								id="intermediateBankRoutingNumber"
+								name="intermediateBankRoutingNumber"
+								placeholder="Intermediate ABA/Routing Number"
+								onChange={(e) => {
+									setInterBankRoutingNumber(e.target.value);
+								}}
+								className="w-100"
+							/>
+						</div>
+						<div className="col-12">
+							<PrimaryButton
+								text="Add Bank Account"
+								className="w-100"
+								disabled={
+									(IBAN.length === 0 || IBAN.length > 32)
+									|| (BIC.length > 11 || BIC.length < 8)
+									|| (bankName.length === 0)
+								}
+								onClick={ addIntBank }
 							/>
 						</div>
 					</ModalBody>

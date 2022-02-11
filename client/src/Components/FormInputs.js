@@ -27,6 +27,18 @@ const StyledInput = styled.input(({ theme, hasIcon, color }) => css`
 		-webkit-text-fill-color: ${theme.colors.text_primary};
 		border-color: ${theme.colors.primary_cta};
     }
+
+    /* Chrome, Safari, Edge, Opera */
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Firefox */
+    &[type=number] {
+      -moz-appearance: textfield;
+    }
 `);
 
 const RoundedInput = styled.input(({ theme, color }) => css`
@@ -80,6 +92,8 @@ export const FormInput = ({
   onFocus,
   onBlur,
   disabled,
+  maxLength,
+  onInput,
 }) => (
   <div className="d-flex">
     {hasIcon && (
@@ -105,6 +119,8 @@ export const FormInput = ({
         onFocus={onFocus}
         onBlur={onBlur}
         disabled={disabled}
+        maxLength={maxLength}
+        onInput={onInput}
       />
     ) : (
       <StyledInput
@@ -124,6 +140,8 @@ export const FormInput = ({
         onFocus={onFocus}
         onBlur={onBlur}
         disabled={disabled}
+        maxLength={maxLength}
+        onInput={onInput}
       />
     )}
   </div>
