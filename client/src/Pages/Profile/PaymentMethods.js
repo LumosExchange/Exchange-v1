@@ -40,12 +40,23 @@ const userPaymentMethods = [
 		bankName: "Lloyds Bank",
 		bic: "BINAADADXXX",
 		iban: "FR7630006000011234567890189",
-  },
+  	},
+	{
+        type: "intbank",
+        name: "International Bank Account",
+        bankName: "Lloyds Bank",
+		bic: "BINAADADXXX",
+    },
     {
         type: "paypal",
         name: "PayPal",
         email: "thisEmail@gmai.com"
-    }
+    },
+	{
+        type: "skrill",
+        name: "Skrill",
+        email: "thisEmail@gmail.com"
+    },
 ];
 
 const MethodIcon = styled.i(({ theme }) => css`
@@ -814,7 +825,7 @@ const PaymentMethods = () => {
 								<PrimaryButton
 									text="Add Skrill"
 									className="w-100"
-									disabled={ payPalEmail.length === 0}
+									disabled={ skrillEmail.length === 0}
 									onClick={ addSkrill }
 								/>
 							</div>
