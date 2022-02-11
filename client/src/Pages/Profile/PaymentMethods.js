@@ -119,6 +119,49 @@ const AddBankButton = styled(InvisibleButton)(({ theme }) => css`
 // Add remove button
 // Add Payment method modal
 
+const ShowAddedPaymentMethods = () => {
+	const [userPaymentMethods, setUserPaymentMethods] = useState([]);
+
+	const getUserPaymentMethods = () => {
+		Axios.get("http://localhost:3001/getUserPaymentMethods", {
+		}).then((response) => {
+		  console.log('get payment methods fired');
+		  	setUserPaymentMethods(response?.data);
+			  console.log(userPaymentMethods, 'user payment methods');
+		});
+	}
+	
+	useEffect(() => {
+		getUserPaymentMethods();
+	});
+
+	return (
+		<React.Fragment>
+		{userPaymentMethods.map((data) => (
+			<PaymentMethodCard className="p-4 mb-3 d-flex align-items-center row">
+				<div className="col-12 d-flex col-lg-4">
+				{convertMethodToIcon(data.type)}
+					<Heading
+						size="20px"
+						className="mb-0 ms-2"
+					>
+						{data.name}
+					</Heading>
+				</div>
+				<div className="col-12 col-lg-6">
+					<Paragraph className="mb-0">
+						{data.account || data.iban || data.email}
+					</Paragraph>
+				</div>
+				<div className="col-12 col-lg-2">
+					<InlineButton>Edit</InlineButton>
+				</div>
+			</PaymentMethodCard>
+		))}
+		</React.Fragment>
+	);
+}
+
 const PaymentMethods = () => {
 
 	// Modal Controls
@@ -272,27 +315,7 @@ const PaymentMethods = () => {
 						</div>
 					</div>
 					<div className="d-flex p-4 row">
-						{userPaymentMethods.map((data) => (
-							<PaymentMethodCard className="p-4 mb-3 d-flex align-items-center row">
-								<div className="col-12 d-flex col-lg-4">
-								{convertMethodToIcon(data.type)}
-									<Heading
-										size="20px"
-										className="mb-0 ms-2"
-									>
-										{data.name}
-									</Heading>
-								</div>
-								<div className="col-12 col-lg-6">
-									<Paragraph className="mb-0">
-										{data.account || data.iban || data.email}
-									</Paragraph>
-								</div>
-								<div className="col-12 col-lg-2">
-									<InlineButton>Edit</InlineButton>
-								</div>
-							</PaymentMethodCard>
-						))}
+						<ShowAddedPaymentMethods />
 					</div>
 				</div>
 			</div>
