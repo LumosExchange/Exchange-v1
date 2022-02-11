@@ -1079,7 +1079,7 @@ app.post("getUserPaymentMethords", (req,res) => {
           UKBank: result[0].EUBank,
           InterBank: result[0].InterBank,
           Paypal: result[0].Paypal,
-          Skrill: result[0].Skrill
+          Skrill: result[0].Skrill,
         });
       }
     }
