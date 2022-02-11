@@ -74,19 +74,32 @@ const PaymentMethodCard = styled.div(({ theme }) => css`
 
 const StyledModal = styled(Modal)(({ theme }) => css`
 	.modal-content {
-		border: 0;
+		border: 1px solid ${theme.colors.primary_link_hover};
 		background: ${theme.colors.base_bg};
 		color: ${theme.colors.text_primary};
 	}
 	.modal-body{
-		button { color: inherit };
-
 		.showError {
 			color: ${theme.colors.invalid};
 		}
 	}
 	.modal-title {
 		display: flex;
+	}
+`);
+
+const AddBankButton = styled(InvisibleButton)(({ theme }) => css`
+	.inner {
+		background: ${theme.colors.panel_accent};
+
+		p, i { color: ${theme.colors.text_primary} };
+
+		&:hover, &:focus {
+			i {
+				font-size: 30px;
+				color:  ${theme.colors.primary_cta};
+			}
+		}
 	}
 `);
 
@@ -130,7 +143,6 @@ const PaymentMethods = () => {
 		}
 		
 	}
-
 
 	// Set Bank Accounts
 	const [sortCode1, setSortCode1] = useState("");
@@ -272,30 +284,30 @@ const PaymentMethods = () => {
 				</ModalHeader>
 				{modalMode === 'initial' && (
 					<ModalBody className="row">
-						<InvisibleButton onClick={() => setModalMode("card")} className="mb-2" disabled>
-							<div className="col-12 p-4 border rounded d-flex justify-content-between align-items-center">
+						<AddBankButton onClick={() => setModalMode("card")} className="mb-2" disabled>
+							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 								<Paragraph size="20px" className="mb-0">Add Credit/Debit Card</Paragraph>
 								<i className="material-icons">arrow_forward</i>
 							</div>
-						</InvisibleButton>
-						<InvisibleButton onClick={() => setModalMode("ukbank")} className="mb-2">
-							<div className="col-12 p-4 border rounded d-flex justify-content-between align-items-center">
+						</AddBankButton>
+						<AddBankButton onClick={() => setModalMode("ukbank")} className="mb-2">
+							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 								<Paragraph size="20px" className="mb-0">Add UK Bank Account</Paragraph>
 								<i className="material-icons">arrow_forward</i>
 							</div>
-						</InvisibleButton>
-						<InvisibleButton onClick={() => setModalMode("eubank")} className="mb-2">
-							<div className="col-12 p-4 border rounded d-flex justify-content-between align-items-center">
+						</AddBankButton>
+						<AddBankButton onClick={() => setModalMode("eubank")} className="mb-2">
+							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 								<Paragraph size="20px" className="mb-0">Add EU Bank Account</Paragraph>
 								<i className="material-icons">arrow_forward</i>
 							</div>
-						</InvisibleButton>
-						<InvisibleButton onClick={() => setModalMode("intbank")} className="mb-2">
-							<div className="col-12 p-4 border rounded d-flex justify-content-between align-items-center">
+						</AddBankButton>
+						<AddBankButton onClick={() => setModalMode("intbank")} className="mb-2">
+							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 								<Paragraph size="20px" className="mb-0">Add International Bank Account</Paragraph>
 								<i className="material-icons">arrow_forward</i>
 							</div>
-						</InvisibleButton>
+						</AddBankButton>
 					</ModalBody>
 				)}
 				{modalMode === 'ukbank' && (
