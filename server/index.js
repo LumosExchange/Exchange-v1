@@ -916,6 +916,7 @@ app.post("/RegisterEUBank", (req, res) => {
         console.log('errors: ' , err)
       }
   );
+})
 });
 
 //Register International bank account
@@ -1239,7 +1240,7 @@ app.post("/UpdatePaypal", (req,res) => {
         res.send({
           message: "Paypal Updated!"
         });
-      }
+      };
     }
 );
 
@@ -1263,11 +1264,8 @@ app.post("/UpdateSkrill", (req,res) => {
         });
       }
     }
-);
+)
 });
-
-
-
 
 
 app.listen(3001, () => {
