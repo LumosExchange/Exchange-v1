@@ -873,14 +873,21 @@ app.post("/RegisterUkBank", (req, res) => {
     "INSERT INTO UKBankAccounts (userID, Name, sortCode, accountNumber) VALUES (?,?,?,?)",
     [user, name, sortCode, accountNumber],
     (err, result) =>{
-      console.log('errors: ' , err)
-      res.send({message: "Bank account added"});
+      if (err) {
+        console.log('errors: ' , err);
+        res.send(err);
+      } else {
+        res.send({message: "UK Bank account added"});
+      }
     }),
+
     db.query(
       "UPDATE userPaymentAccounts SET UKBank = ? WHERE userID = ?",
       [1, user],
       (err, result) =>{
-        console.log('errors: ' , err)
+        if (err) {
+          res.send(err);
+        } 
       }
   );
 });
@@ -896,8 +903,12 @@ app.post("/RegisterEUBank", (req, res) => {
     "INSERT INTO EUBankAccounts (userID, bankName, BIC, IBAN) VALUES (?,?,?,?)",
     [user, name, BIC, IBAN],
     (err, result) =>{
-      res.send({message: "Bank account added"});
-    }),
+      if (err) {
+        console.log('errors: ' , err);
+        res.send(err);
+      } else {
+        res.send({message: "EU Bank account added"});
+      }
     db.query(
       "UPDATE userPaymentAccounts SET EUBank = ? WHERE userID = ?",
       [1, user],
@@ -925,9 +936,14 @@ app.post("/RegisterInternationalBank", (req, res) => {
     "INSERT INTO internationalBankAccounts (userID, bankName, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber) VALUES (?,?,?,?,?,?,?,?,?,?)",
     [user, bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber],
     (err, result) =>{
-      res.send({message: "International Bank account added"});
+      if (err) {
+        console.log('errors: ' , err);
+        res.send(err);
+      } else {
+        res.send({message: "International Bank account added"});
+      }
     }
-  )
+  ),
   db.query(
     "UPDATE userPaymentAccounts SET InterBank = ? WHERE userID = ?",
     [1, user],
@@ -947,8 +963,12 @@ app.post("/RegisterPaypal", (req, res) => {
     "INSERT INTO paypalAccounts (userID, paypalEmail) VALUES (?,?)",
     [user, skrillEmail],
     (err, result) =>{
-      console.log('errors: ' , err)
-      res.send({message: "Paypal account added"});
+      if (err) {
+        console.log('errors: ' , err);
+        res.send(err);
+      } else {
+        res.send({message: "Paypal account added"});
+      }
     }
   )
   db.query(
@@ -969,8 +989,12 @@ app.post("/RegisterSkrill", (req,res) => {
     "INSERT INTO skrillAccounts (userID, skrillEmail) VALUES (?,?)",
     [user, skrillEmail],
     (err, result) =>{
-      console.log('errors: ' , err)
-      res.send({message: "Skrill account added"});
+      if (err) {
+        console.log('errors: ' , err);
+        res.send(err);
+      } else {
+        res.send({message: "SKRILL account added"});
+      }
     }
   )    
   db.query(
