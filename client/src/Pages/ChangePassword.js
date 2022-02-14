@@ -15,7 +15,7 @@ const GrabAttention = keyframes`
   100% { transform: scale(1); }
 `;
 
-const CodeSentMessage = styled.div(({ theme }) => css`
+export const CodeSentMessage = styled.div(({ theme }) => css`
 	background: url(${VerifyBG});
 	background-size: contain;
 	color: ${theme.colors.actual_white};

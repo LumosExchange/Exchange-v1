@@ -209,11 +209,15 @@ const InlineButtonBase = styled.button(({ theme }) => `
     background: ${theme.colors.primary_cta};
     border-radius: 3px;
     color: ${theme.colors.base_bg};
-    padding: 10px 30px;
+    padding: 10px 0;
+
+    &.delete {
+        background: ${theme.colors.invalid};
+    }
 `);
 
-export const InlineButton = ({ children, onClick }) => (
-    <InlineButtonBase className="border-0 w-100" onClick={onClick}>
+export const InlineButton = ({ children, onClick, className }) => (
+    <InlineButtonBase className={`border-0 w-100 text-center ${className && className}`} onClick={onClick}>
         {children}
     </InlineButtonBase>
 );

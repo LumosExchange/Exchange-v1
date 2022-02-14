@@ -8,7 +8,6 @@ import {
   ProfileTabLink,
   Tabs,
 } from "../../Components/Profile";
-import { useNavigate } from "react-router";
 import {
   FormInput,
   PageBody,
@@ -18,6 +17,7 @@ import {
 } from "../../Components/FormInputs";
 import Paragraph from "../../Components/Paragraph";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { CodeSentMessage } from "../ChangePassword";
 
 const fakeUserPaymentMethods = [
 	{
@@ -81,6 +81,14 @@ const convertMethodToIcon = (type) => {
 const PaymentMethodCard = styled.div(({ theme }) => css`
 	background: ${theme.colors.panel_accent};
 	border-radius: 3px;
+
+	.showError {
+		color: ${theme.colors.invalid};
+	}
+
+	.edit {
+		color: ${theme.colors.primary_cta};
+	}
 `);
 
 const StyledModal = styled(Modal)(({ theme }) => css`
@@ -114,6 +122,11 @@ const AddBankButton = styled(InvisibleButton)(({ theme }) => css`
 	}
 `);
 
+const PaymentDetails = styled.span(({ theme }) => css`
+	color: ${theme.colors.text_secondary};
+	padding-left: 15px;
+`);
+
 // **** TODO ****
 // Map type to icon
 // Add remove button
@@ -138,22 +151,25 @@ const ShowAddedPaymentMethods = () => {
 		<React.Fragment>
 		{fakeUserPaymentMethods.map((data) => (
 			<PaymentMethodCard className="p-4 mb-3 d-flex align-items-center row">
-				<div className="col-12 d-flex col-lg-4">
+				<div className="col-12 d-flex col-lg-11">
 				{convertMethodToIcon(data.type)}
 					<Heading
 						size="20px"
 						className="mb-0 ms-2"
 					>
 						{data.name}
+						<PaymentDetails>
+							{data.account || data.iban || data.email}
+						</PaymentDetails>
 					</Heading>
 				</div>
-				<div className="col-12 col-lg-6">
-					<Paragraph className="mb-0">
-						{data.account || data.iban || data.email}
-					</Paragraph>
-				</div>
-				<div className="col-12 col-lg-2">
-					<InlineButton>Edit</InlineButton>
+				<div className="col-12 col-lg-1 d-flex">
+					<InvisibleButton className="me-2" title="Edit">
+						<i className="material-icons edit">edit</i>
+					</InvisibleButton>
+					<InvisibleButton title="Remove">
+						<i className="material-icons showError">clear</i>
+					</InvisibleButton>
 				</div>
 			</PaymentMethodCard>
 		))}
@@ -192,6 +208,10 @@ const PaymentMethods = () => {
 	// PayPal & Skrill
 	const [paypalEmail, setPayPalEmail] = useState("");
 	const [skrillEmail, setSkrillEmail] = useState("");
+
+	// Response Handling
+	const [confirmationMessage, setConfirmationMessage] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
 
 	const resetValues = () => {
 		setSortCode1('');
@@ -241,10 +261,12 @@ const PaymentMethods = () => {
 			IBAN,
 			BIC,
 		}).then((response) => {
-			console.log(response, 'response');
-			setModal(!modal);
-			setModalMode('initial');
-			resetValues()
+			if (response.status === 200){
+				setConfirmationMessage(response.data.message);
+				setModalMode('confirmation');
+			} else {
+				setErrorMessage(response.data.message);
+			}
 		})
 	}
 
@@ -270,18 +292,20 @@ const PaymentMethods = () => {
 
 	const addPayPal = () => {
 		Axios.post("http://localhost:3001/RegisterPaypal", {
-			paypalEmail
+			paypalEmail,
 		}).then((response) => {
-			console.log(response, 'response');
-			setModal(!modal);
-			setModalMode('initial');
-			resetValues()
+			if (response.status === 200){
+				setConfirmationMessage(response.data.message);
+				setModalMode('confirmation');
+			} else {
+				setErrorMessage(response.data.message);
+			}
 		})
 	}
 
 	const addSkrill = () => {
 		Axios.post("http://localhost:3001/RegisterSkrill", {
-			skrillEmail
+			skrillEmail,
 		}).then((response) => {
 			console.log(response, 'response');
 			setModal(!modal);
@@ -290,7 +314,9 @@ const PaymentMethods = () => {
 		})
 	}
 
-	console.log(sortCode, 'sort code');
+	const reloadPayments = () => {
+		window.location.reload(true);
+	}
 
   	useEffect(() => {}, []);
 
@@ -323,28 +349,30 @@ const PaymentMethods = () => {
 				isOpen={modal}
 				toggle={toggle}
 				>
-				<ModalHeader className="d-flex align-items-center">
-					{modalMode !== "initial" && (
-						<InvisibleButton
-							onClick={() => goBack() }
-							className="d-flex align-items-center"
-						>
-							<i className="material-icons">arrow_back</i>
-						</InvisibleButton>
-					)}
-					<div>
-					{
-						(modalMode === "initial" && 'Add a Payment Method')
-						|| (modalMode === "ukbank" && 'Add UK Bank Account')
-						|| (modalMode === "eubank" && 'Add EU Bank Account')
-						|| (modalMode === "intbank" && 'Add International Bank Account (1/2)')
-						|| (modalMode === "intbankPage2" && 'Add International Bank Account (2/2)')
-						|| (modalMode === "card" && 'Add Credit/Debit Card')
-						|| (modalMode === "paypal" && 'Add PayPal Account')
-						|| (modalMode === "skrill" && 'Add Skrill Account')
-					}
-					</div>
-				</ModalHeader>
+				{modalMode !== 'confirmation' && (
+					<ModalHeader className="d-flex align-items-center">
+						{modalMode !== "initial" && (
+							<InvisibleButton
+								onClick={() => goBack() }
+								className="d-flex align-items-center"
+							>
+								<i className="material-icons">arrow_back</i>
+							</InvisibleButton>
+						)}
+						<div>
+						{
+							(modalMode === "initial" && 'Add a Payment Method')
+							|| (modalMode === "ukbank" && 'Add UK Bank Account')
+							|| (modalMode === "eubank" && 'Add EU Bank Account')
+							|| (modalMode === "intbank" && 'Add International Bank Account (1/2)')
+							|| (modalMode === "intbankPage2" && 'Add International Bank Account (2/2)')
+							|| (modalMode === "card" && 'Add Credit/Debit Card')
+							|| (modalMode === "paypal" && 'Add PayPal Account')
+							|| (modalMode === "skrill" && 'Add Skrill Account')
+						}
+						</div>
+					</ModalHeader>
+				)}
 				{modalMode === 'initial' && (
 					<ModalBody className="row">
 						<AddBankButton onClick={() => setModalMode("card")} className="mb-2" disabled>
@@ -484,7 +512,7 @@ const PaymentMethods = () => {
 								text="Add Bank Account"
 								className="w-100"
 								disabled={ (sortCode.length > 6 || sortCode.length < 6) || (accountNumber.length < 8)}
-								onClick={ addUKBank }
+								onClick={ () => addUKBank }
 							/>
 						</div>
 						</form>
@@ -523,6 +551,7 @@ const PaymentMethods = () => {
 								type="text"
 								id="IBAN"
 								name="IBAN"
+								maxLength="32"
 								placeholder="Enter IBAN"
 								onChange={(e) => {
 									setIBAN(e.target.value);
@@ -543,6 +572,7 @@ const PaymentMethods = () => {
 								id="BIC"
 								name="BIC"
 								placeholder="Enter BIC/SWIFT"
+								maxLength="11"
 								onChange={(e) => {
 									setBIC(e.target.value);
 								}}
@@ -786,6 +816,7 @@ const PaymentMethods = () => {
 								}
 								onClick={ addIntBank }
 							/>
+							<Paragraph className="showError">{errorMessage}</Paragraph>
 						</div>
 					</ModalBody>
 				)}
@@ -816,8 +847,14 @@ const PaymentMethods = () => {
 									text="Add PayPal"
 									className="w-100"
 									disabled={ paypalEmail.length === 0}
-									onClick={ addPayPal }
+									onClick={
+										event => {
+											event.preventDefault();
+											addPayPal()
+										}
+									}
 								/>
+								<Paragraph className="showError">{errorMessage}</Paragraph>
 							</div>
 						</form>
 					</ModalBody>
@@ -849,10 +886,31 @@ const PaymentMethods = () => {
 									text="Add Skrill"
 									className="w-100"
 									disabled={ skrillEmail.length === 0}
-									onClick={ addSkrill }
+									onClick={
+										event => {
+											event.preventDefault();
+											addSkrill()
+										}
+									}
 								/>
 							</div>
+							<Paragraph className="showError">{errorMessage}</Paragraph>
 						</form>
+					</ModalBody>
+				)}
+				{modalMode === "confirmation" && (
+					<ModalBody className="p-4">
+						<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+							<i className="material-icons me-2">check_circle</i>
+							<Paragraph bold size="20px" className="mb-0">
+								{confirmationMessage}
+							</Paragraph>
+						</CodeSentMessage>
+						<PrimaryButton
+							text="OK"
+							className="w-100"
+							onClick={ reloadPayments }
+						/>
 					</ModalBody>
 				)}
 				</StyledModal>
