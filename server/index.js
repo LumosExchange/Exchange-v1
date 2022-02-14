@@ -967,7 +967,7 @@ app.post("/RegisterSkrill", (req,res) => {
   const skrillEmail = req.body.skrillEmail;
   db.query(
     "INSERT INTO skrillAccounts (userID, skrillEmail) VALUES (?,?)",
-    [user, ],
+    [user, skrillEmail],
     (err, result) =>{
       console.log('errors: ' , err)
       res.send({message: "Skrill account added"});
@@ -981,7 +981,6 @@ app.post("/RegisterSkrill", (req,res) => {
     }
 );
 });
-
 
 //get User bank details for Profile
 app.post("/getUkBankDetails", (req, res) => {
@@ -1095,7 +1094,7 @@ app.post("/getSkrillDetails", (req,res) => {
 });
 
 //return all user payment methords
-app.post("/getUserPaymentMethords", (req,res) => {
+app.post("/getUserPaymentMethods", (req,res) => {
   const user = req.session.user[0].userID
 
 
