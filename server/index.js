@@ -875,9 +875,14 @@ app.post("/RegisterUkBank", (req, res) => {
     (err, result) =>{
       console.log('errors: ' , err)
       res.send({message: "Bank account added"});
-    }
-
-  )
+    }),
+    db.query(
+      "UPDATE userPaymentAccounts SET UKBank = ? WHERE userID = ?",
+      [1, user],
+      (err, result) =>{
+        console.log('errors: ' , err)
+      }
+  );
 });
 
 //register EU bank account
@@ -892,8 +897,14 @@ app.post("/RegisterEUBank", (req, res) => {
     [user, name, BIC, IBAN],
     (err, result) =>{
       res.send({message: "Bank account added"});
-    }
-  )
+    }),
+    db.query(
+      "UPDATE userPaymentAccounts SET EUBank = ? WHERE userID = ?",
+      [1, user],
+      (err, result) =>{
+        console.log('errors: ' , err)
+      }
+  );
 });
 
 //Register International bank account
@@ -917,6 +928,13 @@ app.post("/RegisterInternationalBank", (req, res) => {
       res.send({message: "International Bank account added"});
     }
   )
+  db.query(
+    "UPDATE userPaymentAccounts SET InterBank = ? WHERE userID = ?",
+    [1, user],
+    (err, result) =>{
+      console.log('errors: ' , err)
+    }
+);
 });
 
 //Register paypal
@@ -927,12 +945,19 @@ app.post("/RegisterPaypal", (req, res) => {
   
   db.query(
     "INSERT INTO paypalAccounts (userID, paypalEmail) VALUES (?,?)",
-    [user, paypalEmail],
+    [user, skrillEmail],
     (err, result) =>{
       console.log('errors: ' , err)
       res.send({message: "Paypal account added"});
     }
   )
+  db.query(
+    "UPDATE userPaymentAccounts SET Paypal = ? WHERE userID = ?",
+    [1, user],
+    (err, result) =>{
+      console.log('errors: ' , err)
+    }
+);
 });
 
 //Register Skrill address
@@ -942,14 +967,20 @@ app.post("/RegisterSkrill", (req,res) => {
   const skrillEmail = req.body.skrillEmail;
   db.query(
     "INSERT INTO skrillAccounts (userID, skrillEmail) VALUES (?,?)",
-    [user, paypalEmail],
+    [user, ],
     (err, result) =>{
       console.log('errors: ' , err)
       res.send({message: "Skrill account added"});
     }
-  )
-
-})
+  )    
+  db.query(
+    "UPDATE userPaymentAccounts SET Skrill = ? WHERE userID = ?",
+    [1, user],
+    (err, result) =>{
+      console.log('errors: ' , err)
+    }
+);
+});
 
 
 //get User bank details for Profile
@@ -975,7 +1006,7 @@ app.post("/getUkBankDetails", (req, res) => {
 });
 
 //get user EU Bank details for profile
-app.post("getEUBankDetails", (req,res) => {
+app.post("/getEUBankDetails", (req,res) => {
   const user = req.session.user[0].userID;
   db.query(
     "SELECT BIC, IBAN, bankName FROM EUBankAccounts WHERE (userID) = (?)",
@@ -998,7 +1029,7 @@ app.post("getEUBankDetails", (req,res) => {
 });
 
 //get international bank details for profile FINISH THIS
-app.post("getInterBankDetails", (req, res) => {
+app.post("/getInterBankDetails", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
     "SELECT bankName, SWIFTCode FROM internationalBankAccounts WHERE (userID) = (?)",
@@ -1020,7 +1051,7 @@ app.post("getInterBankDetails", (req, res) => {
 });
 
 //get Paypal details for profile
-app.post("getPaypalDeails", (req, res) => {
+app.post("/getPaypalDeails", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
     "SELECT paypalEmail, FROM paypalAccounts WHERE (userID) = (?)",
@@ -1042,7 +1073,7 @@ app.post("getPaypalDeails", (req, res) => {
 
 //Get Skrill details for profile
 
-app.post("getSkrillDetails", (req,res) => {
+app.post("/getSkrillDetails", (req,res) => {
   const user = req.session.user[0].userID
 
   db.query(
@@ -1064,11 +1095,12 @@ app.post("getSkrillDetails", (req,res) => {
 });
 
 //return all user payment methords
-app.post("getUserPaymentMethords", (req,res) => {
+app.post("/getUserPaymentMethords", (req,res) => {
   const user = req.session.user[0].userID
 
+
   db.query(
-    "SELECT EUBank, UKBank, InterBank, Paypal, Skrill, FROM userPaymentAccounts WHERE (userID) = (?)",
+    "SELECT EUBank, UKBank, InterBank, Paypal, Skrill FROM userPaymentAccounts WHERE (userID) = (?)",
     [user],
     (err, result) =>{
       if (err) {
@@ -1076,7 +1108,8 @@ app.post("getUserPaymentMethords", (req,res) => {
         console.log('errors: ' , err);
       } else {
         res.send({
-          UKBank: result[0].EUBank,
+          UKBank: result[0].UKBank,
+          EUBank: result[0].EUBank,
           InterBank: result[0].InterBank,
           Paypal: result[0].Paypal,
           Skrill: result[0].Skrill,
@@ -1084,6 +1117,130 @@ app.post("getUserPaymentMethords", (req,res) => {
       }
     }
   )
+});
+
+//Update Uk bank
+
+app.post("/UpdateUkBank", (req,res) => {
+  const user = req.session.user[0].userID
+  const name = req.session.user[0].firstName + ' ' + req.session.user[0].lastName;
+  const sortCode = req.body.sortCode;
+  const accountNumber = req.body.accountNumber;
+
+  db.query(
+    "UPDATE UKBankAccounts SET Name = ?, sortCode = ?, accountNumber =? WHERE userID = ?",
+    [name, sortCode, accountNumber, user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('error : ', err)
+      } else {
+        res.send({
+          message: "UK Bank Updated!"
+        });
+      }
+    }
+);
+});
+
+
+
+//Update Eu Bank
+app.post("/UpdateEUBank", (req,res) => {
+  const user = req.session.user[0].userID
+  const bankName = req.body.bankName;
+  const BIC = req.body.BIC;
+  const IBAN = req.body.IBAN;
+
+
+  db.query(
+    "UPDATE EUBankAccounts SET bankName = ?, BIC = ?, IBAN =? WHERE userID = ?",
+    [bankName, BIC, IBAN, user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('error : ', err)
+      } else {
+        res.send({
+          message: "EU Bank Updated!"
+        });
+      }
+    }
+);
+});
+
+//Update International Bank
+app.post("/UpdateInterBank", (req,res) => {
+  const user = req.session.user[0].userID;
+  const bankName = req.body.bankName;
+  const bankCity = req.body.bankCity;
+  const bankCountry = req.body.bankCountry;
+  const SWIFTCode = req.body.SWIFTCode;
+  const payeesName = req.body.payeesName;
+  const interBankName = req.body.interBankName;
+  const interBankCity = req.body.interBankCity;
+  const interBankCountry = req.body.interBankCountry;
+  const interBankAccountNumber = req.body.interBankAccountNumber;
+  const interBankRoutingNumber = req.body.bankName;
+
+  
+  db.query(
+    "UPDATE internationalBankAccounts SET bankName = ?, bankCity = ?, bankCountry = ?, SWIFTCode = ?, payeesName = ?, interBankName = ?, interBankCity = ?, interBankCountry =?, interBankAccountNumber =?, interBankRoutingNumber =?  WHERE userID = ?",
+    [bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber, user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('error : ', err)
+      } else {
+        res.send({
+          message: "International Bank Updated!"
+        });
+      }
+    }
+);
+});
+
+//Update Paypal
+app.post("/UpdatePaypal", (req,res) => {
+  const user = req.session.user[0].userID;
+  const paypalEmail = req.body.paypalEmail;
+
+  db.query(
+    "UPDATE paypalAccounts SET paypalEmail = ? WHERE userID = ?",
+    [paypalEmail, user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('error : ', err)
+      } else {
+        res.send({
+          message: "Paypal Updated!"
+        });
+      }
+    }
+);
+
+});
+
+//Update Skrill
+app.post("/UpdateSkrill", (req,res) => {
+  const user = req.session.user[0].userID;
+  const skrillEmail = req.body.skrillEmail;
+
+  db.query(
+    "UPDATE skrillAccounts SET skillEmail = ? WHERE userID = ?",
+    [skrillEmail, user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('error : ', err)
+      } else {
+        res.send({
+          message: "Skrill Updated!"
+        });
+      }
+    }
+);
 });
 
 
