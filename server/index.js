@@ -1269,6 +1269,102 @@ app.post("/UpdateSkrill", (req,res) => {
 )
 });
 
+//delete UK bank
+app.post("/DeleteUKBank", (req,res) => {
+  const user = req.session.user[0].userID;
+  db.query(
+    "DELETE FROM UKBankAccounts WHERE = ?",
+    [user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('error : ', err)
+      } else {
+        res.send({
+          message: "UK account Deleted!"
+        });
+      }
+    }
+  )
+});
+
+//Delete EUbank
+app.post("/DeleteEUBank", (req,res) => {
+  const user = req.session.user[0].userID;
+  db.query(
+    "DELETE FROM EUBankAccounts WHERE = ?",
+    [user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('error : ', err)
+      } else {
+        res.send({
+          message: "EU account Deleted!"
+        });
+      }
+    }
+  )
+});
+
+//Delete Inter Bank
+app.post("/DeleteInterBank", (req,res) => {
+  const user = req.session.user[0].userID;
+  db.query(
+    "DELETE FROM internationalBankAccounts WHERE = ?",
+    [user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('error : ', err)
+      } else {
+        res.send({
+          message: "International account Deleted!"
+        });
+      }
+    }
+  )
+});
+
+//delet paypal
+app.post("/DeletePaypalBank", (req,res) => {
+  const user = req.session.user[0].userID;
+  db.query(
+    "DELETE FROM paypalAccounts WHERE = ?",
+    [user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('error : ', err)
+      } else {
+        res.send({
+          message: "Paypal account Deleted!"
+        });
+      }
+    }
+  )
+});
+
+//Delete Skrill
+app.post("/DeleteSkrillBank", (req,res) => {
+  const user = req.session.user[0].userID;
+  db.query(
+    "DELETE FROM skrillAccounts WHERE = ?",
+    [user],
+    (err, result) =>{
+      if (err) {
+        res.send(err);
+        console.log('error : ', err)
+      } else {
+        res.send({
+          message: "Skrill account Deleted!"
+        });
+      }
+    }
+  )
+});
+
+
 
 app.listen(3001, () => {
   console.log("running on port 3001");
