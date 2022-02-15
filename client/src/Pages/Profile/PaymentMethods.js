@@ -21,9 +21,6 @@ import { CodeSentMessage } from "../ChangePassword";
 
 
 
-
-
-
 const getUserPaymentMethods = () => {
 	Axios.all([
 		Axios.post(`http://localhost:3001/getUkBankDetails`), 
@@ -35,9 +32,8 @@ const getUserPaymentMethods = () => {
 	  .then(Axios.spread((UK, EU, Inter, PP, SK) => {
 		// output of req.
 		 const dataObject1 = {UK, EU, Inter, PP, SK};
-
-		// const newObject =  Object.assign(data1,data2,data3,data4);
-		//const dataObject1 = createDataObject1(data1,data2,data3,data4,data5);
+		 
+		//const dataObject1 = createDataObject1(UK, EU, Inter, PP, SK);
 	//	console.log('data1', data1, 'data2', data2, 'data3', data3, 'data4', data4, 'data5', data5)
 		console.log(dataObject1);
 	  }));
@@ -59,8 +55,8 @@ const fakeUserPaymentMethods = [
     {
         type: "ukbank",
         name: "UK Bank Account",
-        account: "12345678",
-        sort: "01-02-03",
+        account: "123456",
+        sort: "123456",
     },
     {
 		type: "eubank",

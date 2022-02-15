@@ -303,6 +303,19 @@ app.get("/getAllListings", (req, res) => {
   });
 });
 
+//getspecific listing
+
+app.post("getSpecificListings", (req,res) => {
+  const location = req.body.location;
+  const payment = req.body.paymentMethod;
+
+  db.query(
+    "SELECT * from sale WHERE (Country, PaymentMethord1, paymentMethord2) = (?,?,?)",
+    [location, payment]
+  )
+
+});
+
 //get userID name for feedback
 app.get("/getUserNameSeller", (req, res) => {
   let params = req.query.sellerID;
@@ -1024,7 +1037,6 @@ app.post("/getUkBankDetails", (req, res) => {
           account: result[0].accountNumber,
           sort: result[0].sortCode,
         });
-        console.log('result :', result);
       }
     }
   )
@@ -1048,7 +1060,6 @@ app.post("/getEUBankDetails", (req,res) => {
           BIC: result[0].BIC,
           IBAN: result[0].IBAN,
         });
-        console.log('result :', result);
       }
     }
   )
@@ -1058,7 +1069,7 @@ app.post("/getEUBankDetails", (req,res) => {
 app.post("/getInterBankDetails", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
-    "SELECT bankName, SWIFTCode FROM internationalBankAccounts WHERE (userID) = (?)",
+    "SELECT bankName, SWIFTCode, payeeName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE (userID) = (?)",
     [user],
     (err, result) =>{
       if (err) {
@@ -1070,6 +1081,12 @@ app.post("/getInterBankDetails", (req, res) => {
           name: "International Bank",
           bankName: result[0].bankName,
           bic: result[0].SWIFTCode,
+          payeeName: result[0].payeeName,
+          interBankName: result[0].interBankName,
+          interBankCity: result[0].interBankCity,
+          interBankCountry: result[0].interBankCountry,
+          interBankAccountNumber: result[0].interBankAccountNumber,
+          interBankRoutingNumber: result[0].interBankRoutingNumber
         });
       }
     }
