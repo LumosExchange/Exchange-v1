@@ -185,12 +185,13 @@ const Buy = () => {
 										<div className="col-3">{val.Country}</div>
 										<div className="col-3">{val.Town}</div>
 										<div className="col-3">
-											<Heading size="24px">
+
+											<Heading size="18px">
 												{selectedCurrency}{val.amountForSale}
 											</Heading>
 										</div>
 										<div className="col-3">110 Trades</div>
-										<div className="col-3">Paypal</div>
+										<div className="col-3">{val.paymentMethord1}{' & '}{val.paymentMethord2}</div>
 										<div className="col-3">
 											<Paragraph size="18px">
 												{val.percentChange}%
