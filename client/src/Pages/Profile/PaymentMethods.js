@@ -40,10 +40,13 @@ const fakeUserPaymentMethods = [
 	{
         type: "card",
         name: "Primary Card",
-        number: "0123 4567 8910 1112",
+        number: "0123456789101112",
         account: "12345678",
         sort: "01-02-03",
         ccv: "069",
+		nameOnCard: "Mr John Smith",
+		cardExpiration: "01/02",
+		cardPostalCode: "ABC123",
     },
     {
         type: "ukbank",
@@ -254,6 +257,15 @@ const PaymentMethods = () => {
 				setModalMode("eubank");
 			}
 
+			if (data.type === "card"){
+				setNameOnCard(data.nameOnCard);
+				setCardExpiration(data.cardExpiration);
+				setCardCvc(data.ccv);
+				setCardPostalCode(data.cardPostalCode);
+				setCardNumber(data.number);
+				setModalMode("card");
+			}
+
 			// TODO International bank account
 			// TODO Primary Card
 
@@ -303,6 +315,11 @@ const PaymentMethods = () => {
 		setBIC('');
 		setSkrillEmail('');
 		setPayPalEmail('');
+		setNameOnCard('');
+		setCardNumber('');
+		setCardExpiration('');
+		setCardCvc('');
+		setCardPostalCode('');
 	}
 
     const toggle = () => {
