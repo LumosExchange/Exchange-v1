@@ -51,25 +51,18 @@ export const ProfileTabLink = styled.a(({ theme }) => css`
         color: ${theme.colors.text_primary};
         padding: 10px 30px;
         border-radius: 5px 5px 0 0;
-        border-top: 2px solid ${theme.colors.btn};
-        border-left: 2px solid ${theme.colors.btn};
-        border-right: 2px solid ${theme.colors.btn};
         border-bottom: 2px solid ${theme.colors.btn};
         margin-right: 16px;
         text-decoration: none;
 
         &:hover {
-            border-top: 2px solid ${theme.colors.primary_cta};
-            border-left: 2px solid ${theme.colors.primary_cta};
-            border-right: 2px solid ${theme.colors.primary_cta};
             color: ${theme.colors.primary_cta};
-            font-family: "THICCCBOI-BOLD";
         }
 
         &.selected {
             background: ${theme.colors.primary_cta};
             color: ${theme.colors.base_bg};
-            border: 2px solid ${theme.colors.primary_cta};
+            border-bottom: 2px solid ${theme.colors.primary_cta};
             font-family: "THICCCBOI-BOLD";
         }
 `);

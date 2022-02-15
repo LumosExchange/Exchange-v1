@@ -170,7 +170,11 @@ const formatString = (e) => {
 	).replace(
 	  /\/\//g, '/' // Prevent entering more than 1 `/`
 	);
-  }
+}
+
+const StyledBackIcon = styled.i(({ theme }) => css`
+	color: ${theme.colors.primary_cta};
+`);
 
 const PaymentMethods = () => {
 
@@ -470,7 +474,7 @@ const PaymentMethods = () => {
 								onClick={() => goBack() }
 								className="d-flex align-items-center"
 							>
-								<i className="material-icons">arrow_back</i>
+								<StyledBackIcon className="material-icons">arrow_back</StyledBackIcon>
 							</InvisibleButton>
 						)}
 						<div>
