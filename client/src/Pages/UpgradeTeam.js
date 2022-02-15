@@ -29,7 +29,7 @@ function UpgradeTeam() {
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid">
       <div className="row">
-        <div className="col-11 col-md-6 d-flex flex-column m-auto">
+        <div className="col-12 d-flex flex-column m-auto">
           <Heading size="36px" className="mt-5 mb-4 text-center">
             Upgrade to Team
           </Heading>
@@ -39,7 +39,7 @@ function UpgradeTeam() {
           <form>
             <FormInput
               id="RegistrationCountry"
-              className="mb-3 w-500"
+              className="mb-3 w-100"
               type="RegistrationCountry"
               placeholder="Registration Country "
               onChange={(e) => {
@@ -49,7 +49,7 @@ function UpgradeTeam() {
 
             <FormInput
               id="RegistrationNumber"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="RegistrationNumber"
               placeholder="Registration Number "
               onChange={(e) => {
@@ -59,7 +59,7 @@ function UpgradeTeam() {
 
             <FormInput
               id="CompanySourceOfIncome"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="CompanySourceOfIncome"
               placeholder="Company SourceOf Income"
               onChange={(e) => {
@@ -69,7 +69,7 @@ function UpgradeTeam() {
 
             <FormInput
               id="DirectorName"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="DirectorName"
               placeholder="Directors Name "
               onChange={(e) => {
@@ -79,7 +79,7 @@ function UpgradeTeam() {
 
             <FormInput
               id="DirectorAddress"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="DirectorAddress"
               placeholder="Directors Address"
               onChange={(e) => {
@@ -89,7 +89,7 @@ function UpgradeTeam() {
 
             <FormInput
               id="DirectorOwnership"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="DirectorOwnership"
               placeholder="Directors Ownership"
               onChange={(e) => {
@@ -98,7 +98,7 @@ function UpgradeTeam() {
             />
             <FormInput
               id="AdditionalDirector"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="AdditionalDirector"
               placeholder="Additional Directors (Optional)"
               onChange={(e) => {

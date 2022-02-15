@@ -19,6 +19,23 @@ import Paragraph from "../../Components/Paragraph";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { CodeSentMessage } from "../ChangePassword";
 
+const getUserPaymentMethods = () => {
+	Axios.all([
+		Axios.post(`/getUKBankDetails`), 
+		Axios.post(`/getEUBankDetails`),
+		Axios.post(`/getInterBankDetails`),
+		Axios.post(`/getPaypalDetails`),
+		Axios.post(`/getSkrillDetails`),
+	  ])
+	  .then(Axios.spread((data1, data2 , data3, data4, data5) => {
+		// output of req.
+		const dataObject1 = createDataObject1(data1,data2,data3,data4,data5);
+		console.log('data1', data1, 'data2', data2, 'data3', data3, 'data4', data4, 'data5', data5)
+		console.log('result : ', dataObject1);
+	  }));
+
+}
+
 const fakeUserPaymentMethods = [
 	{
         type: "card",

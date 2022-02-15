@@ -1075,7 +1075,7 @@ app.post("/getInterBankDetails", (req, res) => {
 });
 
 //get Paypal details for profile
-app.post("/getPaypalDeails", (req, res) => {
+app.post("/getPaypalDetails", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
     "SELECT paypalEmail, FROM paypalAccounts WHERE (userID) = (?)",
