@@ -67,13 +67,21 @@ const fakeUserPaymentMethods = [
 		name: "EU Bank Account",
 		bankName: "Lloyds Bank",
 		bic: "BINAADADXXX",
-		iban: "FR7630006000011234567890189",
+		iban: "CY170020012800000012005276002",
   	},
 	{
         type: "intbank",
         name: "International Bank Account",
         bankName: "Lloyds Bank",
+		bankCity: "London",
+		bankCountry: "United Kingdom",
 		bic: "BINAADADXXX",
+		payeeName: "Mr John Smith",
+		interBankName: "Santender Plc",
+		interBankCity: "Lisbon",
+		interBankCountry: "Portugal",
+		interBankAccountNumber: "0123456789",
+		interBankRoutingNumber: "123456789",
     },
     {
         type: "paypal",
@@ -278,9 +286,19 @@ const PaymentMethods = () => {
 				setModalMode("card");
 			}
 
-			// TODO International bank account
-			// TODO Primary Card
-
+			if (data.type === "intbank"){
+				setBankName(data.bankName);
+				setBankCity(data.bankCity);
+				setBankCountry(data.bankCountry);
+				setBIC(data.bic);
+				setPayeeName(data.payeeName);
+				setInterBankName(data.interBankName);
+				setInterBankCity(data.interBankCity);
+				setInterBankCountry(data.interBankCountry);
+				setInterBankAccountNumber(data.interBankAccountNumber);
+				setInterBankRoutingNumber(data.interBankRoutingNumber);
+				setModalMode("intbank");
+			}
 		}
 		
 		return (
@@ -861,6 +879,7 @@ const PaymentMethods = () => {
 							<FormInput
 								type="text"
 								id="bankName"
+								value={bankName}
 								name="bankName"
 								placeholder="Enter bank name"
 								onChange={(e) => {
@@ -881,6 +900,7 @@ const PaymentMethods = () => {
 								type="text"
 								id="bankCity"
 								name="bankCity"
+								value={bankCity}
 								placeholder="Enter Bank City"
 								onChange={(e) => {
 									setBankCity(e.target.value);
@@ -900,6 +920,7 @@ const PaymentMethods = () => {
 								type="text"
 								id="bankCountry"
 								name="bankCountry"
+								value={bankCountry}
 								placeholder="Enter Bank Country"
 								onChange={(e) => {
 									setBankCountry(e.target.value);
@@ -919,6 +940,7 @@ const PaymentMethods = () => {
 								type="text"
 								id="BIC"
 								name="BIC"
+								value={BIC}
 								placeholder="Enter BIC/SWIFT"
 								onChange={(e) => {
 									setBIC(e.target.value);
@@ -938,6 +960,7 @@ const PaymentMethods = () => {
 								type="text"
 								id="payeeName"
 								name="payeeName"
+								value={payeeName}
 								placeholder="Enter Payee Name"
 								onChange={(e) => {
 									setPayeeName(e.target.value);
@@ -950,13 +973,6 @@ const PaymentMethods = () => {
 								text="Next"
 								className="w-100"
 								onClick={ () => setModalMode("intbankPage2")}
-								disabled={
-									bankName.length === 0
-									|| bankCity.length === 0
-									|| bankCountry.length === 0
-									|| BIC.length === 0
-									|| payeeName.length === 0
-								}
 							/>
 						</div>
 					</ModalBody>
@@ -975,6 +991,7 @@ const PaymentMethods = () => {
 								type="text"
 								id="intermediateBankName"
 								name="intermediateBankName"
+								value={interBankName}
 								placeholder="Intermediate Bank Name"
 								onChange={(e) => {
 									setInterBankName(e.target.value);
@@ -994,6 +1011,7 @@ const PaymentMethods = () => {
 								type="text"
 								id="intermediateBankCity"
 								name="intermediateBankCity"
+								value={interBankCity}
 								placeholder="Intermediate Bank City"
 								onChange={(e) => {
 									setInterBankCity(e.target.value);
@@ -1013,6 +1031,7 @@ const PaymentMethods = () => {
 								type="text"
 								id="intermediateBankCountry"
 								name="intermediateBankCountry"
+								value={interBankCountry}
 								placeholder="Intermediate Bank Country"
 								onChange={(e) => {
 									setInterBankCountry(e.target.value);
@@ -1032,6 +1051,7 @@ const PaymentMethods = () => {
 								type="text"
 								id="intermediateBankAccountNumber"
 								name="intermediateBankAccountNumber"
+								value={interBankAccountNumber}
 								placeholder="Intermediate Bank Account Number"
 								onChange={(e) => {
 									setInterBankAccountNumber(e.target.value);
@@ -1051,6 +1071,7 @@ const PaymentMethods = () => {
 								type="text"
 								id="intermediateBankRoutingNumber"
 								name="intermediateBankRoutingNumber"
+								value={interBankRoutingNumber}
 								placeholder="Intermediate ABA/Routing Number"
 								onChange={(e) => {
 									setInterBankRoutingNumber(e.target.value);
