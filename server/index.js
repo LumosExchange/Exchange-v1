@@ -1085,7 +1085,7 @@ app.post("/getInterBankDetails", (req, res) => {
           name: "International Bank",
           bankName: result[0].bankName,
           bic: result[0].SWIFTCode,
-          payeeName: result[0].payeesName,
+          payeesName: result[0].payeesName,
           interBankName: result[0].interBankName,
           interBankCity: result[0].interBankCity,
           interBankCountry: result[0].interBankCountry,
