@@ -8,15 +8,18 @@ import PrimaryButton from "../Components/Buttons";
 function UpgradeGold() {
   const [employerNameReg, setEmployerNameReg] = useState("");
   const [employerAddressReg, setEmployerAddressReg] = useState("");
-
   const [occupationReg, setOccupationReg] = useState("");
+  const [proofEmploymentReg, setProofEmploymentReg] = useState("");
   const [incomeReg, setIncomeReg] = useState("");
+  const [additionalIncomeReg, setAdditionalIncomeReg] = useState("");
 
   const upgradeGold = () => {
     Axios.post("http://localhost:3001/upgradeGold", {
       EmployerName: employerNameReg,
       EmployerAddress: employerAddressReg,
       Occupation: occupationReg,
+      ProofEmployment: setProofEmploymentReg,
+      AdditionalIncome: setAdditionalIncomeReg,
       Income: incomeReg,
     });
   };
@@ -35,7 +38,7 @@ function UpgradeGold() {
           <form>
             <FormInput
               id="EmployerName"
-              className="mb-3 w-100"
+              className="mb-3 w-300"
               type="text"
               placeholder="Employer Name "
               onChange={(e) => {
@@ -45,7 +48,7 @@ function UpgradeGold() {
 
             <FormInput
               id="EmployerAddress"
-              className="mb-3 w-100"
+              className="mb-3 w-300"
               type="text"
               placeholder="Employer Address "
               onChange={(e) => {
@@ -55,7 +58,7 @@ function UpgradeGold() {
 
             <FormInput
               id="Occupation"
-              className="mb-3 w-100"
+              className="mb-3 w-300"
               type="Occupation"
               placeholder="Occupation "
               onChange={(e) => {
@@ -63,12 +66,30 @@ function UpgradeGold() {
               }}
             />
             <FormInput
+              id="ProofEmployment"
+              className="mb-3 w-300"
+              type="ProofEmployment"
+              placeholder="Proof Of Employment "
+              onChange={(e) => {
+                setProofEmploymentReg(e.target.value);
+              }}
+            />
+            <FormInput
               id="Income"
-              className="mb-3 w-100"
+              className="mb-3 w-300"
               type="text"
               placeholder="Income "
               onChange={(e) => {
                 setIncomeReg(e.target.value);
+              }}
+            />
+            <FormInput
+              id="AdditionalIncome"
+              className="mb-3 w-300"
+              type="AdditionalIncome"
+              placeholder="Additional Income(Optional) "
+              onChange={(e) => {
+                setAdditionalIncomeReg(e.target.value);
               }}
             />
           </form>

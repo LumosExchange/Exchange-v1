@@ -5,17 +5,12 @@ import { FormInput, PageBody } from "../Components/FormInputs";
 import PrimaryButton from "../Components/Buttons";
 import Heading from "../Components/Heading";
 
-function UpgradeBronze() {
-  const [dateOfBirthReg, setDateOfBirthReg] = useState("");
-  const [phoneReg, setPhoneReg] = useState("");
-
+function UpgradeSilver() {
   const [countryOfResidencenReg, setCountryOfResidenceReg] = useState("");
   const [taxReg, setTaxReg] = useState("");
 
-  const upgradeBronze = () => {
-    Axios.post("http://localhost:3001/upgradeBronze", {
-      DateOfBirth: dateOfBirthReg,
-      Phone: phoneReg,
+  const upgradeSilver = () => {
+    Axios.post("http://localhost:3001/upgradeSilver", {
       CountryOfResidence: countryOfResidencenReg,
       Tax: taxReg,
     });
@@ -29,29 +24,10 @@ function UpgradeBronze() {
             Upgrade to Bronze
           </Heading>
           <Heading size="24px" className="mb-5 text-center">
-            Enter your details to upgrade to Bronze.
+            Enter your details to upgrade to Silver.
           </Heading>
 
           <form>
-            <FormInput
-              id="DateOfBirth"
-              className="mb-3 w-300"
-              type="DateOfBirth"
-              placeholder="Date of Birth "
-              onChange={(e) => {
-                setDateOfBirthReg(e.target.value);
-              }}
-            />
-
-            <FormInput
-              id="Phone"
-              className="mb-3 w-300"
-              type="Phone"
-              placeholder="Phone"
-              onChange={(e) => {
-                setPhoneReg(e.target.value);
-              }}
-            />
             <FormInput
               id="CountryOfResidence"
               className="mb-3 w-300"
@@ -65,7 +41,7 @@ function UpgradeBronze() {
               id="Tax"
               className="mb-3 w-300"
               type="Tax"
-              placeholder="Tax (Optional)"
+              placeholder="Tax (Optional) "
               onChange={(e) => {
                 setTaxReg(e.target.value);
               }}
@@ -75,7 +51,7 @@ function UpgradeBronze() {
           <PrimaryButton
             type="submit"
             className="m-auto"
-            onClick={upgradeBronze}
+            onClick={upgradeSilver}
             text="Upgrade"
             hasIcon
           />
@@ -84,4 +60,4 @@ function UpgradeBronze() {
     </PageBody>
   );
 }
-export default UpgradeBronze;
+export default UpgradeSilver;
