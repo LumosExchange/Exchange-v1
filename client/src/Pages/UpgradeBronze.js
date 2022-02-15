@@ -24,7 +24,7 @@ function UpgradeBronze() {
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid">
       <div className="row">
-        <div className="col-11 col-md-6 d-flex flex-column m-auto">
+        <div className="col-12 d-flex flex-column m-auto">
           <Heading size="36px" className="mt-5 mb-4 text-center">
             Upgrade to Bronze
           </Heading>
@@ -35,7 +35,7 @@ function UpgradeBronze() {
           <form>
             <FormInput
               id="DateOfBirth"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="DateOfBirth"
               placeholder="Date of Birth "
               onChange={(e) => {
@@ -45,7 +45,7 @@ function UpgradeBronze() {
 
             <FormInput
               id="Phone"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="Phone"
               placeholder="Phone"
               onChange={(e) => {
@@ -54,7 +54,7 @@ function UpgradeBronze() {
             />
             <FormInput
               id="CountryOfResidence"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="CountryOfResidence"
               placeholder="Country of Residence "
               onChange={(e) => {
@@ -63,7 +63,7 @@ function UpgradeBronze() {
             />
             <FormInput
               id="Tax"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="Tax"
               placeholder="Tax (Optional)"
               onChange={(e) => {
