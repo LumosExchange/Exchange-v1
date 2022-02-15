@@ -19,19 +19,27 @@ import Paragraph from "../../Components/Paragraph";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { CodeSentMessage } from "../ChangePassword";
 
+
+
+
+
+
 const getUserPaymentMethods = () => {
 	Axios.all([
-		Axios.post(`/getUKBankDetails`), 
-		Axios.post(`/getEUBankDetails`),
-		Axios.post(`/getInterBankDetails`),
-		Axios.post(`/getPaypalDetails`),
-		Axios.post(`/getSkrillDetails`),
+		Axios.post(`http://localhost:3001/getUkBankDetails`), 
+		Axios.post(`http://localhost:3001/getEUBankDetails`),
+		Axios.post(`http://localhost:3001/getInterBankDetails`),
+		Axios.post(`http://localhost:3001/getPaypalDetails`),
+		Axios.post(`http://localhost:3001/getSkrillDetails`),
 	  ])
-	  .then(Axios.spread((data1, data2 , data3, data4, data5) => {
+	  .then(Axios.spread((UK, EU, Inter, PP, SK) => {
 		// output of req.
-		// const dataObject1 = createDataObject1(data1,data2,data3,data4,data5);
-		console.log('data1', data1, 'data2', data2, 'data3', data3, 'data4', data4, 'data5', data5)
-		// console.log('result : ', dataObject1);
+		 const dataObject1 = {UK, EU, Inter, PP, SK};
+
+		// const newObject =  Object.assign(data1,data2,data3,data4);
+		//const dataObject1 = createDataObject1(data1,data2,data3,data4,data5);
+	//	console.log('data1', data1, 'data2', data2, 'data3', data3, 'data4', data4, 'data5', data5)
+		console.log(dataObject1);
 	  }));
 
 }
@@ -462,6 +470,7 @@ const PaymentMethods = () => {
 					</div>
 				</div>
 			</div>
+			<button onClick={getUserPaymentMethods}></button>
 			<StyledModal
 				centered
 				isOpen={modal}

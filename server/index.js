@@ -1022,8 +1022,9 @@ app.post("/getUkBankDetails", (req, res) => {
           type: "ukbank",
           name: "UK Bank Account",
           account: result[0].accountNumber,
-          sort: result[0].sortCode
+          sort: result[0].sortCode,
         });
+        console.log('result :', result);
       }
     }
   )
@@ -1045,8 +1046,9 @@ app.post("/getEUBankDetails", (req,res) => {
           name: "EU Bank Account",
           bankName: result[0].bankName,
           BIC: result[0].BIC,
-          IBAN: result[0].IBAN
+          IBAN: result[0].IBAN,
         });
+        console.log('result :', result);
       }
     }
   )
@@ -1078,7 +1080,7 @@ app.post("/getInterBankDetails", (req, res) => {
 app.post("/getPaypalDetails", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
-    "SELECT paypalEmail, FROM paypalAccounts WHERE (userID) = (?)",
+    "SELECT paypalEmail FROM paypalAccounts WHERE (userID) = (?)",
     [user],
     (err, result) =>{
       if (err) {
@@ -1101,7 +1103,7 @@ app.post("/getSkrillDetails", (req,res) => {
   const user = req.session.user[0].userID
 
   db.query(
-    "SELECT skrillEmail, FROM skrillAccounts WHERE (userID) = (?)",
+    "SELECT skrillEmail FROM skrillAccounts WHERE (userID) = (?)",
     [user],
     (err, result) =>{
       if (err) {
