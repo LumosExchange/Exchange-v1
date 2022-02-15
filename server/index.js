@@ -310,8 +310,8 @@ app.post("getSpecificListings", (req,res) => {
   const payment = req.body.paymentMethod;
 
   db.query(
-    "SELECT * from sale WHERE (Country, PaymentMethord1, paymentMethord2) = (?,?,?)",
-    [location, payment, payment],
+    "SELECT * from sale WHERE (Country) AND (PaymentMethord1 OR paymentMethord2) = (?,)",
+    [location, payment],
     (err, result) => {
       res.send(result);
     }
@@ -1073,7 +1073,7 @@ app.post("/getEUBankDetails", (req,res) => {
 app.post("/getInterBankDetails", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
-    "SELECT bankName, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE (userID) = (?)",
+    "SELECT bankName, bankCity, bankCountry SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE (userID) = (?)",
     [user],
     (err, result) =>{
       if (err) {
@@ -1084,7 +1084,9 @@ app.post("/getInterBankDetails", (req, res) => {
           type: "internationalBank",
           name: "International Bank",
           bankName: result[0].bankName,
-          bic: result[0].SWIFTCode,
+          BIC: result[0].SWIFTCode,
+          bankCity: result[0].bankCity,
+          bankCountry: result[0].bankCountry,
           payeesName: result[0].payeesName,
           interBankName: result[0].interBankName,
           interBankCity: result[0].interBankCity,
