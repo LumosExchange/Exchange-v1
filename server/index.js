@@ -311,7 +311,11 @@ app.post("getSpecificListings", (req,res) => {
 
   db.query(
     "SELECT * from sale WHERE (Country, PaymentMethord1, paymentMethord2) = (?,?,?)",
-    [location, payment]
+    [location, payment, payment],
+    (err, result) => {
+      res.send(result);
+    }
+   
   )
 
 });
@@ -1069,7 +1073,7 @@ app.post("/getEUBankDetails", (req,res) => {
 app.post("/getInterBankDetails", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
-    "SELECT bankName, SWIFTCode, payeeName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE (userID) = (?)",
+    "SELECT bankName, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE (userID) = (?)",
     [user],
     (err, result) =>{
       if (err) {
