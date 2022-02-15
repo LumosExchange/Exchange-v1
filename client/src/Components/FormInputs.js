@@ -91,6 +91,7 @@ export const FormInput = ({
   onChange,
   onFocus,
   onBlur,
+  onKeyUp,
   disabled,
   maxLength,
   onInput,
@@ -121,6 +122,7 @@ export const FormInput = ({
         disabled={disabled}
         maxLength={maxLength}
         onInput={onInput}
+        onKeyUp={onKeyUp}
       />
     ) : (
       <StyledInput
@@ -142,6 +144,7 @@ export const FormInput = ({
         disabled={disabled}
         maxLength={maxLength}
         onInput={onInput}
+        onKeyUp={onKeyUp}
       />
     )}
   </div>

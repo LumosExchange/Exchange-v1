@@ -27,7 +27,7 @@ function UpgradeGold() {
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid">
       <div className="row">
-        <div className="col-11 col-md-6 d-flex flex-column m-auto">
+        <div className="col-12 d-flex flex-column m-auto">
           <Heading size="36px" className="mt-5 mb-4 text-center">
             Upgrade to gold
           </Heading>
@@ -38,7 +38,7 @@ function UpgradeGold() {
           <form>
             <FormInput
               id="EmployerName"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="text"
               placeholder="Employer Name "
               onChange={(e) => {
@@ -48,7 +48,7 @@ function UpgradeGold() {
 
             <FormInput
               id="EmployerAddress"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="text"
               placeholder="Employer Address "
               onChange={(e) => {
@@ -58,7 +58,7 @@ function UpgradeGold() {
 
             <FormInput
               id="Occupation"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="Occupation"
               placeholder="Occupation "
               onChange={(e) => {
@@ -67,7 +67,7 @@ function UpgradeGold() {
             />
             <FormInput
               id="ProofEmployment"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="ProofEmployment"
               placeholder="Proof Of Employment "
               onChange={(e) => {
@@ -76,7 +76,7 @@ function UpgradeGold() {
             />
             <FormInput
               id="Income"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="text"
               placeholder="Income "
               onChange={(e) => {
@@ -85,7 +85,7 @@ function UpgradeGold() {
             />
             <FormInput
               id="AdditionalIncome"
-              className="mb-3 w-300"
+              className="mb-3 w-100"
               type="AdditionalIncome"
               placeholder="Additional Income(Optional) "
               onChange={(e) => {
