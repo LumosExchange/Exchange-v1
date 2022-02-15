@@ -3,17 +3,15 @@ import "./App.css";
 import "./Fonts.css";
 import { ThemeProvider } from "styled-components";
 import Navbar from "./Components/Navbar";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import UpgradeBronze from "./Pages/UpgradeBronze";
 import UpgradeGold from "./Pages/UpgradeGold";
-import RegisterCompany from "./Pages/RegisterCompany";
+import UpgradeSilver from "./Pages/UpgradeSilver";
+
+import UpgradeTeam from "./Pages/UpgradeTeam";
 import LoggedHome from "./Pages/LoggedHome";
 import ErrorPage from "./Pages/ErrorPage";
 import Trades from "./Pages/Trades";
@@ -41,8 +39,8 @@ import ProfileKYC from "./Pages/Profile/KnowYourCustomer";
 import PaymentMethods from "./Pages/Profile/PaymentMethods";
 
 const App = () => {
-    const [theme, toggleTheme] = useDarkMode();
-    const themeMode = theme === 'light' ? lightTheme : darkTheme;
+  const [theme, toggleTheme] = useDarkMode();
+  const themeMode = theme === "light" ? lightTheme : darkTheme;
 
   //Check
   Axios.defaults.withCredentials = true;
@@ -72,7 +70,8 @@ const App = () => {
             <Route path="/Register" element={<Register />} />
             <Route path="/UpgradeBronze" element={<UpgradeBronze />} />
             <Route path="/UpgradeGold" element={<UpgradeGold />} />
-            <Route path="/RegisterCompany" element={<RegisterCompany />} />
+            <Route path="/UpgradeSilver" element={<UpgradeSilver />} />
+            <Route path="/UpgradeTeam" element={<UpgradeTeam />} />
             <Route path="*" element={<ErrorPage />} />
             {/* These need to be protected routes eventually */}
             {!loginStatus ? (
@@ -99,13 +98,16 @@ const App = () => {
             <Route path="/Profile/Security" element={<ProfileSecurity />} />
             <Route path="/Profile/Basic" element={<ProfileBasic />} />
             <Route path="/Profile/KYC" element={<ProfileKYC />} />
-            <Route path="/Profile/PaymentMethods" element={<PaymentMethods />} />
+            <Route
+              path="/Profile/PaymentMethods"
+              element={<PaymentMethods />}
+            />
           </Routes>
         </Router>
         <Footer />
       </ThemeProvider>
     </React.Fragment>
   );
-}
+};
 
 export default App;
