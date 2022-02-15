@@ -19,27 +19,6 @@ import Paragraph from "../../Components/Paragraph";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { CodeSentMessage } from "../ChangePassword";
 
-
-
-const getUserPaymentMethods = () => {
-	Axios.all([
-		Axios.post(`http://localhost:3001/getUkBankDetails`), 
-		Axios.post(`http://localhost:3001/getEUBankDetails`),
-		Axios.post(`http://localhost:3001/getInterBankDetails`),
-		Axios.post(`http://localhost:3001/getPaypalDetails`),
-		Axios.post(`http://localhost:3001/getSkrillDetails`),
-	  ])
-	  .then(Axios.spread((UK, EU, Inter, PP, SK) => {
-		// output of req.
-		 const dataObject1 = {UK, EU, Inter, PP, SK};
-		 
-		//const dataObject1 = createDataObject1(UK, EU, Inter, PP, SK);
-	//	console.log('data1', data1, 'data2', data2, 'data3', data3, 'data4', data4, 'data5', data5)
-		console.log(dataObject1);
-	  }));
-
-}
-
 const fakeUserPaymentMethods = [
 	{
         type: "card",
@@ -232,17 +211,29 @@ const PaymentMethods = () => {
 	const [confirmationMessage, setConfirmationMessage] = useState("");
 	const [errorMessage, setErrorMessage] = useState("");
 
+	
 	const ShowAddedPaymentMethods = () => {
 		const [userPaymentMethods, setUserPaymentMethods] = useState([]);
 	
 		const getUserPaymentMethods = () => {
-			Axios.post("http://localhost:3001/getInterBankDetails", {
-			}).then((response) => {
-			  console.log('get payment methods fired');
-				  setUserPaymentMethods(response?.data);
-				  console.log(userPaymentMethods, 'user payment methods');
-			});
+			Axios.all([
+				Axios.post(`http://localhost:3001/getUkBankDetails`), 
+				Axios.post(`http://localhost:3001/getEUBankDetails`),
+				Axios.post(`http://localhost:3001/getInterBankDetails`),
+				Axios.post(`http://localhost:3001/getPaypalDetails`),
+				Axios.post(`http://localhost:3001/getSkrillDetails`),
+			  ])
+			  .then(Axios.spread((...responses) => {
+					setUserPaymentMethods(responses);
+			  }
+			));
 		}
+
+		useEffect(() => {
+			getUserPaymentMethods();
+		  }, []);
+
+		console.log(userPaymentMethods, 'user payment methods');
 
 		const openEditModal = (data) => {
 			setModal(!modal);
@@ -250,9 +241,12 @@ const PaymentMethods = () => {
 
 			if (data.type === "ukbank"){
 				setAccountNumber(data.account);
-				setSortCode1(data.sort.split("-", 3)[0]);
-				setSortCode2(data.sort.split("-", 3)[1]);
-				setSortCode3(data.sort.split("-", 3)[2]);
+				const sortPart1 = data.sort.toString().slice(0, 2);
+				const sortPart2 = data.sort.toString().slice(2, 4);
+				const sortPart3 = data.sort.toString().slice(4, 6);
+				setSortCode1(sortPart1);
+				setSortCode2(sortPart2);
+				setSortCode3(sortPart3);
 				setModalMode("ukbank");
 			}
 
@@ -267,8 +261,9 @@ const PaymentMethods = () => {
 			}
 
 			if (data.type === "eubank"){
-				setIBAN(data.iban);
-				setBIC(data.bic);
+				console.log(data.IBAN);
+				setIBAN(data.IBAN);
+				setBIC(data.BIC);
 				setBankName(data.bankName);
 				setModalMode("eubank");
 			}
@@ -282,11 +277,11 @@ const PaymentMethods = () => {
 				setModalMode("card");
 			}
 
-			if (data.type === "intbank"){
+			if (data.type === "internationalBank"){
 				setBankName(data.bankName);
 				setBankCity(data.bankCity);
 				setBankCountry(data.bankCountry);
-				setBIC(data.bic);
+				setBIC(data.BIC);
 				setPayeeName(data.payeeName);
 				setInterBankName(data.interBankName);
 				setInterBankCity(data.interBankCity);
@@ -299,17 +294,19 @@ const PaymentMethods = () => {
 		
 		return (
 			<React.Fragment>
-			{fakeUserPaymentMethods.map((data) => (
+			{userPaymentMethods.map((data) => {
+				console.log(data.data, 'data in userpaymentmethods');
+				return (
 				<PaymentMethodCard className="p-4 mb-3 d-flex align-items-center row">
 					<div className="col-12 d-flex col-lg-11">
-					{convertMethodToIcon(data.type)}
+					{convertMethodToIcon(data.data.type)}
 						<Heading
 							size="20px"
 							className="mb-0 ms-2"
 						>
-							{data.name}
+							{data.data.name}
 							<PaymentDetails>
-								{data.account || data.iban || data.email}
+								{data.data.account || data.data.iban || data.data.email}
 							</PaymentDetails>
 						</Heading>
 					</div>
@@ -317,7 +314,7 @@ const PaymentMethods = () => {
 						<InvisibleButton
 							className="me-2"
 							title="Edit"
-							onClick={ () => openEditModal(data) }
+							onClick={ () => openEditModal(data.data) }
 						>
 							<i className="material-icons edit">edit</i>
 						</InvisibleButton>
@@ -326,7 +323,8 @@ const PaymentMethods = () => {
 						</InvisibleButton>
 					</div>
 				</PaymentMethodCard>
-			))}
+				);
+			})}
 			</React.Fragment>
 		);
 	}
@@ -484,7 +482,6 @@ const PaymentMethods = () => {
 					</div>
 				</div>
 			</div>
-			<button onClick={getUserPaymentMethods}></button>
 			<StyledModal
 				centered
 				isOpen={modal}
