@@ -111,7 +111,6 @@ const Buy = () => {
 		});
 	}
 
-
 	const getAllListings = () => {
 		Axios.get("http://localhost:3001/getAllListings").then((response) => {
 		setAllListings(response.data);

@@ -75,7 +75,8 @@ var secret = speakeasy.generateSecret({
 });
 
 // Connection deatils for DB
-const db = mysql.createConnection({
+const db = mysql.createPool({
+  connectionLimit : 100, 
   host: "remotemysql.com",
   user: "zEPptCpVyR",
   password: "qmZ0jhRFE5",
