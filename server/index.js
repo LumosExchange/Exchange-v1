@@ -75,7 +75,8 @@ var secret = speakeasy.generateSecret({
 });
 
 // Connection deatils for DB
-const db = mysql.createConnection({
+const db = mysql.createPool({
+  connectionLimit : 100, 
   host: "remotemysql.com",
   user: "zEPptCpVyR",
   password: "qmZ0jhRFE5",
@@ -132,7 +133,7 @@ app.post("/register", (req, res) => {
     );
     db.query(
       "INSERT INTO userPaymentAccounts (EUBank, UKBank, InterBank, Paypal, Skrill) VALUES (?,?,?,?,?)",
-      [0,0,0,0,0],
+      [0, 0, 0, 0, 0],
       (err, result) => {
         console.log(err);
       }
@@ -268,22 +269,31 @@ app.post("/sell", (req, res) => {
     "SELECT Country, Town FROM userInformation WHERE (userID) = (?)",
     [id],
     (err, result) => {
-      console.log('result: ', result);
+      console.log("result: ", result);
       let country = result[0].Country;
       let town = result[0].Town;
 
       db.query(
         "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethord1, paymentMethord2) VALUES (?,?,?,?,?,?,?,?,?)",
-        [id, amountForSale, aboveOrBelow, change, userName, country, town, payment1, payment2],
+        [
+          id,
+          amountForSale,
+          aboveOrBelow,
+          change,
+          userName,
+          country,
+          town,
+          payment1,
+          payment2,
+        ],
         (err, result) => {
           console.log(err);
           res.send(result);
         }
-      )
+      );
     }
   );
-}
-);
+});
 
 //Get users open listings
 app.get("/getListings", (req, res) => {
@@ -305,7 +315,7 @@ app.get("/getAllListings", (req, res) => {
 
 //getspecific listing
 
-app.post("getSpecificListings", (req,res) => {
+app.post("getSpecificListings", (req, res) => {
   const location = req.body.location;
   const payment = req.body.paymentMethod;
 
@@ -315,9 +325,7 @@ app.post("getSpecificListings", (req,res) => {
     (err, result) => {
       res.send(result);
     }
-   
-  )
-
+  );
 });
 
 //get userID name for feedback
@@ -647,34 +655,79 @@ app.post("/VerifyEmail2FA", (req, res) => {
   //once verified delete 2fa from db
 });
 
-//UpgradeGold
-app.post("/UpgradeGold", (req, res) => {
-  const EmployerName = req.body.EmployerName;
+//UpgradeBronze
+app.post("/UpgradeBronze", (req, res) => {
+  const user = req.session.user[0].userID;
+  const DateOfBirth = req.body.DateOfBirth;
+  const Phone = req.body.Phone;
 
-  const EmployerAddress = req.body.EmployerAddress;
-  const Occupation = req.body.Occupation;
-  const Income = req.body.Income;
-  console.log("EmployerName: " + req.body.EmployerName);
+  const Tax = req.body.Tax;
+
+  console.log("DateOfBirth: " + req.body.DateOfBirth);
   db.query(
-    "INSERT INTO UpgradeGold (EmployerName, EmployerAddress, Occupation, Income) VALUES (?,?,?,?)",
-    [EmployerName, EmployerAddress, Occupation, Income],
+    "INSERT INTO UpgradeBronze (userID, DateOfBirth, Phone, Tax) VALUES (?,?,?,?)",
+    [user, DateOfBirth, Phone, Tax],
     (err, result) => {
       console.log(err);
     }
   );
 });
 
-//UpgradeBronze
-app.post("/UpgradeBronze", (req, res) => {
-  const DateOfBirth = req.body.DateOfBirth;
-
-  const Phone = req.body.Phone;
+//UpgradeSilver
+app.post("/UpgradeSilver", (req, res) => {
+  const user = req.session.user[0].userID;
   const CountryOfResidence = req.body.CountryOfResidence;
   const Tax = req.body.Tax;
-  console.log("DateOfBirth: " + req.body.DateOfBirth);
+
   db.query(
-    "INSERT INTO UpgradeBronze (DateOfBirth, Phone, CountryOfResidence, Tax) VALUES (?,?,?,?)",
-    [DateOfBirth, Phone, CountryOfResidence, Tax],
+    "INSERT INTO UpgradeSilver (userID, CountryOfResidence, Tax) VALUES (?,?,?)",
+    [user, CountryOfResidence, Tax],
+    (err, result) => {
+      console.log(err);
+    }
+  );
+});
+
+//UpgradeGold
+app.post("/UpgradeGold", (req, res) => {
+  const user = req.session.user[0].userID;
+  const EmployerName = req.body.EmployerName;
+  const EmployerAddress = req.body.EmployerAddress;
+  const Occupation = req.body.Occupation;
+  const Income = req.body.Income;
+  console.log("EmployerName: " + req.body.EmployerName);
+  db.query(
+    "INSERT INTO UpgradeGold (userID, EmployerName, EmployerAddress, Occupation, Income) VALUES (?,?,?,?,?)",
+    [user, EmployerName, EmployerAddress, Occupation, Income],
+    (err, result) => {
+      console.log(err);
+    }
+  );
+});
+
+//UpgradeTeam
+app.post("/UpgradeTeam", (req, res) => {
+  const user = req.session.user[0].userID;
+  const RegistrationCountry = req.body.RegistrationCountry;
+  const RegistrationNumber = req.body.RegistrationNumber;
+  const CompanySourceOfIncome = req.body.CompanySourceOfIncome;
+  const DirectorName = req.body.DirectorName;
+  const DirectorAddress = req.body.DirectorAddress;
+  const DirectorOwnership = req.body.DirectorOwnership;
+  const AdditionalDirector = req.body.AdditionalDirector;
+
+  db.query(
+    "INSERT INTO UpgradeTeam (userID, RegistrationCountry, RegistrationNumber, CompanySourceOfIncome, DirectorName, DirectorAddress, DirectorOwnership,AdditionalDirector) VALUES (?,?,?,?,?,?,?,?)",
+    [
+      user,
+      RegistrationCountry,
+      RegistrationNumber,
+      CompanySourceOfIncome,
+      DirectorName,
+      DirectorAddress,
+      DirectorOwnership,
+      AdditionalDirector,
+    ],
     (err, result) => {
       console.log(err);
     }
@@ -882,31 +935,32 @@ app.post("/getUser2FAOptions", (req, res) => {
 //register uk bank account
 app.post("/RegisterUkBank", (req, res) => {
   const user = req.session.user[0].userID;
-  const name = req.session.user[0].firstName + ' ' + req.session.user[0].lastName;
+  const name =
+    req.session.user[0].firstName + " " + req.session.user[0].lastName;
   const sortCode = req.body.sortCode;
   const accountNumber = req.body.accountNumber;
 
   db.query(
     "INSERT INTO UKBankAccounts (userID, Name, sortCode, accountNumber) VALUES (?,?,?,?)",
     [user, name, sortCode, accountNumber],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
-        console.log('errors: ' , err);
+        console.log("errors: ", err);
         res.send(err);
       } else {
-        res.send({message: "UK Bank account added"});
+        res.send({ message: "UK Bank account added" });
       }
-    }),
-
+    }
+  ),
     db.query(
       "UPDATE userPaymentAccounts SET UKBank = ? WHERE userID = ?",
       [1, user],
-      (err, result) =>{
+      (err, result) => {
         if (err) {
           res.send(err);
-        } 
+        }
       }
-  );
+    );
 });
 
 //register EU bank account
@@ -919,21 +973,22 @@ app.post("/RegisterEUBank", (req, res) => {
   db.query(
     "INSERT INTO EUBankAccounts (userID, bankName, BIC, IBAN) VALUES (?,?,?,?)",
     [user, name, BIC, IBAN],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
-        console.log('errors: ' , err);
+        console.log("errors: ", err);
         res.send(err);
       } else {
-        res.send({message: "EU Bank account added"});
+        res.send({ message: "EU Bank account added" });
       }
-    db.query(
-      "UPDATE userPaymentAccounts SET EUBank = ? WHERE userID = ?",
-      [1, user],
-      (err, result) =>{
-        console.log('errors: ' , err)
-      }
+      db.query(
+        "UPDATE userPaymentAccounts SET EUBank = ? WHERE userID = ?",
+        [1, user],
+        (err, result) => {
+          console.log("errors: ", err);
+        }
+      );
+    }
   );
-})
 });
 
 //Register International bank account
@@ -952,23 +1007,35 @@ app.post("/RegisterInternationalBank", (req, res) => {
 
   db.query(
     "INSERT INTO internationalBankAccounts (userID, bankName, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber) VALUES (?,?,?,?,?,?,?,?,?,?)",
-    [user, bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber],
-    (err, result) =>{
+    [
+      user,
+      bankName,
+      bankCity,
+      bankCountry,
+      SWIFTCode,
+      payeesName,
+      interBankName,
+      interBankCity,
+      interBankCountry,
+      interBankAccountNumber,
+      interBankRoutingNumber,
+    ],
+    (err, result) => {
       if (err) {
-        console.log('errors: ' , err);
+        console.log("errors: ", err);
         res.send(err);
       } else {
-        res.send({message: "International Bank account added"});
+        res.send({ message: "International Bank account added" });
       }
     }
   ),
-  db.query(
-    "UPDATE userPaymentAccounts SET InterBank = ? WHERE userID = ?",
-    [1, user],
-    (err, result) =>{
-      console.log('errors: ' , err)
-    }
-);
+    db.query(
+      "UPDATE userPaymentAccounts SET InterBank = ? WHERE userID = ?",
+      [1, user],
+      (err, result) => {
+        console.log("errors: ", err);
+      }
+    );
 });
 
 //Register paypal
@@ -976,52 +1043,50 @@ app.post("/RegisterPaypal", (req, res) => {
   const user = req.session.user[0].userID;
   const paypalEmail = req.body.paypalEmail;
 
-  
   db.query(
     "INSERT INTO paypalAccounts (userID, paypalEmail) VALUES (?,?)",
     [user, skrillEmail],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
-        console.log('errors: ' , err);
+        console.log("errors: ", err);
         res.send(err);
       } else {
-        res.send({message: "Paypal account added"});
+        res.send({ message: "Paypal account added" });
       }
     }
-  )
+  );
   db.query(
     "UPDATE userPaymentAccounts SET Paypal = ? WHERE userID = ?",
     [1, user],
-    (err, result) =>{
-      console.log('errors: ' , err)
+    (err, result) => {
+      console.log("errors: ", err);
     }
-);
+  );
 });
 
 //Register Skrill address
-app.post("/RegisterSkrill", (req,res) => {
-
+app.post("/RegisterSkrill", (req, res) => {
   const user = req.session.user[0].userID;
   const skrillEmail = req.body.skrillEmail;
   db.query(
     "INSERT INTO skrillAccounts (userID, skrillEmail) VALUES (?,?)",
     [user, skrillEmail],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
-        console.log('errors: ' , err);
+        console.log("errors: ", err);
         res.send(err);
       } else {
-        res.send({message: "SKRILL account added"});
+        res.send({ message: "SKRILL account added" });
       }
     }
-  )    
+  );
   db.query(
     "UPDATE userPaymentAccounts SET Skrill = ? WHERE userID = ?",
     [1, user],
-    (err, result) =>{
-      console.log('errors: ' , err)
+    (err, result) => {
+      console.log("errors: ", err);
     }
-);
+  );
 });
 
 //get User bank details for Profile
@@ -1030,10 +1095,10 @@ app.post("/getUkBankDetails", (req, res) => {
   db.query(
     "SELECT accountNumber, sortCode FROM UKBankAccounts WHERE (userID) = (?)",
     [user],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('errors: ' , err);
+        console.log("errors: ", err);
       } else {
         res.send({
           type: "ukbank",
@@ -1043,19 +1108,19 @@ app.post("/getUkBankDetails", (req, res) => {
         });
       }
     }
-  )
+  );
 });
 
 //get user EU Bank details for profile
-app.post("/getEUBankDetails", (req,res) => {
+app.post("/getEUBankDetails", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
     "SELECT BIC, IBAN, bankName FROM EUBankAccounts WHERE (userID) = (?)",
     [user],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('errors: ' , err);
+        console.log("errors: ", err);
       } else {
         res.send({
           type: "eubank",
@@ -1066,7 +1131,7 @@ app.post("/getEUBankDetails", (req,res) => {
         });
       }
     }
-  )
+  );
 });
 
 //get international bank details for profile FINISH THIS
@@ -1075,10 +1140,10 @@ app.post("/getInterBankDetails", (req, res) => {
   db.query(
     "SELECT bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE (userID) = (?)",
     [user],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('errors: ' , err);
+        console.log("errors: ", err);
       } else {
         res.send({
           type: "internationalBank",
@@ -1092,11 +1157,11 @@ app.post("/getInterBankDetails", (req, res) => {
           interBankCity: result[0].interBankCity,
           interBankCountry: result[0].interBankCountry,
           interBankAccountNumber: result[0].interBankAccountNumber,
-          interBankRoutingNumber: result[0].interBankRoutingNumber
+          interBankRoutingNumber: result[0].interBankRoutingNumber,
         });
       }
     }
-  )
+  );
 });
 
 //get Paypal details for profile
@@ -1105,10 +1170,10 @@ app.post("/getPaypalDetails", (req, res) => {
   db.query(
     "SELECT paypalEmail FROM paypalAccounts WHERE (userID) = (?)",
     [user],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('errors: ' , err);
+        console.log("errors: ", err);
       } else {
         res.send({
           type: "paypal",
@@ -1117,21 +1182,21 @@ app.post("/getPaypalDetails", (req, res) => {
         });
       }
     }
-  )
+  );
 });
 
 //Get Skrill details for profile
 
-app.post("/getSkrillDetails", (req,res) => {
-  const user = req.session.user[0].userID
+app.post("/getSkrillDetails", (req, res) => {
+  const user = req.session.user[0].userID;
 
   db.query(
     "SELECT skrillEmail FROM skrillAccounts WHERE (userID) = (?)",
     [user],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('errors: ' , err);
+        console.log("errors: ", err);
       } else {
         res.send({
           type: "skrill",
@@ -1140,21 +1205,20 @@ app.post("/getSkrillDetails", (req,res) => {
         });
       }
     }
-  )
+  );
 });
 
 //return all user payment methords
-app.post("/getUserPaymentMethods", (req,res) => {
-  const user = req.session.user[0].userID
-
+app.post("/getUserPaymentMethods", (req, res) => {
+  const user = req.session.user[0].userID;
 
   db.query(
     "SELECT EUBank, UKBank, InterBank, Paypal, Skrill FROM userPaymentAccounts WHERE (userID) = (?)",
     [user],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('errors: ' , err);
+        console.log("errors: ", err);
       } else {
         res.send({
           UKBank: result[0].UKBank,
@@ -1165,61 +1229,59 @@ app.post("/getUserPaymentMethods", (req,res) => {
         });
       }
     }
-  )
+  );
 });
 
 //Update Uk bank
 
-app.post("/UpdateUkBank", (req,res) => {
-  const user = req.session.user[0].userID
-  const name = req.session.user[0].firstName + ' ' + req.session.user[0].lastName;
+app.post("/UpdateUkBank", (req, res) => {
+  const user = req.session.user[0].userID;
+  const name =
+    req.session.user[0].firstName + " " + req.session.user[0].lastName;
   const sortCode = req.body.sortCode;
   const accountNumber = req.body.accountNumber;
 
   db.query(
     "UPDATE UKBankAccounts SET Name = ?, sortCode = ?, accountNumber =? WHERE userID = ?",
     [name, sortCode, accountNumber, user],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('error : ', err)
+        console.log("error : ", err);
       } else {
         res.send({
-          message: "UK Bank Updated!"
+          message: "UK Bank Updated!",
         });
       }
     }
-);
+  );
 });
 
-
-
 //Update Eu Bank
-app.post("/UpdateEUBank", (req,res) => {
-  const user = req.session.user[0].userID
+app.post("/UpdateEUBank", (req, res) => {
+  const user = req.session.user[0].userID;
   const bankName = req.body.bankName;
   const BIC = req.body.BIC;
   const IBAN = req.body.IBAN;
 
-
   db.query(
     "UPDATE EUBankAccounts SET bankName = ?, BIC = ?, IBAN =? WHERE userID = ?",
     [bankName, BIC, IBAN, user],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('error : ', err)
+        console.log("error : ", err);
       } else {
         res.send({
-          message: "EU Bank Updated!"
+          message: "EU Bank Updated!",
         });
       }
     }
-);
+  );
 });
 
 //Update International Bank
-app.post("/UpdateInterBank", (req,res) => {
+app.post("/UpdateInterBank", (req, res) => {
   const user = req.session.user[0].userID;
   const bankName = req.body.bankName;
   const bankCity = req.body.bankCity;
@@ -1232,162 +1294,154 @@ app.post("/UpdateInterBank", (req,res) => {
   const interBankAccountNumber = req.body.interBankAccountNumber;
   const interBankRoutingNumber = req.body.bankName;
 
-  
   db.query(
     "UPDATE internationalBankAccounts SET bankName = ?, bankCity = ?, bankCountry = ?, SWIFTCode = ?, payeesName = ?, interBankName = ?, interBankCity = ?, interBankCountry =?, interBankAccountNumber =?, interBankRoutingNumber =?  WHERE userID = ?",
-    [bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber, user],
-    (err, result) =>{
+    [
+      bankName,
+      bankCity,
+      bankCountry,
+      SWIFTCode,
+      payeesName,
+      interBankName,
+      interBankCity,
+      interBankCountry,
+      interBankAccountNumber,
+      interBankRoutingNumber,
+      user,
+    ],
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('error : ', err)
+        console.log("error : ", err);
       } else {
         res.send({
-          message: "International Bank Updated!"
+          message: "International Bank Updated!",
         });
       }
     }
-);
+  );
 });
 
 //Update Paypal
-app.post("/UpdatePaypal", (req,res) => {
+app.post("/UpdatePaypal", (req, res) => {
   const user = req.session.user[0].userID;
   const paypalEmail = req.body.paypalEmail;
 
   db.query(
     "UPDATE paypalAccounts SET paypalEmail = ? WHERE userID = ?",
     [paypalEmail, user],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('error : ', err)
+        console.log("error : ", err);
       } else {
         res.send({
-          message: "Paypal Updated!"
+          message: "Paypal Updated!",
         });
-      };
+      }
     }
-);
-
+  );
 });
 
 //Update Skrill
-app.post("/UpdateSkrill", (req,res) => {
+app.post("/UpdateSkrill", (req, res) => {
   const user = req.session.user[0].userID;
   const skrillEmail = req.body.skrillEmail;
 
   db.query(
     "UPDATE skrillAccounts SET skillEmail = ? WHERE userID = ?",
     [skrillEmail, user],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('error : ', err)
+        console.log("error : ", err);
       } else {
         res.send({
-          message: "Skrill Updated!"
+          message: "Skrill Updated!",
         });
       }
     }
-)
+  );
 });
 
 //delete UK bank
-app.post("/DeleteUKBank", (req,res) => {
+app.post("/DeleteUKBank", (req, res) => {
   const user = req.session.user[0].userID;
-  db.query(
-    "DELETE FROM UKBankAccounts WHERE = ?",
-    [user],
-    (err, result) =>{
-      if (err) {
-        res.send(err);
-        console.log('error : ', err)
-      } else {
-        res.send({
-          message: "UK account Deleted!"
-        });
-      }
+  db.query("DELETE FROM UKBankAccounts WHERE = ?", [user], (err, result) => {
+    if (err) {
+      res.send(err);
+      console.log("error : ", err);
+    } else {
+      res.send({
+        message: "UK account Deleted!",
+      });
     }
-  )
+  });
 });
 
 //Delete EUbank
-app.post("/DeleteEUBank", (req,res) => {
+app.post("/DeleteEUBank", (req, res) => {
   const user = req.session.user[0].userID;
-  db.query(
-    "DELETE FROM EUBankAccounts WHERE = ?",
-    [user],
-    (err, result) =>{
-      if (err) {
-        res.send(err);
-        console.log('error : ', err)
-      } else {
-        res.send({
-          message: "EU account Deleted!"
-        });
-      }
+  db.query("DELETE FROM EUBankAccounts WHERE = ?", [user], (err, result) => {
+    if (err) {
+      res.send(err);
+      console.log("error : ", err);
+    } else {
+      res.send({
+        message: "EU account Deleted!",
+      });
     }
-  )
+  });
 });
 
 //Delete Inter Bank
-app.post("/DeleteInterBank", (req,res) => {
+app.post("/DeleteInterBank", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
     "DELETE FROM internationalBankAccounts WHERE = ?",
     [user],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('error : ', err)
+        console.log("error : ", err);
       } else {
         res.send({
-          message: "International account Deleted!"
+          message: "International account Deleted!",
         });
       }
     }
-  )
+  );
 });
 
 //delet paypal
-app.post("/DeletePaypalBank", (req,res) => {
+app.post("/DeletePaypalBank", (req, res) => {
   const user = req.session.user[0].userID;
-  db.query(
-    "DELETE FROM paypalAccounts WHERE = ?",
-    [user],
-    (err, result) =>{
-      if (err) {
-        res.send(err);
-        console.log('error : ', err)
-      } else {
-        res.send({
-          message: "Paypal account Deleted!"
-        });
-      }
+  db.query("DELETE FROM paypalAccounts WHERE = ?", [user], (err, result) => {
+    if (err) {
+      res.send(err);
+      console.log("error : ", err);
+    } else {
+      res.send({
+        message: "Paypal account Deleted!",
+      });
     }
-  )
+  });
 });
 
 //Delete Skrill
-app.post("/DeleteSkrillBank", (req,res) => {
+app.post("/DeleteSkrillBank", (req, res) => {
   const user = req.session.user[0].userID;
-  db.query(
-    "DELETE FROM skrillAccounts WHERE = ?",
-    [user],
-    (err, result) =>{
-      if (err) {
-        res.send(err);
-        console.log('error : ', err)
-      } else {
-        res.send({
-          message: "Skrill account Deleted!"
-        });
-      }
+  db.query("DELETE FROM skrillAccounts WHERE = ?", [user], (err, result) => {
+    if (err) {
+      res.send(err);
+      console.log("error : ", err);
+    } else {
+      res.send({
+        message: "Skrill account Deleted!",
+      });
     }
-  )
+  });
 });
-
-
 
 app.listen(3001, () => {
   console.log("running on port 3001");

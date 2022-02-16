@@ -94,15 +94,34 @@ const Buy = () => {
 	const [allListings, setAllListings] = useState([]);
 	const [selectedCrypto, selectCrypto] = useState(CRYPTO_SOL);
 	const [selectedMode, selectMode] = useState('buy');
-	const [selectedCurrency, selectCurrency] = useState('£');
+	const [selectedCurrency, selectCurrency] = useState();
   
 	const navigate = useNavigate();
+
+
+	const getCurrency = () => {
+		Axios.get("http://localhost:3001/getUserSettings") .then((response) => {
+			if(response.data[0]?.currency === 'GBP') {
+				selectCurrency('£');
+			} else if (response.data[0]?.currency === 'USD') {
+				selectCurrency('$');
+			} else {
+				selectCurrency('£');
+			}
+		});
+	}
 
 	const getAllListings = () => {
 		Axios.get("http://localhost:3001/getAllListings").then((response) => {
 		setAllListings(response.data);
 		});
 	}
+
+	 
+    useEffect(() => {
+		getCurrency();
+
+	  }, []);
 
 	useMemo(() => {
 		getAllListings();

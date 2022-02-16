@@ -22,7 +22,7 @@ function UpgradeTeam() {
       DirectorName: directorNameReg,
       DirectorAddress: directorAddressReg,
       DirectorOwnership: directorOwnershipReg,
-      AdditionDirector: additionalDirectorReg,
+      AdditionalDirector: additionalDirectorReg,
     });
   };
 

@@ -9,14 +9,13 @@ function UpgradeBronze() {
   const [dateOfBirthReg, setDateOfBirthReg] = useState("");
   const [phoneReg, setPhoneReg] = useState("");
 
-  const [countryOfResidencenReg, setCountryOfResidenceReg] = useState("");
   const [taxReg, setTaxReg] = useState("");
 
   const upgradeBronze = () => {
     Axios.post("http://localhost:3001/upgradeBronze", {
       DateOfBirth: dateOfBirthReg,
       Phone: phoneReg,
-      CountryOfResidence: countryOfResidencenReg,
+
       Tax: taxReg,
     });
   };
@@ -52,15 +51,7 @@ function UpgradeBronze() {
                 setPhoneReg(e.target.value);
               }}
             />
-            <FormInput
-              id="CountryOfResidence"
-              className="mb-3 w-100"
-              type="CountryOfResidence"
-              placeholder="Country of Residence "
-              onChange={(e) => {
-                setCountryOfResidenceReg(e.target.value);
-              }}
-            />
+
             <FormInput
               id="Tax"
               className="mb-3 w-100"
