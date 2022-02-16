@@ -18,8 +18,8 @@ function UpgradeGold() {
       EmployerName: employerNameReg,
       EmployerAddress: employerAddressReg,
       Occupation: occupationReg,
-      ProofEmployment: setProofEmploymentReg,
-      AdditionalIncome: setAdditionalIncomeReg,
+      ProofEmployment: proofEmploymentReg,
+      AdditionalIncome: additionalIncomeReg,
       Income: incomeReg,
     });
   };
