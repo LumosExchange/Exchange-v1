@@ -236,7 +236,7 @@ const Buy = () => {
 							</div>
 							<div>
 							<div className="col-12">
-									<Heading size="16px">Prefered payment methord</Heading>
+									<Heading size="16px">Prefered payment method</Heading>
 								</div>
 							<StyledDropdown
 										type="change"
