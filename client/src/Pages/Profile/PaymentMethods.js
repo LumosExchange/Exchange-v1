@@ -6,7 +6,7 @@ import PrimaryButton, {
 } from "../../Components/Buttons";
 import styled, { css } from "styled-components";
 import Axios from "axios";
-import { ContentTab, ProfileTabLink, Tabs } from "../../Components/Profile";
+import { ContentTab, LoadingState, ProfileTabLink, Tabs } from "../../Components/Profile";
 import {
   FormInput,
   PageBody,
@@ -173,53 +173,6 @@ const StyledBackIcon = styled.i(({ theme }) => css`
 	color: ${theme.colors.primary_cta};
 `);
 
-// **** TODO ****
-// Map type to icon
-// Add remove button
-// Add Payment method modal
-
-const ShowAddedPaymentMethods = () => {
-  const [userPaymentMethods, setUserPaymentMethods] = useState([]);
-
-  const getUserPaymentMethods = () => {
-    Axios.post("http://localhost:3001/getInterBankDetails", {}).then(
-      (response) => {
-        console.log("get payment methods fired");
-        setUserPaymentMethods(response?.data);
-        console.log(userPaymentMethods, "user payment methods");
-      }
-    );
-  };
-
-  useEffect(() => {});
-
-  return (
-    <React.Fragment>
-      {fakeUserPaymentMethods.map((data) => (
-        <PaymentMethodCard className="p-4 mb-3 d-flex align-items-center row">
-          <div className="col-12 d-flex col-lg-11">
-            {convertMethodToIcon(data.type)}
-            <Heading size="20px" className="mb-0 ms-2">
-              {data.name}
-              <PaymentDetails>
-                {data.account || data.iban || data.email}
-              </PaymentDetails>
-            </Heading>
-          </div>
-          <div className="col-12 col-lg-1 d-flex">
-            <InvisibleButton className="me-2" title="Edit">
-              <i className="material-icons edit">edit</i>
-            </InvisibleButton>
-            <InvisibleButton title="Remove">
-              <i className="material-icons showError">clear</i>
-            </InvisibleButton>
-          </div>
-        </PaymentMethodCard>
-      ))}
-    </React.Fragment>
-  );
-};
-
 const PaymentMethods = () => {
 
 	// Modal Controls
@@ -271,6 +224,7 @@ const PaymentMethods = () => {
 		const [deleteModalData, setDeleteModalData] = useState([]);
 		const [deleteModalMode, setDeleteModalMode] = useState('initial');
 		const [deleteConfirmationMessage, setDeleteConfirmationMessage] = useState("");
+		const [isLoading, setIsLoading] = useState(true);
 
 		const getUserPaymentMethods = () => {
 			Axios.all([
@@ -284,22 +238,19 @@ const PaymentMethods = () => {
 				  if (err) {
 					  console.log(err, 'error from getUserPaymentMethods');
 				  }
-			  }) 
-			  .then(Axios.spread((...responses) => {
+			  	})
+			  	.then(Axios.spread((...responses) => {
 					setUserPaymentMethods(responses);
-			  }
-			));
+					setIsLoading(false);
+			  	}));
 		}
 
 		useEffect(() => {
 			getUserPaymentMethods();
 		  }, []);
 
-		console.log(userPaymentMethods, 'user payment methods');
-
 		const openEditModal = (data) => {
 			setModal(!modal);
-			console.log(data, 'data passed through');
 
 			if (data.type === "ukbank"){
 				setAccountNumber(data.account);
@@ -323,7 +274,6 @@ const PaymentMethods = () => {
 			}
 
 			if (data.type === "eubank"){
-				console.log(data.IBAN);
 				setIBAN(data.IBAN);
 				setBIC(data.BIC);
 				setBankName(data.bankName);
@@ -359,7 +309,6 @@ const PaymentMethods = () => {
 		}
 
 		const openDeleteModal = (data) => {
-			console.log(data, 'data in open delete modal');
 			setDeleteModal(!deleteModal);
 			setDeleteModalData(data);
 		}
@@ -414,42 +363,45 @@ const PaymentMethods = () => {
 				})
 			}
 		}
+
+		const filteredUserPayments = userPaymentMethods.filter(u => u.data.status !== 'none-added');
 		
 		return (
-			<React.Fragment>
-			{userPaymentMethods.length > 0 && userPaymentMethods.map((data) => {
-				console.log(data);
-				return (
-					(data.data.type && (
-						<PaymentMethodCard className="p-4 mb-3 d-flex align-items-center row">
-							<div className="col-12 d-flex col-lg-11">
-							{convertMethodToIcon(data.data.type)}
-								<Heading
-									size="20px"
-									className="mb-0 ms-2"
-								>
-									{data.data.name}
-									<PaymentDetails>
-										{data.data.account || data.data.IBAN || data.data.email || data.data.BIC }
-									</PaymentDetails>
-								</Heading>
-							</div>
-							<div className="col-12 col-lg-1 d-flex">
-								<InvisibleButton
-									className="me-2"
-									title="Edit"
-									onClick={ () => openEditModal(data.data) }
-								>
-									<i className="material-icons edit">edit</i>
-								</InvisibleButton>
-								<InvisibleButton title="Remove" onClick={() => openDeleteModal(data.data)}>
-									<i className="material-icons showError">clear</i>
-								</InvisibleButton>
-							</div>
-						</PaymentMethodCard>
-					))
-				);
-			})}
+			<div className="position-relative">
+			{filteredUserPayments.length === 0 && (
+				<div className="col-12 text-center mt-3">
+					<Paragraph size="20px">No Payment methods added</Paragraph>
+				</div>
+			)}
+			{filteredUserPayments.map((data) => (
+				<PaymentMethodCard className="p-4 mb-3 d-flex align-items-center row position-relative">
+					<div className="col-12 d-flex col-lg-11">
+					{convertMethodToIcon(data.data.type)}
+						<Heading
+							size="20px"
+							className="mb-0 ms-2"
+						>
+							{data.data.name}
+							<PaymentDetails>
+								{data.data.account || data.data.IBAN || data.data.email || data.data.BIC }
+							</PaymentDetails>
+						</Heading>
+					</div>
+					<div className="col-12 col-lg-1 d-flex">
+						<InvisibleButton
+							className="me-2"
+							title="Edit"
+							onClick={ () => openEditModal(data.data) }
+						>
+							<i className="material-icons edit">edit</i>
+						</InvisibleButton>
+						<InvisibleButton title="Remove" onClick={() => openDeleteModal(data.data)}>
+							<i className="material-icons showError">clear</i>
+						</InvisibleButton>
+					</div>
+				</PaymentMethodCard>
+			))}
+			{isLoading && <LoadingState />}
 				<StyledModal
 					centered
 					isOpen={deleteModal}
@@ -499,7 +451,7 @@ const PaymentMethods = () => {
 						</ModalBody>
 					)}
 				</StyledModal>
-			</React.Fragment>
+			</div>
 		);
 	}
 	
@@ -548,7 +500,6 @@ const PaymentMethods = () => {
 			cardPostalCode,
 			cardNumber,
 		}).then((response) => {
-			console.log(response, 'response');
 			setModal(!modal);
 			setModalMode('initial');
 			resetValues()
@@ -654,7 +605,8 @@ const PaymentMethods = () => {
 						<Heading size="18px" bold className="mb-0">Payment Methods</Heading>
 						<div className="col-3">
 							<InlineButton onClick={toggle}>
-								Add a Payment Method</InlineButton>
+								Add a Payment Method
+							</InlineButton>
 						</div>
 					</div>
 					<div className="d-flex p-4 row">
