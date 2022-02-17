@@ -152,14 +152,11 @@ const Buy = () => {
 
 
 	const filterLisitingsPayment = () => {
- const filteredListingsPayment = allListings.filter(al => al.paymentMethord1 === searchCriteriaPayment || al.paymentMethord2 === searchCriteriaPayment && al.Country === searchCriteriaLocation);
+ const filteredListingsPayment = allListings.filter(al => al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment && al.Country === searchCriteriaLocation);
 		console.log(filteredListingsPayment);
 
 	};
 
-	const updateListings = () => {
-		setNewLisiting(filteredListingsPayment);
-	};
 	//const filterPaymentsLocation = () => {
 	//	const filteredListingsLocation = allListings.filter(al => al.Country === searchCriteriaLocation);
 	//	console.log(filteredListingsLocation);
@@ -312,7 +309,7 @@ const Buy = () => {
 											</Heading>
 										</div>
 										<div className="col-3">110 Trades</div>
-										<div className="col-3">{val.paymentMethord1}{' & '}{val.paymentMethord2}</div>
+										<div className="col-3">{val.paymentMethod1}{' & '}{val.paymentMethod2}</div>
 										<div className="col-3">
 											<Paragraph size="18px" >
 												{val.percentChange}%
