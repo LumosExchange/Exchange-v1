@@ -95,6 +95,10 @@ const Buy = () => {
 	const [selectedCrypto, selectCrypto] = useState(CRYPTO_SOL);
 	const [selectedMode, selectMode] = useState('buy');
 	const [selectedCurrency, selectCurrency] = useState();
+	const [solgbp, setSolGbp] = useState();
+	const [solusd, setSolUsd] = useState();
+	const [currencySymbol, setCurrencySymbol] = useState();
+	const [filteredData, setFilteredData] = React.useState(null);
   
 	const navigate = useNavigate();
 
@@ -102,11 +106,22 @@ const Buy = () => {
 	const getCurrency = () => {
 		Axios.get("http://localhost:3001/getUserSettings") .then((response) => {
 			if(response.data[0]?.currency === 'GBP') {
-				selectCurrency('£');
+				selectCurrency('GBP');
+				setCurrencySymbol('£');
+				//Get GBP price of SOlana
+				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp') .then((response) => response.json() .then(function (data) {
+					setSolGbp(data.solana.gbp);
+				}));	
 			} else if (response.data[0]?.currency === 'USD') {
-				selectCurrency('$');
+				selectCurrency('USD');
+				setCurrencySymbol('$');
+				//Get USD price of solana
+				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd') .then((response) => response.json() .then(function (data) {
+					setSolUsd(data.solana.usd);
+				}));
 			} else {
-				selectCurrency('£');
+				//handle other currencys
+				selectCurrency('GBP');
 			}
 		});
 	}
@@ -120,11 +135,11 @@ const Buy = () => {
 	 
     useEffect(() => {
 		getCurrency();
-
 	  }, []);
 
 	useMemo(() => {
 		getAllListings();
+	
 	}, []);
 
   return (
@@ -205,14 +220,21 @@ const Buy = () => {
 										<div className="col-3">{val.Town}</div>
 										<div className="col-3">
 
-											<Heading size="18px">
-												{selectedCurrency}{val.amountForSale}
+											<Heading size="18px" id="AFS">
+											<Heading size="18px">Price per Sol</Heading>
+												{currencySymbol}{val.aboveOrBelow === 'above' && ((solgbp / 100) * (100 + val.percentChange)).toFixed(2)}
+												{val.aboveOrBelow === 'below' && ((solgbp / 100) * (100 - val.percentChange)).toFixed(2)}
+												<Heading size="18px">Total Sol for sale</Heading>
+												{val.amountForSale}
+												<Heading size="18px">Total value of sale</Heading>
+												{currencySymbol}{selectedCurrency === 'GBP' && ((val.amountForSale * solgbp)).toFixed(2)}
+												{selectedCurrency === 'USD' && ((val.amountForSale * solusd))}
 											</Heading>
 										</div>
 										<div className="col-3">110 Trades</div>
 										<div className="col-3">{val.paymentMethord1}{' & '}{val.paymentMethord2}</div>
 										<div className="col-3">
-											<Paragraph size="18px">
+											<Paragraph size="18px" >
 												{val.percentChange}%
 												{' '}{val.aboveOrBelow}{' '}market
 											</Paragraph>
