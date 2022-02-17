@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { css } from 'styled-components';
 import Axios from "axios";
 import { PageBody, StyledDropdown } from "../Components/FormInputs";
@@ -98,21 +98,24 @@ const Buy = () => {
 	const [solgbp, setSolGbp] = useState();
 	const [solusd, setSolUsd] = useState();
 	const [currencySymbol, setCurrencySymbol] = useState();
-	const [filteredData, setFilteredData] = React.useState(null);
-	const [searchCriteriaPayment, setSearchCriteriaPayment] = useState();
-	const [searchCriteriaLocation, setSearchCriteriaLocation] = useState();
+	const [filteredData, setFilteredData] = useState(null);
+	const [searchCriteriaPayment, setSearchCriteriaPayment] = useState('Please Select');
+	const [searchCriteriaLocation, setSearchCriteriaLocation] = useState('Please Select');
+	const [filteredListings, setFilteredListings] = useState([]);
   
 	const navigate = useNavigate();
 	
 	
 
 	const PaymentMethods = [
+		"Please Select",
 		"UK Bank Transfer",
 		"EU Bank Transfer",
 		"International Wire Transfer",
 	];
 
 	const locationMethods = [
+		"Please Select",
 		"United Kingdom",
 		"America",
 		"France",
@@ -121,19 +124,19 @@ const Buy = () => {
 
 
 	const getCurrency = () => {
-		Axios.get("http://localhost:3001/getUserSettings") .then((response) => {
+		Axios.get("http://localhost:3001/getUserSettings").then((response) => {
 			if(response.data[0]?.currency === 'GBP') {
 				selectCurrency('GBP');
 				setCurrencySymbol('£');
 				//Get GBP price of SOlana
-				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp') .then((response) => response.json() .then(function (data) {
+				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp').then((response) => response.json().then(function (data) {
 					setSolGbp(data.solana.gbp);
 				}));	
 			} else if (response.data[0]?.currency === 'USD') {
 				selectCurrency('USD');
 				setCurrencySymbol('$');
 				//Get USD price of solana
-				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd') .then((response) => response.json() .then(function (data) {
+				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd').then((response) => response.json().then(function (data) {
 					setSolUsd(data.solana.usd);
 				}));
 			} else {
@@ -145,35 +148,29 @@ const Buy = () => {
 
 	const getAllListings = () => {
 		Axios.get("http://localhost:3001/getAllListings").then((response) => {
-		setAllListings(response.data);
+			console.log(response, 'response');
+			setAllListings(response.data);
 		});
 	}
 
 
 
 	const filterLisitingsPayment = () => {
- const filteredListingsPayment = allListings.filter(al => al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment && al.Country === searchCriteriaLocation);
-		console.log(filteredListingsPayment);
-
+		const filteredListingsPayment = allListings.filter(al => (
+			(al.paymentMethod1 === searchCriteriaPayment)
+			|| (al.paymentMethod2 === searchCriteriaPayment)
+			&& (al.Country === searchCriteriaLocation)
+		));
+		setFilteredListings(filteredListingsPayment);
 	};
 
-	//const filterPaymentsLocation = () => {
-	//	const filteredListingsLocation = allListings.filter(al => al.Country === searchCriteriaLocation);
-	//	console.log(filteredListingsLocation);
-//	};
-
-
+	console.log(searchCriteriaPayment, 'selected payment method');
+	console.log(filteredListings, 'filtered listings');
 	
     useEffect(() => {
 		getCurrency();
-	  }, []);
-
-	useMemo(() => {
 		getAllListings();
-	
-	}, []);
-
-
+	  }, []);
 
   return (
 		<PageBody>
@@ -200,7 +197,9 @@ const Buy = () => {
 						</div>
 							<div className="d-flex flex-wrap mt-3">
 								<div className="col-12">
-									<Heading size="16px">Crypto</Heading>
+									<StyledLabel bold padding="0 0 5px 0">
+										Crypto
+									</StyledLabel>
 								</div>
 								<div className="col-6 d-flex">
 									<QuadButton
@@ -241,77 +240,82 @@ const Buy = () => {
 							</div>
 							<div>
 							<div className="col-12">
-									<Heading size="16px">Prefered payment method</Heading>
-								</div>
+								<StyledLabel bold padding="10px 0 5px 0" htmlFor="preferredPayment">
+									Preferred Payment Method
+								</StyledLabel>
+							</div>
 							<StyledDropdown
-										type="change"
-										placeholder="preferredPayment"
-										name="preferredPayment"
-										id="preferredPayment"
-										color="btn"
-										onChange={(e) => {
-											setSearchCriteriaPayment(e.target.value);
-										}}
-										className="w-100"
-										required
-									>
-										{PaymentMethods.map((data) => (
-											<option value={data}>{data}</option>
-										))}
-									</StyledDropdown>
-
-									<div className="col-12">
-									<Heading size="16px">Prefered location / country</Heading>
-								</div>
+								type="change"
+								placeholder="preferredPayment"
+								name="preferredPayment"
+								id="preferredPayment"
+								color="btn"
+								onChange={(e) => {
+									setSearchCriteriaPayment(e.target.value);
+								}}
+								className="w-100"
+								required
+							>
+								{PaymentMethods.map((data) => (
+									<option value={data}>{data}</option>
+								))}
+							</StyledDropdown>
+							<div className="col-12">
+								<StyledLabel bold padding="10px 0 5px 0" htmlFor="preferredLocation">
+									Preferred Location
+								</StyledLabel>
+							</div>
 							<StyledDropdown
-										type="change"
-										placeholder="preferredLocation"
-										name="preferredLocation"
-										id="preferredLocation"
-										color="btn"
-										onChange={(e) => {
-											setSearchCriteriaLocation(e.target.value);
-										}}
-										className="w-100"
-										required
-									>
-										{locationMethods.map((data) => (
-											<option value={data}>{data}</option>
-										))}
-									</StyledDropdown>
-									<div className="col-6">
-											<GradientButton text="Search" onClick={filterLisitingsPayment} fontSize="24px" padding="4px 20px" className="w-100" />
-										</div>
+								type="change"
+								placeholder="preferredLocation"
+								name="preferredLocation"
+								id="preferredLocation"
+								color="btn"
+								onChange={(e) => {
+									setSearchCriteriaLocation(e.target.value);
+								}}
+								className="w-100"
+								required
+							>
+								{locationMethods.map((data) => (
+									<option value={data}>{data}</option>
+								))}
+							</StyledDropdown>
+							<div className="col-12 mt-3">
+								<GradientButton text="Search" onClick={filterLisitingsPayment} fontSize="24px" padding="4px 20px" className="w-100" />
+							</div>
 							</div>
 						</Card>
 					</div>
 					<div className="col-12 col-md-8">
 							<Heading size="24px">Buy {selectedCrypto} from these Sellers</Heading>
-							{allListings.map((val) => (
+							{filteredListings.length > 0 ? (
+								filteredListings.map((val) => (
 								<Card className="p-4 mb-3">
 									<div className="row">
 										<div className="col-3">
-											<Heading size="24px">{val.userName}</Heading>
+											<Heading size="24px" bold>{val.userName}</Heading>
 										</div>
 										<div className="col-3">{val.Country}</div>
 										<div className="col-3">{val.Town}</div>
 										<div className="col-3">
-
-											<Heading size="18px" id="AFS">
-											<Heading size="18px">Price per Sol</Heading>
+											<Heading size="24px" color="primary_cta" bold>
 												{currencySymbol}{val.aboveOrBelow === 'above' && ((solgbp / 100) * (100 + val.percentChange)).toFixed(2)}
 												{val.aboveOrBelow === 'below' && ((solgbp / 100) * (100 - val.percentChange)).toFixed(2)}
-												<Heading size="18px">Total Sol for sale</Heading>
+											</Heading>
+											{/*
+											<Heading size="18px">Total Sol for sale</Heading>
 												{val.amountForSale}
-												<Heading size="18px">Total value of sale</Heading>
+											<Heading size="18px">Total value of sale</Heading>
 												{currencySymbol}{selectedCurrency === 'GBP' && ((val.amountForSale * solgbp)).toFixed(2)}
 												{selectedCurrency === 'USD' && ((val.amountForSale * solusd))}
 											</Heading>
+											*/}
 										</div>
 										<div className="col-3">110 Trades</div>
 										<div className="col-3">{val.paymentMethod1}{' & '}{val.paymentMethod2}</div>
 										<div className="col-3">
-											<Paragraph size="18px" >
+											<Paragraph size="18px">
 												{val.percentChange}%
 												{' '}{val.aboveOrBelow}{' '}market
 											</Paragraph>
@@ -321,9 +325,45 @@ const Buy = () => {
 										</div>
 									</div>
 								</Card>
-							))}
+								))) : (
+								allListings.map((val) => (
+									<Card className="p-4 mb-3">
+										<div className="row">
+											<div className="col-3">
+												<Heading size="24px" bold>{val.userName}</Heading>
+											</div>
+											<div className="col-3">{val.Country}</div>
+											<div className="col-3">{val.Town}</div>
+											<div className="col-3">
+												<Heading size="24px" color="primary_cta" bold>
+													{currencySymbol}{val.aboveOrBelow === 'above' && ((solgbp / 100) * (100 + val.percentChange)).toFixed(2)}
+													{val.aboveOrBelow === 'below' && ((solgbp / 100) * (100 - val.percentChange)).toFixed(2)}
+												</Heading>
+												{/*
+												<Heading size="18px">Total Sol for sale</Heading>
+													{val.amountForSale}
+												<Heading size="18px">Total value of sale</Heading>
+													{currencySymbol}{selectedCurrency === 'GBP' && ((val.amountForSale * solgbp)).toFixed(2)}
+													{selectedCurrency === 'USD' && ((val.amountForSale * solusd))}
+												</Heading>
+												*/}
+											</div>
+											<div className="col-3">110 Trades</div>
+											<div className="col-3">{val.paymentMethod1}{' & '}{val.paymentMethod2}</div>
+											<div className="col-3">
+												<Paragraph size="18px">
+													{val.percentChange}%
+													{' '}{val.aboveOrBelow}{' '}market
+												</Paragraph>
+											</div>
+											<div className="col-3">
+												<GradientButton text="Buy" fontSize="24px" padding="4px 20px" className="w-100" />
+											</div>
+										</div>
+									</Card>
+								)))}
+						</div>
 					</div>
-				</div>
 			</div>
 		</PageBody>
   );
