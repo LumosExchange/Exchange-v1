@@ -119,6 +119,8 @@ const LoadingSpinner = () => (
 export const FixedBackground = styled.div(({ theme }) => css`
       background: ${theme.colors.base_bg};
       z-index: 2;
+      top: 0;
+      left: 0;
   
       svg {
           width: 64px;

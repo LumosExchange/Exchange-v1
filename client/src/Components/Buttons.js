@@ -205,19 +205,42 @@ LinkButton.defaultProps = {
     boldText: true,
 }
 
-const InlineButtonBase = styled.button(({ theme }) => `
-    background: ${theme.colors.primary_cta};
+const InlineButtonBase = styled.button(({ theme, color }) => `
+    background: ${theme.colors[color]};
     border-radius: 3px;
     color: ${theme.colors.base_bg};
     padding: 10px 0;
+    border: 2px solid ${theme.colors[color]};
+    font-family: "THICCCBOI-REGULAR";
+    font-size: 18px;
 
     &.delete {
         background: ${theme.colors.invalid};
+        border: 2px solid ${theme.colors.invalid};
+    }
+
+    &.cancel {
+        background: ${theme.colors.base_bg};
+        border: 2px solid ${theme.colors.primary_cta};
+        color: ${theme.colors.primary_cta};
     }
 `);
 
-export const InlineButton = ({ children, onClick, className }) => (
-    <InlineButtonBase className={`border-0 w-100 text-center ${className && className}`} onClick={onClick}>
+export const InlineButton = ({ children, onClick, className, color, accentColor }) => (
+    <InlineButtonBase
+        className={`w-100 text-center ${className && className}`}
+        onClick={onClick}
+        color={color}
+        accentColor={accentColor}
+    >
         {children}
     </InlineButtonBase>
 );
+
+InlineButton.propTypes = {
+	color: PropTypes.string,
+}
+
+InlineButton.defaultProps = {
+    color: 'primary_cta',
+}
