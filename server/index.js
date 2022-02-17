@@ -319,20 +319,7 @@ app.get("/getAllListings", (req, res) => {
   });
 });
 
-//getspecific listing
 
-app.post("getSpecificListings", (req, res) => {
-  const location = req.body.location;
-  const payment = req.body.paymentMethod;
-
-  db.query(
-    "SELECT * from sale WHERE (Country) AND (PaymentMethord1 OR paymentMethord2) = (?,)",
-    [location, payment],
-    (err, result) => {
-      res.send(result);
-    }
-  );
-});
 
 //get userID name for feedback
 app.get("/getUserNameSeller", (req, res) => {

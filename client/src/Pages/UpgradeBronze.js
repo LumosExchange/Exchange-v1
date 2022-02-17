@@ -15,7 +15,6 @@ function UpgradeBronze() {
     Axios.post("http://localhost:3001/upgradeBronze", {
       DateOfBirth: dateOfBirthReg,
       Phone: phoneReg,
-
       Tax: taxReg,
     });
   };

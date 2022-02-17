@@ -99,8 +99,24 @@ const Buy = () => {
 	const [solusd, setSolUsd] = useState();
 	const [currencySymbol, setCurrencySymbol] = useState();
 	const [filteredData, setFilteredData] = React.useState(null);
+	const [searchCriteriaPayment, setSearchCriteriaPayment] = useState();
+	const [searchCriteriaLocation, setSearchCriteriaLocation] = useState();
   
 	const navigate = useNavigate();
+	
+
+	const PaymentMethods = [
+		"UK Bank Transfer",
+		"EU Bank Transfer",
+		"International Wire Transfer",
+	];
+
+	const locationMethods = [
+		"United Kingdom",
+		"America",
+		"France",
+	];
+
 
 
 	const getCurrency = () => {
@@ -132,7 +148,17 @@ const Buy = () => {
 		});
 	}
 
-	 
+	const filterLisitingsPayment = () => {
+	const filteredListingsPayment = allListings.filter(al => al.paymentMethord1 === searchCriteriaPayment || al.paymentMethord2 === searchCriteriaPayment && al.Country === searchCriteriaLocation);
+		console.log(filteredListingsPayment);
+	};
+	//const filterPaymentsLocation = () => {
+	//	const filteredListingsLocation = allListings.filter(al => al.Country === searchCriteriaLocation);
+	//	console.log(filteredListingsLocation);
+//	};
+
+
+	
     useEffect(() => {
 		getCurrency();
 	  }, []);
@@ -141,6 +167,8 @@ const Buy = () => {
 		getAllListings();
 	
 	}, []);
+
+
 
   return (
 		<PageBody>
@@ -205,6 +233,50 @@ const Buy = () => {
 										<span className="ms-2">{CRYPTO_LRA}</span>
 									</QuadButton>
 								</div>
+							</div>
+							<div>
+							<div className="col-12">
+									<Heading size="16px">Prefered payment methord</Heading>
+								</div>
+							<StyledDropdown
+										type="change"
+										placeholder="preferredPayment"
+										name="preferredPayment"
+										id="preferredPayment"
+										color="btn"
+										onChange={(e) => {
+											setSearchCriteriaPayment(e.target.value);
+										}}
+										className="w-100"
+										required
+									>
+										{PaymentMethods.map((data) => (
+											<option value={data}>{data}</option>
+										))}
+									</StyledDropdown>
+
+									<div className="col-12">
+									<Heading size="16px">Prefered location / country</Heading>
+								</div>
+							<StyledDropdown
+										type="change"
+										placeholder="preferredLocation"
+										name="preferredLocation"
+										id="preferredLocation"
+										color="btn"
+										onChange={(e) => {
+											setSearchCriteriaLocation(e.target.value);
+										}}
+										className="w-100"
+										required
+									>
+										{locationMethods.map((data) => (
+											<option value={data}>{data}</option>
+										))}
+									</StyledDropdown>
+									<div className="col-6">
+											<GradientButton text="Search" onClick={filterLisitingsPayment} fontSize="24px" padding="4px 20px" className="w-100" />
+										</div>
 							</div>
 						</Card>
 					</div>
