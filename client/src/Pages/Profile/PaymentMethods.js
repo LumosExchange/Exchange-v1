@@ -645,15 +645,6 @@ const PaymentMethods = () => {
 				)}
 				{modalMode === 'initial' && (
 					<ModalBody className="row">
-						<AddBankButton onClick={() => setModalMode("card")} className="mb-2">
-							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
-								<div className="d-flex">
-									<i className="material-icons me-2 d-flex align-items-center">credit_card</i>
-									<Paragraph size="20px" className="mb-0">Add Credit/Debit Card</Paragraph>
-								</div>
-								<i className="material-icons arrow">arrow_forward</i>
-							</div>
-						</AddBankButton>
 						<AddBankButton onClick={() => setModalMode("ukbank")} className="mb-2">
 							<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 								<div className="d-flex">
