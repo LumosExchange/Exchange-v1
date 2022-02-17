@@ -59,7 +59,7 @@ const Navbar = ({ loginStatus }) => {
       console.log(response, 'response');
       navigate('/Profile/Basic');
       window.location.reload(true);
-      console.log('log out fired');
+
     });
   }
 

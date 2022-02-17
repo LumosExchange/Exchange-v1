@@ -23,7 +23,7 @@ const saltRounds = 10;
 //needed to avoid cors errors
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000", "https://api.coingecko.com");
   // Request methods you wish to allow
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -47,8 +47,14 @@ app.use(
     methods: ["GET", "POST"],
     credentials: true,
     optionSuccessStatus: 200,
-  })
-);
+  }
+,
+{
+  origin: ["https://api.coingecko.com"],
+  methods: ["GET", "POST"],
+  credentials: false,
+  optionSuccessStatus: 200,
+}));
 
 //Initiate Imports
 app.use(express.json());
@@ -313,20 +319,7 @@ app.get("/getAllListings", (req, res) => {
   });
 });
 
-//getspecific listing
 
-app.post("getSpecificListings", (req, res) => {
-  const location = req.body.location;
-  const payment = req.body.paymentMethod;
-
-  db.query(
-    "SELECT * from sale WHERE (Country) AND (PaymentMethord1 OR paymentMethord2) = (?,)",
-    [location, payment],
-    (err, result) => {
-      res.send(result);
-    }
-  );
-});
 
 //get userID name for feedback
 app.get("/getUserNameSeller", (req, res) => {
