@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { Children } from 'react';
 import styled, { css } from "styled-components";
+import { lighten, darken } from 'polished';
 
 const ButtonBase = styled.button(({ 
     theme, round, size, textColor, boldText, fontSize
@@ -213,6 +213,11 @@ const InlineButtonBase = styled.button(({ theme, color }) => `
     border: 2px solid ${theme.colors[color]};
     font-family: "THICCCBOI-REGULAR";
     font-size: 18px;
+
+    &:hover, &:focus {
+        background: ${darken(0.05, theme.colors[color])};
+        border: 2px solid ${darken(0.05, theme.colors[color])};
+    }
 
     &.delete {
         background: ${theme.colors.invalid};
