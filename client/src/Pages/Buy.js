@@ -104,6 +104,7 @@ const Buy = () => {
   
 	const navigate = useNavigate();
 	
+	
 
 	const PaymentMethods = [
 		"UK Bank Transfer",
@@ -148,9 +149,16 @@ const Buy = () => {
 		});
 	}
 
+
+
 	const filterLisitingsPayment = () => {
-	const filteredListingsPayment = allListings.filter(al => al.paymentMethord1 === searchCriteriaPayment || al.paymentMethord2 === searchCriteriaPayment && al.Country === searchCriteriaLocation);
+ const filteredListingsPayment = allListings.filter(al => al.paymentMethord1 === searchCriteriaPayment || al.paymentMethord2 === searchCriteriaPayment && al.Country === searchCriteriaLocation);
 		console.log(filteredListingsPayment);
+
+	};
+
+	const updateListings = () => {
+		setNewLisiting(filteredListingsPayment);
 	};
 	//const filterPaymentsLocation = () => {
 	//	const filteredListingsLocation = allListings.filter(al => al.Country === searchCriteriaLocation);

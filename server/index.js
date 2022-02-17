@@ -280,7 +280,7 @@ app.post("/sell", (req, res) => {
       let town = result[0].Town;
 
       db.query(
-        "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethord1, paymentMethord2) VALUES (?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2) VALUES (?,?,?,?,?,?,?,?,?)",
         [
           id,
           amountForSale,
