@@ -7,9 +7,6 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
-import UpgradeBronze from "./Pages/UpgradeBronze";
-import UpgradeGold from "./Pages/UpgradeGold";
-import UpgradeSilver from "./Pages/UpgradeSilver";
 
 import UpgradeTeam from "./Pages/UpgradeTeam";
 import LoggedHome from "./Pages/LoggedHome";
@@ -37,6 +34,7 @@ import ProfileSecurity from "./Pages/Profile/Security";
 import ProfileBasic from "./Pages/Profile/Basic";
 import ProfileKYC from "./Pages/Profile/KnowYourCustomer";
 import PaymentMethods from "./Pages/Profile/PaymentMethods";
+import AccountUpgrade from "./Pages/Profile/AccountUpgrade";
 
 const App = () => {
   const [theme, toggleTheme] = useDarkMode();
@@ -68,9 +66,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/Register" element={<Register />} />
-            <Route path="/UpgradeBronze" element={<UpgradeBronze />} />
-            <Route path="/UpgradeGold" element={<UpgradeGold />} />
-            <Route path="/UpgradeSilver" element={<UpgradeSilver />} />
+
             <Route path="/UpgradeTeam" element={<UpgradeTeam />} />
             <Route path="*" element={<ErrorPage />} />
             {/* These need to be protected routes eventually */}
@@ -102,6 +98,7 @@ const App = () => {
               path="/Profile/PaymentMethods"
               element={<PaymentMethods />}
             />
+            <Route path="/Profile/AccountUpgrade" element={<AccountUpgrade />} />
           </Routes>
         </Router>
         <Footer />

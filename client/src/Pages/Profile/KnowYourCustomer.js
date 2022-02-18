@@ -65,6 +65,9 @@ const KnowYourCustomer = () => {
             KYC
           </ProfileTabLink>
           <ProfileTabLink href="/Profile/PaymentMethods">Payment Methods</ProfileTabLink>
+          <ProfileTabLink href="/Profile/PaymentMethods">
+            Payment Methods
+          </ProfileTabLink>
         </Tabs>
         <ContentTab className="text-white">
           <div className="d-flex p-4 row">

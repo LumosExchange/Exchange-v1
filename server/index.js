@@ -98,6 +98,7 @@ app.post("/register", (req, res) => {
   const password = req.body.password;
   const nationality = req.body.nationality;
   const userName = req.body.userName;
+  const date = new Date();
 
   const theme = "Dark";
   const timezone = "UTC+0";
@@ -124,7 +125,7 @@ app.post("/register", (req, res) => {
       }
     );
     db.query(
-      "INSERT INTO accountLevel (accountLevel) VALUES (?)",
+      "INSERT INTO accountLevel, (accountLevel, dateUpgraded) VALUES (?,?)",
       [accountLevel],
       (err, result) => {
         console.log(err);
@@ -144,6 +145,15 @@ app.post("/register", (req, res) => {
         console.log(err);
       }
     );
+    db.query(
+      "INSERT INTO upgradeTiers (CountryOfResidence, DateSubmitted) VALUES (?)",
+      [countryOfResidence, date],
+      (err, result) => {
+        console.log(err);
+      }
+    );
+    
+
   });
 });
 
@@ -374,7 +384,7 @@ app.get("/getUserAccountLevel", (req, res) => {
   const user = req.session.user[0].userID;
 
   db.query(
-    "SELECT * FROM accountLevel WHERE (userID) = (?)",
+    "SELECT accountLevel FROM accountLevel WHERE (userID) = (?)",
     [user],
     (err, result) => {
       res.send(result);
@@ -648,37 +658,43 @@ app.post("/VerifyEmail2FA", (req, res) => {
   //once verified delete 2fa from db
 });
 
-//UpgradeBronze
-app.post("/UpgradeBronze", (req, res) => {
-  const user = req.session.user[0].userID;
-  const DateOfBirth = req.body.DateOfBirth;
-  const Phone = req.body.Phone;
-
-  const Tax = req.body.Tax;
-
-  console.log("DateOfBirth: " + req.body.DateOfBirth);
-  db.query(
-    "INSERT INTO UpgradeBronze (userID, DateOfBirth, Phone, Tax) VALUES (?,?,?,?)",
-    [user, DateOfBirth, Phone, Tax],
-    (err, result) => {
-      console.log(err);
-    }
-  );
-});
 
 //UpgradeSilver
 app.post("/UpgradeSilver", (req, res) => {
   const user = req.session.user[0].userID;
   const CountryOfResidence = req.body.CountryOfResidence;
+  const DateOfBirth = req.body.DateOfBirth;
+  const Phone = req.body.Phone;
   const Tax = req.body.Tax;
+  const CountryOfResidence = req.body.countryOfResidence;
+  const date = new Date();
 
   db.query(
-    "INSERT INTO UpgradeSilver (userID, CountryOfResidence, Tax) VALUES (?,?,?)",
-    [user, CountryOfResidence, Tax],
+    "UPDATE UpgradeTiers SET DateOfBirth = ?, PhoneNumber = ?, TaxCode = ?, CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?",
+    [DateOfBirth, Phone, Tax, CountryOfResidence, Tax, date, user],
     (err, result) => {
-      console.log(err);
+      if(err) {
+        res.send(err);
+      } else {
+        res.send({
+          message: "Succesfully Upgraded to silver account"
+        });
+      }
     }
   );
+  // upgarde account level to silver in accountLevel
+  db.query(
+    "UPDATE accountLevel SET accountLevel = ?, dateUpgraded = ? WHERE userID =?",
+    ["Silver", date, user],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      }
+      else {
+        
+      }
+    }
+  )
 });
 
 //UpgradeGold
@@ -688,14 +704,38 @@ app.post("/UpgradeGold", (req, res) => {
   const EmployerAddress = req.body.EmployerAddress;
   const Occupation = req.body.Occupation;
   const Income = req.body.Income;
-  console.log("EmployerName: " + req.body.EmployerName);
+  const addIncome = req.body.AdditionalIncome;
+  const proofEmployment = req.body.ProofEmployment;
+  const date = new Date();
+
   db.query(
-    "INSERT INTO UpgradeGold (userID, EmployerName, EmployerAddress, Occupation, Income) VALUES (?,?,?,?,?)",
-    [user, EmployerName, EmployerAddress, Occupation, Income],
+    "UPDATE upgradeTiers SET EmployerName = ?, EmployerAddress = ?, Occupation = ?, ProofOfEmployment = ?, Income = ?, AdditionalIncome =?, DateSubmitted = ? WHERE userID = ?",
+    [EmployerName, EmployerAddress, Occupation, proofEmployment, Income, addIncome, date, user],
     (err, result) => {
-      console.log(err);
+      if (err) {
+        res.send(err);
+      } else {
+        res.send({
+          message: "Account tier now Gold"
+        })
+      }
     }
   );
+  //Update account level to gold
+
+  db.query(
+    "UPDATE accountLevel SET accountLevel = ?, dateUpgraded = ? WHERE userID =?",
+    ["Gold", date, user],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      }
+      else {
+        
+      }
+    }
+  )
+
 });
 
 //UpgradeTeam
