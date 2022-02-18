@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import Axios from "axios";
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import { InvisibleButton } from './Buttons';
+import Paragraph from './Paragraph';
+import IconSolana from '../Images/icon-circle-solana.svg';
 
 const ThemeBarContainer = styled.div(({ theme, isLight }) => css`
     background: ${theme.colors.base_bg};
@@ -11,6 +14,12 @@ const ThemeBarContainer = styled.div(({ theme, isLight }) => css`
 		width: 44px;
 		border-radius: 50px;
 		justify-content: ${isLight ? 'flex-end' : 'flex-start'};
+	}
+
+	.solana-icon {
+		width: 28px;
+		min-width: 28px;
+		min-height: 28px;
 	}
 `);
 
@@ -26,11 +35,31 @@ const CircleToggle = styled.div(({ theme, isLight }) => css`
 	};
 `);
 
+const convertCurrencyToSymbol = (currency) => {
+	if (currency === 'GBP'){
+		return "£";
+	}
+}
+
 const ThemeToggler = ({ theme, toggleTheme }) => {
-  const isLight = theme === 'light';
+	const [solgbp, setSolGbp] = useState("");
+	const [currency, setCurrency] = useState("");
+  	const isLight = theme === 'light';
+
+	Axios.get("http://localhost:3001/getUserSettings").then((response) => {
+		if (response.data[0]?.currency === 'GBP') {
+			setCurrency(response.data[0]?.currency);
+			fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp')
+			.then((response) => response.json()
+			.then(function (data) {
+				setSolGbp(data.solana.gbp);
+			}));
+		}
+	});
+
   return (
 		<ThemeBarContainer isLight={isLight} className="pt-3">
-			<div className="container">
+			<div className="container d-flex justify-content-between">
 				<InvisibleButton onClick={toggleTheme} className="p-0">
 					{isLight ? (
 						<div className="inner d-flex align-items-center p-0">
@@ -46,6 +75,12 @@ const ThemeToggler = ({ theme, toggleTheme }) => {
 						</div>
 					)}
 				</InvisibleButton>
+				<div className="d-flex align-items-center">
+					<img src={IconSolana} alt="Solana" className="solana-icon me-2" />
+					<Paragraph color="primary_cta" size="18px" className="mb-0">
+						{convertCurrencyToSymbol(currency)}{solgbp}
+					</Paragraph>
+				</div>
 			</div>
 		</ThemeBarContainer>
 	);
