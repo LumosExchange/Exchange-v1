@@ -597,6 +597,8 @@ const PaymentMethods = () => {
 				<ProfileTabLink href="/Profile/Security">Security</ProfileTabLink>
 				<ProfileTabLink href="/Profile/KYC">KYC</ProfileTabLink>
 				<ProfileTabLink href="/Profile/PaymentMethods" className="selected">Payment Methods</ProfileTabLink>
+				<ProfileTabLink href="/Profile/AccountUpgrade">Account Upgrade</ProfileTabLink>
+
 			</Tabs>
 			<ContentTab className="text-white">
 			<div className="d-flex p-4 row">
