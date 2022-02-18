@@ -105,8 +105,6 @@ const Buy = () => {
   
 	const navigate = useNavigate();
 	
-	
-
 	const PaymentMethods = [
 		"Please Select",
 		"UK Bank Transfer",
@@ -120,8 +118,6 @@ const Buy = () => {
 		"America",
 		"France",
 	];
-
-
 
 	const getCurrency = () => {
 		Axios.get("http://localhost:3001/getUserSettings").then((response) => {
@@ -153,24 +149,22 @@ const Buy = () => {
 		});
 	}
 
-
-
-	const filterLisitingsPayment = () => {
-		const filteredListingsPayment = allListings.filter(al => (
-			(al.paymentMethod1 === searchCriteriaPayment
-			|| al.paymentMethod2 === searchCriteriaPayment)
-			&& (al.Country === searchCriteriaLocation)
-		));
-		setFilteredListings(filteredListingsPayment);
+	const filterLisitings = () => {
+		const filteredListings = allListings
+		.filter(al => (al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment) || al.Country === searchCriteriaLocation)
+		setFilteredListings(filteredListings);
 	};
 
+	console.log(searchCriteriaLocation, 'selected location');
 	console.log(searchCriteriaPayment, 'selected payment method');
+	console.log(allListings, 'all listings');
 	console.log(filteredListings, 'filtered listings');
 	
     useEffect(() => {
 		getCurrency();
 		getAllListings();
 	  }, []);
+
 
   return (
 		<PageBody>
@@ -284,7 +278,7 @@ const Buy = () => {
 							<div className="col-12 mt-3">
 								<GradientButton
 									text="Filter"
-									onClick={filterLisitingsPayment}
+									onClick={filterLisitings}
 									fontSize="24px"
 									padding="4px 20px"
 									className="w-100" 
@@ -295,8 +289,47 @@ const Buy = () => {
 					</div>
 					<div className="col-12 col-md-8">
 							<Heading size="24px">Buy {selectedCrypto} from these Sellers</Heading>
-							{filteredListings.length > 0 ? (
+							{filteredListings.length > 0 && (
 								filteredListings.map((val) => (
+								<Card className="p-4 mb-3" color="grey">
+									<div className="row">
+										<div className="col-3">
+											<Heading size="24px" bold>{val.userName}</Heading>
+										</div>
+										<div className="col-6 d-flex align-items-center">
+											<i className="material-icons">place</i>
+											{val.Town}, {val.Country}
+										</div>
+										<div className="col-3">
+											<Heading size="24px" color="primary_cta" bold>
+												{currencySymbol}{val.aboveOrBelow === 'above' && ((solgbp / 100) * (100 + val.percentChange)).toFixed(2)}
+												{val.aboveOrBelow === 'below' && ((solgbp / 100) * (100 - val.percentChange)).toFixed(2)}
+											</Heading>
+											{/*
+											<Heading size="18px">Total Sol for sale</Heading>
+												{val.amountForSale}
+											<Heading size="18px">Total value of sale</Heading>
+												{currencySymbol}{selectedCurrency === 'GBP' && ((val.amountForSale * solgbp)).toFixed(2)}
+												{selectedCurrency === 'USD' && ((val.amountForSale * solusd))}
+											</Heading>
+											*/}
+										</div>
+										<div className="col-3">110 Trades</div>
+										<div className="col-3">{val.paymentMethod1}{' & '}{val.paymentMethod2}</div>
+										<div className="col-3">
+											<Paragraph size="18px">
+												{val.percentChange}%
+												{' '}{val.aboveOrBelow}{' '}market
+											</Paragraph>
+										</div>
+										<div className="col-3">
+											<GradientButton text="Buy" fontSize="24px" padding="4px 20px" className="w-100" />
+										</div>
+									</div>
+								</Card>
+							)))}
+							{filteredListings.length === 0 && (
+								allListings.map((val) => (
 								<Card className="p-4 mb-3">
 									<div className="row">
 										<div className="col-3">
@@ -331,43 +364,7 @@ const Buy = () => {
 										</div>
 									</div>
 								</Card>
-								))) : (
-								allListings.map((val) => (
-									<Card className="p-4 mb-3">
-										<div className="row">
-											<div className="col-3">
-												<Heading size="24px" bold>{val.userName}</Heading>
-											</div>
-											<div className="col-3">{val.Country}</div>
-											<div className="col-3">{val.Town}</div>
-											<div className="col-3">
-												<Heading size="24px" color="primary_cta" bold>
-													{currencySymbol}{val.aboveOrBelow === 'above' && ((solgbp / 100) * (100 + val.percentChange)).toFixed(2)}
-													{val.aboveOrBelow === 'below' && ((solgbp / 100) * (100 - val.percentChange)).toFixed(2)}
-												</Heading>
-												{/*
-												<Heading size="18px">Total Sol for sale</Heading>
-													{val.amountForSale}
-												<Heading size="18px">Total value of sale</Heading>
-													{currencySymbol}{selectedCurrency === 'GBP' && ((val.amountForSale * solgbp)).toFixed(2)}
-													{selectedCurrency === 'USD' && ((val.amountForSale * solusd))}
-												</Heading>
-												*/}
-											</div>
-											<div className="col-3">110 Trades</div>
-											<div className="col-3">{val.paymentMethod1}{' & '}{val.paymentMethod2}</div>
-											<div className="col-3">
-												<Paragraph size="18px">
-													{val.percentChange}%
-													{' '}{val.aboveOrBelow}{' '}market
-												</Paragraph>
-											</div>
-											<div className="col-3">
-												<GradientButton text="Buy" fontSize="24px" padding="4px 20px" className="w-100" />
-											</div>
-										</div>
-									</Card>
-								)))}
+							)))}
 						</div>
 					</div>
 			</div>
