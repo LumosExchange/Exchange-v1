@@ -84,6 +84,9 @@ const AccountUpgrade = () => {
           <ProfileTabLink href="/Profile/PaymentMethods">
             Payment Methods
           </ProfileTabLink>
+          <ProfileTabLink href="/Profile/AccountUpgrade">
+            Account Upgrade
+          </ProfileTabLink>
         </Tabs>
         <ContentTab>
           <div className="d-flex p-4 row">
