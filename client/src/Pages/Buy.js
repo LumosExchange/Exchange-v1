@@ -157,8 +157,8 @@ const Buy = () => {
 
 	const filterLisitingsPayment = () => {
 		const filteredListingsPayment = allListings.filter(al => (
-			(al.paymentMethod1 === searchCriteriaPayment)
-			|| (al.paymentMethod2 === searchCriteriaPayment)
+			(al.paymentMethod1 === searchCriteriaPayment
+			|| al.paymentMethod2 === searchCriteriaPayment)
 			&& (al.Country === searchCriteriaLocation)
 		));
 		setFilteredListings(filteredListingsPayment);
@@ -282,7 +282,13 @@ const Buy = () => {
 								))}
 							</StyledDropdown>
 							<div className="col-12 mt-3">
-								<GradientButton text="Search" onClick={filterLisitingsPayment} fontSize="24px" padding="4px 20px" className="w-100" />
+								<GradientButton
+									text="Filter"
+									onClick={filterLisitingsPayment}
+									fontSize="24px"
+									padding="4px 20px"
+									className="w-100" 
+								/>
 							</div>
 							</div>
 						</Card>

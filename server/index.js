@@ -1138,7 +1138,9 @@ app.post("/getUkBankDetails", (req, res) => {
           sort: result[0].sortCode,
         });
       } else {
-        res.send({});
+        res.send({
+          status: "none-added",
+        });
       }
     }
   );
@@ -1161,7 +1163,9 @@ app.post("/getEUBankDetails", (req,res) => {
             IBAN: result[0].IBAN,
           });
         } else {
-          res.send({});
+          res.send({
+            status: "none-added",
+          });
         }
       }
     )
@@ -1191,7 +1195,9 @@ app.post("/getInterBankDetails", (req,res) => {
           interBankRoutingNumber: result[0].interBankRoutingNumber,
         });
       } else {
-        res.send({});
+        res.send({
+          status: "none-added",
+        });
       }
     }
   );
@@ -1211,7 +1217,9 @@ app.post("/getPaypalDetails", (req,res) => {
           email: result[0].paypalEmail,
         });
       } else {
-        res.send({});
+        res.send({
+          status: "none-added",
+        });
       }
     }
   );
@@ -1232,7 +1240,9 @@ app.post("/getSkrillDetails", (req,res) => {
           email: result[0].skrillEmail,
         });
       } else {
-        res.send({});
+        res.send({
+          status: "none-added",
+        });
       }
     }
   );
