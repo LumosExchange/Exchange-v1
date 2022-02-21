@@ -324,7 +324,17 @@ const Buy = () => {
 											</Paragraph>
 										</div>
 										<div className="col-3">
-											<GradientButton text="Buy" fontSize="24px" padding="4px 20px" className="w-100" />
+											<GradientButton
+												text="Buy"
+												fontSize="24px"
+												padding="4px 20px"
+												className="w-100"
+												onClick={ () => navigate("/Offer", {
+													state: {
+														val
+													}
+												})}
+											/>
 										</div>
 									</div>
 								</Card>
@@ -363,7 +373,17 @@ const Buy = () => {
 											</Paragraph>
 										</div>
 										<div className="col-3">
-											<GradientButton text="Buy" fontSize="24px" padding="4px 20px" className="w-100" />
+											<GradientButton
+												text="Buy"
+												fontSize="24px"
+												padding="4px 20px"
+												className="w-100"
+												onClick={ () => navigate("/Offer", {
+													state: {
+														val
+													}
+												})}
+											/>
 										</div>
 									</div>
 								</Card>
