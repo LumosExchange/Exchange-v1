@@ -254,8 +254,9 @@ const PaymentMethods = () => {
 
 			if (data.type === "ukbank"){
 				setAccountNumber(data.account);
-				const sortCode = data.sort;
-				console.log(sortCode, 'sort code when editing');
+				setSortCode1(data.sort.slice(0,2));
+				setSortCode2(data.sort.slice(2,4));
+				setSortCode3(data.sort.slice(4,6));
 				setModalMode("ukbank");
 			}
 
