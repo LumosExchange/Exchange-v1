@@ -14,6 +14,7 @@ const nodemailer = require("nodemailer");
 const SMTPPool = require("nodemailer/lib/smtp-pool");
 const crypto = require("crypto");
 const { Console } = require("console");
+const e = require("express");
 
 require("dotenv").config();
 
@@ -1486,6 +1487,38 @@ app.post("/DeleteSkrillBank", (req, res) => {
     }
     );
   });
+
+  app.get("getSellersTopTradeHistory", (req, res) => {
+    let param = req.body.sellerID
+    db.query(
+      "SELECT TOP (3) FROM feedback WHERE sellerUserID = ?",
+      [param],
+      (err, result) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send({result});
+        }
+      }
+    )
+  });
+
+  app.get("getSellerNoTrades", (req, res) => {
+    let param = req.body.sellerID
+    db.query(
+      "SELECT * FROM saleHistory WHERE userID =? ",
+      [param],
+      (err, result) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(result.length);
+        }
+      }
+    )
+  });
+
+
 
 app.listen(3001, () => {
   console.log("running on port 3001");
