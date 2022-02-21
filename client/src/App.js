@@ -14,7 +14,6 @@ import ErrorPage from "./Pages/ErrorPage";
 import Trades from "./Pages/Trades";
 import Buy from "./Pages/Buy";
 import Sell from "./Pages/Sell";
-import Offer from "./Pages/Offer";
 import Feedback from "./Pages/Feedback";
 import Axios from "axios";
 import Footer from "./Components/Footer";
@@ -76,7 +75,6 @@ const App = () => {
               <Route path="/Home" element={<LoggedHome />} />
             )}
             ;
-            <Route path="/Offer" element={<Offer />} />
             <Route path="/Buy" element={<Buy />} />
             <Route path="/Sell" element={<Sell />} />
             <Route path="/Trades" element={<Trades />} />

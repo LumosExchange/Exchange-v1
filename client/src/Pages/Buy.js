@@ -147,6 +147,7 @@ const Buy = () => {
 			console.log(response, 'response');
 			setAllListings(response.data);
 		});
+		
 	}
 
 	const filterLisitings = () => {

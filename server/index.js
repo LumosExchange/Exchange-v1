@@ -132,7 +132,7 @@ app.post("/register", (req, res) => {
       }
     );
     db.query(
-      "INSERT INTO userAuth (Email, emailVerified, SMS, google, googleSecret, Authy phoneNumber) VALUES (?,?,?,?,?,?,?)",
+      "INSERT INTO userAuth (Email, emailVerified, SMS, google, googleSecret, Authy, phoneNumber) VALUES (?,?,?,?,?,?,?)",
       [email, 0, 0, 0, 0, 0, "0"],
       (err, result) => {
         console.log(err);
@@ -146,8 +146,8 @@ app.post("/register", (req, res) => {
       }
     );
     db.query(
-      "INSERT INTO upgradeTiers (CountryOfResidence, DateSubmitted) VALUES (?)",
-      [countryOfResidence, date],
+      "INSERT INTO upgradeTiers (DateSubmitted) VALUES (?)",
+      [date],
       (err, result) => {
         console.log(err);
       }
@@ -355,17 +355,6 @@ app.get("/getUserEmail", (req, res) => {
   res.send(email);
 });
 
-app.get("/getUserFeedback", (req, res) => {
-  let params = req.query.sellerID;
-  console.log("ID = " + params);
-  db.query(
-    "SELECT * FROM Feedback WHERE (saleUserID) = (?)",
-    [params],
-    (err, result) => {
-      res.send(result);
-    }
-  );
-});
 
 app.get("/getUserSettings", (req, res) => {
   const user = req.session.user[0].userID;
@@ -666,7 +655,6 @@ app.post("/UpgradeSilver", (req, res) => {
   const DateOfBirth = req.body.DateOfBirth;
   const Phone = req.body.Phone;
   const Tax = req.body.Tax;
-  const CountryOfResidence = req.body.countryOfResidence;
   const date = new Date();
 
   db.query(

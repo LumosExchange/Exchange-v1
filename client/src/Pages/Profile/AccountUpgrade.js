@@ -63,9 +63,7 @@ const AccountUpgrade = () => {
         Income: income,
       });
   };
-  //TODO: Display current account tier
-  //     - pass inputs to useState Variables
-  //     - implement steps
+ 
 
   //UseEffect here for account tier etc
   useEffect(() => {
@@ -77,14 +75,14 @@ const AccountUpgrade = () => {
       <div className="container pt-5">
         <Tabs>
           <ProfileTabLink href="/Profile/Basic">Basic</ProfileTabLink>
-          <ProfileTabLink href="/Profile/Security" className="selected">
+          <ProfileTabLink href="/Profile/Security">
             Security
           </ProfileTabLink>
           <ProfileTabLink href="/Profile/KYC">KYC</ProfileTabLink>
           <ProfileTabLink href="/Profile/PaymentMethods">
             Payment Methods
           </ProfileTabLink>
-          <ProfileTabLink href="/Profile/AccountUpgrade">
+          <ProfileTabLink href="/Profile/AccountUpgrade" className="selected">
             Account Upgrade
           </ProfileTabLink>
         </Tabs>
