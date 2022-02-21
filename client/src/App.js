@@ -34,6 +34,7 @@ import ProfileBasic from "./Pages/Profile/Basic";
 import ProfileKYC from "./Pages/Profile/KnowYourCustomer";
 import PaymentMethods from "./Pages/Profile/PaymentMethods";
 import AccountUpgrade from "./Pages/Profile/AccountUpgrade";
+import Offer from "./Pages/Offer";
 
 const App = () => {
   const [theme, toggleTheme] = useDarkMode();
@@ -78,6 +79,7 @@ const App = () => {
             <Route path="/Buy" element={<Buy />} />
             <Route path="/Sell" element={<Sell />} />
             <Route path="/Trades" element={<Trades />} />
+            <Route path="/Offer" element={<Offer />} />
             <Route path="/TradeHistory" element={<TradeHistory />} />
             <Route path="/Feedback" element={<Feedback />} />
             <Route path="/TwoFactorAuth" element={<TwoFactorAuth />} />

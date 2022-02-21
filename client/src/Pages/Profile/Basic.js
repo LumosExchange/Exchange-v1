@@ -193,61 +193,6 @@ const AccountTier = ({ tier, selectedTier, limit, title }) => (
             />
           </div>
         </div>
-        {/* Account Limit Section */}
-  
-        <div className="d-flex px-4 row py-4">
-          <div className="col-12">
-            <Heading size="18px">Account Limits</Heading>
-          </div>
-          <div className="col-12 col-lg-4">
-            <AccountTier
-              tier="six9Grey"
-              title="Standard"
-              limit="1"
-              selectedTier={userAccountLevel === "Standard"}
-            />
-          </div>
-          <div className="col-12 col-lg-4">
-            <AccountTier
-              tier="bronze"
-              title="Bronze"
-              limit="5"
-              selectedTier={userAccountLevel === "Bronze"}
-            />
-          </div>
-          <div className="col-12 col-lg-4">
-            <AccountTier
-              tier="silver"
-              title="Silver"
-              limit="10"
-              selectedTier={userAccountLevel === "Silver"}
-            />
-          </div>
-          <div className="col-12 col-lg-4">
-            <AccountTier
-              tier="gold"
-              title="Gold"
-              limit="25"
-              selectedTier={userAccountLevel === "Gold"}
-            />
-          </div>
-          <div className="col-12 col-lg-4">
-            <AccountTier
-              tier="diamond"
-              title="Diamond"
-              limit="50"
-              selectedTier={userAccountLevel === "Diamond"}
-            />
-          </div>
-          <div className="col-12 col-lg-4">
-            <AccountTier
-              tier="six9Grey"
-              title="Team"
-              limit="100"
-              selectedTier={userAccountLevel === "Team"}
-            />
-          </div>
-        </div>
       </ContentTab>
       </div>
       </PageBody>

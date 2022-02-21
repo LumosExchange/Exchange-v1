@@ -280,7 +280,7 @@ const Buy = () => {
 								<GradientButton
 									text="Filter"
 									onClick={filterLisitings}
-									fontSize="24px"
+									fontSize="20px"
 									padding="4px 20px"
 									className="w-100" 
 								/>
@@ -290,7 +290,7 @@ const Buy = () => {
 					</div>
 					<div className="col-12 col-md-8">
 							<Heading size="24px">Buy {selectedCrypto} from these Sellers</Heading>
-							{filteredListings.length > 0 && (
+							{filteredListings.length >= 0 ? (
 								filteredListings.map((val) => (
 								<Card className="p-4 mb-3" color="grey">
 									<div className="row">
@@ -328,7 +328,9 @@ const Buy = () => {
 										</div>
 									</div>
 								</Card>
-							)))}
+							))) : (
+								<Paragraph size="20px" className="mt-3">No results found</Paragraph>
+							)}
 							{filteredListings.length === 0 && (
 								allListings.map((val) => (
 								<Card className="p-4 mb-3">

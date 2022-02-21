@@ -254,12 +254,8 @@ const PaymentMethods = () => {
 
 			if (data.type === "ukbank"){
 				setAccountNumber(data.account);
-				const sortPart1 = data.sort.toString().slice(0, 2);
-				const sortPart2 = data.sort.toString().slice(2, 4);
-				const sortPart3 = data.sort.toString().slice(4, 6);
-				setSortCode1(sortPart1);
-				setSortCode2(sortPart2);
-				setSortCode3(sortPart3);
+				const sortCode = data.sort;
+				console.log(sortCode, 'sort code when editing');
 				setModalMode("ukbank");
 			}
 
@@ -589,6 +585,11 @@ const PaymentMethods = () => {
 
   	useEffect(() => {}, []);
 
+	console.log(sortCode1, 'sortcode 1');
+	console.log(sortCode2, 'sortcode 2');
+	console.log(sortCode3, 'sortcode 3');
+	console.log(sortCode, 'sortcode');
+
 	return (
 		<PageBody>
 		<div className="container pt-5">
@@ -833,11 +834,11 @@ const PaymentMethods = () => {
 									id="sort-part-1"
 									value={sortCode1}
 									name="sort-part-1"
+									maxLength="2"
 									placeholder=""
 									onChange={(e) => {
 										setSortCode1(e.target.value);
 									}}
-									onInput={(e) => { e.target.value = e.target.value.slice(0, 2) }}
 									className="w-100 text-center"
 								/>
 							</div>
@@ -848,11 +849,11 @@ const PaymentMethods = () => {
 									value={sortCode2}
 									id="sort-part-2"
 									name="sort-part-2"
+									maxLength="2"
 									placeholder=""
 									onChange={(e) => {
 										setSortCode2(e.target.value);
 									}}
-									onInput={(e) => { e.target.value = e.target.value.slice(0, 2) }}
 									className="w-100 text-center"
 									
 								/>
@@ -861,7 +862,6 @@ const PaymentMethods = () => {
 							<div className="col-3">
 								<FormInput
 									type="tel"
-									onInput={(e) => { e.target.value = e.target.value.slice(0, 2) }}
 									value={sortCode3}
 									id="sort-part-3"
 									maxLength="2"

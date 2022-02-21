@@ -9,6 +9,7 @@ const StyledInput = styled.input(({ theme, hasIcon, color }) => css`
     color: ${theme.colors.text_primary};
     font-size: 24px;
     padding: 10px;
+    width: 100%;
 
     :focus,
     :active {
@@ -71,6 +72,12 @@ const IconArea = styled.div(({ theme }) => css`
     i {
       color: ${theme.colors.text_primary};
     }
+
+    .customIcon {
+      width: 24px;
+      min-width: 24px;
+      min-height: 24px;
+    }
 `);
 
 export const FormInput = ({
@@ -95,16 +102,18 @@ export const FormInput = ({
   disabled,
   maxLength,
   onInput,
+  customIcon,
 }) => (
-  <div className="d-flex">
+  <div className={`d-flex ${hasIcon && className}`}>
     {hasIcon && (
       <IconArea className="d-flex align-items-center">
-        <i className="material-icons">{icon}</i>
+        {!customIcon && <i className="material-icons">{icon}</i>}
+        {customIcon && <img src={customIcon} alt="icon" className="customIcon" />}
       </IconArea>
     )}
     {rounded ? (
       <RoundedInput
-        className={className}
+        className={!hasIcon && className}
         form={form}
         hasIcon={hasIcon}
         id={id}
@@ -126,7 +135,7 @@ export const FormInput = ({
       />
     ) : (
       <StyledInput
-        className={className}
+        className={!hasIcon && className}
         form={form}
         hasIcon={hasIcon}
         id={id}
@@ -310,3 +319,32 @@ export const FileInput = ({ id, children }) => (
   </React.Fragment>
 );
 
+export const TextArea = styled.textarea(({ theme, color }) => css`
+    background: ${theme.colors[color]};
+    border-radius: 10px;
+    border: 2px solid transparent;
+    color: ${theme.colors.text_primary};
+    font-size: 24px;
+    padding: 10px;
+    width: 100%;
+
+    :focus,
+    :active {
+      border: 2px solid ${theme.colors.primary_cta};
+      outline: none;
+    }
+
+    :disabled {
+      opacity: 0.5;
+      border: 2px solid ${theme.colors.primary_cta};
+      cursor: not-allowed;
+    }
+`);
+
+TextArea.propTypes = {
+  color: PropTypes.string,
+};
+
+TextArea.defaultProps = {
+  color: "grey",
+};
