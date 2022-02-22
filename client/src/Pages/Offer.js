@@ -11,11 +11,43 @@ import { FormInput, StyledLabel } from "../Components/FormInputs";
 import { useNavigate, useLocation } from "react-router-dom";
 import IconSolana from '../Images/icon-circle-solana.svg';
 
+const SwitchButton = styled.button(({ theme }) => css`
+	width: 50px;
+	min-width: 50px;
+	height: 50px;
+	border-radius: 50px;
+	border: 1px solid ${theme.colors.grey};
+	margin-top: 20px;
+`);
+
+const ConversionArea = styled.div(({ theme }) => css`
+	min-height: 60px;
+	background: ${theme.colors.grey};
+	border-radius: 10px;
+	display: flex;
+	align-items: center;
+	padding: 0;
+	cursor: text;
+
+	.icon-area {
+		min-height: 60px;
+		padding: 10px 20px 10px 10px;
+		border-radius: 10px 0 0 10px;
+
+		img {
+			width: 24px;
+			height: 24px;
+		}
+	}
+`);
+
 const Offer = () => {
 	const [offerAmount, setOfferAmount] = useState("");
 	const [offerAmountInSol, setOfferAmountInSol] = useState("");
+	const [offerAmountInCurrency, setOfferAmountInCurrency] = useState("");
 	const [offerMessage, setOfferMessage] = useState("");
 	const [solGbp, setSolGbp] = useState("");
+	const [conversionMode, setConversionMode] = useState("FIATtoSOL");
 
 	const { state } = useLocation();
 	const { val } = state;
@@ -26,6 +58,7 @@ const Offer = () => {
 		fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp')
 		.then((response) => response.json()
 		.then(function (data) {
+			const setCorrectPrice = data.solana.gbp;
 			setSolGbp(data.solana.gbp);
 		}));
 	}
@@ -34,6 +67,23 @@ const Offer = () => {
 		const convertedAmount = amount / solGbp;
 		console.log(convertedAmount, 'converted amount');
 		setOfferAmountInSol(convertedAmount);
+	}
+
+	const convertSolToAmount = (amount) => {
+		const convertedAmount2 = solGbp * amount;
+		console.log(convertedAmount2, 'converted amount');
+		setOfferAmountInCurrency(convertedAmount2);
+	}
+
+	const switchConversionMode = () => {
+		setOfferAmount('');
+		setOfferAmountInCurrency('');
+		setOfferAmountInSol('');
+		if (conversionMode === "FIATtoSOL"){
+			setConversionMode('SOLtoFIAT');
+		} else {
+			setConversionMode('FIATtoSOL');
+		}
 	}
 
 	useEffect(() => {
@@ -47,44 +97,77 @@ const Offer = () => {
 			<div className="container">
 				<div className="row pt-5">
 					<div className="col-12 mb-5 pb-5">
-						<Heading size="26px">Buy SOL from {state.val.userName} with {state.val.paymentMethod1}.</Heading>
+						<Heading size="26px">Buy SOL from {state.val.userName} with {state.val.paymentMethod1} {state.val.paymentMethod2 && `or ${state.val.paymentMethod2}`}.</Heading>
 						<Card className="p-4">
 							<div>{state.val.userName}</div>
 						</Card>
 					</div>
-					<div className="col-12 col-md-6">
-						<StyledLabel
-							padding="0 0 10px 0"
-							bold
-							htmlFor="offerAmount"
-						>
-							Offer Amount
-						</StyledLabel>
-						<FormInput
-							type="text"
-							id="offerAmount"
-							value={offerAmount}
-							name="offerAmount"
-							placeholder="0.00"
-							hasIcon
-							icon="currency_pound"
-							onChange={(e) => {
-								setOfferAmount(e.target.value);
-								convertAmountToSOL(e.target.value);
-							}}
-							className="w-100 mb-2"
-						/>
-						<FormInput
-							type="text"
-							id="offerAmountInSol"
-							value={offerAmountInSol}
-							name="offerAmountInSol"
-							placeholder=""
-							hasIcon
-							icon="token"
-							customIcon={IconSolana}
-							className="w-100"
-						/>
+					<div className="col-12 col-md-6 row">
+						<div className="col-2 d-flex align-items-center">
+							<SwitchButton
+								className="d-flex align-items-center justify-content-center"
+								onClick={ switchConversionMode }
+							>
+								<i className="material-icons">import_export</i>
+							</SwitchButton>
+						</div>
+						<div className="col-10">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+								htmlFor="offerAmount"
+							>
+								Offer Amount
+							</StyledLabel>
+							{conversionMode === 'FIATtoSOL' && (
+								<React.Fragment>
+									<FormInput
+										type="text"
+										id="offerAmount"
+										value={offerAmount}
+										name="offerAmount"
+										placeholder="0.00"
+										hasIcon
+										icon="currency_pound"
+										onChange={(e) => {
+											setOfferAmount(e.target.value);
+											convertAmountToSOL(e.target.value);
+										}}
+										className="w-100 mb-2"
+									/>
+									<ConversionArea>
+										<div className="icon-area d-flex align-items-center">
+											<img src={IconSolana} alt="SOL" />
+										</div>
+										<Heading size="24px" className="mb-0">{offerAmountInSol || 0.00}</Heading>
+									</ConversionArea>
+								</React.Fragment>
+							)}
+							{conversionMode === 'SOLtoFIAT' && (
+								<React.Fragment>
+									<FormInput
+										type="text"
+										id="offerAmount"
+										value={offerAmount}
+										name="offerAmount"
+										placeholder="0 SOL"
+										hasIcon
+										customIcon={IconSolana}
+										onChange={(e) => {
+											setOfferAmount(e.target.value);
+											convertSolToAmount(e.target.value);
+										}}
+										className="w-100 mb-2"
+									/>
+									<ConversionArea>
+										<div className="icon-area d-flex align-items-center">
+											<i className="material-icons">currency_pound</i>
+										</div>
+										<Heading size="24px" className="mb-0">{offerAmountInCurrency || 0.00}</Heading>
+									</ConversionArea>
+								</React.Fragment>
+							)}
+						</div>
 						<StyledLabel
 							padding="20px 0 10px 0"
 							bold
@@ -106,11 +189,22 @@ const Offer = () => {
 					</div>
 					<div className="col-12 col-md-6 row mt-4">
 						<div className="col-12 text-center">
-							<Heading bold>1 SOL = xxx</Heading>
+							<Heading bold>1 SOL = {solGbp}</Heading>
 							<Paragraph size="18px">SOL/GBP rate is secured for 111 seconds.</Paragraph>
 						</div>
-						<div className="col-6">Left</div>
-						<div className="col-6">Right</div>
+						<div className="col-6">
+							<Paragraph bold>About the Trader</Paragraph>
+							<Paragraph color="primary_cta" size="20px">{val.userName}</Paragraph>
+							<Paragraph>Feedback score: 98%</Paragraph>
+							<Paragraph>Registered: Aug 2021</Paragraph>
+							<Paragraph>Total Trades: ~250</Paragraph>
+						</div>
+						<div className="col-6">
+							<Paragraph bold>Headline</Paragraph>
+							<Card className="p-3 mb-4">Paypal, Wise supported. Quick response!</Card>
+							<Paragraph bold>Payment Methods</Paragraph>
+							<Paragraph>{state.val.paymentMethod1}, {state.val.paymentMethod2}</Paragraph>
+						</div>
 					</div>
 				</div>
 			</div>
