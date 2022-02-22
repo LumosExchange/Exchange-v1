@@ -16,8 +16,10 @@ const SwitchButton = styled.button(({ theme }) => css`
 	min-width: 50px;
 	height: 50px;
 	border-radius: 50px;
-	border: 1px solid ${theme.colors.grey};
+	border: 0px;
 	margin-top: 20px;
+	background: ${theme.colors.primary_cta};
+	color: ${theme.colors.base_bg};
 `);
 
 const ConversionArea = styled.div(({ theme }) => css`
@@ -33,6 +35,10 @@ const ConversionArea = styled.div(({ theme }) => css`
 		min-height: 60px;
 		padding: 10px 20px 10px 10px;
 		border-radius: 10px 0 0 10px;
+
+		i {
+			color: ${theme.colors.text_primary};
+		}
 
 		img {
 			width: 24px;
@@ -53,13 +59,20 @@ const Offer = () => {
 	const { val } = state;
 	console.log(state, 'state passed through');
 
-
 	const getCurrentSolPrice = () => {
 		fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp')
 		.then((response) => response.json()
 		.then(function (data) {
-			const setCorrectPrice = data.solana.gbp;
-			setSolGbp(data.solana.gbp);
+			console.log(val, 'state.val');
+			if (val.aboveOrBelow === 'above'){
+				const listingPrice = (data.solana.gbp / 100) * (100 + val.percentChange);
+				console.log(listingPrice, 'listing price');
+				setSolGbp(listingPrice.toFixed(2));
+			} else {
+				const listingPrice = (data.solana.gbp / 100) * (100 - val.percentChange);
+				setSolGbp(listingPrice.toFixed(2));
+			}
+
 		}));
 	}
 
@@ -97,40 +110,31 @@ const Offer = () => {
 			<div className="container">
 				<div className="row pt-5">
 					<div className="col-12 mb-5 pb-5">
-						<Heading size="26px">Buy SOL from {state.val.userName} with {state.val.paymentMethod1} {state.val.paymentMethod2 && `or ${state.val.paymentMethod2}`}.</Heading>
-						<Card className="p-4 mb-3" color="grey">
-									<div className="row">
-										<div className="col-3">
-											<Heading size="24px" bold>{val.userName}</Heading>
-										</div>
-										<div className="col-6 d-flex align-items-center">
-											<i className="material-icons">place</i>
-											{val.Town}, {val.Country}
-										</div>
-										<div className="col-3">
-											<Heading size="24px" color="primary_cta" bold>
-												{val.aboveOrBelow === 'above' && ((solGbp / 100) * (100 + val.percentChange)).toFixed(2)}
-												{val.aboveOrBelow === 'below' && ((solGbp / 100) * (100 - val.percentChange)).toFixed(2)}
-											</Heading>
-											{/*
-											<Heading size="18px">Total Sol for sale</Heading>
-												{val.amountForSale}
-											<Heading size="18px">Total value of sale</Heading>
-												{currencySymbol}{selectedCurrency === 'GBP' && ((val.amountForSale * solgbp)).toFixed(2)}
-												{selectedCurrency === 'USD' && ((val.amountForSale * solusd))}
-											</Heading>
-											*/}
-										</div>
-										<div className="col-3">110 Trades</div>
-										<div className="col-3">{val.paymentMethod1}{' & '}{val.paymentMethod2}</div>
-										<div className="col-3">
-											<Paragraph size="18px">
-												{val.percentChange}%
-												{' '}{val.aboveOrBelow}{' '}market
-											</Paragraph>
-										</div>
+						<Heading size="26px">Buy SOL from {val.userName} with {val.paymentMethod1} {val.paymentMethod2 && `or ${val.paymentMethod2}`}.</Heading>
+							<Card className="p-4 mb-3" color="grey">
+								<div className="row">
+									<div className="col-3">
+										<Heading size="24px" bold>{val.userName}</Heading>
 									</div>
-								</Card>
+									<div className="col-6 d-flex align-items-center">
+										<i className="material-icons">place</i>
+										{val.Town}, {val.Country}
+									</div>
+									<div className="col-3">
+										<Heading size="24px" color="primary_cta" bold>
+											{solGbp}
+										</Heading>
+									</div>
+									<div className="col-3">110 Trades</div>
+									<div className="col-3">{val.paymentMethod1}{' & '}{val.paymentMethod2}</div>
+									<div className="col-3">
+										<Paragraph size="18px">
+											{val.percentChange}%
+											{' '}{val.aboveOrBelow}{' '}market
+										</Paragraph>
+									</div>
+								</div>
+							</Card>
 					</div>
 					<div className="col-12 col-md-6 row">
 						<div className="col-2 d-flex align-items-center">
@@ -219,9 +223,7 @@ const Offer = () => {
 					</div>
 					<div className="col-12 col-md-6 row mt-4">
 						<div className="col-12 text-center">
-							<Heading bold>1 SOL = {' '}
-								{val.aboveOrBelow === 'above' && ((solGbp / 100) * (100 + val.percentChange)).toFixed(2)}
-								{val.aboveOrBelow === 'below' && ((solGbp / 100) * (100 - val.percentChange)).toFixed(2)}</Heading>
+							<Heading bold>1 SOL = {' '} {solGbp}</Heading>
 							<Paragraph size="18px">SOL/GBP rate is secured for 111 seconds.</Paragraph>
 						</div>
 						<div className="col-6">
@@ -235,7 +237,7 @@ const Offer = () => {
 							<Paragraph bold>Headline</Paragraph>
 							<Card className="p-3 mb-4">Paypal, Wise supported. Quick response!</Card>
 							<Paragraph bold>Payment Methods</Paragraph>
-							<Paragraph>{state.val.paymentMethod1}, {state.val.paymentMethod2}</Paragraph>
+							<Paragraph>{val.paymentMethod1}, {val.paymentMethod2}</Paragraph>
 						</div>
 					</div>
 				</div>
