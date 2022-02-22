@@ -1489,7 +1489,7 @@ app.post("/DeleteSkrillBank", (req, res) => {
   });
 
   app.get("getSellersTopTradeHistory", (req, res) => {
-    let param = req.body.sellerID
+    const param = req.body.sellerID
     db.query(
       "SELECT TOP (3) FROM feedback WHERE sellerUserID = ?",
       [param],
@@ -1504,7 +1504,7 @@ app.post("/DeleteSkrillBank", (req, res) => {
   });
 
   app.get("getSellerNoTrades", (req, res) => {
-    let param = req.body.sellerID
+    const param = req.body.sellerID;
     db.query(
       "SELECT * FROM saleHistory WHERE userID =? ",
       [param],
@@ -1518,6 +1518,33 @@ app.post("/DeleteSkrillBank", (req, res) => {
     )
   });
 
+  app.post("OpenTrade", (req, res) => {
+    let saleID = req.body.saleID;
+    let sellerID = req.body.sellerID;
+    let buyerID = req.session.user[0].userID;
+    var date = new Date().toLocaleString();
+    let paymentMethod = req.body.paymentMethod;
+    let userSolPrice = req.body.userSolPrice;
+    let amountOfSol = req.body.amountOfSolBought;
+    let fiatAmount = req.body.amountOfFiat;
+    let paymentCurrency = req.body.paymentCurrency;
+    let message = req.body.buyerMessage;
+    let reference = crypto.randomBytes(10).toString('hex');
+
+    db.query(
+      "INSERT INTO LiveTrades (saleID, sellerID, buyerID, Date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, Message, Reference) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+      [saleID, sellerID, buyerID, date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, message, reference],
+      (err, result) => {
+        if(err) {
+          res.send(err);
+        } else {
+          res.send({
+            message: "Succesfully opened the trade"
+          })
+        };
+      }
+    );
+  });
 
 
 app.listen(3001, () => {
