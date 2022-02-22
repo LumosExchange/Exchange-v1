@@ -258,8 +258,10 @@ const Offer = () => {
 								fontSize="24px"
 								padding="4px 20px"
 								className="w-100"
-								onClick={ () => openTrade(),
-									navigate("/LiveTrade") }
+								onClick={() => {
+									openTrade();
+									navigate("/LiveTrade");
+								}}
 							/>
 						</div>
 						</div>
