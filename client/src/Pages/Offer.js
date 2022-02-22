@@ -17,7 +17,6 @@ const SwitchButton = styled.button(({ theme }) => css`
 	height: 50px;
 	border-radius: 50px;
 	border: 0px;
-	margin-top: 20px;
 	background: ${theme.colors.primary_cta};
 	color: ${theme.colors.base_bg};
 `);
@@ -54,37 +53,32 @@ const Offer = () => {
 	const [offerMessage, setOfferMessage] = useState("");
 	const [solGbp, setSolGbp] = useState("");
 	const [conversionMode, setConversionMode] = useState("FIATtoSOL");
+	const [paymentMethod, setPaymentMethod] = useState([]);
 
 	const { state } = useLocation();
 	const { val } = state;
-	console.log(state, 'state passed through');
 
 	const getCurrentSolPrice = () => {
 		fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp')
 		.then((response) => response.json()
 		.then(function (data) {
-			console.log(val, 'state.val');
 			if (val.aboveOrBelow === 'above'){
 				const listingPrice = (data.solana.gbp / 100) * (100 + val.percentChange);
-				console.log(listingPrice, 'listing price');
 				setSolGbp(listingPrice.toFixed(2));
 			} else {
 				const listingPrice = (data.solana.gbp / 100) * (100 - val.percentChange);
 				setSolGbp(listingPrice.toFixed(2));
 			}
-
 		}));
 	}
 
 	const convertAmountToSOL = (amount) => {
 		const convertedAmount = amount / solGbp;
-		console.log(convertedAmount, 'converted amount');
 		setOfferAmountInSol(convertedAmount);
 	}
 
 	const convertSolToAmount = (amount) => {
 		const convertedAmount2 = solGbp * amount;
-		console.log(convertedAmount2, 'converted amount');
 		setOfferAmountInCurrency(convertedAmount2);
 	}
 
@@ -103,7 +97,8 @@ const Offer = () => {
 		getCurrentSolPrice();
 	}, []);
 
-	console.log(solGbp, 'SOL Price');
+	const filteredPaymentMethods = ['Please Select', val.paymentMethod1, val.paymentMethod2];
+	const navigate = useNavigate();
 
   	return (
 		<PageBody>
@@ -137,7 +132,7 @@ const Offer = () => {
 							</Card>
 					</div>
 					<div className="col-12 col-md-6 row">
-						<div className="col-2 d-flex align-items-center">
+						<div className="col d-flex align-items-center" style={{ maxHeight: '200px' }}>
 							<SwitchButton
 								className="d-flex align-items-center justify-content-center"
 								onClick={ switchConversionMode }
@@ -201,7 +196,6 @@ const Offer = () => {
 									</ConversionArea>
 								</React.Fragment>
 							)}
-						</div>
 						<StyledLabel
 							padding="20px 0 10px 0"
 							bold
@@ -220,6 +214,41 @@ const Offer = () => {
 							}}
 							className="w-100 mb-2"
 						/>
+						<div className="w-100 p-0 mt-3">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+								htmlFor="preferredPayment"
+							>
+								Select Payment Method
+							</StyledLabel>
+							<StyledDropdown
+								type="change"
+								placeholder="preferredPayment"
+								name="preferredPayment"
+								id="preferredPayment"
+								color="btn"
+								onChange={(e) => {
+									setPaymentMethod(e.target.value);
+								}}
+								className="w-100"
+								required
+							>
+								{filteredPaymentMethods.map((option) => (
+									<option value={option}>{option}</option>
+								))}
+							</StyledDropdown>
+						</div>
+						<div className="w-100 p-0 mt-3">
+							<GradientButton
+								text="Open Trade"
+								fontSize="24px"
+								padding="4px 20px"
+								className="w-100"
+								onClick={ () => navigate("/LiveTrade") }
+							/>
+						</div>
+						</div>
 					</div>
 					<div className="col-12 col-md-6 row mt-4">
 						<div className="col-12 text-center">
