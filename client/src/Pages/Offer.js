@@ -98,9 +98,39 @@ const Offer = () => {
 				<div className="row pt-5">
 					<div className="col-12 mb-5 pb-5">
 						<Heading size="26px">Buy SOL from {state.val.userName} with {state.val.paymentMethod1} {state.val.paymentMethod2 && `or ${state.val.paymentMethod2}`}.</Heading>
-						<Card className="p-4">
-							<div>{state.val.userName}</div>
-						</Card>
+						<Card className="p-4 mb-3" color="grey">
+									<div className="row">
+										<div className="col-3">
+											<Heading size="24px" bold>{val.userName}</Heading>
+										</div>
+										<div className="col-6 d-flex align-items-center">
+											<i className="material-icons">place</i>
+											{val.Town}, {val.Country}
+										</div>
+										<div className="col-3">
+											<Heading size="24px" color="primary_cta" bold>
+												{val.aboveOrBelow === 'above' && ((solGbp / 100) * (100 + val.percentChange)).toFixed(2)}
+												{val.aboveOrBelow === 'below' && ((solGbp / 100) * (100 - val.percentChange)).toFixed(2)}
+											</Heading>
+											{/*
+											<Heading size="18px">Total Sol for sale</Heading>
+												{val.amountForSale}
+											<Heading size="18px">Total value of sale</Heading>
+												{currencySymbol}{selectedCurrency === 'GBP' && ((val.amountForSale * solgbp)).toFixed(2)}
+												{selectedCurrency === 'USD' && ((val.amountForSale * solusd))}
+											</Heading>
+											*/}
+										</div>
+										<div className="col-3">110 Trades</div>
+										<div className="col-3">{val.paymentMethod1}{' & '}{val.paymentMethod2}</div>
+										<div className="col-3">
+											<Paragraph size="18px">
+												{val.percentChange}%
+												{' '}{val.aboveOrBelow}{' '}market
+											</Paragraph>
+										</div>
+									</div>
+								</Card>
 					</div>
 					<div className="col-12 col-md-6 row">
 						<div className="col-2 d-flex align-items-center">
@@ -189,7 +219,9 @@ const Offer = () => {
 					</div>
 					<div className="col-12 col-md-6 row mt-4">
 						<div className="col-12 text-center">
-							<Heading bold>1 SOL = {solGbp}</Heading>
+							<Heading bold>1 SOL = {' '}
+								{val.aboveOrBelow === 'above' && ((solGbp / 100) * (100 + val.percentChange)).toFixed(2)}
+								{val.aboveOrBelow === 'below' && ((solGbp / 100) * (100 - val.percentChange)).toFixed(2)}</Heading>
 							<Paragraph size="18px">SOL/GBP rate is secured for 111 seconds.</Paragraph>
 						</div>
 						<div className="col-6">
