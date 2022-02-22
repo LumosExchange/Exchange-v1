@@ -92,6 +92,19 @@ const Offer = () => {
 			setConversionMode('FIATtoSOL');
 		}
 	}
+	const openTrade = () => {
+		Axios.post("http://localhost:3001/OpenTrade", {
+			saleID: val.saleID,
+			sellerID: val.sellerID,
+			paymentMethod: paymentMethod,
+			userSolPrice: solGbp,
+			amountOfSol: offerAmountInSol,
+			fiatAmount: offerAmountInCurrency,
+			paymentCurrency: val.paymentCurrency,
+			message: offerMessage,
+		  }).then((response) => {
+			//Handle response here any errors etc
+		  })};
 
 	useEffect(() => {
 		getCurrentSolPrice();
@@ -245,7 +258,8 @@ const Offer = () => {
 								fontSize="24px"
 								padding="4px 20px"
 								className="w-100"
-								onClick={ () => navigate("/LiveTrade") }
+								onClick={ () => openTrade(),
+									navigate("/LiveTrade") }
 							/>
 						</div>
 						</div>
