@@ -95,7 +95,7 @@ const PaymentMethodCard = styled.div(
   `
 );
 
-const StyledModal = styled(Modal)(
+export const StyledModal = styled(Modal)(
   ({ theme }) => css`
     .modal-content {
       border: 1px solid ${theme.colors.panel_accent};
