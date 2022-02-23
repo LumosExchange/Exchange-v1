@@ -360,7 +360,7 @@ const Buy = () => {
 											</Heading>
 											*/}
 										</div>
-										<div className="col-3">110 Trades</div>
+										<div className="col-3">{val.tradeHistory} {" Trades"}</div>
 										<div className="col-3">{val.paymentMethod1}{' & '}{val.paymentMethod2}</div>
 										<div className="col-3">
 											<Paragraph size="18px">
@@ -406,7 +406,7 @@ const Buy = () => {
 												</Heading>
 												*/}
 											</div>
-											<div className="col-3">110 Trades</div>
+											<div className="col-3">{val.tradeHistory}{" Trades"}</div>
 											<div className="col-3">{val.paymentMethod1}{' & '}{val.paymentMethod2}</div>
 											<div className="col-3">
 												<Paragraph size="18px">

@@ -276,7 +276,7 @@ const Offer = () => {
 							<Paragraph color="primary_cta" size="20px">{val.userName}</Paragraph>
 							<Paragraph>Feedback score: 98%</Paragraph>
 							<Paragraph>Registered: Aug 2021</Paragraph>
-							<Paragraph>Total Trades: ~250</Paragraph>
+							<Paragraph>Total Trades: {val.tradeHistory}</Paragraph>
 						</div>
 						<div className="col-6">
 							<Paragraph bold>Headline</Paragraph>

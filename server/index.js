@@ -281,17 +281,29 @@ app.post("/sell", (req, res) => {
 
   let country;
   let town;
+  let tradeHistory;
 
   db.query(
     "SELECT Country, Town FROM userInformation WHERE (userID) = (?)",
     [id],
     (err, result) => {
       console.log("result: ", result);
-      let country = result[0].Country;
-      let town = result[0].Town;
-
+       country = result[0].Country;
+       town = result[0].Town;
+      }
+      );
+  
+    db.query(
+      "SELECT saleID FROM TradeHistory WHERE (sellerID) = (?)"
+      [id],
+      (err, result) => {
+        tradeHistory = result.length;
+      }
+    );
+          
+          
       db.query(
-        "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2) VALUES (?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory) VALUES (?,?,?,?,?,?,?,?,?,?)",
         [
           id,
           amountForSale,
@@ -302,15 +314,16 @@ app.post("/sell", (req, res) => {
           town,
           payment1,
           payment2,
+          tradeHistory,
         ],
         (err, result) => {
           console.log(err);
           res.send(result);
         }
       );
-    }
-  );
-});
+    });
+  
+
 
 //Get users open listings
 app.get("/getListings", (req, res) => {
