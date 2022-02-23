@@ -81,11 +81,11 @@ const Navbar = ({ loginStatus }) => {
                 <Link href="/Buy" className="me-4 me-xl-5">
                   Buy &amp; Sell
                 </Link>
-                <Link href="/Offers" className="me-4 me-xl-5">
-                  Offers
+                <Link href="/MyListings" className="me-4 me-xl-5">
+                  My Listings
                 </Link>
-                <Link href="/Trade" className="me-4 me-xl-5">
-                  Trade
+                <Link href="/MyTrades" className="me-4 me-xl-5">
+                  My Trades
                 </Link>
                 <Link href="/MyWallet" className="me-4 me-xl-5">
                   Wallet

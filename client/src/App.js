@@ -35,6 +35,7 @@ import ProfileKYC from "./Pages/Profile/KnowYourCustomer";
 import PaymentMethods from "./Pages/Profile/PaymentMethods";
 import AccountUpgrade from "./Pages/Profile/AccountUpgrade";
 import Offer from "./Pages/Offer";
+import MyListings from "./Pages/MyListings";
 
 const App = () => {
   const [theme, toggleTheme] = useDarkMode();
@@ -99,6 +100,7 @@ const App = () => {
               element={<PaymentMethods />}
             />
             <Route path="/Profile/AccountUpgrade" element={<AccountUpgrade />} />
+            <Route path="/MyListings" element={<MyListings />} />
           </Routes>
         </Router>
         <Footer />
