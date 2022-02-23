@@ -385,7 +385,7 @@ const Buy = () => {
 								</Card>
 							))) : (
 								allListings.map((val) => (
-									<Card className="p-4 mb-3">
+									<Card className="p-4 mb-3" color="grey">
 										<div className="row">
 											<div className="col-3">
 												<Heading size="24px" bold>{val.userName}</Heading>
