@@ -194,12 +194,6 @@ const Buy = () => {
 		setFilteredListings([]);
 	}
 
-	console.log(searchCriteriaLocation, 'selected location');
-	console.log(searchCriteriaPayment, 'selected payment method');
-	console.log(allListings, 'all listings');
-	console.log(filteredListings, 'filtered listings');
-	console.log(isFiltering, 'is filtering atm?');
-	
     useEffect(() => {
 		getCurrency();
 		getAllListings();
@@ -333,7 +327,8 @@ const Buy = () => {
 						<Heading size="24px">Buy {selectedCrypto} from these Sellers</Heading>
 							{isFiltering && (
 								<div className="d-flex mb-3">
-									<Paragraph size="20px" className="mb-0">{filteredListings.length} result(s) found</Paragraph>
+									<Paragraph size="20px" bold className="mb-0 me-1">{filteredListings.length}</Paragraph>
+									<Paragraph size="20px" className="mb-0">result{filteredListings.length > 1 && 's'} found</Paragraph>
 									<ClearFilterButton onClick={ resetFilters } className="d-flex align-items-center">
 										<span className="me-1">Clear</span>
 										<i className="material-icons">cancel</i>
