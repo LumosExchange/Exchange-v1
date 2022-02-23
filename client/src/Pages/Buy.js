@@ -6,7 +6,7 @@ import Card from "../Components/Card";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
 import GradientButton from "../Components/GradientButton";
-import PrimaryButton from "../Components/Buttons";
+import PrimaryButton, { InvisibleButton } from "../Components/Buttons";
 import { FormInput, StyledLabel } from "../Components/FormInputs";
 import { useNavigate } from "react-router-dom";
 
@@ -46,6 +46,14 @@ const QuadButton = styled.button(({ theme }) => css`
 		font-family: 'THICCCBOI-BOLD';
 		color: ${theme.colors.base_bg};
 	}
+`);
+
+const ClearFilterButton = styled(InvisibleButton)(({ theme }) => css`
+    color: ${theme.colors.primary_cta};
+	font-size: 19px;
+    &:hover {
+        color: ${theme.colors.text_primary};
+    }
 `);
 
 export const convertAssetToSvg = (asset) => {
@@ -102,6 +110,7 @@ const Buy = () => {
 	const [searchCriteriaPayment, setSearchCriteriaPayment] = useState('Please Select');
 	const [searchCriteriaLocation, setSearchCriteriaLocation] = useState('Please Select');
 	const [filteredListings, setFilteredListings] = useState([]);
+	const [isFiltering, setIsFiltering] = useState(false);
   
 	const navigate = useNavigate();
 	
@@ -150,16 +159,46 @@ const Buy = () => {
 		
 	}
 
-	const filterLisitings = () => {
-		const filteredListings = allListings
-		.filter(al => (al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment) || al.Country === searchCriteriaLocation)
-		setFilteredListings(filteredListings);
-	};
+	const filterListings = () => {
+		if (searchCriteriaPayment === "Please Select" || setSearchCriteriaLocation === "Please Select"){
+			setIsFiltering(false);
+			setFilteredListings([]);
+		}
+
+		if (searchCriteriaPayment !== "Please Select"){
+			setIsFiltering(true);
+			const filteredListings = allListings
+			.filter(al => (al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment));
+			setFilteredListings(filteredListings);
+
+			if (searchCriteriaLocation !== "Please Select"){
+				setIsFiltering(true);
+				const filteredListings2 = filteredListings
+				.filter(al => al.Country === searchCriteriaLocation);
+				setFilteredListings(filteredListings2);
+			}
+		}
+
+		if (searchCriteriaPayment === "Please Select" && searchCriteriaLocation !== "Please Select"){
+			setIsFiltering(true);
+			const filteredListings = allListings
+			.filter(al => al.Country === searchCriteriaLocation);
+			setFilteredListings(filteredListings);
+		}
+	}
+
+	const resetFilters = () => {
+		setIsFiltering(false);
+		setSearchCriteriaPayment('Please Select');
+		setSearchCriteriaLocation('Please Select');
+		setFilteredListings([]);
+	}
 
 	console.log(searchCriteriaLocation, 'selected location');
 	console.log(searchCriteriaPayment, 'selected payment method');
 	console.log(allListings, 'all listings');
 	console.log(filteredListings, 'filtered listings');
+	console.log(isFiltering, 'is filtering atm?');
 	
     useEffect(() => {
 		getCurrency();
@@ -243,6 +282,7 @@ const Buy = () => {
 								type="change"
 								placeholder="preferredPayment"
 								name="preferredPayment"
+								value={searchCriteriaPayment}
 								id="preferredPayment"
 								color="btn"
 								onChange={(e) => {
@@ -264,6 +304,7 @@ const Buy = () => {
 								type="change"
 								placeholder="preferredLocation"
 								name="preferredLocation"
+								value={searchCriteriaLocation}
 								id="preferredLocation"
 								color="btn"
 								onChange={(e) => {
@@ -279,7 +320,7 @@ const Buy = () => {
 							<div className="col-12 mt-3">
 								<GradientButton
 									text="Filter"
-									onClick={filterLisitings}
+									onClick={filterListings}
 									fontSize="20px"
 									padding="4px 20px"
 									className="w-100" 
@@ -289,8 +330,17 @@ const Buy = () => {
 						</Card>
 					</div>
 					<div className="col-12 col-md-8">
-							<Heading size="24px">Buy {selectedCrypto} from these Sellers</Heading>
-							{filteredListings.length >= 0 ? (
+						<Heading size="24px">Buy {selectedCrypto} from these Sellers</Heading>
+							{isFiltering && (
+								<div className="d-flex mb-3">
+									<Paragraph size="20px" className="mb-0">{filteredListings.length} result(s) found</Paragraph>
+									<ClearFilterButton onClick={ resetFilters } className="d-flex align-items-center">
+										<span className="me-1">Clear</span>
+										<i className="material-icons">cancel</i>
+									</ClearFilterButton>
+								</div>
+							)}
+							{isFiltering ? (
 								filteredListings.map((val) => (
 								<Card className="p-4 mb-3" color="grey">
 									<div className="row">
@@ -339,55 +389,53 @@ const Buy = () => {
 									</div>
 								</Card>
 							))) : (
-								<Paragraph size="20px" className="mt-3">No results found</Paragraph>
-							)}
-							{filteredListings.length === 0 && (
 								allListings.map((val) => (
-								<Card className="p-4 mb-3">
-									<div className="row">
-										<div className="col-3">
-											<Heading size="24px" bold>{val.userName}</Heading>
+									<Card className="p-4 mb-3">
+										<div className="row">
+											<div className="col-3">
+												<Heading size="24px" bold>{val.userName}</Heading>
+											</div>
+											<div className="col-3">{val.Country}</div>
+											<div className="col-3">{val.Town}</div>
+											<div className="col-3">
+												<Heading size="24px" color="primary_cta" bold>
+													{currencySymbol}{val.aboveOrBelow === 'above' && ((solgbp / 100) * (100 + val.percentChange)).toFixed(2)}
+													{val.aboveOrBelow === 'below' && ((solgbp / 100) * (100 - val.percentChange)).toFixed(2)}
+												</Heading>
+												{/*
+												<Heading size="18px">Total Sol for sale</Heading>
+													{val.amountForSale}
+												<Heading size="18px">Total value of sale</Heading>
+													{currencySymbol}{selectedCurrency === 'GBP' && ((val.amountForSale * solgbp)).toFixed(2)}
+													{selectedCurrency === 'USD' && ((val.amountForSale * solusd))}
+												</Heading>
+												*/}
+											</div>
+											<div className="col-3">110 Trades</div>
+											<div className="col-3">{val.paymentMethod1}{' & '}{val.paymentMethod2}</div>
+											<div className="col-3">
+												<Paragraph size="18px">
+													{val.percentChange}%
+													{' '}{val.aboveOrBelow}{' '}market
+												</Paragraph>
+											</div>
+											<div className="col-3">
+												<GradientButton
+													text="Buy"
+													fontSize="24px"
+													padding="4px 20px"
+													className="w-100"
+													onClick={ () => navigate("/Offer", {
+														state: {
+															val
+														}
+													})}
+												/>
+											</div>
 										</div>
-										<div className="col-3">{val.Country}</div>
-										<div className="col-3">{val.Town}</div>
-										<div className="col-3">
-											<Heading size="24px" color="primary_cta" bold>
-												{currencySymbol}{val.aboveOrBelow === 'above' && ((solgbp / 100) * (100 + val.percentChange)).toFixed(2)}
-												{val.aboveOrBelow === 'below' && ((solgbp / 100) * (100 - val.percentChange)).toFixed(2)}
-											</Heading>
-											{/*
-											<Heading size="18px">Total Sol for sale</Heading>
-												{val.amountForSale}
-											<Heading size="18px">Total value of sale</Heading>
-												{currencySymbol}{selectedCurrency === 'GBP' && ((val.amountForSale * solgbp)).toFixed(2)}
-												{selectedCurrency === 'USD' && ((val.amountForSale * solusd))}
-											</Heading>
-											*/}
-										</div>
-										<div className="col-3">110 Trades</div>
-										<div className="col-3">{val.paymentMethod1}{' & '}{val.paymentMethod2}</div>
-										<div className="col-3">
-											<Paragraph size="18px">
-												{val.percentChange}%
-												{' '}{val.aboveOrBelow}{' '}market
-											</Paragraph>
-										</div>
-										<div className="col-3">
-											<GradientButton
-												text="Buy"
-												fontSize="24px"
-												padding="4px 20px"
-												className="w-100"
-												onClick={ () => navigate("/Offer", {
-													state: {
-														val
-													}
-												})}
-											/>
-										</div>
-									</div>
-								</Card>
-							)))}
+									</Card>
+								))
+							)}
 						</div>
 					</div>
 			</div>

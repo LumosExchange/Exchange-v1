@@ -57,9 +57,8 @@ const Navbar = ({ loginStatus }) => {
     Axios.get("http://localhost:3001/logout", {
     }).then((response) => {
       console.log(response, 'response');
-      navigate('/Profile/Basic');
+      navigate('/Login');
       window.location.reload(true);
-
     });
   }
 
@@ -79,8 +78,8 @@ const Navbar = ({ loginStatus }) => {
           {loginStatus ? (
             <React.Fragment>
               <div className="d-none d-lg-block m-auto">
-                <Link href="/Market" className="me-4 me-xl-5">
-                  Market
+                <Link href="/Buy" className="me-4 me-xl-5">
+                  Buy &amp; Sell
                 </Link>
                 <Link href="/Offers" className="me-4 me-xl-5">
                   Offers
@@ -101,7 +100,7 @@ const Navbar = ({ loginStatus }) => {
                     <i className="material-icons me-1">person</i>
                     <span>{userName}</span>
                 </NavActionButton>
-                <NavActionButton onClick={logOut} className="d-flex">
+                <NavActionButton onClick={ () => logOut() } className="d-flex">
                     <i className="material-icons ms-3 me-1">logout</i>
                     <span>Log Out</span>
                 </NavActionButton>
