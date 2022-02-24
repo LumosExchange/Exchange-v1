@@ -23,6 +23,11 @@ const PaymentMethods = [
 	"International Wire Transfer",
 ];
 
+const CardActionButton = styled(InvisibleButton)(({ theme }) => css`
+	.edit { color: ${theme.colors.primary_cta} };
+	.delete { color: ${theme.colors.invalid} };
+`);
+
 const MyListings = () => {
 	const [userListings, setUserListings] = useState([]);
 	const [modal, setModal] = useState(false);
@@ -33,10 +38,40 @@ const MyListings = () => {
 	const [secondaryPaymentMethod, setSecondaryPaymentMethod] = useState('');
 	const [aboveOrBelow, setAboveOrBelow] = useState('');
 	const [percentageDifference, setPercentageDifference] = useState('');
+	const [volumeForSale, setVolumeForSale] = useState('');
+
+	// Currency
+	const [selectedCurrency, selectCurrency] = useState();
+	const [solgbp, setSolGbp] = useState();
+	const [solusd, setSolUsd] = useState();
+	const [currencySymbol, setCurrencySymbol] = useState();
 
 	const getUserListings = () => {
 		Axios.get("http://localhost:3001/getListings").then((response) => {
 			setUserListings(response.data);
+		});
+	}
+
+	const getCurrency = () => {
+		Axios.get("http://localhost:3001/getUserSettings").then((response) => {
+			if(response.data[0]?.currency === 'GBP') {
+				selectCurrency('GBP');
+				setCurrencySymbol('£');
+				//Get GBP price of SOlana
+				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp').then((response) => response.json().then(function (data) {
+					setSolGbp(data.solana.gbp);
+				}));	
+			} else if (response.data[0]?.currency === 'USD') {
+				selectCurrency('USD');
+				setCurrencySymbol('$');
+				//Get USD price of solana
+				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd').then((response) => response.json().then(function (data) {
+					setSolUsd(data.solana.usd);
+				}));
+			} else {
+				//handle other currencys
+				selectCurrency('GBP');
+			}
 		});
 	}
 
@@ -45,6 +80,8 @@ const MyListings = () => {
 		setPrimaryPaymentMethod(val.paymentMethod1);
 		setSecondaryPaymentMethod(val.paymentMethod2);
 		setAboveOrBelow(val.aboveOrBelow);
+		setPercentageDifference(val.percentChange);
+		setVolumeForSale(val.amountForSale);
 		setModal(!modal);
 	}
 
@@ -54,6 +91,7 @@ const MyListings = () => {
 
 	useEffect(() => {
 		getUserListings();
+		getCurrency();
 	}, []);
 
   	return (
@@ -62,34 +100,42 @@ const MyListings = () => {
 			{userListings.map((val) => (
 				<Card className="p-4 mb-3" color="grey">
 					<div className="row">
-						<div className="col-3">
-							<Heading size="24px" bold>{val.userName}</Heading>
-						</div>
-						<div className="col-3">{val.Country}</div>
-						<div className="col-3">{val.Town}</div>
-						<div className="col-3">
-							<Heading size="24px" color="primary_cta" bold>
+						<div className="col-3 d-flex align-items-center">
+							<i className="material-icons">person</i>
+							<Heading size="24px" bold className="mb-0">
+								{val.userName}
 							</Heading>
-							{/*
-							<Heading size="18px">Total Sol for sale</Heading>
-								{val.amountForSale}
-							<Heading size="18px">Total value of sale</Heading>
-								{currencySymbol}{selectedCurrency === 'GBP' && ((val.amountForSale * solgbp)).toFixed(2)}
-								{selectedCurrency === 'USD' && ((val.amountForSale * solusd))}
-							</Heading>
-							*/}
 						</div>
-						<div className="col-3">{val.tradeHistory} Trades</div>
-						<div className="col-3">{val.paymentMethod1}{' & '}{val.paymentMethod2}</div>
-						<div className="col-3">
-							<Paragraph size="18px">
+						<div className="col-6 d-flex align-items-center">
+							<i className="material-icons me-2">place</i>
+							{val.Town}, {val.Country}
+						</div>
+						<div className="col-3 d-flex flex-column align-items-end">
+							<Heading size="24px" bold color="primary_cta" className="mb-0">
+								{currencySymbol}{val.aboveOrBelow === 'above' && ((solgbp / 100) * (100 + val.percentChange)).toFixed(2)}
+								{val.aboveOrBelow === 'below' && ((solgbp / 100) * (100 - val.percentChange)).toFixed(2)}
+							</Heading>
+							<Paragraph className="mb-0">{val.amountForSale} for sale</Paragraph>
+						</div>
+						<div className="col-3 d-flex align-items-center">{val.tradeHistory} Trades</div>
+						<div className="col-3 d-flex align-items-center">
+							<i className="material-icons me-2">account_balance_wallet</i>
+							{val.paymentMethod1}{' & '}{val.paymentMethod2}
+						</div>
+						<div className="col-3 d-flex align-items-center">
+							<i className="material-icons me-2">vertical_align_center</i>
+							<Paragraph size="18px" className="mb-0">
 								{val.percentChange}%
 								{' '}{val.aboveOrBelow}{' '}market
 							</Paragraph>
 						</div>
-						<div className="col-3">
-							<button onClick={ () => openEditModal(val) }>Edit</button>
-							<button onClick={ () => openDeleteModal(val) }>Delete</button>
+						<div className="col-3 d-flex align-items-end justify-content-end">
+							<CardActionButton onClick={ () => openEditModal(val) } title="Edit">
+								<i className="material-icons edit">edit</i>
+							</CardActionButton>
+							<CardActionButton onClick={ () => openDeleteModal(val) } title="Delete">
+								<i className="material-icons delete">clear</i>
+							</CardActionButton>
 						</div>
 					</div>
 				</Card>
@@ -148,25 +194,57 @@ const MyListings = () => {
 							))}
 						</StyledDropdown>
 					</div>
+					<div className="col-12">
+						<StyledLabel padding="0 0 10px 0" htmlFor="percentageDifference" bold>Sell above or below market</StyledLabel>
+					</div>
+					<div className="col-12 mb-4 d-flex">
+						<div className="col-2">
+							<FormInput
+								type="text"
+								id="percentageDifference"
+								name="percentageDifference"
+								value={percentageDifference}
+								onChange={(e) => {
+									setPercentageDifference(e.target.value);
+								}}
+								className="w-100"
+							/>
+						</div>
+						<div className="col-1 d-flex align-items-center justify-content-center">
+							<Paragraph bold className="mb-0" size="24px">%</Paragraph>
+						</div>
+						<div className="col-9">
+							<StyledDropdown
+								autofocus="true"
+								type="aboveOrBelow"
+								placeholder="aboveOrBelow"
+								value={aboveOrBelow}
+								name="aboveOrBelow"
+								id="aboveOrBelow"
+								color="btn"
+								onChange={(e) => {
+									setAboveOrBelow(e.target.value);
+								}}
+								className="w-100"
+								required
+							>
+								<option value="below">Below</option>
+								<option value="above">Above</option>
+							</StyledDropdown>
+						</div>
+					</div>
 					<div className="col-12 mb-4">
-						<StyledLabel padding="0 0 10px 0" htmlFor="aboveOrBelow" bold>Sell above or below market</StyledLabel>
-						<StyledDropdown
-							autofocus="true"
-							type="aboveOrBelow"
-							placeholder="aboveOrBelow"
-							value={aboveOrBelow}
-							name="aboveOrBelow"
-							id="aboveOrBelow"
-							color="btn"
+						<StyledLabel padding="0 0 10px 0" htmlFor="volumeForSale" bold>Amount for Sale</StyledLabel>
+						<FormInput
+							type="text"
+							id="volumeForSale"
+							name="volumeForSale"
+							value={volumeForSale}
 							onChange={(e) => {
-								setAboveOrBelow(e.target.value);
+								setVolumeForSale(e.target.value);
 							}}
 							className="w-100"
-							required
-						>
-							<option value="below">Below</option>
-							<option value="above">Above</option>
-						</StyledDropdown>
+						/>
 					</div>
 					<div className="col-12 mb-4">
 						<PrimaryButton text="Save" className="w-100" />
