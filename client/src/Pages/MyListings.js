@@ -16,6 +16,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { StyledModal } from "./Profile/PaymentMethods";
 import { InlineButton } from "../Components/Buttons";
 import { CodeSentMessage } from "./ChangePassword";
+import { useNavigate } from "react-router";
 
 const PaymentMethods = [
 	"Please Select",
@@ -29,11 +30,17 @@ const CardActionButton = styled(InvisibleButton)(({ theme }) => css`
 	.delete { color: ${theme.colors.invalid} };
 `);
 
+const MissingIcon = styled.i(({ theme }) => css`
+	font-size: 80px;
+	color: ${theme.colors.primary_cta};
+`);
+
 const MyListings = () => {
 	const [userListings, setUserListings] = useState([]);
 	const [modal, setModal] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
 	const [modalMode, setModalMode] = useState('initial');
+	const [deleteModalMode, setDeleteModalMode] = useState('initial');
 
 	// Editing Listings
 	const [primaryPaymentMethod, setPrimaryPaymentMethod] = useState('');
@@ -103,15 +110,21 @@ const MyListings = () => {
 
 	const editListing = () => {
 		Axios.post("http://localhost:3001/UpdateMyListings", {
-			volumeForSale,
+			amountForSale: volumeForSale,
 			aboveOrBelow,
-			percentageDifference,
-			primaryPaymentMethod,
-			secondaryPaymentMethod,
+			percentChange: percentageDifference,
+			paymentMethod1: primaryPaymentMethod,
+			paymentMethod2: secondaryPaymentMethod,
 			userID,
 			saleID,
 		  }).then((response) => {
-			//Handle response here any errors etc
+				if (response.status === 200){
+					setConfirmationMessage(response.data.message);
+					setModalMode('confirmation');
+				} else {
+					setModalMode('error');
+					setErrorMessage(response.data.message);
+				}
 		})
 	};
 
@@ -119,23 +132,50 @@ const MyListings = () => {
 		Axios.post("http://localhost:3001/DeleteMyListing", {
 			saleID,
 		  }).then((response) => {
-			//Handle response here any errors etc
+			  if (response.status === 200){
+					setConfirmationMessage(response.data.message);
+					setDeleteModalMode('confirmation');
+			  } else {
+					setDeleteModalMode('error');
+				 	setErrorMessage(response.data.message);
+			  }
 		})
 	};
+
+	const confirmDeletion = () => {
+		openDeleteModal(false);
+		setDeleteModalMode('initial');
+		window.location.reload(true);
+	}
+
+	const confirmEditing = () => {
+		openEditModal(false);
+		setModalMode('initial');
+		window.location.reload(true);
+	}
 
 	useEffect(() => {
 		getUserListings();
 		getCurrency();
 	}, []);
 
+	const navigate = useNavigate();
+
   	return (
 		<PageBody className="d-flex align-items-start">
 			<div className="container d-flex justify-content-center py-5 flex-column">
+			{userListings.length === 0 && (
+				<div className="d-flex align-items-center justify-content-center flex-column">
+					<MissingIcon className="material-icons mb-3">manage_search</MissingIcon>
+					<Heading bold size="24px" className="mb-4">No Listings Found</Heading>
+					<PrimaryButton text="Create Listing" onClick={ () => navigate('/Sell') } />
+				</div>
+			)}
 			{userListings.map((val) => (
 				<Card className="p-4 mb-3" color="grey">
 					<div className="row">
 						<div className="col-3 d-flex align-items-center">
-							<i className="material-icons">person</i>
+							<i className="material-icons me-2">person</i>
 							<Heading size="24px" bold className="mb-0">
 								{val.userName}
 							</Heading>
@@ -303,7 +343,7 @@ const MyListings = () => {
 						<PrimaryButton
 							text="OK"
 							className="w-100"
-							onClick={ null }
+							onClick={ confirmEditing }
 						/>
 					</ModalBody>
 				)}
@@ -329,16 +369,48 @@ const MyListings = () => {
 				toggle={openDeleteModal}
 			>
 				<ModalHeader>Permenantly delete this listing?</ModalHeader>
-				<ModalBody>
-					<div className="row">
-						<div className="col-6">
-							<InlineButton className="cancel" onClick={openDeleteModal}>Cancel</InlineButton>
+				{deleteModalMode === 'initial' && (
+					<ModalBody>
+						<div className="row">
+							<div className="col-6">
+								<InlineButton className="cancel" onClick={openDeleteModal}>Cancel</InlineButton>
+							</div>
+							<div className="col-6">
+								<InlineButton className="delete" onClick={deleteListing}>Delete Listing</InlineButton>
+							</div>
 						</div>
-						<div className="col-6">
-							<InlineButton className="delete" onClick={deleteListing}>Delete Listing</InlineButton>
-						</div>
-					</div>
-				</ModalBody>
+					</ModalBody>
+				)}
+				{deleteModalMode === 'error' && (
+					<ModalBody className="p-4">
+						<CodeSentMessage error className="d-flex mb-4 align-items-center flex-column">
+							<i className="material-icons me-2">cancel</i>
+							<Paragraph bold size="20px" className="mb-0">
+								{errorMessage}
+							</Paragraph>
+						</CodeSentMessage>
+						<PrimaryButton
+							text="OK"
+							className="w-100"
+							onClick={ null }
+						/>
+					</ModalBody>
+				)}
+				{deleteModalMode === 'confirmation' && (
+					<ModalBody className="p-4">
+						<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+							<i className="material-icons me-2">check_circle</i>
+							<Paragraph bold size="20px" className="mb-0">
+								{confirmationMessage}
+							</Paragraph>
+						</CodeSentMessage>
+						<PrimaryButton
+							text="OK"
+							className="w-100"
+							onClick={ confirmDeletion }
+						/>
+					</ModalBody>
+				)}
 			</StyledModal>
 			</div>
     	</PageBody>
