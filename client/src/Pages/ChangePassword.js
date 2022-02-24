@@ -8,6 +8,7 @@ import Card from "../Components/Card";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
 import VerifyBG from '../Images/verifybg.svg';
+import ErrorBG from '../Images/errorbg.svg';
 
 const GrabAttention = keyframes`
   0% { transform: scale(1); }
@@ -15,8 +16,8 @@ const GrabAttention = keyframes`
   100% { transform: scale(1); }
 `;
 
-export const CodeSentMessage = styled.div(({ theme }) => css`
-	background: url(${VerifyBG});
+export const CodeSentMessage = styled.div(({ theme, error }) => css`
+	background: url(${error ? ErrorBG : VerifyBG});
 	background-size: contain;
 	color: ${theme.colors.actual_white};
 	border: 2px solid transparent;

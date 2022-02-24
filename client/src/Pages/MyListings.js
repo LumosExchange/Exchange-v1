@@ -15,6 +15,7 @@ import StyledTable from "../Components/Tables";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { StyledModal } from "./Profile/PaymentMethods";
 import { InlineButton } from "../Components/Buttons";
+import { CodeSentMessage } from "./ChangePassword";
 
 const PaymentMethods = [
 	"Please Select",
@@ -32,6 +33,7 @@ const MyListings = () => {
 	const [userListings, setUserListings] = useState([]);
 	const [modal, setModal] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
+	const [modalMode, setModalMode] = useState('initial');
 
 	// Editing Listings
 	const [primaryPaymentMethod, setPrimaryPaymentMethod] = useState('');
@@ -49,6 +51,8 @@ const MyListings = () => {
 	// Delete Listings
 	const [saleID, setSaleId] = useState('');
 	const [userID, setUserId] = useState('');
+	const [confirmationMessage, setConfirmationMessage] = useState('');
+	const [errorMessage, setErrorMessage] = useState('');
 
 	const getUserListings = () => {
 		Axios.get("http://localhost:3001/getListings").then((response) => {
@@ -138,21 +142,27 @@ const MyListings = () => {
 						</div>
 						<div className="col-6 d-flex align-items-center">
 							<i className="material-icons me-2">place</i>
-							{val.Town}, {val.Country}
+							<Paragraph size="20px" className="mb-0">{val.Town}, {val.Country}</Paragraph>
 						</div>
 						<div className="col-3 d-flex flex-column align-items-end">
 							<Heading size="24px" bold color="primary_cta" className="mb-0">
 								{currencySymbol}{val.aboveOrBelow === 'above' && ((solgbp / 100) * (100 + val.percentChange)).toFixed(2)}
 								{val.aboveOrBelow === 'below' && ((solgbp / 100) * (100 - val.percentChange)).toFixed(2)}
 							</Heading>
-							<Paragraph className="mb-0">{val.amountForSale} for sale</Paragraph>
-						</div>
-						<div className="col-3 d-flex align-items-center">{val.tradeHistory} Trades</div>
-						<div className="col-3 d-flex align-items-center">
-							<i className="material-icons me-2">account_balance_wallet</i>
-							{val.paymentMethod1}{' & '}{val.paymentMethod2}
+							<Paragraph size="16px" className="mb-0">{val.amountForSale} for sale</Paragraph>
 						</div>
 						<div className="col-3 d-flex align-items-center">
+							<Paragraph size="18px" className="mb-0">
+								{val.tradeHistory} Trades
+							</Paragraph>
+						</div>
+						<div className="col-3 d-flex align-items-center">
+							<i className="material-icons me-2 align-self-start">account_balance_wallet</i>
+							<Paragraph size="18px" className="mb-0">
+								{val.paymentMethod1}{' & '}{val.paymentMethod2}
+							</Paragraph>
+						</div>
+						<div className="col-3 d-flex align-items-center justify-content-end">
 							<i className="material-icons me-2">vertical_align_center</i>
 							<Paragraph size="18px" className="mb-0">
 								{val.percentChange}%
@@ -178,108 +188,140 @@ const MyListings = () => {
 				<ModalHeader>
 					Edit Listing
 				</ModalHeader>
-				<ModalBody>
-					<div className="col-12 mb-4">
-						<StyledLabel
-							padding="0 0 10px 0"
-							bold
-							htmlFor="primaryPayment"
-						>
-							Primary Payment Method
-						</StyledLabel>
-						<StyledDropdown
-							type="text"
-							id="primaryPayment"
-							value={primaryPaymentMethod}
-							name="primaryPayment"
-							onChange={(e) => {
-								setPrimaryPaymentMethod(e.target.value);
-							}}
-							className="w-100"
-						>
-							{PaymentMethods.map((data) => (
-								<option value={data}>{data}</option>
-							))}
-						</StyledDropdown>
-					</div>
-					<div className="col-12 mb-4">
-						<StyledLabel
-							padding="0 0 10px 0"
-							bold
-							htmlFor="secondaryPayment"
-						>
-							Secondary Payment Method
-						</StyledLabel>
-						<StyledDropdown
-							id="secondaryPayment"
-							value={secondaryPaymentMethod}
-							name="secondaryPayment"
-							onChange={(e) => {
-								setSecondaryPaymentMethod(e.target.value);
-							}}
-							className="w-100"
-						>
-							{PaymentMethods.map((data) => (
-								<option value={data}>{data}</option>
-							))}
-						</StyledDropdown>
-					</div>
-					<div className="col-12">
-						<StyledLabel padding="0 0 10px 0" htmlFor="percentageDifference" bold>Sell above or below market</StyledLabel>
-					</div>
-					<div className="col-12 mb-4 d-flex">
-						<div className="col-2">
+				{modalMode === 'initial' && (
+					<ModalBody>
+						<div className="col-12 mb-4">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+								htmlFor="primaryPayment"
+							>
+								Primary Payment Method
+							</StyledLabel>
+							<StyledDropdown
+								type="text"
+								id="primaryPayment"
+								value={primaryPaymentMethod}
+								name="primaryPayment"
+								onChange={(e) => {
+									setPrimaryPaymentMethod(e.target.value);
+								}}
+								className="w-100"
+							>
+								{PaymentMethods.map((data) => (
+									<option value={data}>{data}</option>
+								))}
+							</StyledDropdown>
+						</div>
+						<div className="col-12 mb-4">
+							<StyledLabel
+								padding="0 0 10px 0"
+								bold
+								htmlFor="secondaryPayment"
+							>
+								Secondary Payment Method
+							</StyledLabel>
+							<StyledDropdown
+								id="secondaryPayment"
+								value={secondaryPaymentMethod}
+								name="secondaryPayment"
+								onChange={(e) => {
+									setSecondaryPaymentMethod(e.target.value);
+								}}
+								className="w-100"
+							>
+								{PaymentMethods.map((data) => (
+									<option value={data}>{data}</option>
+								))}
+							</StyledDropdown>
+						</div>
+						<div className="col-12">
+							<StyledLabel padding="0 0 10px 0" htmlFor="percentageDifference" bold>Sell above or below market</StyledLabel>
+						</div>
+						<div className="col-12 mb-4 d-flex">
+							<div className="col-2">
+								<FormInput
+									type="text"
+									id="percentageDifference"
+									name="percentageDifference"
+									value={percentageDifference}
+									onChange={(e) => {
+										setPercentageDifference(e.target.value);
+									}}
+									className="w-100"
+								/>
+							</div>
+							<div className="col-1 d-flex align-items-center justify-content-center">
+								<Paragraph bold className="mb-0" size="24px">%</Paragraph>
+							</div>
+							<div className="col-9">
+								<StyledDropdown
+									autofocus="true"
+									type="aboveOrBelow"
+									placeholder="aboveOrBelow"
+									value={aboveOrBelow}
+									name="aboveOrBelow"
+									id="aboveOrBelow"
+									color="btn"
+									onChange={(e) => {
+										setAboveOrBelow(e.target.value);
+									}}
+									className="w-100"
+									required
+								>
+									<option value="below">Below</option>
+									<option value="above">Above</option>
+								</StyledDropdown>
+							</div>
+						</div>
+						<div className="col-12 mb-4">
+							<StyledLabel padding="0 0 10px 0" htmlFor="volumeForSale" bold>Amount for Sale</StyledLabel>
 							<FormInput
 								type="text"
-								id="percentageDifference"
-								name="percentageDifference"
-								value={percentageDifference}
+								id="volumeForSale"
+								name="volumeForSale"
+								value={volumeForSale}
 								onChange={(e) => {
-									setPercentageDifference(e.target.value);
+									setVolumeForSale(e.target.value);
 								}}
 								className="w-100"
 							/>
 						</div>
-						<div className="col-1 d-flex align-items-center justify-content-center">
-							<Paragraph bold className="mb-0" size="24px">%</Paragraph>
+						<div className="col-12 mb-4">
+							<PrimaryButton text="Save" className="w-100" onClick={editListing} />
 						</div>
-						<div className="col-9">
-							<StyledDropdown
-								autofocus="true"
-								type="aboveOrBelow"
-								placeholder="aboveOrBelow"
-								value={aboveOrBelow}
-								name="aboveOrBelow"
-								id="aboveOrBelow"
-								color="btn"
-								onChange={(e) => {
-									setAboveOrBelow(e.target.value);
-								}}
-								className="w-100"
-								required
-							>
-								<option value="below">Below</option>
-								<option value="above">Above</option>
-							</StyledDropdown>
-						</div>
-					</div>
-					<div className="col-12 mb-4">
-						<StyledLabel padding="0 0 10px 0" htmlFor="volumeForSale" bold>Amount for Sale</StyledLabel>
-						<FormInput
-							type="text"
-							id="volumeForSale"
-							name="volumeForSale"
-							value={volumeForSale}
-							onChange={(e) => {
-								setVolumeForSale(e.target.value);
-							}}
+					</ModalBody>
+				)}
+				{modalMode === 'confirmation' && (
+					<ModalBody className="p-4">
+						<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+							<i className="material-icons me-2">check_circle</i>
+							<Paragraph bold size="20px" className="mb-0">
+								{confirmationMessage}
+							</Paragraph>
+						</CodeSentMessage>
+						<PrimaryButton
+							text="OK"
 							className="w-100"
+							onClick={ null }
 						/>
-					</div>
-					<div className="col-12 mb-4">
-						<PrimaryButton text="Save" className="w-100" onClick={editListing} />
-					</div>
-				</ModalBody>
+					</ModalBody>
+				)}
+				{modalMode === 'error' && (
+					<ModalBody className="p-4">
+						<CodeSentMessage error className="d-flex mb-4 align-items-center flex-column">
+							<i className="material-icons me-2">cancel</i>
+							<Paragraph bold size="20px" className="mb-0">
+								{errorMessage}
+							</Paragraph>
+						</CodeSentMessage>
+						<PrimaryButton
+							text="OK"
+							className="w-100"
+							onClick={ null }
+						/>
+					</ModalBody>
+				)}
 			</StyledModal>
 			<StyledModal
 				centered
