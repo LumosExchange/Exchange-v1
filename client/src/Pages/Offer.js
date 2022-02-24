@@ -92,6 +92,7 @@ const Offer = () => {
 			setConversionMode('FIATtoSOL');
 		}
 	}
+	
 	const openTrade = () => {
 		Axios.post("http://localhost:3001/OpenTrade", {
 			saleID: val.saleID,
@@ -104,7 +105,7 @@ const Offer = () => {
 			message: offerMessage,
 		  }).then((response) => {
 			//Handle response here any errors etc
-		  })};
+	})};
 
 	useEffect(() => {
 		getCurrentSolPrice();

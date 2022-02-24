@@ -41,10 +41,14 @@ const MyListings = () => {
 	const [volumeForSale, setVolumeForSale] = useState('');
 
 	// Currency
-	const [selectedCurrency, selectCurrency] = useState();
-	const [solgbp, setSolGbp] = useState();
-	const [solusd, setSolUsd] = useState();
-	const [currencySymbol, setCurrencySymbol] = useState();
+	const [selectedCurrency, selectCurrency] = useState('');
+	const [solgbp, setSolGbp] = useState('');
+	const [solusd, setSolUsd] = useState('');
+	const [currencySymbol, setCurrencySymbol] = useState('');
+
+	// Delete Listings
+	const [saleID, setSaleId] = useState('');
+	const [userID, setUserId] = useState('');
 
 	const getUserListings = () => {
 		Axios.get("http://localhost:3001/getListings").then((response) => {
@@ -82,12 +86,38 @@ const MyListings = () => {
 		setAboveOrBelow(val.aboveOrBelow);
 		setPercentageDifference(val.percentChange);
 		setVolumeForSale(val.amountForSale);
+		setSaleId(val.saleID);
+		setUserId(val.userID);
 		setModal(!modal);
 	}
 
 	const openDeleteModal = (val) => {
 		setDeleteModal(!deleteModal);
+		setSaleId(val.saleID);
+		setUserId(val.userID);
 	}
+
+	const editListing = () => {
+		Axios.post("http://localhost:3001/UpdateMyListings", {
+			volumeForSale,
+			aboveOrBelow,
+			percentageDifference,
+			primaryPaymentMethod,
+			secondaryPaymentMethod,
+			userID,
+			saleID,
+		  }).then((response) => {
+			//Handle response here any errors etc
+		})
+	};
+
+	const deleteListing = () => {
+		Axios.post("http://localhost:3001/DeleteMyListing", {
+			saleID,
+		  }).then((response) => {
+			//Handle response here any errors etc
+		})
+	};
 
 	useEffect(() => {
 		getUserListings();
@@ -247,7 +277,7 @@ const MyListings = () => {
 						/>
 					</div>
 					<div className="col-12 mb-4">
-						<PrimaryButton text="Save" className="w-100" />
+						<PrimaryButton text="Save" className="w-100" onClick={editListing} />
 					</div>
 				</ModalBody>
 			</StyledModal>
@@ -260,10 +290,10 @@ const MyListings = () => {
 				<ModalBody>
 					<div className="row">
 						<div className="col-6">
-							<InlineButton className="cancel">Cancel</InlineButton>
+							<InlineButton className="cancel" onClick={openDeleteModal}>Cancel</InlineButton>
 						</div>
 						<div className="col-6">
-							<InlineButton className="delete">Delete Listing</InlineButton>
+							<InlineButton className="delete" onClick={deleteListing}>Delete Listing</InlineButton>
 						</div>
 					</div>
 				</ModalBody>
