@@ -15,6 +15,8 @@ const SMTPPool = require("nodemailer/lib/smtp-pool");
 const crypto = require("crypto");
 const { Console } = require("console");
 const e = require("express");
+const { resolveNaptr } = require("dns");
+const { addAbortSignal } = require("stream");
 
 require("dotenv").config();
 
@@ -24,7 +26,11 @@ const saltRounds = 10;
 //needed to avoid cors errors
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000", "https://api.coingecko.com");
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "http://localhost:3000",
+    "https://api.coingecko.com"
+  );
   // Request methods you wish to allow
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -43,19 +49,21 @@ app.use(function (req, res, next) {
 });
 
 app.use(
-  cors({
-    origin: ["http:localhost:3000"],
-    methods: ["GET", "POST"],
-    credentials: true,
-    optionSuccessStatus: 200,
-  }
-,
-{
-  origin: ["https://api.coingecko.com"],
-  methods: ["GET", "POST"],
-  credentials: false,
-  optionSuccessStatus: 200,
-}));
+  cors(
+    {
+      origin: ["http:localhost:3000"],
+      methods: ["GET", "POST"],
+      credentials: true,
+      optionSuccessStatus: 200,
+    },
+    {
+      origin: ["https://api.coingecko.com"],
+      methods: ["GET", "POST"],
+      credentials: false,
+      optionSuccessStatus: 200,
+    }
+  )
+);
 
 //Initiate Imports
 app.use(express.json());
@@ -83,7 +91,7 @@ var secret = speakeasy.generateSecret({
 
 // Connection deatils for DB
 const db = mysql.createPool({
-  connectionLimit : 100, 
+  connectionLimit: 100,
   host: "remotemysql.com",
   user: "zEPptCpVyR",
   password: "qmZ0jhRFE5",
@@ -112,8 +120,8 @@ app.post("/register", (req, res) => {
       console.log(err);
     }
     db.query(
-      "INSERT INTO users (firstName, lastName, email, password, nationality, userName) VALUES (?,?,?,?,?,?)",
-      [firstName, lastName, email, hash, nationality, userName],
+      "INSERT INTO users (firstName, lastName, email, password, nationality, userName, registeredDate) VALUES (?,?,?,?,?,?,?)",
+      [firstName, lastName, email, hash, nationality, userName, date],
       (err, result) => {
         console.log(err);
       }
@@ -153,8 +161,6 @@ app.post("/register", (req, res) => {
         console.log(err);
       }
     );
-    
-
   });
 });
 
@@ -288,42 +294,38 @@ app.post("/sell", (req, res) => {
     [id],
     (err, result) => {
       console.log("result: ", result);
-       country = result[0].Country;
-       town = result[0].Town;
-      }
-      );
-  
-    db.query(
-      "SELECT saleID FROM TradeHistory WHERE (sellerID) = (?)"
-      [id],
-      (err, result) => {
-        tradeHistory = result.length;
-      }
-    );
-          
-          
-      db.query(
-        "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory) VALUES (?,?,?,?,?,?,?,?,?,?)",
-        [
-          id,
-          amountForSale,
-          aboveOrBelow,
-          change,
-          userName,
-          country,
-          town,
-          payment1,
-          payment2,
-          tradeHistory,
-        ],
-        (err, result) => {
-          console.log(err);
-          res.send(result);
-        }
-      );
-    });
-  
+      country = result[0].Country;
+      town = result[0].Town;
+    }
+  );
 
+  db.query(
+    "SELECT saleID FROM TradeHistory WHERE (sellerID) = (?)"[id],
+    (err, result) => {
+      tradeHistory = result.length;
+    }
+  );
+
+  db.query(
+    "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory) VALUES (?,?,?,?,?,?,?,?,?,?)",
+    [
+      id,
+      amountForSale,
+      aboveOrBelow,
+      change,
+      userName,
+      country,
+      town,
+      payment1,
+      payment2,
+      tradeHistory,
+    ],
+    (err, result) => {
+      console.log(err);
+      res.send(result);
+    }
+  );
+});
 
 //Get users open listings
 app.get("/getListings", (req, res) => {
@@ -342,8 +344,6 @@ app.get("/getAllListings", (req, res) => {
     console.log(err);
   });
 });
-
-
 
 //get userID name for feedback
 app.get("/getUserNameSeller", (req, res) => {
@@ -368,7 +368,6 @@ app.get("/getUserEmail", (req, res) => {
   const email = req.session.user[0].email;
   res.send(email);
 });
-
 
 app.get("/getUserSettings", (req, res) => {
   const user = req.session.user[0].userID;
@@ -661,7 +660,6 @@ app.post("/VerifyEmail2FA", (req, res) => {
   //once verified delete 2fa from db
 });
 
-
 //UpgradeSilver
 app.post("/UpgradeSilver", (req, res) => {
   const user = req.session.user[0].userID;
@@ -675,11 +673,11 @@ app.post("/UpgradeSilver", (req, res) => {
     "UPDATE UpgradeTiers SET DateOfBirth = ?, PhoneNumber = ?, TaxCode = ?, CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?",
     [DateOfBirth, Phone, Tax, CountryOfResidence, Tax, date, user],
     (err, result) => {
-      if(err) {
+      if (err) {
         res.send(err);
       } else {
         res.send({
-          message: "Succesfully Upgraded to silver account"
+          message: "Succesfully Upgraded to silver account",
         });
       }
     }
@@ -691,12 +689,10 @@ app.post("/UpgradeSilver", (req, res) => {
     (err, result) => {
       if (err) {
         res.send(err);
-      }
-      else {
-        
+      } else {
       }
     }
-  )
+  );
 });
 
 //UpgradeGold
@@ -712,14 +708,23 @@ app.post("/UpgradeGold", (req, res) => {
 
   db.query(
     "UPDATE upgradeTiers SET EmployerName = ?, EmployerAddress = ?, Occupation = ?, ProofOfEmployment = ?, Income = ?, AdditionalIncome =?, DateSubmitted = ? WHERE userID = ?",
-    [EmployerName, EmployerAddress, Occupation, proofEmployment, Income, addIncome, date, user],
+    [
+      EmployerName,
+      EmployerAddress,
+      Occupation,
+      proofEmployment,
+      Income,
+      addIncome,
+      date,
+      user,
+    ],
     (err, result) => {
       if (err) {
         res.send(err);
       } else {
         res.send({
-          message: "Account tier now Gold"
-        })
+          message: "Account tier now Gold",
+        });
       }
     }
   );
@@ -731,13 +736,10 @@ app.post("/UpgradeGold", (req, res) => {
     (err, result) => {
       if (err) {
         res.send(err);
-      }
-      else {
-        
+      } else {
       }
     }
-  )
-
+  );
 });
 
 //UpgradeTeam
@@ -1081,7 +1083,7 @@ app.post("/RegisterPaypal", (req, res) => {
   db.query(
     "INSERT INTO paypalAccounts (userID, paypalEmail) VALUES (?,?)",
     [user, paypalEmail],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         console.log("errors: ", err);
         res.send(err);
@@ -1131,8 +1133,8 @@ app.post("/getUkBankDetails", (req, res) => {
     "SELECT accountNumber, sortCode FROM UKBankAccounts WHERE (userID) = (?)",
     [user],
     (err, result) => {
-      console.log(err, 'error in getUKbankDetails');
-      if (result.length > 0){
+      console.log(err, "error in getUKbankDetails");
+      if (result.length > 0) {
         res.send({
           type: "ukbank",
           name: "UK Bank Account",
@@ -1149,39 +1151,39 @@ app.post("/getUkBankDetails", (req, res) => {
 });
 
 //get user EU Bank details for profile
-app.post("/getEUBankDetails", (req,res) => {
-    const user = req.session.user[0].userID;
-    db.query(
-      "SELECT BIC, IBAN, bankName FROM EUBankAccounts WHERE (userID) = (?)",
-      [user],
-      (err, result) => {
-        console.log(err, 'error in getUKbankDetails');
-        if (result.length > 0){
-          res.send({
-            type: "eubank",
-            name: "EU Bank Account",
-            bankName: result[0].bankName,
-            BIC: result[0].BIC,
-            IBAN: result[0].IBAN,
-          });
-        } else {
-          res.send({
-            status: "none-added",
-          });
-        }
+app.post("/getEUBankDetails", (req, res) => {
+  const user = req.session.user[0].userID;
+  db.query(
+    "SELECT BIC, IBAN, bankName FROM EUBankAccounts WHERE (userID) = (?)",
+    [user],
+    (err, result) => {
+      console.log(err, "error in getUKbankDetails");
+      if (result.length > 0) {
+        res.send({
+          type: "eubank",
+          name: "EU Bank Account",
+          bankName: result[0].bankName,
+          BIC: result[0].BIC,
+          IBAN: result[0].IBAN,
+        });
+      } else {
+        res.send({
+          status: "none-added",
+        });
       }
-    )
+    }
+  );
 });
 
 //get international bank details for profile FINISH THIS
-app.post("/getInterBankDetails", (req,res) => {
+app.post("/getInterBankDetails", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
     "SELECT bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE (userID) = (?)",
     [user],
     (err, result) => {
-      console.log(err, 'error in getIntbankDetails');
-      if (result.length > 0){
+      console.log(err, "error in getIntbankDetails");
+      if (result.length > 0) {
         res.send({
           type: "internationalBank",
           name: "International Bank",
@@ -1205,14 +1207,14 @@ app.post("/getInterBankDetails", (req,res) => {
   );
 });
 
-app.post("/getPaypalDetails", (req,res) => {
+app.post("/getPaypalDetails", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
     "SELECT paypalEmail FROM paypalAccounts WHERE (userID) = (?)",
     [user],
     (err, result) => {
-      console.log(err, 'error in getUKbankDetails');
-      if (result.length > 0){
+      console.log(err, "error in getUKbankDetails");
+      if (result.length > 0) {
         res.send({
           type: "paypal",
           name: "PayPal",
@@ -1228,14 +1230,14 @@ app.post("/getPaypalDetails", (req,res) => {
 });
 
 //Get Skrill details for profile
-app.post("/getSkrillDetails", (req,res) => {
+app.post("/getSkrillDetails", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
     "SELECT skrillEmail FROM skrillAccounts WHERE (userID) = (?)",
     [user],
     (err, result) => {
-      console.log(err, 'error in getUKbankDetails');
-      if (result.length > 0){
+      console.log(err, "error in getUKbankDetails");
+      if (result.length > 0) {
         res.send({
           type: "skrill",
           name: "Skrill",
@@ -1412,13 +1414,13 @@ app.post("/DeleteUKBank", (req, res) => {
   db.query(
     "DELETE FROM UKBankAccounts WHERE userId = 1",
     [user],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('error : ', err)
+        console.log("error : ", err);
       } else {
         res.send({
-          message: "UK account Deleted!"
+          message: "UK account Deleted!",
         });
       }
     }
@@ -1431,18 +1433,18 @@ app.post("/DeleteEUBank", (req, res) => {
   db.query(
     "DELETE FROM EUBankAccounts WHERE userId = 1",
     [user],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('error : ', err)
+        console.log("error : ", err);
       } else {
         res.send({
-          message: "EU account Deleted!"
+          message: "EU account Deleted!",
         });
       }
     }
-    );
-  });
+  );
+});
 
 //Delete Inter Bank
 app.post("/DeleteInterBank", (req, res) => {
@@ -1469,18 +1471,18 @@ app.post("/DeletePaypalBank", (req, res) => {
   db.query(
     "DELETE FROM paypalAccounts WHERE userId = 1",
     [user],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('error : ', err)
+        console.log("error : ", err);
       } else {
         res.send({
-          message: "Paypal account Deleted!"
+          message: "Paypal account Deleted!",
         });
       }
     }
-    );
-  });
+  );
+});
 
 //Delete Skrill
 app.post("/DeleteSkrillBank", (req, res) => {
@@ -1488,77 +1490,174 @@ app.post("/DeleteSkrillBank", (req, res) => {
   db.query(
     "DELETE FROM skrillAccounts WHERE userId = 1",
     [user],
-    (err, result) =>{
+    (err, result) => {
       if (err) {
         res.send(err);
-        console.log('error : ', err)
+        console.log("error : ", err);
       } else {
         res.send({
-          message: "Skrill account Deleted!"
+          message: "Skrill account Deleted!",
         });
       }
     }
-    );
-  });
+  );
+});
 
-  app.get("getSellersTopTradeHistory", (req, res) => {
-    const param = req.body.sellerID
-    db.query(
-      "SELECT TOP (3) FROM feedback WHERE sellerUserID = ?",
-      [param],
-      (err, result) => {
-        if (err) {
-          res.send(err);
-        } else {
-          res.send({result});
-        }
+app.get("getSellersTopTradeHistory", (req, res) => {
+  const param = req.body.sellerID;
+  db.query(
+    "SELECT TOP (3) FROM feedback WHERE sellerUserID = ?",
+    [param],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send({ result });
       }
-    )
-  });
+    }
+  );
+});
 
-  app.get("getSellerNoTrades", (req, res) => {
-    const param = req.body.sellerID;
-    db.query(
-      "SELECT * FROM saleHistory WHERE userID =? ",
-      [param],
-      (err, result) => {
-        if (err) {
-          res.send(err);
-        } else {
-          res.send(result.length);
-        }
+app.get("getSellerNoTrades", (req, res) => {
+  const param = req.body.sellerID;
+  db.query(
+    "SELECT * FROM saleHistory WHERE userID =? ",
+    [param],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(result.length);
       }
-    )
-  });
+    }
+  );
+});
 
-  app.post("OpenTrade", (req, res) => {
-    let saleID = req.body.saleID;
-    let sellerID = req.body.sellerID;
-    let buyerID = req.session.user[0].userID;
-    var date = new Date().toLocaleString();
-    let paymentMethod = req.body.paymentMethod;
-    let userSolPrice = req.body.userSolPrice;
-    let amountOfSol = req.body.amountOfSolBought;
-    let fiatAmount = req.body.amountOfFiat;
-    let paymentCurrency = req.body.paymentCurrency;
-    let message = req.body.buyerMessage;
-    let reference = crypto.randomBytes(10).toString('hex');
+app.post("OpenTrade", (req, res) => {
+  let saleID = req.body.saleID;
+  let sellerID = req.body.sellerID;
+  let buyerID = req.session.user[0].userID;
+  var date = new Date().toLocaleString();
+  let paymentMethod = req.body.paymentMethod;
+  let userSolPrice = req.body.userSolPrice;
+  let amountOfSol = req.body.amountOfSolBought;
+  let fiatAmount = req.body.amountOfFiat;
+  let paymentCurrency = req.body.paymentCurrency;
+  let message = req.body.buyerMessage;
+  let reference = crypto.randomBytes(10).toString("hex");
 
-    db.query(
-      "INSERT INTO LiveTrades (saleID, sellerID, buyerID, Date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, Message, Reference) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-      [saleID, sellerID, buyerID, date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, message, reference],
-      (err, result) => {
-        if(err) {
-          res.send(err);
-        } else {
-          res.send({
-            message: "Succesfully opened the trade"
-          })
-        };
+  db.query(
+    "INSERT INTO LiveTrades (saleID, sellerID, buyerID, Date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, Message, Reference) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+    [
+      saleID,
+      sellerID,
+      buyerID,
+      date,
+      paymentMethod,
+      userSolPrice,
+      amountOfSol,
+      fiatAmount,
+      paymentCurrency,
+      message,
+      reference,
+    ],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send({
+          message: "Succesfully opened the trade",
+        });
       }
-    );
-  });
+    }
+  );
+});
 
+
+//Update functionality for updating the user lisitngs
+app.post("/UpdateMyListings", (req, res) => {
+  const userID = req.session.user[0].userID;
+  const saleID = req.body.saleID;
+  const amountForSale = req.body.amountForSale;
+  const aboveOrBelow = req.body.aboveOrBelow;
+  const percentChange = req.body.percentChange;
+  const paymentMethod1 = req.body.paymentMethod1;
+  const paymentMethod2 = req.body.paymentMethod2;
+
+  db.query(
+    "UPDATE sale SET amountForSale = ?, aboveOrBelow = ?, percentChange =? , paymentMethod1 = ?, paymentMethod2 = ?  Where userID = ? AND saleID =?",
+    [
+      amountForSale,
+      aboveOrBelow,
+      percentChange,
+      paymentMethod1,
+      paymentMethod2,
+      userID,
+      saleID,
+    ],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send({
+          message: "Lisiting succefully updated!",
+        });
+      }
+    }
+  );
+});
+
+app.post("/DeleteMyLisiting", (req, res) => {
+  const saleID = req.body.saleID;
+  db.query(
+    "DELETE FROM sale Where saleID = ?",
+    [saleID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send({
+          message: "Listing succesfully deleted!",
+        });
+      }
+    }
+  );
+});
+
+//Functionality to get information baout the seller
+app.get("/GetSellerInfo", (req, res) => {
+  const sellerID = req.body.sellerID;
+  let registeredDate;
+  let feedbackScore;
+  let escrowReleaseTime;
+  let length;
+
+  db.query(
+    "SELECT registerdDate FROM users WHERE (userID) = (?)",
+    [sellerID],
+    (err, result) => {
+      registeredDate = result;
+    })
+
+  db.query(
+    "SELECT feedbackScore, EscrowRelseaseTime from feedback WHERE (sellerUserID) = (?)",
+    [sellerID],
+    (err, result) => {
+      // Need to calulate median escrow time and average feedback score
+
+      for(var i = 0; i < result.length; i++) {
+        escrowReleaseTime =+ result[i];
+      }
+      var avg = escrowReleaseTime / result.length
+      console.log('AVG' ,avg);
+
+    }
+  )
+
+
+
+console.log('Date: ', registeredDate);
+});
 
 app.listen(3001, () => {
   console.log("running on port 3001");
