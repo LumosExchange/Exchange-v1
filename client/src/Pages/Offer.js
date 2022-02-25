@@ -153,7 +153,7 @@ const Offer = () => {
 											{solGbp}
 										</Heading>
 									</div>
-									<div className="col-3">110 Trades</div>
+									<div className="col-3">{val.tradeHistory}</div>
 									<div className="col-3">{val.paymentMethod1}{' & '}{val.paymentMethod2}</div>
 									<div className="col-3">
 										<Paragraph size="18px">
@@ -294,8 +294,8 @@ const Offer = () => {
 						<div className="col-6">
 							<Paragraph bold>About the Trader</Paragraph>
 							<Paragraph color="primary_cta" size="20px">{val.userName}</Paragraph>
-							<Paragraph>Feedback score: {feedbackScore}</Paragraph>
-							<Paragraph>Registered: {registeredDate}</Paragraph>
+							<Paragraph>Feedback score: {feedbackScore} {" / 3"}</Paragraph>
+							<Paragraph>Registered: {new Date(registeredDate).toDateString}</Paragraph>
 							<Paragraph>Total Trades: {val.tradeHistory}</Paragraph>
 							<Paragraph>Median Escrow Release Time: {escrowReleaseTime}</Paragraph>
 							
