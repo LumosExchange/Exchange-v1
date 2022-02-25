@@ -100,7 +100,6 @@ const Offer = () => {
 	}
 
 	const getSellerInfo = () => {
-		console.log('seller id: ', val.sellerID);
 		Axios.post("http://localhost:3001/GetSellerInfo", {
 			sellerID: val.userID,
 			
