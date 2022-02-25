@@ -91,6 +91,7 @@ export const convertAssetToSvg = (asset) => {
 }
 
 const PaymentMethods = [
+	"Please Select",
 	"UK Bank Transfer",
 	"EU Bank Transfer",
 	"International Wire Transfer",
@@ -196,7 +197,7 @@ const Sell = () => {
 									<StyledLabel padding="0 0 10px 0" htmlFor="amount" bold>Amount of SOL for sale</StyledLabel>
 									<FormInput
 										type="text"
-										placeholder="amount"
+										placeholder="0 SOL"
 										name="amount"
 										color="btn"
 										id="amount"
@@ -222,6 +223,7 @@ const Sell = () => {
 										className="w-100"
 										required
 									>
+										<option value="Please Select">Please Select</option>
 										<option value="below">Below</option>
 										<option value="above">Above</option>
 									</StyledDropdown>
@@ -230,7 +232,7 @@ const Sell = () => {
 									<StyledLabel padding="0 0 10px 0" htmlFor="change" bold>Percentage Market</StyledLabel>
 									<FormInput
 										type="change"
-										placeholder="change"
+										placeholder="2.5%"
 										name="change"
 										color="btn"
 										id="change"

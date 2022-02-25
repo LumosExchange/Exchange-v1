@@ -17,6 +17,7 @@ import { StyledModal } from "./Profile/PaymentMethods";
 import { InlineButton } from "../Components/Buttons";
 import { CodeSentMessage } from "./ChangePassword";
 import { useNavigate } from "react-router";
+import TradeCard from "../Components/TradeCard";
 
 const PaymentMethods = [
 	"Please Select",
@@ -172,53 +173,16 @@ const MyListings = () => {
 				</div>
 			)}
 			{userListings.map((val) => (
-				<Card className="p-4 mb-3" color="grey">
-					<div className="row">
-						<div className="col-3 d-flex align-items-center">
-							<i className="material-icons me-2">person</i>
-							<Heading size="24px" bold className="mb-0">
-								{val.userName}
-							</Heading>
-						</div>
-						<div className="col-6 d-flex align-items-center">
-							<i className="material-icons me-2">place</i>
-							<Paragraph size="20px" className="mb-0">{val.Town}, {val.Country}</Paragraph>
-						</div>
-						<div className="col-3 d-flex flex-column align-items-end">
-							<Heading size="24px" bold color="primary_cta" className="mb-0">
-								{currencySymbol}{val.aboveOrBelow === 'above' && ((solgbp / 100) * (100 + val.percentChange)).toFixed(2)}
-								{val.aboveOrBelow === 'below' && ((solgbp / 100) * (100 - val.percentChange)).toFixed(2)}
-							</Heading>
-							<Paragraph size="16px" className="mb-0">{val.amountForSale} for sale</Paragraph>
-						</div>
-						<div className="col-3 d-flex align-items-center">
-							<Paragraph size="18px" className="mb-0">
-								{val.tradeHistory} Trades
-							</Paragraph>
-						</div>
-						<div className="col-3 d-flex align-items-center">
-							<i className="material-icons me-2 align-self-start">account_balance_wallet</i>
-							<Paragraph size="18px" className="mb-0">
-								{val.paymentMethod1}{' & '}{val.paymentMethod2}
-							</Paragraph>
-						</div>
-						<div className="col-3 d-flex align-items-center justify-content-end">
-							<i className="material-icons me-2">vertical_align_center</i>
-							<Paragraph size="18px" className="mb-0">
-								{val.percentChange}%
-								{' '}{val.aboveOrBelow}{' '}market
-							</Paragraph>
-						</div>
-						<div className="col-3 d-flex align-items-end justify-content-end">
-							<CardActionButton onClick={ () => openEditModal(val) } title="Edit">
-								<i className="material-icons edit">edit</i>
-							</CardActionButton>
-							<CardActionButton onClick={ () => openDeleteModal(val) } title="Delete">
-								<i className="material-icons delete">clear</i>
-							</CardActionButton>
-						</div>
+				<TradeCard val={val} withoutButton>
+					<div className="col-3 d-flex align-items-end justify-content-end">
+						<CardActionButton onClick={ () => openEditModal(val) } title="Edit">
+							<i className="material-icons edit">edit</i>
+						</CardActionButton>
+						<CardActionButton onClick={ () => openDeleteModal(val) } title="Delete">
+							<i className="material-icons delete">clear</i>
+						</CardActionButton>
 					</div>
-				</Card>
+				</TradeCard>
 			))}
 			<StyledModal
 				centered

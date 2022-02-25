@@ -295,8 +295,7 @@ app.post("/sell", (req, res) => {
   );
 
   db.query(
-    "SELECT saleID FROM TradeHistory WHERE (sellerID) = (?)",
-    [id],
+    "SELECT saleID FROM TradeHistory WHERE (sellerID) = (?)", [id],
     (err, result) => {
       tradeHistory = result.length;
     }
@@ -1614,7 +1613,7 @@ app.post("/UpdateMyListings", (req, res) => {
   );
 });
 
-app.post("/DeleteMyLisiting", (req, res) => {
+app.post("/DeleteMyListing", (req, res) => {
   const saleID = req.body.saleID;
   db.query("DELETE FROM sale Where saleID = ?", [saleID], (err, result) => {
     if (err) {
