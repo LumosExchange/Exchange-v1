@@ -134,8 +134,8 @@ app.post("/register", (req, res) => {
       }
     );
     db.query(
-      "INSERT INTO accountLevel, (accountLevel, dateUpgraded) VALUES (?,?)",
-      [accountLevel],
+      "INSERT INTO accountLevel (accountLevel, dateUpgraded) VALUES (?,?)",
+      [accountLevel, date],
       (err, result) => {
         console.log(err);
       }
@@ -150,13 +150,6 @@ app.post("/register", (req, res) => {
     db.query(
       "INSERT INTO userPaymentAccounts (EUBank, UKBank, InterBank, Paypal, Skrill) VALUES (?,?,?,?,?)",
       [0, 0, 0, 0, 0],
-      (err, result) => {
-        console.log(err);
-      }
-    );
-    db.query(
-      "INSERT INTO upgradeTiers (DateSubmitted) VALUES (?)",
-      [date],
       (err, result) => {
         console.log(err);
       }
@@ -285,22 +278,25 @@ app.post("/sell", (req, res) => {
   const payment1 = req.body.payment1;
   const payment2 = req.body.payment2;
 
-  let country;
-  let town;
-  let tradeHistory;
+  let country = " ";
+  let town = " ";
+
+  
+
 
   db.query(
     "SELECT Country, Town FROM userInformation WHERE (userID) = (?)",
     [id],
     (err, result) => {
-      console.log("result: ", result);
+      console.log("result: ", result[0].Country);
       country = result[0].Country;
       town = result[0].Town;
     }
   );
 
   db.query(
-    "SELECT saleID FROM TradeHistory WHERE (sellerID) = (?)"[id],
+    "SELECT saleID FROM TradeHistory WHERE (sellerID) = (?)",
+    [id],
     (err, result) => {
       tradeHistory = result.length;
     }
@@ -1632,36 +1628,55 @@ app.post("/DeleteMyLisiting", (req, res) => {
 });
 
 //Functionality to get information baout the seller
-app.get("/GetSellerInfo", (req, res) => {
+app.post("/GetSellerInfo", (req, res) => {
   const sellerID = req.body.sellerID;
-  let registeredDate;
-  let feedbackScore;
-  let escrowReleaseTime;
-  let length;
+  let registeredDate = " ";
+  let feedbackScore = " ";
+  let escrowReleaseTime = " ";
+ 
 
   db.query(
-    "SELECT registerdDate FROM users WHERE (userID) = (?)",
+    "SELECT registeredDate FROM users WHERE (userID) = (?)",
     [sellerID],
     (err, result) => {
-      registeredDate = result;
+      registeredDate = result[0].registeredDate;
+  
     }
   );
 
   db.query(
-    "SELECT feedbackScore, EscrowRelseaseTime from feedback WHERE (sellerUserID) = (?)",
+    "SELECT AVG(feedbackScore) as feedbackScore from feedback WHERE (sellerUserID) = (?)",
     [sellerID],
-    (err, result) => {
-      // Need to calulate median escrow time and average feedback score
-
-      for (var i = 0; i < result.length; i++) {
-        escrowReleaseTime = +result[i];
-      }
-      var avg = escrowReleaseTime / result.length;
-      console.log("AVG", avg);
+    (err, results) => {
+      feedbackScore = results[0].feedbackScore;
+  
     }
   );
 
-  console.log("Date: ", registeredDate);
+  db.query( 
+    "SELECT AVG(EscrowReleaseTime) as escrowReleaseTime from feedback WHERE (sellerUserID) = (?)",
+    [sellerID],
+    (err, resultss) => {
+      escrowReleaseTime = resultss[0].escrowReleaseTime;
+     
+
+      res.send({
+        sellerID: sellerID,
+        registeredDate: registeredDate,
+        feedbackScore: feedbackScore,
+        escrowReleaseTime: escrowReleaseTime,
+      });
+
+    }
+  );
+
+
+ 
+
+  console.log("date: ", registeredDate);
+  console.log("score: ", feedbackScore);
+  console.log("escrow: ", escrowReleaseTime);
+
 });
 
 app.listen(3001, () => {

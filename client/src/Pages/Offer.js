@@ -55,6 +55,11 @@ const Offer = () => {
 	const [conversionMode, setConversionMode] = useState("FIATtoSOL");
 	const [paymentMethod, setPaymentMethod] = useState([]);
 
+	const [registeredDate, setRegisteredDate] = useState("");
+	const [feedbackScore, setFeedbackScore] = useState("");
+	const [escrowReleaseTime, setEscrowReleaseTime] = useState("");
+
+
 	const { state } = useLocation();
 	const { val } = state;
 
@@ -71,6 +76,7 @@ const Offer = () => {
 			}
 		}));
 	}
+	
 
 	const convertAmountToSOL = (amount) => {
 		const convertedAmount = amount / solGbp;
@@ -92,11 +98,23 @@ const Offer = () => {
 			setConversionMode('FIATtoSOL');
 		}
 	}
+
+	const getSellerInfo = () => {
+		Axios.post("http://localhost:3001/GetSellerInfo", {
+			sellerID: val.userID,
+			
+		}).then((response) => {
+			setRegisteredDate(response.data.registeredDate);
+			setFeedbackScore(response.data.feedbackScore);
+			setEscrowReleaseTime(response.data.escrowReleaseTime);
+		})
+
+	}
 	
 	const openTrade = () => {
 		Axios.post("http://localhost:3001/OpenTrade", {
 			saleID: val.saleID,
-			sellerID: val.sellerID,
+			sellerID: val.userID,
 			paymentMethod: paymentMethod,
 			userSolPrice: solGbp,
 			amountOfSol: offerAmountInSol,
@@ -109,6 +127,7 @@ const Offer = () => {
 
 	useEffect(() => {
 		getCurrentSolPrice();
+		getSellerInfo();
 	}, []);
 
 	const filteredPaymentMethods = ['Please Select', val.paymentMethod1, val.paymentMethod2];
@@ -275,9 +294,12 @@ const Offer = () => {
 						<div className="col-6">
 							<Paragraph bold>About the Trader</Paragraph>
 							<Paragraph color="primary_cta" size="20px">{val.userName}</Paragraph>
-							<Paragraph>Feedback score: 98%</Paragraph>
-							<Paragraph>Registered: Aug 2021</Paragraph>
+							<Paragraph>Feedback score: {feedbackScore}</Paragraph>
+							<Paragraph>Registered: {registeredDate}</Paragraph>
 							<Paragraph>Total Trades: {val.tradeHistory}</Paragraph>
+							<Paragraph>Median Escrow Release Time: {escrowReleaseTime}</Paragraph>
+							
+
 						</div>
 						<div className="col-6">
 							<Paragraph bold>Headline</Paragraph>
