@@ -10,6 +10,7 @@ import PrimaryButton from "../Components/Buttons";
 import { FormInput, StyledLabel } from "../Components/FormInputs";
 import { useNavigate, useLocation } from "react-router-dom";
 import IconSolana from '../Images/icon-circle-solana.svg';
+import TradeCard from "../Components/TradeCard";
 
 const SwitchButton = styled.button(({ theme }) => css`
 	width: 50px;
@@ -44,6 +45,23 @@ const ConversionArea = styled.div(({ theme }) => css`
 			height: 24px;
 		}
 	}
+`);
+
+const HorizontalDivider = styled.hr(({ theme }) => css`
+    :not([size]){
+        color: ${theme.colors.text_primary};
+        height: 1px;
+        opacity: 0.2;
+    }
+`);
+
+const VerticalDivider = styled.hr(({ theme }) => css`
+    :not([size]){
+        color: ${theme.colors.text_primary};
+        height: 100%;
+		width: 1px;
+        opacity: 0.2;
+    }
 `);
 
 const Offer = () => {
@@ -138,31 +156,8 @@ const Offer = () => {
 			<div className="container">
 				<div className="row pt-5">
 					<div className="col-12 mb-5 pb-5">
-						<Heading size="26px">Buy SOL from {val.userName} with {val.paymentMethod1} {val.paymentMethod2 && `or ${val.paymentMethod2}`}.</Heading>
-							<Card className="p-4 mb-3" color="grey">
-								<div className="row">
-									<div className="col-3">
-										<Heading size="24px" bold>{val.userName}</Heading>
-									</div>
-									<div className="col-6 d-flex align-items-center">
-										<i className="material-icons">place</i>
-										{val.Town}, {val.Country}
-									</div>
-									<div className="col-3">
-										<Heading size="24px" color="primary_cta" bold>
-											{solGbp}
-										</Heading>
-									</div>
-									<div className="col-3">{val.tradeHistory}</div>
-									<div className="col-3">{val.paymentMethod1}{' & '}{val.paymentMethod2}</div>
-									<div className="col-3">
-										<Paragraph size="18px">
-											{val.percentChange}%
-											{' '}{val.aboveOrBelow}{' '}market
-										</Paragraph>
-									</div>
-								</div>
-							</Card>
+						<Heading size="26px" className="mb-4">Buy SOL from {val.userName} with {val.paymentMethod1} {val.paymentMethod2 && `or ${val.paymentMethod2}`}.</Heading>
+						<TradeCard val={val} />
 					</div>
 					<div className="col-12 col-md-6 row">
 						<div className="col d-flex align-items-center" style={{ maxHeight: '200px' }}>
@@ -284,12 +279,16 @@ const Offer = () => {
 								}}
 							/>
 						</div>
-						</div>
 					</div>
-					<div className="col-12 col-md-6 row mt-4">
+					</div>
+					<div className="col-1 d-flex justify-content-center">
+						<VerticalDivider />
+					</div>
+					<div className="col-12 col-md-5 row mt-4">
 						<div className="col-12 text-center">
 							<Heading bold>1 SOL = {' '} {solGbp}</Heading>
-							<Paragraph size="18px">SOL/GBP rate is secured for 111 seconds.</Paragraph>
+							<Paragraph size="18px" className="pb-3">SOL/GBP rate is secured for 111 seconds.</Paragraph>
+							<HorizontalDivider />
 						</div>
 						<div className="col-6">
 							<Paragraph bold>About the Trader</Paragraph>
@@ -298,8 +297,6 @@ const Offer = () => {
 							<Paragraph>Registered: {new Date(registeredDate).toLocaleDateString()}</Paragraph>
 							<Paragraph>Total Trades: {val.tradeHistory}</Paragraph>
 							<Paragraph>Median Escrow Time: {(escrowReleaseTime / 60).toFixed(2)}{" Mins"}</Paragraph>
-							
-
 						</div>
 						<div className="col-6">
 							<Paragraph bold>Headline</Paragraph>
