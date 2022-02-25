@@ -172,18 +172,20 @@ const MyListings = () => {
 					<PrimaryButton text="Create Listing" onClick={ () => navigate('/Sell') } />
 				</div>
 			)}
-			{userListings.map((val) => (
-				<TradeCard val={val} withoutButton>
-					<div className="col-3 d-flex align-items-end justify-content-end">
-						<CardActionButton onClick={ () => openEditModal(val) } title="Edit">
-							<i className="material-icons edit">edit</i>
-						</CardActionButton>
-						<CardActionButton onClick={ () => openDeleteModal(val) } title="Delete">
-							<i className="material-icons delete">clear</i>
-						</CardActionButton>
-					</div>
-				</TradeCard>
-			))}
+			<div className="col-12 col-lg-6 col-xl-9">
+				{userListings.map((val) => (
+					<TradeCard val={val} withoutButton>
+						<div className="col-3 d-flex align-items-end justify-content-end">
+							<CardActionButton onClick={ () => openEditModal(val) } title="Edit">
+								<i className="material-icons edit">edit</i>
+							</CardActionButton>
+							<CardActionButton onClick={ () => openDeleteModal(val) } title="Delete">
+								<i className="material-icons delete">clear</i>
+							</CardActionButton>
+						</div>
+					</TradeCard>
+				))}
+			</div>
 			<StyledModal
 				centered
 				isOpen={modal}
