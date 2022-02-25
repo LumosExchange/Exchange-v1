@@ -295,7 +295,8 @@ app.post("/sell", (req, res) => {
   );
 
   db.query(
-    "SELECT saleID FROM TradeHistory WHERE (sellerID) = (?)", [id],
+    "SELECT saleID FROM TradeHistory WHERE (sellerID) = (?)",
+    [id],
     (err, result) => {
       tradeHistory = result.length;
     }
@@ -667,8 +668,9 @@ app.post("/UpgradeSilver", (req, res) => {
   const date = new Date();
 
   db.query(
-    "UPDATE UpgradeTiers SET BirthDayy = ?, BirthMonthh = ?, BirthYearr = ?, PhoneNumber = ?, TaxCode = ?, CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?",
+    "INSERT INTO UpgradeTiers SET userID = ?,BirthDayy = ?, BirthMonthh = ?, BirthYearr = ?, PhoneNumber = ?, TaxCode = ?, CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?",
     [
+      user,
       BirthDayy,
       BirthMonthh,
       BirthYearr,
@@ -1613,7 +1615,7 @@ app.post("/UpdateMyListings", (req, res) => {
   );
 });
 
-app.post("/DeleteMyListing", (req, res) => {
+app.post("/DeleteMyLisiting", (req, res) => {
   const saleID = req.body.saleID;
   db.query("DELETE FROM sale Where saleID = ?", [saleID], (err, result) => {
     if (err) {
@@ -1669,12 +1671,6 @@ app.post("/GetSellerInfo", (req, res) => {
     }
   );
 
-
- 
-
-  console.log("date: ", registeredDate);
-  console.log("score: ", feedbackScore);
-  console.log("escrow: ", escrowReleaseTime);
 
 });
 
