@@ -663,15 +663,27 @@ app.post("/VerifyEmail2FA", (req, res) => {
 //UpgradeSilver
 app.post("/UpgradeSilver", (req, res) => {
   const user = req.session.user[0].userID;
+  const BirthDayy = req.body.BirthDayy;
+  const BirthMonthh = req.body.BirthMonthh;
+  const BirthYearr = req.body.BirthYearr;
   const CountryOfResidence = req.body.CountryOfResidence;
-  const DateOfBirth = req.body.DateOfBirth;
   const Phone = req.body.Phone;
   const Tax = req.body.Tax;
   const date = new Date();
 
   db.query(
-    "UPDATE UpgradeTiers SET DateOfBirth = ?, PhoneNumber = ?, TaxCode = ?, CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?",
-    [DateOfBirth, Phone, Tax, CountryOfResidence, Tax, date, user],
+    "UPDATE UpgradeTiers SET BirthDayy = ?, BirthMonthh = ?, BirthYearr = ?, PhoneNumber = ?, TaxCode = ?, CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?",
+    [
+      BirthDayy,
+      BirthMonthh,
+      BirthYearr,
+      Phone,
+      Tax,
+      CountryOfResidence,
+      Tax,
+      date,
+      user,
+    ],
     (err, result) => {
       if (err) {
         res.send(err);
@@ -1573,7 +1585,6 @@ app.post("OpenTrade", (req, res) => {
   );
 });
 
-
 //Update functionality for updating the user lisitngs
 app.post("/UpdateMyListings", (req, res) => {
   const userID = req.session.user[0].userID;
@@ -1609,19 +1620,15 @@ app.post("/UpdateMyListings", (req, res) => {
 
 app.post("/DeleteMyLisiting", (req, res) => {
   const saleID = req.body.saleID;
-  db.query(
-    "DELETE FROM sale Where saleID = ?",
-    [saleID],
-    (err, result) => {
-      if (err) {
-        res.send(err);
-      } else {
-        res.send({
-          message: "Listing succesfully deleted!",
-        });
-      }
+  db.query("DELETE FROM sale Where saleID = ?", [saleID], (err, result) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send({
+        message: "Listing succesfully deleted!",
+      });
     }
-  );
+  });
 });
 
 //Functionality to get information baout the seller
@@ -1637,7 +1644,8 @@ app.get("/GetSellerInfo", (req, res) => {
     [sellerID],
     (err, result) => {
       registeredDate = result;
-    })
+    }
+  );
 
   db.query(
     "SELECT feedbackScore, EscrowRelseaseTime from feedback WHERE (sellerUserID) = (?)",
@@ -1645,18 +1653,15 @@ app.get("/GetSellerInfo", (req, res) => {
     (err, result) => {
       // Need to calulate median escrow time and average feedback score
 
-      for(var i = 0; i < result.length; i++) {
-        escrowReleaseTime =+ result[i];
+      for (var i = 0; i < result.length; i++) {
+        escrowReleaseTime = +result[i];
       }
-      var avg = escrowReleaseTime / result.length
-      console.log('AVG' ,avg);
-
+      var avg = escrowReleaseTime / result.length;
+      console.log("AVG", avg);
     }
-  )
+  );
 
-
-
-console.log('Date: ', registeredDate);
+  console.log("Date: ", registeredDate);
 });
 
 app.listen(3001, () => {
