@@ -130,7 +130,7 @@ const Sell = () => {
 					<div className="col-12 col-md-4">
 						<Card radius="10px" className="p-4">
 						<div className="d-flex">
-							<div className="col-md-6">
+							<div className="col-6">
 								<ToggleButton
 									onClick={() => switchMode()}
 									className="left w-100"
@@ -138,7 +138,7 @@ const Sell = () => {
 									Buy
 								</ToggleButton>
 							</div>
-							<div className="col-md-6">
+							<div className="col-6">
 								<ToggleButton
 									className="right w-100 selected"
 								>
@@ -148,7 +148,7 @@ const Sell = () => {
 						</div>
 							<div className="d-flex flex-wrap mt-3">
 								<div className="col-12">
-									<Heading size="16px">Crypto</Heading>
+									<Heading size="16px" bold>Crypto</Heading>
 								</div>
 								<div className="col-6 d-flex">
 									<QuadButton
@@ -189,7 +189,7 @@ const Sell = () => {
 							</div>
 						</Card>
 					</div>
-					<div className="col-12 col-md-8">
+					<div className="col-12 col-md-8 mt-4 mt-md-0">
 						<Heading size="24px">List {selectedCrypto} for Sale</Heading>
 						<Card radius="20px" className="p-4">
 							<div className="row">
@@ -280,7 +280,7 @@ const Sell = () => {
 										))}
 									</StyledDropdown>
 								</div>
-								<div className="col-12 col-md-6 d-flex align-items-end">
+								<div className="col-12 col-md-6 d-flex align-items-end mt-4 mt-md-0">
 									<PrimaryButton
 										value="sell"
 										text="List Sale"
