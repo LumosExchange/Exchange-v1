@@ -127,7 +127,7 @@ const Sell = () => {
 		<PageBody>
 			<div className="container">
 				<div className="row pt-5">
-					<div className="col-12 col-md-4">
+					<div className="col-12 col-md-5">
 						<Card radius="10px" className="p-4">
 						<div className="d-flex">
 							<div className="col-6">
@@ -189,7 +189,7 @@ const Sell = () => {
 							</div>
 						</Card>
 					</div>
-					<div className="col-12 col-md-8 mt-4 mt-md-0">
+					<div className="col-12 col-md-7 mt-4 mt-md-0">
 						<Heading size="24px">List {selectedCrypto} for Sale</Heading>
 						<Card radius="20px" className="p-4">
 							<div className="row">
