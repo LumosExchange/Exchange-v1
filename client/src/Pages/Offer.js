@@ -294,10 +294,10 @@ const Offer = () => {
 						<div className="col-6">
 							<Paragraph bold>About the Trader</Paragraph>
 							<Paragraph color="primary_cta" size="20px">{val.userName}</Paragraph>
-							<Paragraph>Feedback score: {feedbackScore} {" / 3"}</Paragraph>
-							<Paragraph>Registered: {new Date(registeredDate).toDateString}</Paragraph>
+							<Paragraph>Feedback score: {((feedbackScore * 100) / 3).toFixed(2)}{"%"}</Paragraph>
+							<Paragraph>Registered: {new Date(registeredDate).toLocaleDateString()}</Paragraph>
 							<Paragraph>Total Trades: {val.tradeHistory}</Paragraph>
-							<Paragraph>Median Escrow Release Time: {escrowReleaseTime}</Paragraph>
+							<Paragraph>Median Escrow Time: {(escrowReleaseTime / 60).toFixed(2)}{" Mins"}</Paragraph>
 							
 
 						</div>
