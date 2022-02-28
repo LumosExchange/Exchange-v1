@@ -17,8 +17,33 @@ const { Console } = require("console");
 const e = require("express");
 const { resolveNaptr } = require("dns");
 const { addAbortSignal } = require("stream");
+const { server } = require("socket.io");
+const http = require("http");
 
 require("dotenv").config();
+
+const server = http.createServer(app);
+
+const io = new http.Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log('user connected: ', socket.id);
+
+  socket.on("join_room", (data) => {
+    socket.join(data);
+    console.log('User with ID : ', socket.id, ' joined the room: ', data );
+
+  })
+
+  socket.on("disconnect", () => {
+    console.log("User Disconnected", socket.id);
+  });
+});
 
 //Change this to randomly generate salt
 const saltRounds = 10;
@@ -306,8 +331,6 @@ app.post("/sell", (req, res) => {
     );
   });
 });
-
-
 
 //Get users open listings
 app.get("/getListings", (req, res) => {
@@ -1568,6 +1591,68 @@ app.post("OpenTrade", (req, res) => {
   );
 });
 
+app.post("/GetLiveTradeBuyer", (req, res) => {
+  const sellerID = req.body.sellerID;
+  const buyerID = req.session.user[0].userID;
+  const paymentMethod = req.body.paymentMethod;
+  let reference = " ";
+
+  db.query(
+    "SELECT Reference FROM LiveTrades WHERE sellerID = ? AND buyerID = ?",
+    [sellerID, buyerID],
+    (err, result) => {
+      if (err) {
+        res.send(err);  
+      } else {
+        reference =  result[0].Reference;
+        console.log(result[0].Reference);
+    }});
+
+   switch(paymentMethod){
+     case "UK Bank Transfer":
+       db.query(
+         "SELECT Name, sortCode, accountNumber FROM UKBankAccounts WHERE userID = ?",
+         [sellerID],
+         (err, result) => {
+           if (err) {
+             res.send(err);
+           } else {
+             res.send({
+               name: result[0].Name,
+               sortCode: result[0].sortCode,
+               accountNumber: result[0].accountNumber,
+               reference: reference,
+             });
+           }
+         }
+       );
+       case "EU Bank Transfer":
+        db.query(
+          "SELECT bankName, BIC, IBAN FROM EUBankAccounts WHERE userID = ?",
+          [sellerID],
+          (err, result) => {
+            if (err) {
+              res.send(err);
+            } else {
+              res.send({
+                bankName: result[0].bankName,
+                BIC: result[0].BIC,
+                IBAN: result[0].IBAN,
+                reference: reference,
+              });
+            }
+          }
+        );
+   };
+
+
+//
+
+
+//get 
+
+});
+
 //Update functionality for updating the user lisitngs
 app.post("/UpdateMyListings", (req, res) => {
   const userID = req.session.user[0].userID;
@@ -1601,7 +1686,7 @@ app.post("/UpdateMyListings", (req, res) => {
   );
 });
 
-app.post("/DeleteMyListing", (req, res) => {
+app.post("/DeleteMyLisiting", (req, res) => {
   const saleID = req.body.saleID;
   db.query("DELETE FROM sale Where saleID = ?", [saleID], (err, result) => {
     if (err) {
