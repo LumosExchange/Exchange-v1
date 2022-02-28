@@ -49,18 +49,26 @@ const ThemeToggler = ({ theme, toggleTheme }) => {
 	const [currency, setCurrency] = useState("");
   	const isLight = theme === 'light';
 
-	Axios.get("http://localhost:3001/getUserSettings").then((response) => {
-		if (response.data[0]?.currency === 'GBP') {
-			setCurrency(response.data[0]?.currency);
-			fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp')
-			.then((response) => response.json()
-			.then(function (data) {
-				setSolGbp(data.solana.gbp);
-			}));
-		}
-	});
+	const getUserSettings = () => {
+		Axios.get("http://localhost:3001/getUserSettings").then((response) => {
+			if (response.data[0]?.currency === 'GBP') {
+				setCurrency(response.data[0]?.currency);
+				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp')
+				.then((response) => response.json()
+				.then(function (data) {
+					setSolGbp(data.solana.gbp);
+				}));
+			}
+		});
+	}
 
-  return (
+	useEffect(() => {
+		if (currency === undefined){
+            getUserSettings();
+        }
+	}, [currency]);
+
+  	return (
 		<ThemeBarContainer isLight={isLight} className="pt-3">
 			<div className="container d-flex justify-content-between">
 				<InvisibleButton onClick={toggleTheme} className="p-0">

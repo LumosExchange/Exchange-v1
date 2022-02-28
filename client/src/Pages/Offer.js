@@ -6,7 +6,7 @@ import Card from "../Components/Card";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
 import GradientButton from "../Components/GradientButton";
-import PrimaryButton from "../Components/Buttons";
+import PrimaryButton, { InvisibleButton } from "../Components/Buttons";
 import { FormInput, StyledLabel } from "../Components/FormInputs";
 import { useNavigate, useLocation } from "react-router-dom";
 import IconSolana from '../Images/icon-circle-solana.svg';
@@ -120,13 +120,11 @@ const Offer = () => {
 	const getSellerInfo = () => {
 		Axios.post("http://localhost:3001/GetSellerInfo", {
 			sellerID: val.userID,
-			
 		}).then((response) => {
 			setRegisteredDate(response.data.registeredDate);
 			setFeedbackScore(response.data.feedbackScore);
 			setEscrowReleaseTime(response.data.escrowReleaseTime);
 		})
-
 	}
 	
 	const openTrade = () => {
@@ -155,9 +153,18 @@ const Offer = () => {
 		<PageBody>
 			<div className="container">
 				<div className="row pt-5">
+					<div className="col-12 mb-4">
+						<InvisibleButton
+							className="d-flex align-items-center"
+							onClick={() => navigate('/Buy')}
+						>
+							<i className="material-icons me-2">arrow_back</i>
+							<Paragraph size="20px" className="mb-0" color="primary_cta">Back to Buy</Paragraph>
+						</InvisibleButton>
+					</div>
 					<div className="col-12 mb-5 pb-5">
 						<Heading size="26px" className="mb-4">Buy SOL from {val.userName} with {val.paymentMethod1} {val.paymentMethod2 && `or ${val.paymentMethod2}`}.</Heading>
-						<TradeCard val={val} />
+						<TradeCard val={val} withoutButton />
 					</div>
 					<div className="col-12 col-md-6 row">
 						<div className="col d-flex align-items-center" style={{ maxHeight: '200px' }}>

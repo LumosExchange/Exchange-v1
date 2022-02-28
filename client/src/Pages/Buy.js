@@ -129,6 +129,11 @@ const Buy = () => {
 		"France",
 	];
 
+	const ListingArea = styled.div`
+		max-height: 100vh;
+		overflow-y: scroll;
+	`;
+
 	const getCurrency = () => {
 		Axios.get("http://localhost:3001/getUserSettings").then((response) => {
 			if(response.data[0]?.currency === 'GBP') {
@@ -324,6 +329,7 @@ const Buy = () => {
 					</div>
 					<div className="col-12 col-md-7 mt-4 mt-md-0">
 						<Heading size="24px">Buy {selectedCrypto} from these Sellers</Heading>
+						<ListingArea>
 							{isFiltering && (
 								<div className="d-flex mb-3">
 									<Paragraph size="20px" bold className="mb-0 me-1">{filteredListings.length}</Paragraph>
@@ -342,8 +348,9 @@ const Buy = () => {
 									<TradeCard val={val} />
 								))
 							)}
-						</div>
+						</ListingArea>
 					</div>
+				</div>
 			</div>
 		</PageBody>
   );
