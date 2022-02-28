@@ -96,6 +96,7 @@ const db = mysql.createPool({
   user: "zEPptCpVyR",
   password: "qmZ0jhRFE5",
   database: "zEPptCpVyR",
+  multipleStatements: true,
 });
 
 //Register
@@ -278,49 +279,32 @@ app.post("/sell", (req, res) => {
   const payment1 = req.body.payment1;
   const payment2 = req.body.payment2;
 
-  let country = " ";
-  let town = " ";
+  var sql =
+    "SELECT Country AS Country FROM userInformation WHERE (userID) = (?);SELECT Town AS Town FROM userInformation WHERE (userID) = (?);SELECT saleID AS SaleID FROM TradeHistory WHERE (sellerID) = (?)";
 
-  
-
-
-  db.query(
-    "SELECT Country, Town FROM userInformation WHERE (userID) = (?)",
-    [id],
-    (err, result) => {
-      console.log("result: ", result[0].Country);
-      country = result[0].Country;
-      town = result[0].Town;
+  db.query(sql, [id, id, id], function (error, results) {
+    if (error) {
+      console.log(error);
     }
-  );
-
-  db.query(
-    "SELECT saleID FROM TradeHistory WHERE (sellerID) = (?)",
-    [id],
-    (err, result) => {
-      tradeHistory = result.length;
-    }
-  );
-
-  db.query(
-    "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory) VALUES (?,?,?,?,?,?,?,?,?,?)",
-    [
-      id,
-      amountForSale,
-      aboveOrBelow,
-      change,
-      userName,
-      country,
-      town,
-      payment1,
-      payment2,
-      tradeHistory,
-    ],
-    (err, result) => {
-      console.log(err);
-      res.send(result);
-    }
-  );
+    db.query(
+      "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory) VALUES (?,?,?,?,?,?,?,?,?,?)",
+      [
+        id,
+        amountForSale,
+        aboveOrBelow,
+        change,
+        userName,
+        results[0][0].Country,
+        results[1][0].Town,
+        payment1,
+        payment2,
+        results[2].length,
+      ],
+      (err, resultt) => {
+        console.log(err);
+      }
+    );
+  });
 });
 
 //Get users open listings
@@ -1634,14 +1618,12 @@ app.post("/GetSellerInfo", (req, res) => {
   let registeredDate = " ";
   let feedbackScore = " ";
   let escrowReleaseTime = " ";
- 
 
   db.query(
     "SELECT registeredDate FROM users WHERE (userID) = (?)",
     [sellerID],
     (err, result) => {
       registeredDate = result[0].registeredDate;
-  
     }
   );
 
@@ -1650,16 +1632,14 @@ app.post("/GetSellerInfo", (req, res) => {
     [sellerID],
     (err, results) => {
       feedbackScore = results[0].feedbackScore;
-  
     }
   );
 
-  db.query( 
+  db.query(
     "SELECT AVG(EscrowReleaseTime) as escrowReleaseTime from feedback WHERE (sellerUserID) = (?)",
     [sellerID],
     (err, resultss) => {
       escrowReleaseTime = resultss[0].escrowReleaseTime;
-     
 
       res.send({
         sellerID: sellerID,
@@ -1667,11 +1647,8 @@ app.post("/GetSellerInfo", (req, res) => {
         feedbackScore: feedbackScore,
         escrowReleaseTime: escrowReleaseTime,
       });
-
     }
   );
-
-
 });
 
 app.listen(3001, () => {
