@@ -36,6 +36,7 @@ import PaymentMethods from "./Pages/Profile/PaymentMethods";
 import AccountUpgrade from "./Pages/Profile/AccountUpgrade";
 import Offer from "./Pages/Offer";
 import MyListings from "./Pages/MyListings";
+import Trade from './Pages/Trade';
 
 const App = () => {
   const [theme, toggleTheme] = useDarkMode();
@@ -101,6 +102,7 @@ const App = () => {
             />
             <Route path="/Profile/AccountUpgrade" element={<AccountUpgrade />} />
             <Route path="/MyListings" element={<MyListings />} />
+            <Route path="/Trade" element={<Trade />} />
           </Routes>
         </Router>
         <Footer />

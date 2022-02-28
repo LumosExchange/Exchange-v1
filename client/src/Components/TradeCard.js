@@ -116,7 +116,8 @@ const TradeCard = ({ val, children, withoutButton }) => {
                             className="w-100"
                             onClick={ () => navigate("/Offer", {
                                 state: {
-                                    val
+                                    val,
+                                    currency,
                                 }
                             })}
                         />

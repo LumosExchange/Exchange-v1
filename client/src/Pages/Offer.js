@@ -77,7 +77,6 @@ const Offer = () => {
 	const [feedbackScore, setFeedbackScore] = useState("");
 	const [escrowReleaseTime, setEscrowReleaseTime] = useState("");
 
-
 	const { state } = useLocation();
 	const { val } = state;
 
@@ -94,7 +93,6 @@ const Offer = () => {
 			}
 		}));
 	}
-	
 
 	const convertAmountToSOL = (amount) => {
 		const convertedAmount = amount / solGbp;
@@ -148,6 +146,10 @@ const Offer = () => {
 
 	const filteredPaymentMethods = ['Please Select', val.paymentMethod1, val.paymentMethod2];
 	const navigate = useNavigate();
+
+	console.log(state, 'state');
+
+	const currency = state.currency;
 
   	return (
 		<PageBody>
@@ -282,7 +284,13 @@ const Offer = () => {
 								className="w-100"
 								onClick={() => {
 									openTrade();
-									navigate("/LiveTrade");
+									navigate("/Trade" , {
+										state: {
+											val,
+											solGbp,
+											currency,
+										}
+									});
 								}}
 							/>
 						</div>
