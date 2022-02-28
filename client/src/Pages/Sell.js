@@ -196,6 +196,7 @@ const Sell = () => {
 								<div className="col-12 col-md-6 mb-3">
 									<StyledLabel padding="0 0 10px 0" htmlFor="amount" bold>Amount of SOL for sale</StyledLabel>
 									<FormInput
+										autofocus="true"
 										type="text"
 										placeholder="0 SOL"
 										name="amount"
@@ -211,7 +212,6 @@ const Sell = () => {
 								<div className="col-12 col-md-6">
 									<StyledLabel padding="0 0 10px 0" htmlFor="aboveOrBelow" bold>Sell above or below market</StyledLabel>
 									<StyledDropdown
-										autofocus="true"
 										type="aboveOrBelow"
 										placeholder="aboveOrBelow"
 										name="aboveOrBelow"
