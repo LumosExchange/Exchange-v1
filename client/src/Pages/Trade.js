@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled, { css } from 'styled-components';
 import Axios from "axios";
-import { PageBody } from "../Components/FormInputs";
+import { PageBody, TextArea } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
 import GradientButton from "../Components/GradientButton";
@@ -10,42 +10,6 @@ import { FormInput, StyledLabel, FormCheckbox } from "../Components/FormInputs";
 import { useNavigate, useLocation } from "react-router-dom";
 import Card from '../Components/Card';
 import io from 'socket.io-client';
-
-
-const SwitchButton = styled.button(({ theme }) => css`
-	width: 50px;
-	min-width: 50px;
-	height: 50px;
-	border-radius: 50px;
-	border: 0px;
-	background: ${theme.colors.primary_cta};
-	color: ${theme.colors.base_bg};
-`);
-
-const ConversionArea = styled.div(({ theme }) => css`
-	min-height: 60px;
-	background: ${theme.colors.grey};
-	border-radius: 10px;
-	display: flex;
-	align-items: center;
-	padding: 0;
-	cursor: text;
-
-	.icon-area {
-		min-height: 60px;
-		padding: 10px 20px 10px 10px;
-		border-radius: 10px 0 0 10px;
-
-		i {
-			color: ${theme.colors.text_primary};
-		}
-
-		img {
-			width: 24px;
-			height: 24px;
-		}
-	}
-`);
 
 const HorizontalDivider = styled.hr(({ theme }) => css`
     :not([size]){
@@ -77,6 +41,81 @@ const HighlightedText = styled.span(({ theme }) => css`
 	color: ${theme.colors.primary_cta};
 `);
 
+const ChatWrapper = styled.div(({ theme }) => css`
+	display: flex;
+	flex-direction: column;
+	max-height: 700px;
+	overflow-y: auto;
+
+	.message {
+		border-radius: 20px 20px 0 20px;
+		background: ${theme.colors.grey};
+		padding: 10px 20px;
+		font-size: 18px;
+		margin-bottom: 28px; 
+		width: auto;
+		display: flex;
+		justify-content: flex-end;
+		align-self: flex-end;
+
+		&.self {
+			border-radius: 0px 20px 20px 20px;
+			background: ${theme.colors.primary_cta};
+			color: ${theme.colors.base_bg};
+			justify-content: flex-start;
+			align-self: flex-start;
+		}
+	}
+`);
+
+const ButtonBase = styled.div(({ theme, fontSize, borderSize }) => css`
+	border-radius: 50px;
+	padding: 3px;
+	background: rgba(46, 46, 46, 0.5);
+	background: linear-gradient(90deg,
+		${theme.colors.gradients.yellow} 0%,
+		${theme.colors.gradients.peach} 33%,
+		${theme.colors.gradients.mauve} 66%,
+		${theme.colors.gradients.blue} 100%
+	);
+
+	.innerButton {
+		background: ${theme.colors.grad_button2};
+		margin: ${borderSize};
+		border-radius: 50px;
+		font-size: ${fontSize};
+		padding: 10px;
+		color: ${theme.colors.actual_white};
+		border: 0;
+
+		&:disabled {
+			opacity: 0.7;
+		}
+	}
+`);
+
+const SendButton = ({
+	icon, className,
+	onClick, value, type,
+	fontSize, disabled
+}) => (
+	<ButtonBase
+		fontSize={fontSize}
+		className={`d-inline-flex ${className ? className : ''}`}
+	>
+		<button
+			className="innerButton d-flex align-items-center jusityf-content-center"
+			onClick={onClick}
+			value={value}
+			type={type}
+			fontSize={fontSize}
+			disabled={disabled}
+		>
+			<i className="material-icons">{icon}</i>
+		</button>
+	</ButtonBase>
+);
+
 const solQuantity = 2;
 
 const Trade = () => {
@@ -99,21 +138,15 @@ const Trade = () => {
 
 	const navigate = useNavigate();
 
-
 	//Get userName && reference 
 	//room will be refernce so buyer and seller can connect 
-
 
 	//chat stuff here
 	const joinRoom = () => {
 		if(val.userName !=="" && room !=="") {
 			socket.emit("join_room", room);
-
 		}
 	}
-
-
-
 
 	const sendMessage = async() => {
 		console.log(currentMessage);
@@ -124,30 +157,18 @@ const Trade = () => {
 				message: currentMessage,
 				time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
 			};
-
-			await socket.emit("send_message", messageData);
-		
+			await socket.emit("send_message", messageData);		
 		}
 	};
 
 	useEffect(() => {
-	//	getSellerInfo();
 		socket.on("receive_message", (data) => {
 		  setMessageList((list) => [...list, data]);
 		});
-	  }, [socket]);
+	}, [socket]);
 
-
-// do we still need this???
-	//  const getSellerInfo = () => {
-//		Axios.post("http://localhost:3001/GetSellerInfo", {
-	//		sellerID: val.userID,
-	////	}).then((response) => {
-	//		setRegisteredDate(response.data.registeredDate);
-	//		setFeedbackScore(response.data.feedbackScore);
-	//		setEscrowReleaseTime(response.data.escrowReleaseTime);
-	//	})
-//	};
+	console.log(messageList, 'message list');
+	console.log(currentMessage, 'current message');
 
   	return (
 		<PageBody>
@@ -158,24 +179,29 @@ const Trade = () => {
 							<Heading size="26px" className="mb-4">Offers &gt; Buy SOL from {val.userName} with {val.paymentMethod1}.</Heading>
 						</div>
 						<div className="col-12 col-md-6 row">
-							<div className="col-10">
-								<div>
-									<div className="chat-header">
-										<p>Live Chat</p>
-									</div>
-									<div className="chat-body"></div>
-									<div className="chat-footer">
-										<input 
+							<ChatWrapper>
+								<div className="chat-header">
+									<Paragraph>Conversation</Paragraph>
+									<div className="message self">Message from me</div>
+									<div className="message">Message from another user</div>
+								</div>
+								<div className="chat-footer d-flex align-items-center">
+									<TextArea
 										type="text"
-										placeholder="Hey..."
+										placeholder="Enter message here"
 										onChange={(event) => {
 											setCurrentMessage(event.target.value);
 										}}
-										/>
-										<button onClick={joinRoom, sendMessage}>&#9658;</button>
-									</div>
+									/>
+									<SendButton
+										icon="send"
+										onClick={ () => {
+											joinRoom();
+											sendMessage();
+										}}
+									/>
 								</div>
-							</div>
+							</ChatWrapper>
 						</div>
 						<div className="col-1 d-flex justify-content-center">
 							<VerticalDivider />
