@@ -104,7 +104,7 @@ const SendButton = ({
 		className={`d-inline-flex ${className ? className : ''}`}
 	>
 		<button
-			className="innerButton d-flex align-items-center jusityf-content-center"
+			className="innerButton d-flex align-items-center jusitfy-content-center"
 			onClick={onClick}
 			value={value}
 			type={type}
@@ -180,7 +180,7 @@ const Trade = () => {
 						</div>
 						<div className="col-12 col-md-6 row">
 							<ChatWrapper>
-								<div className="chat-header">
+								<div className="chat-header d-flex align-items-center flex-column">
 									<Paragraph>Conversation</Paragraph>
 									<div className="message self">Message from me</div>
 									<div className="message">Message from another user</div>
