@@ -214,7 +214,7 @@ const Trade = () => {
                         <div
                           className="message"
                           id={
-                            username === messageContent.author ? "you" : "other"
+                            val.username === messageContent.author ? "you" : "other"
                           }
                         >
                           <div>

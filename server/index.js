@@ -1631,6 +1631,7 @@ app.post("/GetLiveTradeBuyer", (req, res) => {
            }
          }
        );
+       break;
        case "EU Bank Transfer":
         db.query(
           "SELECT bankName, BIC, IBAN FROM EUBankAccounts WHERE userID = ?",
@@ -1648,7 +1649,8 @@ app.post("/GetLiveTradeBuyer", (req, res) => {
             }
           }
         );
-   };
+   };  
+   break;
 
 
 });
