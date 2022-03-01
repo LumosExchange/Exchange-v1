@@ -1526,7 +1526,7 @@ app.post("/DeleteSkrillBank", (req, res) => {
   );
 });
 
-app.get("getSellersTopTradeHistory", (req, res) => {
+app.get("/getSellersTopTradeHistory", (req, res) => {
   const param = req.body.sellerID;
   db.query(
     "SELECT TOP (3) FROM feedback WHERE sellerUserID = ?",
@@ -1541,7 +1541,7 @@ app.get("getSellersTopTradeHistory", (req, res) => {
   );
 });
 
-app.get("getSellerNoTrades", (req, res) => {
+app.get("/getSellerNoTrades", (req, res) => {
   const param = req.body.sellerID;
   db.query(
     "SELECT * FROM saleHistory WHERE userID =? ",
@@ -1556,11 +1556,11 @@ app.get("getSellerNoTrades", (req, res) => {
   );
 });
 
-app.post("OpenTrade", (req, res) => {
+app.post("/OpenTrade", (req, res) => {
   let saleID = req.body.saleID;
   let sellerID = req.body.sellerID;
   let buyerID = req.session.user[0].userID;
-  var date = new Date().toLocaleString();
+  var date = new Date().format("yyyy-mm-dd hh-MM-ss");
   let paymentMethod = req.body.paymentMethod;
   let userSolPrice = req.body.userSolPrice;
   let amountOfSol = req.body.amountOfSolBought;
@@ -1587,6 +1587,7 @@ app.post("OpenTrade", (req, res) => {
     (err, result) => {
       if (err) {
         res.send(err);
+        console.log(err);
       } else {
         res.send({
           message: "Succesfully opened the trade",
@@ -1650,7 +1651,7 @@ app.post("/GetLiveTradeBuyer", (req, res) => {
           }
         );
    };  
-   break;
+  
 
 
 });
