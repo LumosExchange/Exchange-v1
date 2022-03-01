@@ -71,7 +71,7 @@ const Offer = () => {
 	const [offerMessage, setOfferMessage] = useState("");
 	const [solGbp, setSolGbp] = useState("");
 	const [conversionMode, setConversionMode] = useState("FIATtoSOL");
-	const [paymentMethod, setPaymentMethod] = useState([]);
+	const [paymentMethod, setPaymentMethod] = useState("Please Select");
 
 	const [registeredDate, setRegisteredDate] = useState("");
 	const [feedbackScore, setFeedbackScore] = useState("");
@@ -132,7 +132,7 @@ const Offer = () => {
 			paymentMethod: paymentMethod,
 			userSolPrice: solGbp,
 			amountOfSol: offerAmountInSol,
-			fiatAmount: offerAmountInCurrency,
+			fiatAmount: offerAmount || offerAmountInCurrency,
 			paymentCurrency: val.paymentCurrency,
 			message: offerMessage,
 		  }).then((response) => {
@@ -149,6 +149,10 @@ const Offer = () => {
 
 
 	const currency = state.currency;
+
+	console.log(offerAmount, 'offer amount in GBP');
+	console.log(offerAmountInSol, 'offer amount in SOL');
+	console.log(offerAmountInCurrency, 'offer amount in currency');
 
   	return (
 		<PageBody>
@@ -213,13 +217,13 @@ const Offer = () => {
 									<FormInput
 										type="text"
 										id="offerAmount"
-										value={offerAmount}
+										value={offerAmountInSol}
 										name="offerAmount"
 										placeholder="0 SOL"
 										hasIcon
 										customIcon={IconSolana}
 										onChange={(e) => {
-											setOfferAmount(e.target.value);
+											setOfferAmountInSol(e.target.value);
 											convertSolToAmount(e.target.value);
 										}}
 										className="w-100 mb-2"
@@ -291,6 +295,11 @@ const Offer = () => {
 										}
 									});
 								}}
+								disabled={
+									offerMessage.length === 0
+									|| paymentMethod === "Please Select"
+									|| offerAmountInSol.length === 0
+								}
 							/>
 						</div>
 					</div>

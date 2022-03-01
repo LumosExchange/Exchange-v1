@@ -23,6 +23,7 @@ const ButtonBase = styled.div(({ theme, fontSize, padding, borderSize, dark }) =
 
 		&:disabled {
 			opacity: 0.7;
+			cursor: not-allowed;
 		}
 	}
 
