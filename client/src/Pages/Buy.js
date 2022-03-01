@@ -131,7 +131,7 @@ const Buy = () => {
 
 	const ListingArea = styled.div`
 		max-height: 100vh;
-		overflow-y: scroll;
+		overflow-y: auto;
 	`;
 
 	const getCurrency = () => {
