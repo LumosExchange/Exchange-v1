@@ -80,6 +80,8 @@ const Offer = () => {
 	const { state } = useLocation();
 	const { val } = state;
 
+	const ID = val.userID;
+
 	const getCurrentSolPrice = () => {
 		fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp')
 		.then((response) => response.json()
@@ -133,7 +135,7 @@ const Offer = () => {
 			userSolPrice: solGbp,
 			amountOfSol: offerAmountInSol,
 			fiatAmount: offerAmount || offerAmountInCurrency,
-			paymentCurrency: val.paymentCurrency,
+			paymentCurrency: currency,
 			message: offerMessage,
 		  }).then((response) => {
 			//Handle response here any errors etc
@@ -292,6 +294,9 @@ const Offer = () => {
 											val,
 											solGbp,
 											currency,
+											ID,
+											paymentMethod
+
 										}
 									});
 								}}

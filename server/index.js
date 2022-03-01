@@ -43,6 +43,8 @@ io.on("connection", (socket) => {
   socket.on("send_message", (data) => {
     socket.to(data.room).emit("recieve_message" , data)
     console.log(data);
+    
+
   });
 
   socket.on("disconnect", () => {
@@ -1560,14 +1562,14 @@ app.post("/OpenTrade", (req, res) => {
   let saleID = req.body.saleID;
   let sellerID = req.body.sellerID;
   let buyerID = req.session.user[0].userID;
-  var date = new Date().format("yyyy-mm-dd hh-MM-ss");
+  var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
   let paymentMethod = req.body.paymentMethod;
   let userSolPrice = req.body.userSolPrice;
-  let amountOfSol = req.body.amountOfSolBought;
-  let fiatAmount = req.body.amountOfFiat;
+  let amountOfSol = req.body.amountOfSol;
+  let fiatAmount = req.body.fiatAmount;
   let paymentCurrency = req.body.paymentCurrency;
-  let message = req.body.buyerMessage;
-  let reference = crypto.randomBytes(10).toString("hex");
+  let message = req.body.message;
+  let reference = crypto.randomBytes(5).toString("hex");
 
   db.query(
     "INSERT INTO LiveTrades (saleID, sellerID, buyerID, Date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, Message, Reference) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
@@ -1597,7 +1599,7 @@ app.post("/OpenTrade", (req, res) => {
   );
 });
 
-app.post("/GetLiveTradeBuyer", (req, res) => {
+app.post("/GetLiveTradeInfo", (req, res) => {
   const sellerID = req.body.sellerID;
   const buyerID = req.session.user[0].userID;
   const paymentMethod = req.body.paymentMethod;
@@ -1612,45 +1614,47 @@ app.post("/GetLiveTradeBuyer", (req, res) => {
       } else {
         reference =  result[0].Reference;
         console.log(result[0].Reference);
+        switch(paymentMethod){
+     
+          case "UK Bank Transfer":
+            db.query(
+              "SELECT Name, sortCode, accountNumber FROM UKBankAccounts WHERE userID = ?",
+              [sellerID],
+              (err, result) => {
+                if (err) {
+                  res.send(err);
+                } else {
+                  res.send({
+                    name: result[0].Name,
+                    sortCode: result[0].sortCode,
+                    accountNumber: result[0].accountNumber,
+                    reference: reference,
+                  });
+                }
+              }
+            );
+            break;
+            case "EU Bank Transfer":
+             db.query(
+               "SELECT bankName, BIC, IBAN FROM EUBankAccounts WHERE userID = ?",
+               [sellerID],
+               (err, result) => {
+                 if (err) {
+                   res.send(err);
+                 } else {
+                   res.send({
+                     bankName: result[0].bankName,
+                     BIC: result[0].BIC,
+                     IBAN: result[0].IBAN,
+                     reference: reference,
+                   });
+                 }
+               }  
+             );
+        };  
     }});
 
-   switch(paymentMethod){
-     case "UK Bank Transfer":
-       db.query(
-         "SELECT Name, sortCode, accountNumber FROM UKBankAccounts WHERE userID = ?",
-         [sellerID],
-         (err, result) => {
-           if (err) {
-             res.send(err);
-           } else {
-             res.send({
-               name: result[0].Name,
-               sortCode: result[0].sortCode,
-               accountNumber: result[0].accountNumber,
-               reference: reference,
-             });
-           }
-         }
-       );
-       break;
-       case "EU Bank Transfer":
-        db.query(
-          "SELECT bankName, BIC, IBAN FROM EUBankAccounts WHERE userID = ?",
-          [sellerID],
-          (err, result) => {
-            if (err) {
-              res.send(err);
-            } else {
-              res.send({
-                bankName: result[0].bankName,
-                BIC: result[0].BIC,
-                IBAN: result[0].IBAN,
-                reference: reference,
-              });
-            }
-          }
-        );
-   };  
+   
   
 
 
