@@ -41,7 +41,7 @@ io.on("connection", (socket) => {
   });
   
   socket.on("send_message", (data) => {
-
+    socket.to(data.room).emit("recieve_message" , data)
     console.log(data);
   });
 
@@ -1631,6 +1631,7 @@ app.post("/GetLiveTradeBuyer", (req, res) => {
            }
          }
        );
+       break;
        case "EU Bank Transfer":
         db.query(
           "SELECT bankName, BIC, IBAN FROM EUBankAccounts WHERE userID = ?",
@@ -1648,13 +1649,9 @@ app.post("/GetLiveTradeBuyer", (req, res) => {
             }
           }
         );
-   };
+   };  
+   break;
 
-
-//
-
-
-//get 
 
 });
 
