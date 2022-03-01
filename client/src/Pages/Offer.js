@@ -147,7 +147,6 @@ const Offer = () => {
 	const filteredPaymentMethods = ['Please Select', val.paymentMethod1, val.paymentMethod2];
 	const navigate = useNavigate();
 
-	console.log(state, 'state');
 
 	const currency = state.currency;
 
