@@ -1649,10 +1649,7 @@ app.post("/GetLiveTradeBuyer", (req, res) => {
             }
           }
         );
-   };  
-   break;
-
-
+   };
 });
 
 //Update functionality for updating the user lisitngs
