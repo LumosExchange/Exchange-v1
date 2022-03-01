@@ -33,7 +33,7 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log('user connected: ', socket.id);
+ // console.log('user connected: ', socket.id);
 
   socket.on("join_room", (data) => {
     socket.join(data);
@@ -1731,7 +1731,7 @@ app.post("/GetSellerInfo", (req, res) => {
     "SELECT AVG(EscrowReleaseTime) as escrowReleaseTime from feedback WHERE (sellerUserID) = (?)",
     [sellerID],
     (err, resultss) => {
-      escrowReleaseTime = resultss.escrowReleaseTime;
+      escrowReleaseTime = resultss[0].escrowReleaseTime;
 
       res.send({
         sellerID: sellerID,
