@@ -9,6 +9,8 @@ import PrimaryButton, { SecondaryButton } from "../Components/Buttons";
 import { FormInput, StyledLabel, FormCheckbox } from "../Components/FormInputs";
 import { useNavigate, useLocation } from "react-router-dom";
 import Card from '../Components/Card';
+import io from 'socket.io-client';
+
 
 const SwitchButton = styled.button(({ theme }) => css`
 	width: 50px;
@@ -83,30 +85,69 @@ const Trade = () => {
 	const [registeredDate, setRegisteredDate] = useState("");
 	const [feedbackScore, setFeedbackScore] = useState("");
 	const [escrowReleaseTime, setEscrowReleaseTime] = useState("");
+	const [currentMessage, setCurrentMessage] = useState("");
+	const [messageList, setMessageList] = useState("");
+	//const [room, setRoom] = useState("");
+	const room = "hello";
+
+	const socket = io.connect("http://localhost:3002");
 
 	const [pageMode, setPageMode] = useState("buy");
 
 	const { state } = useLocation();
 	const { val } = state;
 
-	const getSellerInfo = () => {
-		Axios.post("http://localhost:3001/GetSellerInfo", {
-			sellerID: val.userID,
-		}).then((response) => {
-			setRegisteredDate(response.data.registeredDate);
-			setFeedbackScore(response.data.feedbackScore);
-			setEscrowReleaseTime(response.data.escrowReleaseTime);
-		})
-	}
-
-	useEffect(() => {
-		getSellerInfo();
-	}, []);
-
 	const navigate = useNavigate();
 
-	console.log(val, 'val');
-	console.log(state, 'state');
+
+	//Get userName && reference 
+	//room will be refernce so buyer and seller can connect 
+
+
+	//chat stuff here
+	const joinRoom = () => {
+		if(val.userName !=="" && room !=="") {
+			socket.emit("join_room", room);
+
+		}
+	}
+
+
+
+
+	const sendMessage = async() => {
+		console.log(currentMessage);
+		if (currentMessage !== "") {
+			const messageData = {
+				room: room,
+				author: val.userName,
+				message: currentMessage,
+				time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
+			};
+
+			await socket.emit("send_message", messageData);
+		
+		}
+	};
+
+	useEffect(() => {
+	//	getSellerInfo();
+		socket.on("receive_message", (data) => {
+		  setMessageList((list) => [...list, data]);
+		});
+	  }, [socket]);
+
+
+// do we still need this???
+	//  const getSellerInfo = () => {
+//		Axios.post("http://localhost:3001/GetSellerInfo", {
+	//		sellerID: val.userID,
+	////	}).then((response) => {
+	//		setRegisteredDate(response.data.registeredDate);
+	//		setFeedbackScore(response.data.feedbackScore);
+	//		setEscrowReleaseTime(response.data.escrowReleaseTime);
+	//	})
+//	};
 
   	return (
 		<PageBody>
@@ -118,7 +159,22 @@ const Trade = () => {
 						</div>
 						<div className="col-12 col-md-6 row">
 							<div className="col-10">
-								Message Area
+								<div>
+									<div className="chat-header">
+										<p>Live Chat</p>
+									</div>
+									<div className="chat-body"></div>
+									<div className="chat-footer">
+										<input 
+										type="text"
+										placeholder="Hey..."
+										onChange={(event) => {
+											setCurrentMessage(event.target.value);
+										}}
+										/>
+										<button onClick={joinRoom, sendMessage}>&#9658;</button>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div className="col-1 d-flex justify-content-center">

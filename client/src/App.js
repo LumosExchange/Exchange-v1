@@ -38,6 +38,10 @@ import Offer from "./Pages/Offer";
 import MyListings from "./Pages/MyListings";
 import Trade from './Pages/Trade';
 
+
+
+
+
 const App = () => {
   const [theme, toggleTheme] = useDarkMode();
   const themeMode = theme === "light" ? lightTheme : darkTheme;

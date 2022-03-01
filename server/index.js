@@ -17,14 +17,15 @@ const { Console } = require("console");
 const e = require("express");
 const { resolveNaptr } = require("dns");
 const { addAbortSignal } = require("stream");
-const { server } = require("socket.io");
+const { Server } = require("socket.io");
 const http = require("http");
+
 
 require("dotenv").config();
 
 const server = http.createServer(app);
 
-const io = new http.Server(server, {
+const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
     methods: ["GET", "POST"],
@@ -37,8 +38,12 @@ io.on("connection", (socket) => {
   socket.on("join_room", (data) => {
     socket.join(data);
     console.log('User with ID : ', socket.id, ' joined the room: ', data );
+  });
+  
+  socket.on("send_message", (data) => {
 
-  })
+    console.log(data);
+  });
 
   socket.on("disconnect", () => {
     console.log("User Disconnected", socket.id);
@@ -1726,7 +1731,7 @@ app.post("/GetSellerInfo", (req, res) => {
     "SELECT AVG(EscrowReleaseTime) as escrowReleaseTime from feedback WHERE (sellerUserID) = (?)",
     [sellerID],
     (err, resultss) => {
-      escrowReleaseTime = resultss[0].escrowReleaseTime;
+      escrowReleaseTime = resultss.escrowReleaseTime;
 
       res.send({
         sellerID: sellerID,
@@ -1736,6 +1741,10 @@ app.post("/GetSellerInfo", (req, res) => {
       });
     }
   );
+});
+
+server.listen(3002, () => {
+  console.log("SERVER RUNNING");
 });
 
 app.listen(3001, () => {
