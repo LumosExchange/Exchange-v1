@@ -215,7 +215,7 @@ const Trade = () => {
     socket.on("receive_message", (data) => {
       setMessageList((list) => [...list, data]);
     });
-  });
+  }, [socket]);
 
   //console.log(messageList, 'message list');
   //console.log(currentMessage, 'current message');
@@ -250,19 +250,20 @@ const Trade = () => {
                   <scrollToBottom>
                     {messageList.map((messageContent) => (
                       <div
-                        className="message"
-                        id={
+                        
+                        className={
                           val.username === messageContent.author
-                            ? "you"
-                            : "other"
+                            ? "message"
+                            : "message self"
                         }
                       >
                         <div>
-							<div className="message">
 								{messageContent.message}
+								{" "}
 								{messageContent.time}
+								{" "}
 								{messageContent.author}
-							</div>
+						
 						</div>
                       </div>
                     ))}
