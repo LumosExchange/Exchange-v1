@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components';
 import { InvisibleButton } from './Buttons';
 import Paragraph from './Paragraph';
 import IconSolana from '../Images/icon-circle-solana.svg';
+import { convertCurrencyToSymbol } from '../Helpers'
 
 const ThemeBarContainer = styled.div(({ theme, isLight }) => css`
     background: ${theme.colors.base_bg};
@@ -34,15 +35,6 @@ const CircleToggle = styled.div(({ theme, isLight }) => css`
 		color: ${isLight ? theme.colors.actual_white : '#696969'};
 	};
 `);
-
-const convertCurrencyToSymbol = (currency) => {
-	if (currency === 'GBP'){
-		return "£";
-	}
-	if (currency === 'USD'){
-		return "$";
-	}
-}
 
 const ThemeToggler = ({ theme, toggleTheme }) => {
 	const [solgbp, setSolGbp] = useState("");

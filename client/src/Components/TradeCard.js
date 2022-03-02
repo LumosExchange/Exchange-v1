@@ -7,15 +7,7 @@ import Paragraph from "../Components/Paragraph";
 import GradientButton from "../Components/GradientButton";
 import { useNavigate } from "react-router-dom";
 import { LoadingState } from "./Profile";
-
-const convertCurrencyToSymbol = (currency) => {
-	if (currency === 'GBP'){
-		return "£";
-	}
-	if (currency === 'USD'){
-		return "$";
-	}
-}
+import { convertCurrencyToSymbol } from "../Helpers";
 
 const CardDivider = styled.hr(({ theme }) => css`
     :not([size]){

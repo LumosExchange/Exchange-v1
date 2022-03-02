@@ -28,7 +28,6 @@ const ButtonBase = styled.div(({ theme, fontSize, padding, borderSize, dark }) =
 	}
 
 	&:hover { transform: scale(1.05); }
-	a, a:hover { color: ${theme.colors.actual_white}; }
 `);
 
 const GradientButton = ({
