@@ -1437,13 +1437,20 @@ app.post("/UpdateSkrill", (req, res) => {
 app.post("/DeleteUKBank", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
-    "DELETE FROM UKBankAccounts WHERE userId = 1",
+    "DELETE FROM UKBankAccounts WHERE (userId) = (?) ",
     [user],
     (err, result) => {
       if (err) {
         res.send(err);
         console.log("error : ", err);
       } else {
+        db.query(
+          "UPDATE  UKBank WHERE (userID) = (?)",
+          [0, user],
+          (err, result) => {
+            console.log("errors: ", err);
+          }
+        );
         res.send({
           message: "UK account Deleted!",
         });
@@ -1456,13 +1463,20 @@ app.post("/DeleteUKBank", (req, res) => {
 app.post("/DeleteEUBank", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
-    "DELETE FROM EUBankAccounts WHERE userId = 1",
+    "DELETE FROM EUBankAccounts WHERE (userId) = (?)",
     [user],
     (err, result) => {
       if (err) {
         res.send(err);
         console.log("error : ", err);
       } else {
+        db.query(
+          "UPDATE  EUBank WHERE (userID) = (?)",
+          [0, user],
+          (err, result) => {
+            console.log("errors: ", err);
+          }
+        );
         res.send({
           message: "EU account Deleted!",
         });
@@ -1475,13 +1489,20 @@ app.post("/DeleteEUBank", (req, res) => {
 app.post("/DeleteInterBank", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
-    "DELETE FROM internationalBankAccounts WHERE userId = 1",
+    "DELETE FROM internationalBankAccounts WHERE (userId) = (?)",
     [user],
     (err, result) => {
       if (err) {
         res.send(err);
         console.log("error : ", err);
       } else {
+        db.query(
+          "UPDATE internationalBankAccounts WHERE (userID) = (?)",
+          [0, user],
+          (err, result) => {
+            console.log("errors: ", err);
+          }
+        );
         res.send({
           message: "International account Deleted!",
         });
@@ -1494,13 +1515,20 @@ app.post("/DeleteInterBank", (req, res) => {
 app.post("/DeletePaypalBank", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
-    "DELETE FROM paypalAccounts WHERE userId = 1",
+    "DELETE FROM paypalAccounts WHERE (userId) = (?)",
     [user],
     (err, result) => {
       if (err) {
         res.send(err);
         console.log("error : ", err);
       } else {
+        db.query(
+          "UPDATE paypalAccounts WHERE (userID) = (?)",
+          [0, user],
+          (err, result) => {
+            console.log("errors: ", err);
+          }
+        );
         res.send({
           message: "Paypal account Deleted!",
         });
@@ -1520,6 +1548,13 @@ app.post("/DeleteSkrillBank", (req, res) => {
         res.send(err);
         console.log("error : ", err);
       } else {
+        db.query(
+          "UPDATE skrillAccounts WHERE (userID) = (?)",
+          [0, user],
+          (err, result) => {
+            console.log("errors: ", err);
+          }
+        );
         res.send({
           message: "Skrill account Deleted!",
         });
@@ -1814,6 +1849,45 @@ app.post("/FindUserPaymentMethods", (req, res) => {
     }
   );
 
+});
+
+app.post("/GetLiveTradesBuyer" , (req, res) => {
+  const userID = req.session.user[0].userID;
+
+  db.query(
+    "SELECT * FROM LiveTrades WHERE (buyerid) =(?)",
+    [userID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else if (result.length === 0 ) {
+        res.send({
+          message: "No live trades"
+        })
+      } else {
+        res.send(result);
+      }
+    }
+  )
+});
+
+app.post("GetLiveTradesSeller" , (req, res) => {
+  const userID = req.session.user[0].userID;
+  db.query(
+    "SELECT * FROM LiveTrades WHERE (sellerid) =(?)",
+    [userID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else if (result.length === 0 ) {
+        res.send({
+          message: "No live trades"
+        })
+      } else {
+        res.send(result);
+      }
+    }
+  )  
 });
 
 server.listen(3002, () => {
