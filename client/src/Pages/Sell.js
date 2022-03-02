@@ -90,6 +90,9 @@ export const convertAssetToSvg = (asset) => {
     if (asset === ''){ return <i className="material-icons">token</i> }
 }
 
+//Write something to populate these from userPyamentsAccounts db
+
+
 const PaymentMethods = [
 	"Please Select",
 	"UK Bank Transfer",
@@ -106,8 +109,18 @@ const Sell = () => {
 	const [changeReg, setChangeReg] = useState("");
 	const [preferredPayment, setPreferredPayment] = useState("");
 	const [secondaryPayment, setSecondaryPayment] = useState("");
+	const [newPaymentMethods, setNewPaymentMethods] = useState([]);
   
 	const navigate = useNavigate();
+
+	const updatePayments = () => {
+		Axios.post("http://localhost:3001/FindUserPaymentMethods", {
+
+		}).then((response) =>{
+			setNewPaymentMethods(response.data);
+			console.log(response.data);
+		})
+	}
 
 	const addSale = () => {
 	  Axios.post("http://localhost:3001/sell", {
@@ -123,6 +136,7 @@ const Sell = () => {
 	}
 
   useEffect(() => {
+	  updatePayments();
   }, []);
 
   return (
