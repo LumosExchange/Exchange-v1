@@ -95,6 +95,8 @@ const PaymentMethods = [
 	"UK Bank Transfer",
 	"EU Bank Transfer",
 	"International Wire Transfer",
+	"Paypal Transfer",
+	"Skrill Transfer",
 ];
 
 const Sell = () => {
