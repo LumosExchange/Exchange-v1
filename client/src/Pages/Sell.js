@@ -115,10 +115,15 @@ const Sell = () => {
 
 	const updatePayments = () => {
 		Axios.post("http://localhost:3001/FindUserPaymentMethods", {
-
-		}).then((response) =>{
-			setNewPaymentMethods(response.data);
-			console.log(response.data);
+		}).then((response) => {
+			const methods = ["Please Select",];
+			if (response.data[0].EUBank === 1){methods.push('EU Bank Transfer')}
+			if (response.data[0].UKBank === 1){ methods.push('UK Bank Transfer')}
+			if (response.data[0].InterBank === 1){ methods.push('International Bank Transfer')}
+			if (response.data[0].Paypal === 1){ methods.push('Paypal')}
+			if (response.data[0].Skrill === 1){ methods.push('Skrill')}
+			setNewPaymentMethods(methods);
+			console.log(newPaymentMethods, 'New Payment Methods');
 		})
 	}
 
@@ -131,6 +136,7 @@ const Sell = () => {
 		  payment2: secondaryPayment
 		})
   	}
+
 	const switchMode = () => {
 		navigate("/Buy");
 	}
@@ -273,7 +279,7 @@ const Sell = () => {
 										className="w-100"
 										required
 									>
-										{PaymentMethods.map((data) => (
+										{newPaymentMethods.map((data) => (
 											<option value={data}>{data}</option>
 										))}
 									</StyledDropdown>
@@ -291,7 +297,7 @@ const Sell = () => {
 										className="w-100"
 										required
 									>
-										{PaymentMethods.map((data) => (
+										{newPaymentMethods.map((data) => (
 											<option value={data}>{data}</option>
 										))}
 									</StyledDropdown>
