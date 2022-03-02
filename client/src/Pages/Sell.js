@@ -123,7 +123,6 @@ const Sell = () => {
 			if (response.data[0].Paypal === 1){ methods.push('Paypal')}
 			if (response.data[0].Skrill === 1){ methods.push('Skrill')}
 			setNewPaymentMethods(methods);
-			console.log(newPaymentMethods, 'New Payment Methods');
 		})
 	}
 
@@ -144,6 +143,8 @@ const Sell = () => {
   useEffect(() => {
 	  updatePayments();
   }, []);
+
+  const filteredNewPaymentMethods = newPaymentMethods.filter(method => method !== preferredPayment);
 
   return (
 		<PageBody>
@@ -297,7 +298,7 @@ const Sell = () => {
 										className="w-100"
 										required
 									>
-										{newPaymentMethods.map((data) => (
+										{filteredNewPaymentMethods.map((data) => (
 											<option value={data}>{data}</option>
 										))}
 									</StyledDropdown>
