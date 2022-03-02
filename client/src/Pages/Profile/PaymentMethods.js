@@ -18,46 +18,6 @@ import Paragraph from "../../Components/Paragraph";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { CodeSentMessage } from "../ChangePassword";
 
-const fakeUserPaymentMethods = [
-  {
-    type: "card",
-    name: "Primary Card",
-    number: "0123 4567 8910 1112",
-    account: "12345678",
-    sort: "00-00-00",
-    ccv: "069",
-  },
-  {
-    type: "ukbank",
-    name: "UK Bank Account",
-    account: "12345678",
-    sort: "00-00-00",
-  },
-  {
-    type: "eubank",
-    name: "EU Bank Account",
-    bankName: "Lloyds Bank",
-    bic: "BINAADADXXX",
-    iban: "FR7630006000011234567890189",
-  },
-  {
-    type: "intbank",
-    name: "International Bank Account",
-    bankName: "Lloyds Bank",
-    bic: "BINAADADXXX",
-  },
-  {
-    type: "paypal",
-    name: "PayPal",
-    email: "thisEmail@gmai.com",
-  },
-  {
-    type: "skrill",
-    name: "Skrill",
-    email: "thisEmail@gmail.com",
-  },
-];
-
 const MethodIcon = styled.i(
   ({ theme }) => css`
     color: ${theme.colors.text_primary};
@@ -225,6 +185,7 @@ const PaymentMethods = () => {
 		const [deleteModalMode, setDeleteModalMode] = useState('initial');
 		const [deleteConfirmationMessage, setDeleteConfirmationMessage] = useState("");
 		const [isLoading, setIsLoading] = useState(true);
+		const [modalTitle, setModalTitle] = useState('');
 
 		const getUserPaymentMethods = () => {
 			Axios.all([
@@ -258,6 +219,7 @@ const PaymentMethods = () => {
 				setSortCode2(data.sort.slice(2,4));
 				setSortCode3(data.sort.slice(4,6));
 				setModalMode("ukbank");
+				setModalTitle("Edit UK bank");
 			}
 
 			if (data.type === "paypal"){

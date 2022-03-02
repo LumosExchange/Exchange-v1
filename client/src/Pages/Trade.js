@@ -82,15 +82,23 @@ const solQuantity = 2;
 const socket = io.connect("http://localhost:3002");
 
 const PaymentInfoArea = ({ val, paymentInfo }) => (
-	<Card className="p-3 mb-4 d-flex flex-column">
-		<Paragraph size="20px" bold>
+	<Card className="p-3 mb-4 d-flex flex-column" color="grey">
+		<Paragraph size="24px" bold>
 			{val.paymentMethod1}
 		</Paragraph>
-		{paymentInfo.data?.reference && (
+		{paymentInfo.data?.name && (
 			<div className="d-flex justify-content-center">
-				<Paragraph bold size="20px" className="me-2">Ref:</Paragraph>
+				<Paragraph bold size="20px" className="me-2">Name:</Paragraph>
 				<Paragraph className="text-uppercase" size="20px">
-					{paymentInfo.data.reference}
+					{paymentInfo.data.name}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.sortCode && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">Sort:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.sortCode}
 				</Paragraph>
 			</div>
 		)}
@@ -102,11 +110,59 @@ const PaymentInfoArea = ({ val, paymentInfo }) => (
 				</Paragraph>
 			</div>
 		)}
-		{paymentInfo.data?.sortCode && (
+		{paymentInfo.data?.reference && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">Ref:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.reference}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.email && (
 			<div className="d-flex justify-content-center">
 				<Paragraph bold size="20px" className="me-2">Sort:</Paragraph>
 				<Paragraph className="text-uppercase" size="20px">
-					{paymentInfo.data.sortCode}
+					{paymentInfo.data.email}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.email && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">Email:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.email}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.bankName && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">Bank Name:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.bankName}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.bankCity && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">Bank City:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.bankCity}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.IBAN && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">IBAN:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.IBAN}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.BIC && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">BIC/SWIFT:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.BIC}
 				</Paragraph>
 			</div>
 		)}
