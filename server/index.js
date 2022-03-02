@@ -1651,6 +1651,63 @@ app.post("/GetLiveTradeInfo", (req, res) => {
                  }
                }  
              );
+             break;
+             case "International Wire Transfer":
+              db.query(
+                "SELECT bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE userID = ?",
+                [sellerID],
+                (err, result) => {
+                  if (err) {
+                    res.send(err);
+                  } else {
+                    res.send({
+                      bankName: result[0].bankName,
+                      bankCity: result[0].bankCity,
+                      bankCountry: result[0].bankCountry,
+                      SWIFTCode: result[0].SWIFTCode,
+                      payeesName: result[0].payeesName,
+                      interBankName: result[0].interBankName,
+                      interBankCity: result[0].interBankCity,
+                      interBankCountry: result[0].interBankCountry,
+                      interBankAccountNumber: result[0].interBankAccountNumber,
+                      interBankRoutingNumber: result[0].interBankRoutingNumber,
+                      reference: reference,
+                    });
+                  }
+                }  
+              );
+              break;
+              case "Paypal Transfer":
+              db.query(
+                "SELECT paypalEmail FROM paypalAccounts WHERE userID = ?",
+                [sellerID],
+                (err, result) => {
+                  if (err) {
+                    res.send(err);
+                  } else {
+                    res.send({
+                      paypalEmail: result[0].paypalEmail,
+                      reference: reference,
+                    });
+                  }
+                }  
+              );
+              break;
+              case "Skrill Transfer":
+              db.query(
+                "SELECT paypalEmail FROM skrillAccounts WHERE userID = ?",
+                [sellerID],
+                (err, result) => {
+                  if (err) {
+                    res.send(err);
+                  } else {
+                    res.send({
+                      skrillEmail: result[0].skrillEmail,
+                      reference: reference,
+                    });
+                  }
+                }  
+              );
         };  
     }});
 
@@ -1743,6 +1800,20 @@ app.post("/GetSellerInfo", (req, res) => {
       });
     }
   );
+});
+
+app.post("/FindUserPaymentMethods", (req, res) => {
+  const userID = req.session.user[0].userID;
+  
+  db.query(
+    "SELECT * FROM userPaymentAccounts WHERE (userID) =(?)",
+    [userID],
+    (err, result) => {
+      console.log(result);
+      res.send(result);
+    }
+  );
+
 });
 
 server.listen(3002, () => {
