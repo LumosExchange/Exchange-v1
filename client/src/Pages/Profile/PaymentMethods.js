@@ -177,6 +177,8 @@ const PaymentMethods = () => {
 	const [confirmationMessage, setConfirmationMessage] = useState("");
 	const [errorMessage, setErrorMessage] = useState("");
 
+	const [isEditing, setIsEditing] = useState(false);
+
 	
 	const ShowAddedPaymentMethods = () => {
 		const [userPaymentMethods, setUserPaymentMethods] = useState([]);
@@ -214,25 +216,28 @@ const PaymentMethods = () => {
 			setModal(!modal);
 
 			if (data.type === "ukbank"){
+				setIsEditing(true);
 				setAccountNumber(data.account);
 				setSortCode1(data.sort.slice(0,2));
 				setSortCode2(data.sort.slice(2,4));
 				setSortCode3(data.sort.slice(4,6));
 				setModalMode("ukbank");
-				setModalTitle("Edit UK bank");
 			}
 
 			if (data.type === "paypal"){
+				setIsEditing(true);
 				setPayPalEmail(data.email);
 				setModalMode("paypal");
 			}
 
 			if (data.type === "skrill"){
+				setIsEditing(true);
 				setSkrillEmail(data.email);
 				setModalMode("skrill");
 			}
 
 			if (data.type === "eubank"){
+				setIsEditing(true);
 				setIBAN(data.IBAN);
 				setBIC(data.BIC);
 				setBankName(data.bankName);
@@ -240,6 +245,7 @@ const PaymentMethods = () => {
 			}
 
 			if (data.type === "card"){
+				setIsEditing(true);
 				setNameOnCard(data.nameOnCard);
 				setCardExpiration(data.cardExpiration);
 				setCardCvc(data.ccv);
@@ -249,6 +255,7 @@ const PaymentMethods = () => {
 			}
 
 			if (data.type === "internationalBank"){
+				setIsEditing(true);
 				setBankName(data.bankName);
 				setBankCity(data.bankCity);
 				setBankCountry(data.bankCountry);
@@ -433,6 +440,7 @@ const PaymentMethods = () => {
 
     const toggle = () => {
 		setModal(!modal);
+		setIsEditing(false);
 
 		if (modalMode === "intbankPage2"){
 			setModalMode("intbank");
@@ -451,6 +459,7 @@ const PaymentMethods = () => {
 		}	
 	}
 
+	// Add & Edit Cards
 	const addCard = () => {
 		Axios.post("http://localhost:3001/RegisterCard", {
 			nameOnCard,
@@ -465,6 +474,21 @@ const PaymentMethods = () => {
 		})
 	}
 
+	const editCard = () => {
+		Axios.post("http://localhost:3001/EditCard", {
+			nameOnCard,
+			cardExpiration,
+			cardCvc,
+			cardPostalCode,
+			cardNumber,
+		}).then((response) => {
+			setModal(!modal);
+			setModalMode('initial');
+			resetValues()
+		})
+	}
+
+	// Add & Edit UK Bank
 	const addUKBank = () => {
 		Axios.post("http://localhost:3001/RegisterUkBank", {
 			sortCode,
@@ -479,6 +503,21 @@ const PaymentMethods = () => {
 		})
 	}
 
+	const editUKBank = () => {
+		Axios.post("http://localhost:3001/EditUkBank", {
+			sortCode,
+			accountNumber
+		}).then((response) => {
+			if (response.status === 200){
+				setConfirmationMessage(response.data.message);
+				setModalMode('confirmation');
+			} else {
+				setErrorMessage(response.data.message);
+			}
+		})
+	}
+
+	// Add & Edit EU Bank
 	const addEUBank = () => {
 		Axios.post("http://localhost:3001/RegisterEUBank", {
 			bankName,
@@ -494,6 +533,22 @@ const PaymentMethods = () => {
 		})
 	}
 
+	const editEUBank = () => {
+		Axios.post("http://localhost:3001/EditEUBank", {
+			bankName,
+			IBAN,
+			BIC,
+		}).then((response) => {
+			if (response.status === 200){
+				setConfirmationMessage(response.data.message);
+				setModalMode('confirmation');
+			} else {
+				setErrorMessage(response.data.message);
+			}
+		})
+	}
+
+	// Add & Edit International Bank
 	const addIntBank = () => {
 		Axios.post("http://localhost:3001/RegisterInternationalBank", {
 			bankName,
@@ -516,6 +571,29 @@ const PaymentMethods = () => {
 		})
 	}
 
+	const editIntBank = () => {
+		Axios.post("http://localhost:3001/EditInternationalBank", {
+			bankName,
+			bankCity,
+			bankCountry,
+			BIC,
+			payeeName,
+			interBankName,
+			interBankCity,
+			interBankCountry,
+			interBankAccountNumber,
+			interBankRoutingNumber,
+		}).then((response) => {
+			if (response.status === 200){
+				setConfirmationMessage(response.data.message);
+				setModalMode('confirmation');
+			} else {
+				setErrorMessage(response.data.message);
+			}
+		})
+	}
+
+	// Add & Edit International Bank
 	const addPayPal = () => {
 		Axios.post("http://localhost:3001/RegisterPaypal", {
 			paypalEmail,
@@ -529,8 +607,35 @@ const PaymentMethods = () => {
 		})
 	}
 
+	const editPayPal = () => {
+		Axios.post("http://localhost:3001/EditPaypal", {
+			paypalEmail,
+		}).then((response) => {
+			if (response.status === 200){
+				setConfirmationMessage(response.data.message);
+				setModalMode('confirmation');
+			} else {
+				setErrorMessage(response.data.message);
+			}
+		})
+	}
+
+	// Add & Edit International Bank
 	const addSkrill = () => {
 		Axios.post("http://localhost:3001/RegisterSkrill", {
+			skrillEmail,
+		}).then((response) => {
+			if (response.status === 200){
+				setConfirmationMessage(response.data.message);
+				setModalMode('confirmation');
+			} else {
+				setErrorMessage(response.data.message);
+			}
+		})
+	}
+
+	const editSkrill = () => {
+		Axios.post("http://localhost:3001/EditSkrill", {
 			skrillEmail,
 		}).then((response) => {
 			if (response.status === 200){
@@ -587,7 +692,7 @@ const PaymentMethods = () => {
 				>
 				{modalMode !== 'confirmation' && (
 					<ModalHeader className="d-flex align-items-center">
-						{modalMode !== "initial" && (
+						{modalMode !== "initial" && !isEditing && (
 							<InvisibleButton
 								onClick={() => goBack() }
 								className="d-flex align-items-center"
@@ -598,17 +703,19 @@ const PaymentMethods = () => {
 						<div>
 						{(
 							modalMode === "initial" && 'Add a Payment Method')
-							|| (modalMode === "ukbank" && 'Add UK Bank Account')
-							|| (modalMode === "eubank" && 'Add EU Bank Account')
-							|| (modalMode === "intbank" && 'Add International Bank Account (1/2)')
-							|| (modalMode === "intbankPage2" && 'Add International Bank Account (2/2)')
-							|| (modalMode === "card" && 'Add Credit/Debit Card')
-							|| (modalMode === "paypal" && 'Add PayPal Account')
-							|| (modalMode === "skrill" && 'Add Skrill Account'
+							|| (modalMode === "ukbank" && (isEditing ? 'Edit UK Bank Account' : 'Add UK Bank Account'))
+							|| (modalMode === "eubank" && (isEditing ? 'Edit EU Bank Account' : 'Add EU Bank Account'))
+							|| (modalMode === "intbank" && (isEditing ? 'Edit International Bank (1/2)' : 'Add International Bank Account (1/2)'))
+							|| (modalMode === "intbankPage2" && (isEditing ? 'Edit Internation Bank (2/2)' : 'Add International Bank Account (2/2)'))
+							|| (modalMode === "card" && (isEditing ? 'Edit Credit/Debit Card' : 'Add Credit/Debit Card'))
+							|| (modalMode === "paypal" && (isEditing ? 'Edit PayPal Account' : 'Add PayPal Account'))
+							|| (modalMode === "skrill" && (isEditing ? 'Edit Skrill Account' : 'Add Skrill Account')
 						)}
+						{console.log(isEditing, 'is editing?')}
+						{console.log(modalMode, 'modal mode')}
 						</div>
 					</ModalHeader>
-				)}
+				)} 
 				{modalMode === 'initial' && (
 					<ModalBody className="row">
 						<AddBankButton onClick={() => setModalMode("ukbank")} className="mb-2">
@@ -769,10 +876,10 @@ const PaymentMethods = () => {
 						</div>
 						<div className="col-12">
 							<PrimaryButton
-								text="Save"
 								className="w-100"
 								disabled={ (nameOnCard.length === 0 || cardExpiration.length < 5) || (cardCvc.length < 3) || (cardPostalCode.length < 6)}
-								onClick={ () => addCard }
+								text={isEditing ? 'Save Changes' : 'Add Card'}
+								onClick={() => { isEditing ? editCard() : addCard()}}
 							/>
 						</div>
 						</form>
@@ -860,15 +967,10 @@ const PaymentMethods = () => {
 						</div>
 						<div className="col-12">
 							<PrimaryButton
-								text="Save"
+								text={isEditing ? 'Update UK Bank' : 'Add UK Bank'}
 								className="w-100"
 								disabled={ (sortCode.length > 6 || sortCode.length < 6) || (accountNumber.length < 8)}
-								onClick={
-									event => {
-										event.preventDefault();
-										addUKBank()
-									}
-								}
+								onClick={() => { isEditing ? editUKBank() : addUKBank()}}
 							/>
 						</div>
 						</form>
@@ -940,14 +1042,14 @@ const PaymentMethods = () => {
 						</div>
 						<div className="col-12">
 							<PrimaryButton
-								text="Save"
+								text={isEditing ? 'Update EU Bank' : 'Add EU Bank'}
 								className="w-100"
 								disabled={
 									(IBAN.length === 0 || IBAN.length > 32)
 									|| (BIC.length > 11 || BIC.length < 8)
 									|| (bankName.length === 0)
 								}
-								onClick={ addEUBank }
+								onClick={() => { isEditing ? editEUBank() : addEUBank()}}
 							/>
 						</div>
 					</ModalBody>
@@ -1167,7 +1269,7 @@ const PaymentMethods = () => {
 						</div>
 						<div className="col-12">
 							<PrimaryButton
-								text="Save"
+								text={isEditing ? 'Update International Bank' : 'Add International Bank'}
 								className="w-100"
 								disabled={
 									interBankName.length === 0
@@ -1176,7 +1278,7 @@ const PaymentMethods = () => {
 									|| interBankAccountNumber.length === 0
 									|| interBankRoutingNumber.length === 0
 								}
-								onClick={ addIntBank }
+								onClick={() => { isEditing ? editIntBank() : addIntBank()}}
 							/>
 							<Paragraph className="showError">{errorMessage}</Paragraph>
 						</div>
@@ -1207,13 +1309,13 @@ const PaymentMethods = () => {
 							</div>
 							<div className="col-12">
 								<PrimaryButton
-									text="Save"
+									text={isEditing ? 'Edit Paypal' : 'Add PayPal'}
 									className="w-100"
 									disabled={ paypalEmail.length === 0}
 									onClick={
 										event => {
 											event.preventDefault();
-											addPayPal()
+											isEditing ? editPayPal() : addPayPal()
 										}
 									}
 								/>
@@ -1247,13 +1349,13 @@ const PaymentMethods = () => {
 							</div>
 							<div className="col-12">
 								<PrimaryButton
-									text="Save"
+									text={isEditing ? 'Edit Skrill' : 'Add Skrill'}
 									className="w-100"
 									disabled={ skrillEmail.length === 0}
 									onClick={
 										event => {
 											event.preventDefault();
-											addSkrill()
+											isEditing ? editSkrill() : addSkrill()
 										}
 									}
 								/>
