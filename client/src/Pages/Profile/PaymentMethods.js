@@ -441,6 +441,7 @@ const PaymentMethods = () => {
     const toggle = () => {
 		setModal(!modal);
 		setIsEditing(false);
+		setErrorMessage('');
 
 		if (modalMode === "intbankPage2"){
 			setModalMode("intbank");
@@ -475,7 +476,7 @@ const PaymentMethods = () => {
 	}
 
 	const editCard = () => {
-		Axios.post("http://localhost:3001/EditCard", {
+		Axios.post("http://localhost:3001/UpdateCard", {
 			nameOnCard,
 			cardExpiration,
 			cardCvc,
@@ -494,25 +495,25 @@ const PaymentMethods = () => {
 			sortCode,
 			accountNumber
 		}).then((response) => {
-			if (response.status === 200){
+			if (!response.data.code){
 				setConfirmationMessage(response.data.message);
 				setModalMode('confirmation');
 			} else {
-				setErrorMessage(response.data.message);
+				setErrorMessage(response.data.sqlMessage);
 			}
 		})
 	}
 
 	const editUKBank = () => {
-		Axios.post("http://localhost:3001/EditUkBank", {
+		Axios.post("http://localhost:3001/UpdateUkBank", {
 			sortCode,
 			accountNumber
 		}).then((response) => {
-			if (response.status === 200){
+			if (!response.data.code){
 				setConfirmationMessage(response.data.message);
 				setModalMode('confirmation');
 			} else {
-				setErrorMessage(response.data.message);
+				setErrorMessage(response.data.sqlMessage);
 			}
 		})
 	}
@@ -524,26 +525,26 @@ const PaymentMethods = () => {
 			IBAN,
 			BIC,
 		}).then((response) => {
-			if (response.status === 200){
+			if (!response.data.code){
 				setConfirmationMessage(response.data.message);
 				setModalMode('confirmation');
 			} else {
-				setErrorMessage(response.data.message);
+				setErrorMessage(response.data.sqlMessage);
 			}
 		})
 	}
 
 	const editEUBank = () => {
-		Axios.post("http://localhost:3001/EditEUBank", {
+		Axios.post("http://localhost:3001/UpdateEUBank", {
 			bankName,
 			IBAN,
 			BIC,
 		}).then((response) => {
-			if (response.status === 200){
+			if (!response.data.code){
 				setConfirmationMessage(response.data.message);
 				setModalMode('confirmation');
 			} else {
-				setErrorMessage(response.data.message);
+				setErrorMessage(response.data.sqlMessage);
 			}
 		})
 	}
@@ -562,17 +563,17 @@ const PaymentMethods = () => {
 			interBankAccountNumber,
 			interBankRoutingNumber,
 		}).then((response) => {
-			if (response.status === 200){
+			if (!response.data.code){
 				setConfirmationMessage(response.data.message);
 				setModalMode('confirmation');
 			} else {
-				setErrorMessage(response.data.message);
+				setErrorMessage(response.data.sqlMessage);
 			}
 		})
 	}
 
 	const editIntBank = () => {
-		Axios.post("http://localhost:3001/EditInternationalBank", {
+		Axios.post("http://localhost:3001/UpdateInternationalBank", {
 			bankName,
 			bankCity,
 			bankCountry,
@@ -584,11 +585,11 @@ const PaymentMethods = () => {
 			interBankAccountNumber,
 			interBankRoutingNumber,
 		}).then((response) => {
-			if (response.status === 200){
+			if (!response.data.code){
 				setConfirmationMessage(response.data.message);
 				setModalMode('confirmation');
 			} else {
-				setErrorMessage(response.data.message);
+				setErrorMessage(response.data.sqlMessage);
 			}
 		})
 	}
@@ -598,24 +599,24 @@ const PaymentMethods = () => {
 		Axios.post("http://localhost:3001/RegisterPaypal", {
 			paypalEmail,
 		}).then((response) => {
-			if (response.status === 200){
+			if (!response.data.code){
 				setConfirmationMessage(response.data.message);
 				setModalMode('confirmation');
 			} else {
-				setErrorMessage(response.data.message);
+				setErrorMessage(response.data.sqlMessage);
 			}
 		})
 	}
 
 	const editPayPal = () => {
-		Axios.post("http://localhost:3001/EditPaypal", {
+		Axios.post("http://localhost:3001/UpdatePaypal", {
 			paypalEmail,
 		}).then((response) => {
-			if (response.status === 200){
+			if (!response.data.code){
 				setConfirmationMessage(response.data.message);
 				setModalMode('confirmation');
 			} else {
-				setErrorMessage(response.data.message);
+				setErrorMessage(response.data.sqlMessage);
 			}
 		})
 	}
@@ -625,24 +626,25 @@ const PaymentMethods = () => {
 		Axios.post("http://localhost:3001/RegisterSkrill", {
 			skrillEmail,
 		}).then((response) => {
-			if (response.status === 200){
+			if (!response.data.code){
 				setConfirmationMessage(response.data.message);
 				setModalMode('confirmation');
 			} else {
-				setErrorMessage(response.data.message);
+				setErrorMessage(response.data.sqlMessage);
 			}
 		})
 	}
 
 	const editSkrill = () => {
-		Axios.post("http://localhost:3001/EditSkrill", {
+		Axios.post("http://localhost:3001/UpdateSkrill", {
 			skrillEmail,
 		}).then((response) => {
-			if (response.status === 200){
+			console.log(response, 'response from editSkrill');
+			if (!response.data.code){
 				setConfirmationMessage(response.data.message);
 				setModalMode('confirmation');
 			} else {
-				setErrorMessage(response.data.message);
+				setErrorMessage(response.data.sqlMessage);
 			}
 		})
 	}
@@ -652,11 +654,6 @@ const PaymentMethods = () => {
 	}
 
   	useEffect(() => {}, []);
-
-	console.log(sortCode1, 'sortcode 1');
-	console.log(sortCode2, 'sortcode 2');
-	console.log(sortCode3, 'sortcode 3');
-	console.log(sortCode, 'sortcode');
 
 	return (
 		<PageBody>
@@ -881,6 +878,7 @@ const PaymentMethods = () => {
 								text={isEditing ? 'Save Changes' : 'Add Card'}
 								onClick={() => { isEditing ? editCard() : addCard()}}
 							/>
+							{errorMessage && <Paragraph className="showError mt-3 mb-0" size="18px" bold>Error: {errorMessage}</Paragraph>}
 						</div>
 						</form>
 					</ModalBody>
@@ -972,6 +970,7 @@ const PaymentMethods = () => {
 								disabled={ (sortCode.length > 6 || sortCode.length < 6) || (accountNumber.length < 8)}
 								onClick={() => { isEditing ? editUKBank() : addUKBank()}}
 							/>
+							{errorMessage && <Paragraph className="showError mt-3 mb-0" size="18px" bold>Error: {errorMessage}</Paragraph>}
 						</div>
 						</form>
 					</ModalBody>
@@ -1051,6 +1050,7 @@ const PaymentMethods = () => {
 								}
 								onClick={() => { isEditing ? editEUBank() : addEUBank()}}
 							/>
+							{errorMessage && <Paragraph className="showError mt-3 mb-0" size="18px" bold>Error: {errorMessage}</Paragraph>}
 						</div>
 					</ModalBody>
 				)}
@@ -1280,7 +1280,7 @@ const PaymentMethods = () => {
 								}
 								onClick={() => { isEditing ? editIntBank() : addIntBank()}}
 							/>
-							<Paragraph className="showError">{errorMessage}</Paragraph>
+							{errorMessage && <Paragraph className="showError mt-3 mb-0" size="18px" bold>Error: {errorMessage}</Paragraph>}
 						</div>
 					</ModalBody>
 				)}
@@ -1319,7 +1319,7 @@ const PaymentMethods = () => {
 										}
 									}
 								/>
-								<Paragraph className="showError">{errorMessage}</Paragraph>
+								{errorMessage && <Paragraph className="showError mt-3 mb-0" size="18px" bold>Error: {errorMessage}</Paragraph>}
 							</div>
 						</form>
 					</ModalBody>
@@ -1360,7 +1360,7 @@ const PaymentMethods = () => {
 									}
 								/>
 							</div>
-							<Paragraph className="showError">{errorMessage}</Paragraph>
+							{errorMessage && <Paragraph className="showError mt-3 mb-0" size="18px" bold>Error: {errorMessage}</Paragraph>}
 						</form>
 					</ModalBody>
 				)}
