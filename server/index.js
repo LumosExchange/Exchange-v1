@@ -41,8 +41,8 @@ io.on("connection", (socket) => {
   });
   
   socket.on("send_message", (data) => {
-    socket.to(data.room).emit("recieve_message" , data)
-    console.log(data);
+    socket.to(data.room).emit("recieve_message", data);
+    console.log('RECIEVE MESSAGE: ', data);
     
 
   });
@@ -406,6 +406,11 @@ app.get("/getUserAccountLevel", (req, res) => {
   );
 });
 
+app.get("/getUserID" , (req, res) => {
+  id = req.session.user[0].userID;
+  req.send(id);
+})
+
 //update user settings
 app.post("/updateUserSettings", (req, res) => {
   const theme = req.body.theme;
@@ -661,7 +666,7 @@ app.post("/VerifyEmail2FA", (req, res) => {
   //Add user to userAuth Table
   db.query(
     "UPDATE userAuth SET emailVerified = ? WHERE Email = ?",
-    [TRUE, email],
+    [1, email],
     (err, result) => {
       console.log(err);
     }
@@ -1418,7 +1423,7 @@ app.post("/UpdateSkrill", (req, res) => {
   const skrillEmail = req.body.skrillEmail;
 
   db.query(
-    "UPDATE skrillAccounts SET skillEmail = ? WHERE userID = ?",
+    "UPDATE skrillAccounts SET skrillEmail = ? WHERE userID = ?",
     [skrillEmail, user],
     (err, result) => {
       if (err) {
@@ -1605,9 +1610,10 @@ app.post("/OpenTrade", (req, res) => {
   let paymentCurrency = req.body.paymentCurrency;
   let message = req.body.message;
   let reference = crypto.randomBytes(5).toString("hex");
+  let no = "NO";
 
   db.query(
-    "INSERT INTO LiveTrades (saleID, sellerID, buyerID, Date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, Message, Reference) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+    "INSERT INTO LiveTrades (saleID, sellerID, buyerID, Date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, Message, Reference, paymentRecieved, escrowReleaseTime) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
     [
       saleID,
       sellerID,
@@ -1620,6 +1626,8 @@ app.post("/OpenTrade", (req, res) => {
       paymentCurrency,
       message,
       reference,
+      no,
+      date,
     ],
     (err, result) => {
       if (err) {
@@ -1633,6 +1641,44 @@ app.post("/OpenTrade", (req, res) => {
     }
   );
 });
+
+//CLOSE TRADE
+app.post("/UpdateLiveListing", (req, res) => {
+  const sellerID = req.session.user[0].userID;
+  const saleID = req.body.saleID;
+
+
+  var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  
+  db.query(
+    "Update liveTrades SET paymentRecieved = ?, escrowReleaseTime = ? , WHERE sellerID = ? && saleID = ?",
+    ["YES", date, sellerID, saleID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(result);
+    }});
+});
+
+app.post("/CloseTrade", (req,res) => {
+
+  const buyerID = req.session.user[0].userID;
+  const saleID = req.body.saleID;
+  const sellerID = req.body.sellerID;
+  const feedbackScore = req.body.feedbackScore;
+  const feedbackComment = req.body.feedbackComment;
+
+ 
+  db.query(
+    "")
+
+  //Calculate escrow release time and add to feedback db
+
+  //delete trade from live trade and copy to tardeHistory db
+
+
+})
 
 app.post("/GetLiveTradeInfo", (req, res) => {
   const sellerID = req.body.sellerID;
@@ -1841,7 +1887,7 @@ app.post("/FindUserPaymentMethods", (req, res) => {
   const userID = req.session.user[0].userID;
   
   db.query(
-    "SELECT * FROM userPaymentAccounts WHERE (userID) =(?)",
+    "SELECT * FROM userPaymentAccounts WHERE (userID) = (?)",
     [userID],
     (err, result) => {
       console.log(result);
@@ -1851,18 +1897,18 @@ app.post("/FindUserPaymentMethods", (req, res) => {
 
 });
 
-app.post("/GetLiveTradesBuyer" , (req, res) => {
+app.post("/GetLiveTradesBuyer", (req, res) => {
   const userID = req.session.user[0].userID;
 
   db.query(
-    "SELECT * FROM LiveTrades WHERE (buyerid) =(?)",
+    "SELECT * FROM LiveTrades WHERE (buyerid) = (?)",
     [userID],
     (err, result) => {
       if (err) {
         res.send(err);
       } else if (result.length === 0 ) {
         res.send({
-          message: "No live trades"
+          message: "No live trades",
         })
       } else {
         res.send(result);
@@ -1871,17 +1917,17 @@ app.post("/GetLiveTradesBuyer" , (req, res) => {
   )
 });
 
-app.post("GetLiveTradesSeller" , (req, res) => {
+app.post("/GetLiveTradesSeller", (req, res) => {
   const userID = req.session.user[0].userID;
   db.query(
-    "SELECT * FROM LiveTrades WHERE (sellerid) =(?)",
+    "SELECT * FROM LiveTrades WHERE (sellerid) = (?)",
     [userID],
     (err, result) => {
       if (err) {
         res.send(err);
       } else if (result.length === 0 ) {
         res.send({
-          message: "No live trades"
+          message: "No live trades",
         })
       } else {
         res.send(result);
@@ -1889,6 +1935,8 @@ app.post("GetLiveTradesSeller" , (req, res) => {
     }
   )  
 });
+
+
 
 server.listen(3002, () => {
   console.log("SERVER RUNNING");

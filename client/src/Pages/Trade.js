@@ -180,6 +180,9 @@ const Trade = () => {
 	const [paymentInfo, setPaymentInfo] = useState([]);
 	const [room, setRoom] = useState("");
 	const [pageMode, setPageMode] = useState("buy");
+	const [buyer, setBuyer] = useState(false);
+
+
 
 	const { state } = useLocation();
 	const { val } = state;
@@ -187,6 +190,15 @@ const Trade = () => {
 	console.log(state);
 
 	const navigate = useNavigate();
+
+	//if (state.buyerOrSeller === "Buyer") {
+	//	setBuyer(true);
+
+		//show buyer state
+	//} else {
+	//	setBuyer(false);
+		//show seller side
+	//}
 
 	//Get userName && reference
 	//room will be refernce so buyer and seller can connect
@@ -204,6 +216,8 @@ const Trade = () => {
 			});
 	};
 
+	
+	
 	//chat stuff here
 	const joinRoom = () => {
 		if (val.userName !== "" && room !== "") {
@@ -233,7 +247,7 @@ const Trade = () => {
 		socket.on("receive_message", (data) => {
 			setMessageList((list) => [...list, data]);
 		});
-	}, []);
+	}, [socket]);
 
 	//console.log(messageList, 'message list');
 	//console.log(currentMessage, 'current message');

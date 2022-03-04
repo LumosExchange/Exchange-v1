@@ -107,6 +107,7 @@ const App = () => {
             <Route path="/Profile/AccountUpgrade" element={<AccountUpgrade />} />
             <Route path="/MyListings" element={<MyListings />} />
             <Route path="/Trade" element={<Trade />} />
+
           </Routes>
         </Router>
         <Footer />
