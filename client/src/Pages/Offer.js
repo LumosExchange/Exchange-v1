@@ -79,6 +79,7 @@ const Offer = () => {
 
 	const { state } = useLocation();
 	const { val } = state;
+	const buyerOrSeller = "Buyer";
 
 	const ID = val.userID;
 
@@ -295,7 +296,8 @@ const Offer = () => {
 											solGbp,
 											currency,
 											ID,
-											paymentMethod
+											paymentMethod,
+										//	buyerOrSeller
 
 										}
 									});
@@ -306,6 +308,23 @@ const Offer = () => {
 									|| offerAmountInSol.length === 0
 								}
 							/>
+							<button
+							onClick={() => {
+									
+									navigate("/Trades" , {
+										state: {
+											val,
+											solGbp,
+											currency,
+											ID,
+											paymentMethod,
+										//	buyerOrSeller
+
+										}
+									});
+								}}>
+
+							</button>
 						</div>
 					</div>
 					</div>
