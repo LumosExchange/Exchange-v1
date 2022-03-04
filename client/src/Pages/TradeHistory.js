@@ -12,6 +12,7 @@ import { convertCurrencyToSymbol } from '../Helpers'
 import GradientButton from "../Components/GradientButton";
 import { convertAssetToSvg } from '../Pages/Buy';
 import styled from 'styled-components';
+import { useNavigate } from "react-router";
 
 const Reference = styled(Paragraph)`text-transform: uppercase;`;
 const TitledIcon = styled.i`cursor: help;`;
@@ -19,9 +20,11 @@ const TitledIcon = styled.i`cursor: help;`;
 const ActiveTradeCard = ({ tradeInfo }) => {
 	const formattedDate = tradeInfo.Date.replace('T', ' at ').replace('.000Z', ' ');
 	const formattedCurrencySymbol = convertCurrencyToSymbol(tradeInfo.paymentCurrency);
+	const liveTradeId = tradeInfo.LiveTradeID;
+	const navigate = useNavigate();
 
 	return (
-		<Card className="w-100 p-4" color="grey">
+		<Card className="w-100 p-4" color="grey" key={tradeInfo.Reference}>
 			<div className="row">
 				<div className="col-3">
 					<div className="d-flex flex-column">
@@ -77,7 +80,15 @@ const ActiveTradeCard = ({ tradeInfo }) => {
 					</div>
 				</div>
 				<div className="col-3 d-flex align-items-end justify-content-end">
-					<GradientButton text="View this Trade" fontSize="20px" />
+					<GradientButton
+						text="View this Trade"
+						fontSize="20px"
+						onClick={ () => navigate("/Offer", {
+							state: {
+								liveTradeId,
+							}
+						})}
+					/>
 				</div>
 			</div>
 		</Card>
