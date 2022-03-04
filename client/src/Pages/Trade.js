@@ -59,15 +59,15 @@ const ChatWrapper = styled.div(({ theme }) => css`
 			margin-bottom: 28px;
 			width: auto;
 			display: flex;
-			justify-content: flex-end;
-			align-self: flex-end;
+			// justify-content: flex-end;
+			// align-self: flex-end;
 
 			&.self {
 				border-radius: 0px 20px 20px 20px;
 				background: ${theme.colors.primary_cta};
 				color: ${theme.colors.base_bg};
-				justify-content: flex-start;
-				align-self: flex-start;
+				// justify-content: flex-start;
+				// align-self: flex-start;
 			}
 		}
 
@@ -180,9 +180,7 @@ const Trade = () => {
 	const [paymentInfo, setPaymentInfo] = useState([]);
 	const [room, setRoom] = useState("");
 	const [pageMode, setPageMode] = useState("buy");
-	const [buyer, setBuyer] = useState(false);
-
-
+	const [userName, setUserName] = useState("");
 
 	const { state } = useLocation();
 	const { val } = state;
@@ -190,15 +188,6 @@ const Trade = () => {
 	console.log(state);
 
 	const navigate = useNavigate();
-
-	//if (state.buyerOrSeller === "Buyer") {
-	//	setBuyer(true);
-
-		//show buyer state
-	//} else {
-	//	setBuyer(false);
-		//show seller side
-	//}
 
 	//Get userName && reference
 	//room will be refernce so buyer and seller can connect
@@ -216,11 +205,17 @@ const Trade = () => {
 			});
 	};
 
-	
-	
+	const getUserName = () => {
+		Axios.get("http://localhost:3001/getUserNameNav", {
+		}).then((response) => {
+		  console.log('get user name fired');
+			setUserName(response?.data);
+		});
+	  }
+
 	//chat stuff here
 	const joinRoom = () => {
-		if (val.userName !== "" && room !== "") {
+		if (userName !== "" && room !== "") {
 			socket.emit("join_room", room);
 		}
 	};
@@ -229,7 +224,7 @@ const Trade = () => {
 		if (currentMessage !== "") {
 			const messageData = {
 				room: room,
-				author: val.userName,
+				author: userName,
 				message: currentMessage,
 				time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
 			};
@@ -244,7 +239,9 @@ const Trade = () => {
 			getDetails();
 		}
 
-		socket.on("receive_message", (data) => {
+		getUserName();
+
+		socket.on("recieve_message", (data) => {
 			setMessageList((list) => [...list, data]);
 		});
 	}, [socket]);
@@ -283,7 +280,11 @@ const Trade = () => {
 									<div className="chat-body w-100">
 										{messageList.map((messageContent) => (
 											<div className="d-flex flex-column">
-												<div className="d-flex">
+												<div className={
+													userName !== messageContent.author
+														? "d-flex justify-content-end align-self-end"
+														: "d-flex justify-content-start align-self-start"
+													}>
 													<Paragraph size="16px" className="mb-0 me-2" bold>
 														{messageContent.author}
 													</Paragraph>
@@ -293,9 +294,9 @@ const Trade = () => {
 												</div>
 												<div
 													className={
-														val.username === messageContent.author
-															? "message"
-															: "message self"
+														userName !== messageContent.author
+															? "message justify-content-end align-self-end"
+															: "message self justify-content-start align-self-start"
 													}
 												>
 													{messageContent.message}
@@ -308,6 +309,7 @@ const Trade = () => {
 									<TextArea
 										type="text"
 										placeholder="Enter message here"
+										value={currentMessage}
 										className="me-3"
 										onChange={(event) => {
 											setCurrentMessage(event.target.value);
@@ -318,6 +320,7 @@ const Trade = () => {
 										onClick={() => {
 											joinRoom();
 											sendMessage();
+											setCurrentMessage('');
 										}}
 										onKeyPress={(event) => {
 											event.key === "Enter" && sendMessage();

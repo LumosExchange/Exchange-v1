@@ -1899,7 +1899,6 @@ app.post("/FindUserPaymentMethods", (req, res) => {
 
 app.post("/GetLiveTradesBuyer", (req, res) => {
   const userID = req.session.user[0].userID;
-
   db.query(
     "SELECT * FROM LiveTrades WHERE (buyerid) = (?)",
     [userID],

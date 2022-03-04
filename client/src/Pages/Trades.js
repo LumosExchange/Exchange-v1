@@ -59,15 +59,15 @@ const ChatWrapper = styled.div(({ theme }) => css`
 			margin-bottom: 28px;
 			width: auto;
 			display: flex;
-			justify-content: flex-end;
-			align-self: flex-end;
+			// justify-content: flex-end; justify-content-end align-self-end
+			// align-self: flex-end; 
 
 			&.self {
 				border-radius: 0px 20px 20px 20px;
 				background: ${theme.colors.primary_cta};
 				color: ${theme.colors.base_bg};
-				justify-content: flex-start;
-				align-self: flex-start;
+				// justify-content: flex-start; 
+				// align-self: flex-start;
 			}
 		}
 
@@ -92,7 +92,7 @@ const Trades = () => {
 	const [messageList, setMessageList] = useState([]);
 	const [showChat, setShowChat] = useState(false);
 	const [paymentInfo, setPaymentInfo] = useState([]);
-	const [room, setRoom] = useState("492eaebe09");
+	const [room, setRoom] = useState("9f30c282c6");
 	const [pageMode, setPageMode] = useState("buy");
 	const [buyer, setBuyer] = useState(false);
 
@@ -128,7 +128,7 @@ const Trades = () => {
 		//	});
 	//};
 
-  const userName = "JDan";
+  const userName = "ABC";
   
 
 	
@@ -176,7 +176,7 @@ const Trades = () => {
 					<div className="row pt-5">
 						<div className="col-12 mb-5 pb-5">
 							<Heading size="26px" className="mb-4">
-								Offers &gt; Buy SOL from {val.userName} with {val.paymentMethod1}.
+								Offers &gt; Sell SOL to {val.userName} with {val.paymentMethod1}.
 							</Heading>
 						</div>
 						<div className="col-12 col-md-6 row">
@@ -196,7 +196,11 @@ const Trades = () => {
 									<div className="chat-body w-100">
 										{messageList.map((messageContent) => (
 											<div className="d-flex flex-column">
-												<div className="d-flex">
+												<div className={
+														userName !== messageContent.author
+															? "d-flex justify-content-end align-self-end"
+															: "d-flex justify-content-start align-self-start"
+													}>
 													<Paragraph size="16px" className="mb-0 me-2" bold>
 														{messageContent.author}
 													</Paragraph>
@@ -206,9 +210,9 @@ const Trades = () => {
 												</div>
 												<div
 													className={
-														val.username === messageContent.author
-															? "message"
-															: "message self"
+														userName !== messageContent.author
+															? "message justify-content-end align-self-end"
+															: "message self justify-content-start align-self-start"
 													}
 												>
 													{messageContent.message}
@@ -221,6 +225,7 @@ const Trades = () => {
 									<TextArea
 										type="text"
 										placeholder="Enter message here"
+                    value={currentMessage}
 										className="me-3"
 										onChange={(event) => {
 											setCurrentMessage(event.target.value);
@@ -231,6 +236,7 @@ const Trades = () => {
 										onClick={() => {
 											joinRoom();
 											sendMessage();
+                      setCurrentMessage('');
 										}}
 										onKeyPress={(event) => {
 											event.key === "Enter" && sendMessage();
@@ -245,10 +251,10 @@ const Trades = () => {
 						<div className="col-12 col-md-5 row mt-4">
 							<div className="col-12 text-center">
 								<div className="d-flex">
-									<Heading className="me-2">Buying</Heading>
+									<Heading className="me-2">Selling</Heading>
 									<Heading bold>{solQuantity} SOL</Heading>
 									<Heading className="mx-2">for</Heading>
-									<Heading bold>{state.solGbp * solQuantity}</Heading>
+									<Heading bold>{convertCurrencyToSymbol(state.currency)}{state.solGbp * solQuantity}</Heading>
 								</div>
 								<Paragraph size="18px" className="pb-3">
 									1 SOL = {convertCurrencyToSymbol(state.currency)}
@@ -256,15 +262,6 @@ const Trades = () => {
 								</Paragraph>
 								<HorizontalDivider />
 								<div className="d-flex justify-content-center flex-column">
-									<Paragraph bold size="24px" className="me-2">
-										Please pay {convertCurrencyToSymbol(state.currency)}{" "}
-										{state.solGbp * solQuantity}
-									</Paragraph>
-									<Paragraph size="18px" className="me-2">
-										into
-									</Paragraph>
-									{console.log(val, 'val')}
-						
 									<div className="d-flex text-start">
 										<FormCheckbox
 											type="checkbox"
@@ -273,8 +270,8 @@ const Trades = () => {
 											className="me-4"
 										/>
 										<StyledLabel className="p-0" htmlFor="checkedPayment">
-											<HighlightedText className="me-1">YES!</HighlightedText> I have sent the
-											payment to the seller.
+											<HighlightedText className="me-1">YES!</HighlightedText> I have received the
+											payment from the buyer.
 										</StyledLabel>
 									</div>
 									<div className="row mt-5">
