@@ -54,11 +54,11 @@ const ThemeToggler = ({ theme, toggleTheme }) => {
 		});
 	}
 
+	console.log(solgbp, 'sol price');
+
 	useEffect(() => {
-		if (currency === undefined){
-            getUserSettings();
-        }
-	}, [currency]);
+		getUserSettings();
+	}, []);
 
   	return (
 		<ThemeBarContainer isLight={isLight} className="pt-3">

@@ -11,35 +11,20 @@ import Card from '../Components/Card';
 import { convertCurrencyToSymbol } from '../Helpers'
 import GradientButton from "../Components/GradientButton";
 import { convertAssetToSvg } from '../Pages/Buy';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+import { useNavigate } from "react-router";
 
-const FakeTableData = [
-	{
-		'user': 'shinji0314',
-		'region': 'United Kingdom',
-		'date': '16-07-2021 - 11:00:00',
-		'type': 'Airdrop',
-		'amount': 0.5,
-		'currency': 'SOL',
-		'total': '100',
-		'status': 'completed',
-	},
-]
-
-const Reference = styled(Paragraph)`
-	text-transform: uppercase;
-`;
-
-const TitledIcon = styled.i`
-	cursor: help;
-`;
+const Reference = styled(Paragraph)`text-transform: uppercase;`;
+const TitledIcon = styled.i`cursor: help;`;
 
 const ActiveTradeCard = ({ tradeInfo }) => {
 	const formattedDate = tradeInfo.Date.replace('T', ' at ').replace('.000Z', ' ');
 	const formattedCurrencySymbol = convertCurrencyToSymbol(tradeInfo.paymentCurrency);
+	const liveTradeId = tradeInfo.LiveTradeID;
+	const navigate = useNavigate();
 
 	return (
-		<Card className="w-100 p-4" color="grey">
+		<Card className="w-100 p-4 mb-3" color="grey" key={tradeInfo.Reference}>
 			<div className="row">
 				<div className="col-3">
 					<div className="d-flex flex-column">
@@ -95,7 +80,15 @@ const ActiveTradeCard = ({ tradeInfo }) => {
 					</div>
 				</div>
 				<div className="col-3 d-flex align-items-end justify-content-end">
-					<GradientButton text="View this Trade" fontSize="20px" />
+					<GradientButton
+						text="View this Trade"
+						fontSize="20px"
+						onClick={ () => navigate("/Trade", {
+							state: {
+								liveTradeId,
+							}
+						})}
+					/>
 				</div>
 			</div>
 		</Card>
@@ -103,8 +96,6 @@ const ActiveTradeCard = ({ tradeInfo }) => {
 }
 
 const TradeHistory = () => {
-	const [userListings, setUserListings] = useState([]);
-
 	// Collapse Sections
 	const [historyExpanded, expandHistory] = useState(false);
 	const [activeBuyTradesExpanded, expandActiveBuyTrades] = useState(true);
@@ -161,7 +152,7 @@ const TradeHistory = () => {
 							{liveTradesBuyer.map((tradeInfo) => (
 								<ActiveTradeCard tradeInfo={tradeInfo} />
 							))}
-							{messageForPurchases && <Paragraph size="20px">{messageForPurchases}</Paragraph>}
+							{messageForPurchases && <Paragraph size="20px" className="ms-2">{messageForPurchases}</Paragraph>}
 						</Collapse>
 					</div>
 					<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
@@ -173,8 +164,10 @@ const TradeHistory = () => {
 							<Heading size="24px" className="mb-0">Active Trades (Selling)</Heading>
 						</InvisibleButton>
 						<Collapse orientation="horizontal" in={activeSellTradesExpanded}>
-							Active Selling Trades Here
-							{messageForSales && <Paragraph size="20px">{messageForSales}</Paragraph>}
+							{liveTradesSeller.map((tradeInfo) => (
+								<ActiveTradeCard tradeInfo={tradeInfo} />
+							))}
+							{messageForSales && <Paragraph size="20px" className="ms-2">{messageForSales}</Paragraph>}
 						</Collapse>
 					</div>
 					<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
