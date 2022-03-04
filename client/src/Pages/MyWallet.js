@@ -26,7 +26,7 @@ const ToggleIconBase = styled.svg(({ toggled, theme }) => css`
 	}
 `);
 
-const ToggleIcon = ({ className, toggled }) => (
+export const ToggleIcon = ({ className, toggled }) => (
 	<ToggleIconBase
 		width="71"
 		height="71"

@@ -2,8 +2,16 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { PageBody, StyledLabel, StyledDropdown } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
-
+import { Collapse } from "@material-ui/core";
 import StyledTable from "../Components/Tables";
+import { InvisibleButton } from "../Components/Buttons";
+import { ToggleIcon } from "./MyWallet";
+import Paragraph from "../Components/Paragraph";
+import Card from '../Components/Card';
+import { convertCurrencyToSymbol } from '../Helpers'
+import GradientButton from "../Components/GradientButton";
+import { convertAssetToSvg } from '../Pages/Buy';
+import styled, { css } from 'styled-components';
 
 const FakeTableData = [
 	{
@@ -18,94 +26,172 @@ const FakeTableData = [
 	},
 ]
 
+const Reference = styled(Paragraph)`
+	text-transform: uppercase;
+`;
+
+const TitledIcon = styled.i`
+	cursor: help;
+`;
+
+const ActiveTradeCard = ({ tradeInfo }) => {
+	const formattedDate = tradeInfo.Date.replace('T', ' at ').replace('.000Z', ' ');
+	const formattedCurrencySymbol = convertCurrencyToSymbol(tradeInfo.paymentCurrency);
+
+	return (
+		<Card className="w-100 p-4" color="grey">
+			<div className="row">
+				<div className="col-3">
+					<div className="d-flex flex-column">
+						<Heading bold size="20px">MetaData</Heading>
+						<div className="d-flex">
+							<TitledIcon className="material-icons me-2" title="Reference">tag</TitledIcon>
+							<Paragraph size="18px" className="mb-2">{tradeInfo.LiveTradeID}</Paragraph>
+						</div>
+						<div className="d-flex">
+							<TitledIcon className="material-icons me-2" title="Date/Time Created">schedule</TitledIcon>
+							<Paragraph size="18px" className="mb-2">{formattedDate}</Paragraph>
+						</div>
+						{tradeInfo.Message && (
+							<div className="d-flex">
+								<TitledIcon className="material-icons me-2" title="Message from Seller">message</TitledIcon>
+								<Paragraph size="18px" className="mb-2">{tradeInfo.Message}</Paragraph>
+							</div>
+						)}
+					</div>
+				</div>
+				<div className="col-3">
+					<Heading bold size="20px">Price/Coin Data</Heading>
+					<div className="d-flex">
+						<TitledIcon className="me-2" title="Price per SOL">{convertAssetToSvg('SOL')}</TitledIcon>
+						<Paragraph size="18px" className="mb-2">{formattedCurrencySymbol}{tradeInfo.userSolPrice} per SOL</Paragraph>
+					</div>
+					<div className="d-flex">
+						<TitledIcon className="me-2" title="Quantity Requested">{convertAssetToSvg('SOL')}</TitledIcon>
+						<Paragraph size="18px" className="mb-2">{tradeInfo.amountOfSol}</Paragraph>
+					</div>
+					<div className="d-flex">
+						<TitledIcon className="material-icons me-2" title="Amount in FIAT">paid</TitledIcon>
+						<Paragraph size="18px" className="mb-2">{formattedCurrencySymbol}{tradeInfo.fiatAmount}</Paragraph>
+					</div>
+				</div>
+				<div className="col-3">
+					<Heading bold size="20px">Payment Data</Heading>
+					<div className="d-flex">
+						<TitledIcon className="material-icons me-2" title="Payment Method">account_balance_wallet</TitledIcon>
+						<Paragraph size="18px" className="mb-2">{tradeInfo.paymentMethod}</Paragraph>
+					</div>
+					<div className="d-flex">
+						<TitledIcon className="material-icons me-2" title="Is Payment sent?">
+							{tradeInfo.paymentRecieved === "NO" ? 'cancel' : 'check_circle'}
+						</TitledIcon>
+						<Paragraph size="18px" className="mb-2">
+							{tradeInfo.paymentRecieved === "NO" ? 'Payment not sent' : 'Payment Sent'}
+						</Paragraph>
+					</div>
+					<div className="d-flex">
+						<TitledIcon className="material-icons me-2" title="Payment Reference">label</TitledIcon>
+						<Reference size="18px" className="mb-2">{tradeInfo.Reference}</Reference>
+					</div>
+				</div>
+				<div className="col-3 d-flex align-items-end justify-content-end">
+					<GradientButton text="View this Trade" fontSize="20px" />
+				</div>
+			</div>
+		</Card>
+	);
+}
+
 const TradeHistory = () => {
 	const [userListings, setUserListings] = useState([]);
 
+	// Collapse Sections
+	const [historyExpanded, expandHistory] = useState(false);
+	const [activeBuyTradesExpanded, expandActiveBuyTrades] = useState(true);
+	const [activeSellTradesExpanded, expandActiveSellTrades] = useState(true);
+	const [messageForSales, setMessageForSales] = useState('');
+	const [messageForPurchases, setMessageForPurchases] = useState('');
+	const [liveTradesBuyer, setLiveTradesBuyer] = useState([]);
+	const [liveTradesSeller, setLiveTradesSeller] = useState([]);
+
+	const getLiveTradesBuyer = () => {
+		Axios.post("http://localhost:3001/GetLiveTradesBuyer").then((response) => {
+			if (response.data.message){
+				setMessageForPurchases(response.data.message);
+			} else {
+				setLiveTradesBuyer(response.data);
+			}
+		}
+	)}
+
+	const getLiveTradesSeller = () => {
+		Axios.post("http://localhost:3001/GetLiveTradesSeller").then((response) => {
+			if (response.data.message){
+				setMessageForSales(response.data.message);
+			} else {
+				setLiveTradesSeller(response.data);
+			}
+		}
+	)}
+
+	console.log(liveTradesBuyer, 'live trades buyer side');
+	console.log(liveTradesSeller, 'live trades seller side');
+
 	useEffect(() => {
-	  Axios.get("http://localhost:3001/getAllListings").then((response) => {
-		  console.log(response.data, 'data');
-		setUserListings(response.data);
-	  });
+		if(liveTradesBuyer.length === 0){
+			getLiveTradesBuyer();
+		}
+		if(liveTradesSeller.length === 0){
+			getLiveTradesSeller();
+		}
 	}, []);
 
-	console.log(userListings, 'user listings');
-
-  return (
-		<PageBody className="d-flex align-items-start">
-			<div className="container d-flex align-items-center justify-content-center py-5 flex-column">
-				<div className="row w-100 mt-5">
-					<Heading className="pb-4">Trade History</Heading>
-					<div className="col-8 d-flex justify-content-between">
-						<div className="col-4 d-flex flex-column me-3">
-							<StyledLabel
-								padding="0 0 10px 0"
-								fontSize="24px"
-							>
-								Type
-							</StyledLabel>
-							<StyledDropdown>
-								<option>AirDrop</option>
-								<option>Purchase</option>
-								<option>Sale</option>
-							</StyledDropdown>
-						</div>
-						<div className="col-4 d-flex flex-column me-3">
-							<StyledLabel
-								padding="0 0 10px 0"
-								fontSize="24px"
-							>
-								Time
-							</StyledLabel>
-							<StyledDropdown>
-								<option>Past 30 Days</option>
-								<option>Past 60 Days</option>
-								<option>Past 90 Days</option>
-								<option>Past Year</option>
-							</StyledDropdown>
-						</div>
-						<div className="col-4 d-flex flex-column me-3">
-							<StyledLabel
-								padding="0 0 10px 0"
-								fontSize="24px"
-							>
-								Status
-							</StyledLabel>
-							<StyledDropdown>
-								<option>Active</option>
-								<option>Completed</option>
-							</StyledDropdown>
-						</div>
-					</div>
-					<StyledTable className="w-100 mt-4">
-						<thead>
-							<tr>
-								<th>User</th>
-								<th>Region</th>
-								<th>Date</th>
-								<th>Type</th>
-								<th>Amount</th>
-								<th>Total</th>
-								<th>Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							{FakeTableData.map((data) => (
-								<tr key={data.date}>
-									<td><span>{data.user}</span></td>
-									<td>{data.region}</td>
-									<td>{data.date}</td>
-									<td>{data.type}</td>
-									<td>{data.amount}</td>
-									<td>{data.total} {data.currency}</td>
-									<td>{data.status}</td>
-								</tr>
+	return (
+			<PageBody className="d-flex align-items-start flex-column">
+				<div className="container">
+					<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
+						<InvisibleButton
+							onClick={ () => expandActiveBuyTrades((prev) => !prev)}
+							className="d-flex align-items-center pt-2"
+						>
+							<ToggleIcon toggled={activeBuyTradesExpanded} alt="Dropdown" className="small me-3" />
+							<Heading size="24px" className="mb-0">Active Trades (Buying)</Heading>
+						</InvisibleButton>
+						<Collapse orientation="horizontal" in={activeBuyTradesExpanded}>
+							{liveTradesBuyer.map((tradeInfo) => (
+								<ActiveTradeCard tradeInfo={tradeInfo} />
 							))}
-						</tbody>
-					</StyledTable>
+							{messageForPurchases && <Paragraph size="20px">{messageForPurchases}</Paragraph>}
+						</Collapse>
+					</div>
+					<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
+						<InvisibleButton
+							onClick={ () => expandActiveSellTrades((prev) => !prev)}
+							className="d-flex align-items-center pt-2"
+						>
+							<ToggleIcon toggled={activeSellTradesExpanded} alt="Dropdown" className="small me-3" />
+							<Heading size="24px" className="mb-0">Active Trades (Selling)</Heading>
+						</InvisibleButton>
+						<Collapse orientation="horizontal" in={activeSellTradesExpanded}>
+							Active Selling Trades Here
+							{messageForSales && <Paragraph size="20px">{messageForSales}</Paragraph>}
+						</Collapse>
+					</div>
+					<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
+						<InvisibleButton
+							onClick={ () => expandHistory((prev) => !prev)}
+							className="d-flex align-items-center pt-2"
+						>
+							<ToggleIcon toggled={historyExpanded} alt="Dropdown" className="small me-3" />
+							<Heading size="24px" className="mb-0">Trade History</Heading>
+						</InvisibleButton>
+						<Collapse orientation="horizontal" in={historyExpanded}>
+							Trade History Here
+						</Collapse>
+					</div>
 				</div>
-			</div>
-    	</PageBody>
-  );
+			</PageBody>
+		);
 }
 
 export default TradeHistory;
