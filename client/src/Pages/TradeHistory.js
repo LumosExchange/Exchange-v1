@@ -24,7 +24,7 @@ const ActiveTradeCard = ({ tradeInfo }) => {
 	const navigate = useNavigate();
 
 	return (
-		<Card className="w-100 p-4" color="grey" key={tradeInfo.Reference}>
+		<Card className="w-100 p-4 mb-3" color="grey" key={tradeInfo.Reference}>
 			<div className="row">
 				<div className="col-3">
 					<div className="d-flex flex-column">

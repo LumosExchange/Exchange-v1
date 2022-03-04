@@ -11,6 +11,7 @@ import { FormInput, StyledLabel } from "../Components/FormInputs";
 import { useNavigate, useLocation } from "react-router-dom";
 import IconSolana from '../Images/icon-circle-solana.svg';
 import TradeCard from "../Components/TradeCard";
+import { convertCurrencyToSymbol } from '../Helpers';
 
 const SwitchButton = styled.button(({ theme }) => css`
 	width: 50px;
@@ -151,6 +152,7 @@ const Offer = () => {
 
 
 	const currency = state.currency;
+	const formattedCurrency = convertCurrencyToSymbol(state.currency);
 
 	console.log(offerAmount, 'offer amount in GBP');
 	console.log(offerAmountInSol, 'offer amount in SOL');
@@ -296,7 +298,6 @@ const Offer = () => {
 											currency,
 											ID,
 											paymentMethod
-
 										}
 									});
 								}}
@@ -314,7 +315,7 @@ const Offer = () => {
 					</div>
 					<div className="col-12 col-md-5 row mt-4">
 						<div className="col-12 text-center">
-							<Heading bold>1 SOL = {' '} {solGbp}</Heading>
+							<Heading bold>1 SOL = {formattedCurrency}{solGbp}</Heading>
 							<Paragraph size="18px" className="pb-3">SOL/GBP rate is secured for 111 seconds.</Paragraph>
 							<HorizontalDivider />
 						</div>

@@ -240,6 +240,8 @@ const Trade = () => {
 
 	console.log(paymentInfo, "payment info");
 
+	const formattedCurrency = convertCurrencyToSymbol(state.currency);
+
 	return (
 		<PageBody>
 			{pageMode === "buy" && (
@@ -319,16 +321,16 @@ const Trade = () => {
 									<Heading className="me-2">Buying</Heading>
 									<Heading bold>{solQuantity} SOL</Heading>
 									<Heading className="mx-2">for</Heading>
-									<Heading bold>{state.solGbp * solQuantity}</Heading>
+									<Heading bold>{formattedCurrency}{state.solGbp * solQuantity}</Heading>
 								</div>
 								<Paragraph size="18px" className="pb-3">
-									1 SOL = {convertCurrencyToSymbol(state.currency)}
+									1 SOL = {formattedCurrency}
 									{state.solGbp}
 								</Paragraph>
 								<HorizontalDivider />
 								<div className="d-flex justify-content-center flex-column">
 									<Paragraph bold size="24px" className="me-2">
-										Please pay {convertCurrencyToSymbol(state.currency)}{" "}
+										Please pay {formattedCurrency}
 										{state.solGbp * solQuantity}
 									</Paragraph>
 									<Paragraph size="18px" className="me-2">
@@ -398,7 +400,7 @@ const Trade = () => {
 									<Heading bold>{state.solGbp * solQuantity}</Heading>
 								</div>
 								<Paragraph size="18px" className="pb-3">
-									1 SOL = {convertCurrencyToSymbol(state.currency)}
+									1 SOL = {formattedCurrency}
 									{state.solGbp}
 								</Paragraph>
 								<HorizontalDivider />
