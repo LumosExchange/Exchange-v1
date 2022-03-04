@@ -83,7 +83,7 @@ const ActiveTradeCard = ({ tradeInfo }) => {
 					<GradientButton
 						text="View this Trade"
 						fontSize="20px"
-						onClick={ () => navigate("/Offer", {
+						onClick={ () => navigate("/Trade", {
 							state: {
 								liveTradeId,
 							}

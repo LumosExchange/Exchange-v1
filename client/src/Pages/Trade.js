@@ -184,6 +184,8 @@ const Trade = () => {
 	const { state } = useLocation();
 	const { val } = state;
 
+	console.log(state);
+
 	const navigate = useNavigate();
 
 	//Get userName && reference
