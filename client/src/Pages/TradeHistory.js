@@ -16,12 +16,18 @@ import { useNavigate } from "react-router";
 
 const Reference = styled(Paragraph)`text-transform: uppercase;`;
 const TitledIcon = styled.i`cursor: help;`;
+const MaxHeightBarrier = styled.div`
+	max-height: 1000px;
+	overflow: auto;
+	padding-right: 10px;
+`;
 
-const ActiveTradeCard = ({ tradeInfo }) => {
+const ActiveTradeCard = ({ tradeInfo, type }) => {
 	const formattedDate = tradeInfo.Date.replace('T', ' at ').replace('.000Z', ' ');
 	const formattedCurrencySymbol = convertCurrencyToSymbol(tradeInfo.paymentCurrency);
 	const liveTradeId = tradeInfo.LiveTradeID;
 	const navigate = useNavigate();
+	console.log(type, 'type?');
 
 	return (
 		<Card className="w-100 p-4 mb-3" color="grey" key={tradeInfo.Reference}>
@@ -83,7 +89,7 @@ const ActiveTradeCard = ({ tradeInfo }) => {
 					<GradientButton
 						text="View this Trade"
 						fontSize="20px"
-						onClick={ () => navigate("/Trade", {
+						onClick={ () => navigate(type === "buying" ? "/Buying" : "/Selling", {
 							state: {
 								liveTradeId,
 							}
@@ -138,53 +144,57 @@ const TradeHistory = () => {
 	}, []);
 
 	return (
-			<PageBody className="d-flex align-items-start flex-column">
-				<div className="container">
-					<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
-						<InvisibleButton
-							onClick={ () => expandActiveBuyTrades((prev) => !prev)}
-							className="d-flex align-items-center pt-2"
-						>
-							<ToggleIcon toggled={activeBuyTradesExpanded} alt="Dropdown" className="small me-3" />
-							<Heading size="24px" className="mb-0">Active Trades (Buying)</Heading>
-						</InvisibleButton>
+		<PageBody className="d-flex align-items-start flex-column">
+			<div className="container">
+				<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
+					<InvisibleButton
+						onClick={ () => expandActiveBuyTrades((prev) => !prev)}
+						className="d-flex align-items-center pt-2"
+					>
+						<ToggleIcon toggled={activeBuyTradesExpanded} alt="Dropdown" className="small me-3" />
+						<Heading size="24px" className="mb-0">Active Trades (Buying)</Heading>
+					</InvisibleButton>
+					<MaxHeightBarrier>
 						<Collapse orientation="horizontal" in={activeBuyTradesExpanded}>
 							{liveTradesBuyer.map((tradeInfo) => (
-								<ActiveTradeCard tradeInfo={tradeInfo} />
+								<ActiveTradeCard tradeInfo={tradeInfo} type="buying" />
 							))}
 							{messageForPurchases && <Paragraph size="20px" className="ms-2">{messageForPurchases}</Paragraph>}
 						</Collapse>
-					</div>
-					<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
-						<InvisibleButton
-							onClick={ () => expandActiveSellTrades((prev) => !prev)}
-							className="d-flex align-items-center pt-2"
-						>
-							<ToggleIcon toggled={activeSellTradesExpanded} alt="Dropdown" className="small me-3" />
-							<Heading size="24px" className="mb-0">Active Trades (Selling)</Heading>
-						</InvisibleButton>
+					</MaxHeightBarrier>
+				</div>
+				<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
+					<InvisibleButton
+						onClick={ () => expandActiveSellTrades((prev) => !prev)}
+						className="d-flex align-items-center pt-2"
+					>
+						<ToggleIcon toggled={activeSellTradesExpanded} alt="Dropdown" className="small me-3" />
+						<Heading size="24px" className="mb-0">Active Trades (Selling)</Heading>
+					</InvisibleButton>
+					<MaxHeightBarrier>
 						<Collapse orientation="horizontal" in={activeSellTradesExpanded}>
 							{liveTradesSeller.map((tradeInfo) => (
-								<ActiveTradeCard tradeInfo={tradeInfo} />
+								<ActiveTradeCard tradeInfo={tradeInfo}  type="selling" />
 							))}
 							{messageForSales && <Paragraph size="20px" className="ms-2">{messageForSales}</Paragraph>}
 						</Collapse>
-					</div>
-					<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
-						<InvisibleButton
-							onClick={ () => expandHistory((prev) => !prev)}
-							className="d-flex align-items-center pt-2"
-						>
-							<ToggleIcon toggled={historyExpanded} alt="Dropdown" className="small me-3" />
-							<Heading size="24px" className="mb-0">Trade History</Heading>
-						</InvisibleButton>
-						<Collapse orientation="horizontal" in={historyExpanded}>
-							Trade History Here
-						</Collapse>
-					</div>
+					</MaxHeightBarrier>
 				</div>
-			</PageBody>
-		);
+				<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
+					<InvisibleButton
+						onClick={ () => expandHistory((prev) => !prev)}
+						className="d-flex align-items-center pt-2"
+					>
+						<ToggleIcon toggled={historyExpanded} alt="Dropdown" className="small me-3" />
+						<Heading size="24px" className="mb-0">Trade History</Heading>
+					</InvisibleButton>
+					<Collapse orientation="horizontal" in={historyExpanded}>
+						Trade History Here
+					</Collapse>
+				</div>
+			</div>
+		</PageBody>
+	);
 }
 
 export default TradeHistory;
