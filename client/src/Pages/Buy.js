@@ -204,6 +204,8 @@ const Buy = () => {
 		getAllListings();
 	}, []);
 
+	console.log(allListings, 'all listings');
+
   	return (
 		<PageBody>
 			<div className="container">

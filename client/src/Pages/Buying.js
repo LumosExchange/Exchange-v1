@@ -83,40 +83,30 @@ const socket = io.connect("http://localhost:3002");
 
 
 
-const Trade = () => {
-
+const Buying = () => {
 	const [currentMessage, setCurrentMessage] = useState("");
 	const [messageList, setMessageList] = useState([]);
 	const [paymentInfo, setPaymentInfo] = useState([]);
 	const [room, setRoom] = useState("");
 	const [userName, setUserName] = useState("");
 	
-
 	const { state } = useLocation();
-	const { val } = state;
 	const liveTradeID = state.liveTradeID;
 	
-
-	console.log(state);
-
 	const navigate = useNavigate();
 
 	//Get trade ID then use that to populate other things
 
 	const getTradeDetails = () => {
 		console.log('Live Trade ID : ', state.liveTradeID);
-		
-
 		axios.post("http://localhost:3001/GetLiveTradeDetails", {
 			liveTradeID: liveTradeID
-		}). then((response) => {
+		}).then((response) => {
 			//Can map all details needed here from the response get seller ID and payment method from response
 			console.log(response.data);
 		});
 
 		//get the payment method and do getliveTrade info 
-	
-
 	}
 
 
@@ -182,6 +172,7 @@ const Trade = () => {
 	//console.log(paymentInfo, "payment info");
 
 	const formattedCurrency = convertCurrencyToSymbol(state.currency);
+	console.log(state.liveTradeID, 'live trade id');
 
 	return (
 		<PageBody>
@@ -282,8 +273,6 @@ const Trade = () => {
 								<Paragraph size="18px" className="me-2">
 									into
 								</Paragraph>
-								{console.log(val, 'val')}
-								
 								<div className="d-flex text-start">
 									<FormCheckbox
 										type="checkbox"
@@ -326,4 +315,4 @@ const Trade = () => {
 	);
 };
 
-export default Trade;
+export default Buying;

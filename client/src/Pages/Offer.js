@@ -90,9 +90,6 @@ const Offer = () => {
 	const { state } = useLocation();
 	const { val } = state;
 	
-
-	const ID = val.userID;
-
 	const getCurrentSolPrice = () => {
 		fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp").then((response) =>
 			response.json().then(function (data) {
@@ -139,6 +136,7 @@ const Offer = () => {
 	};
 
 	const openTrade = () => {
+		console.log(val.saleID);
 		Axios.post("http://localhost:3001/OpenTrade", {
 			saleID: val.saleID,
 			sellerID: val.userID,
@@ -173,6 +171,7 @@ const Offer = () => {
 	console.log(offerAmountInCurrency, "offer amount in currency");
 
 	console.log('Live trade id: ', liveTradeID);
+	console.log('val: ', val);
 
 	return (
 		<PageBody>
@@ -304,7 +303,6 @@ const Offer = () => {
 										navigate("/Buying", {
 											state: {
 												liveTradeID,
-			
 											},
 										});
 									}}
@@ -319,7 +317,6 @@ const Offer = () => {
 										navigate("/Selling", {
 											state: {
 												liveTradeID,
-												
 											},
 										});
 									}}
@@ -343,9 +340,12 @@ const Offer = () => {
 						</div>
 						<div className="col-6">
 							<Paragraph bold>About the Trader</Paragraph>
-							<Paragraph color="primary_cta" size="20px">
-								{val.userName}
-							</Paragraph>
+							<div className="d-flex mb-2">
+								<i className="material-icons me-1">person</i>
+								<Paragraph color="primary_cta" size="20px" bold className="mb-0">
+									{val.userName}
+								</Paragraph>
+							</div>
 							<Paragraph>
 								Feedback score: {((feedbackScore * 100) / 3).toFixed(2)}
 								{"%"}
