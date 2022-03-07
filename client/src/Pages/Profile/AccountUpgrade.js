@@ -97,14 +97,7 @@ const AccountUpgrade = () => {
         </Tabs>
         <ContentTab className="text-white">
           <div className="d-flex p-4 row">
-            <div className="col-12 col-md-6 mb-3">
-              <Heading size="20px" bold>
-                Current Tier
-              </Heading>
-              <Heading size="20px" bold>
-                {accountTier}
-              </Heading>
-
+            <div className="d-flex col-12 col-md-6 mb-3 flex-column">
               {currentStep === 1 && (
                 <React.Fragment>
                   <Heading size="20px" bold>
@@ -299,6 +292,15 @@ const AccountUpgrade = () => {
                   </form>
                 </React.Fragment>
               )}
+            </div>
+            <div className="col-md-3"> </div>
+            <div className="d-flex col-12 col-md-3 mb-3 flex-column">
+              <Heading size="20px" bold className="text-center">
+                Current Tier
+              </Heading>
+              <Heading size="20px" bold className="text-center">
+                {accountTier}
+              </Heading>
             </div>
           </div>
         </ContentTab>
