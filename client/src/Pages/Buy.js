@@ -112,6 +112,7 @@ const Buy = () => {
 	const [searchCriteriaLocation, setSearchCriteriaLocation] = useState('Please Select');
 	const [filteredListings, setFilteredListings] = useState([]);
 	const [isFiltering, setIsFiltering] = useState(false);
+	const [userName, setUserName] = useState('');
   
 	const navigate = useNavigate();
 	
@@ -157,6 +158,14 @@ const Buy = () => {
 		});
 	}
 
+	const getUserName = () => {
+		Axios.get("http://localhost:3001/getUserNameNav", {
+		}).then((response) => {
+		  console.log('get user name fired');
+			setUserName(response?.data);
+		});
+	  }
+
 	const getAllListings = () => {
 		Axios.get("http://localhost:3001/getAllListings").then((response) => {
 			console.log(response, 'response');
@@ -172,7 +181,7 @@ const Buy = () => {
 
 		if (searchCriteriaPayment !== "Please Select"){
 			setIsFiltering(true);
-			const filteredListings = allListings
+			const filteredListings = filteredAllListings
 			.filter(al => (al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment));
 			setFilteredListings(filteredListings);
 
@@ -186,7 +195,7 @@ const Buy = () => {
 
 		if (searchCriteriaPayment === "Please Select" && searchCriteriaLocation !== "Please Select"){
 			setIsFiltering(true);
-			const filteredListings = allListings
+			const filteredListings = filteredAllListings
 			.filter(al => al.Country === searchCriteriaLocation);
 			setFilteredListings(filteredListings);
 		}
@@ -200,11 +209,14 @@ const Buy = () => {
 	}
 
     useEffect(() => {
+		getUserName();
 		getCurrency();
 		getAllListings();
 	}, []);
 
 	console.log(allListings, 'all listings');
+
+	const filteredAllListings = allListings.filter(al => (al.userName !== userName));
 
   	return (
 		<PageBody>
@@ -346,7 +358,7 @@ const Buy = () => {
 								filteredListings.map((val) => (
 									<TradeCard val={val} />
 							))) : (
-								allListings.map((val) => (
+								filteredAllListings.map((val) => (
 									<TradeCard val={val} />
 								))
 							)}
