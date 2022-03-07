@@ -91,8 +91,8 @@ const Buying = () => {
 	const [userName, setUserName] = useState("");
 	
 	const { state } = useLocation();
-	const liveTradeID = state.custom;
-	console.log(liveTradeID, 'LIVE AIDS ID')
+	const liveTradeID = state.liveTradeID;
+	console.log(state, 'st8')
 	
 	const navigate = useNavigate();
 

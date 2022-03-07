@@ -150,10 +150,14 @@ const Offer = () => {
 			paymentCurrency: currency,
 			message: offerMessage,
 		}).then((response) => {
-			console.log('Live Trade ID' , response.data.insertId);
-			console.log(response.data, 'data length');
-			setCustom(response.data.insertId);
-		});
+			console.log(response, 'response');
+			if (response.status === 200){
+				navigate("/Buying", {
+					state: {
+						liveTradeID: response.data.insertId,
+					}
+				})}
+			});
 	};
 
 	useEffect(() => {
@@ -292,23 +296,13 @@ const Offer = () => {
 									))}
 								</StyledDropdown>
 							</div>
-							{console.log(custom, 'custom')}
 							<div className="w-100 p-0 mt-3">
 								<GradientButton
 									text="Open Trade"
 									fontSize="24px"
 									padding="4px 20px"
 									className="w-100"
-									onClick={() => {
-										openTrade();
-										if (custom.length !== 0){
-											navigate("/Buying", {
-												state: {
-													custom,
-												}
-											});
-										}
-									}}
+									onClick={() => openTrade() }
 									disabled={
 										offerMessage.length === 0 ||
 										paymentMethod === "Please Select" ||
