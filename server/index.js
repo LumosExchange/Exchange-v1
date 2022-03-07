@@ -1634,9 +1634,8 @@ app.post("/OpenTrade", (req, res) => {
         res.send(err);
         console.log(err);
       } else {
-        res.send({
-          message: "Succesfully opened the trade",
-        });
+        console.log(result.insertId);
+        res.send(result);
       }
     }
   );
@@ -1680,7 +1679,23 @@ app.post("/CloseTrade", (req,res) => {
 
 })
 
-app.post("/GetLiveTradeInfo", (req, res) => {
+app.post("/GetLiveTradeDetails", (req, res) => {
+  const liveTradeID = req.body.liveTradeID;
+
+  db.query(
+    "SELECT * FROM LiveTrades WHERE liveTradeID = ?",
+    [liveTradeID],
+    (err, result) => {
+      if (err){
+        res.send(err);
+      } else {
+        res.send(result);
+      }
+    })
+
+});
+
+app.post("/GetLiveTradePaymentInfo", (req, res) => {
   const sellerID = req.body.sellerID;
   const buyerID = req.session.user[0].userID;
   const paymentMethod = req.body.paymentMethod;

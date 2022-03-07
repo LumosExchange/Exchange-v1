@@ -85,10 +85,11 @@ const Offer = () => {
 	const [registeredDate, setRegisteredDate] = useState("");
 	const [feedbackScore, setFeedbackScore] = useState("");
 	const [escrowReleaseTime, setEscrowReleaseTime] = useState("");
+	const [liveTradeID, setLiveTradeID] = useState("");
 
 	const { state } = useLocation();
 	const { val } = state;
-	const buyerOrSeller = "Buyer";
+	
 
 	const ID = val.userID;
 
@@ -148,8 +149,12 @@ const Offer = () => {
 			paymentCurrency: currency,
 			message: offerMessage,
 		}).then((response) => {
+			setLiveTradeID(response.data.insertId);
+			console.log('LIVE ID ' , response.data.insertId);
+
 			//Handle response here any errors etc
 		});
+		
 	};
 
 	useEffect(() => {
@@ -166,6 +171,8 @@ const Offer = () => {
 	console.log(offerAmount, "offer amount in GBP");
 	console.log(offerAmountInSol, "offer amount in SOL");
 	console.log(offerAmountInCurrency, "offer amount in currency");
+
+	console.log('Live trade id: ', liveTradeID);
 
 	return (
 		<PageBody>
@@ -296,11 +303,8 @@ const Offer = () => {
 										openTrade();
 										navigate("/Buying", {
 											state: {
-												val,
-												solGbp,
-												currency,
-												ID,
-												paymentMethod,
+												liveTradeID,
+			
 											},
 										});
 									}}
@@ -314,12 +318,8 @@ const Offer = () => {
 									onClick={() => {
 										navigate("/Selling", {
 											state: {
-												val,
-												solGbp,
-												currency,
-												ID,
-												paymentMethod,
-												//	buyerOrSeller
+												liveTradeID,
+												
 											},
 										});
 									}}

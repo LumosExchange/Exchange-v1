@@ -81,120 +81,50 @@ const solQuantity = 2;
 
 const socket = io.connect("http://localhost:3002");
 
-const PaymentInfoArea = ({ val, paymentInfo }) => (
-	<Card className="p-3 mb-4 d-flex flex-column" color="grey">
-		<Paragraph size="24px" bold>
-			{val.paymentMethod1}
-		</Paragraph>
-		{paymentInfo.data?.name && (
-			<div className="d-flex justify-content-center">
-				<Paragraph bold size="20px" className="me-2">Name:</Paragraph>
-				<Paragraph className="text-uppercase" size="20px">
-					{paymentInfo.data.name}
-				</Paragraph>
-			</div>
-		)}
-		{paymentInfo.data?.sortCode && (
-			<div className="d-flex justify-content-center">
-				<Paragraph bold size="20px" className="me-2">Sort:</Paragraph>
-				<Paragraph className="text-uppercase" size="20px">
-					{paymentInfo.data.sortCode}
-				</Paragraph>
-			</div>
-		)}
-		{paymentInfo.data?.accountNumber && (
-			<div className="d-flex justify-content-center">
-				<Paragraph bold size="20px" className="me-2">Acc No:</Paragraph>
-				<Paragraph className="text-uppercase" size="20px">
-					{paymentInfo.data.accountNumber}
-				</Paragraph>
-			</div>
-		)}
-		{paymentInfo.data?.reference && (
-			<div className="d-flex justify-content-center">
-				<Paragraph bold size="20px" className="me-2">Ref:</Paragraph>
-				<Paragraph className="text-uppercase" size="20px">
-					{paymentInfo.data.reference}
-				</Paragraph>
-			</div>
-		)}
-		{paymentInfo.data?.email && (
-			<div className="d-flex justify-content-center">
-				<Paragraph bold size="20px" className="me-2">Sort:</Paragraph>
-				<Paragraph className="text-uppercase" size="20px">
-					{paymentInfo.data.email}
-				</Paragraph>
-			</div>
-		)}
-		{paymentInfo.data?.email && (
-			<div className="d-flex justify-content-center">
-				<Paragraph bold size="20px" className="me-2">Email:</Paragraph>
-				<Paragraph className="text-uppercase" size="20px">
-					{paymentInfo.data.email}
-				</Paragraph>
-			</div>
-		)}
-		{paymentInfo.data?.bankName && (
-			<div className="d-flex justify-content-center">
-				<Paragraph bold size="20px" className="me-2">Bank Name:</Paragraph>
-				<Paragraph className="text-uppercase" size="20px">
-					{paymentInfo.data.bankName}
-				</Paragraph>
-			</div>
-		)}
-		{paymentInfo.data?.bankCity && (
-			<div className="d-flex justify-content-center">
-				<Paragraph bold size="20px" className="me-2">Bank City:</Paragraph>
-				<Paragraph className="text-uppercase" size="20px">
-					{paymentInfo.data.bankCity}
-				</Paragraph>
-			</div>
-		)}
-		{paymentInfo.data?.IBAN && (
-			<div className="d-flex justify-content-center">
-				<Paragraph bold size="20px" className="me-2">IBAN:</Paragraph>
-				<Paragraph className="text-uppercase" size="20px">
-					{paymentInfo.data.IBAN}
-				</Paragraph>
-			</div>
-		)}
-		{paymentInfo.data?.BIC && (
-			<div className="d-flex justify-content-center">
-				<Paragraph bold size="20px" className="me-2">BIC/SWIFT:</Paragraph>
-				<Paragraph className="text-uppercase" size="20px">
-					{paymentInfo.data.BIC}
-				</Paragraph>
-			</div>
-		)}
-	</Card>
-);
+
 
 const Trade = () => {
-	const [solGbp, setSolGbp] = useState("");
-	const [registeredDate, setRegisteredDate] = useState("");
-	const [feedbackScore, setFeedbackScore] = useState("");
-	const [escrowReleaseTime, setEscrowReleaseTime] = useState("");
+
 	const [currentMessage, setCurrentMessage] = useState("");
 	const [messageList, setMessageList] = useState([]);
-	const [showChat, setShowChat] = useState(false);
 	const [paymentInfo, setPaymentInfo] = useState([]);
 	const [room, setRoom] = useState("");
 	const [userName, setUserName] = useState("");
+	
 
 	const { state } = useLocation();
 	const { val } = state;
+	const liveTradeID = state.liveTradeID;
+	
 
 	console.log(state);
 
 	const navigate = useNavigate();
 
-	//Get userName && reference
-	//room will be refernce so buyer and seller can connect
+	//Get trade ID then use that to populate other things
+
+	const getTradeDetails = () => {
+		console.log('Live Trade ID : ', state.liveTradeID);
+		
+
+		axios.post("http://localhost:3001/GetLiveTradeDetails", {
+			liveTradeID: liveTradeID
+		}). then((response) => {
+			//Can map all details needed here from the response get seller ID and payment method from response
+			console.log(response.data);
+		});
+
+		//get the payment method and do getliveTrade info 
+	
+
+	}
+
+
 
 	const getDetails = () => {
 		axios
-			.post("http://localhost:3001/GetLiveTradeInfo", {
-				sellerID: state.ID,
+			.post("http://localhost:3001/GetLiveTradePaymentInfo", {
+				sellerID: liveTradeID,
 				paymentMethod: state.paymentMethod,
 			})
 			.then((response) => {
@@ -234,8 +164,9 @@ const Trade = () => {
 	};
 
 	useEffect(() => {
+		getTradeDetails();
 		if (paymentInfo.length === 0) {
-			getDetails();
+		//	getDetails();
 		}
 
 		getUserName();
@@ -248,7 +179,7 @@ const Trade = () => {
 	//console.log(messageList, 'message list');
 	//console.log(currentMessage, 'current message');
 
-	console.log(paymentInfo, "payment info");
+	//console.log(paymentInfo, "payment info");
 
 	const formattedCurrency = convertCurrencyToSymbol(state.currency);
 
@@ -258,7 +189,7 @@ const Trade = () => {
 				<div className="row pt-5">
 					<div className="col-12 mb-5 pb-5">
 						<Heading size="26px" className="mb-4">
-							Offers &gt; Buy SOL from {val.userName} with {val.paymentMethod1}.
+							Offers &gt; Buy SOL from {"USERNAME"} with {"PAYMENT METHOD"}.
 						</Heading>
 					</div>
 					<div className="col-12 col-md-6 row">
@@ -336,7 +267,7 @@ const Trade = () => {
 								<Heading className="me-2">Buying</Heading>
 								<Heading bold>{solQuantity} SOL</Heading>
 								<Heading className="mx-2">for</Heading>
-								<Heading bold>{formattedCurrency}{state.solGbp * solQuantity}</Heading>
+								<Heading bold>{formattedCurrency}{"state.solGbp * solQuantity"}</Heading>
 							</div>
 							<Paragraph size="18px" className="pb-3">
 								1 SOL = {formattedCurrency}
@@ -352,7 +283,7 @@ const Trade = () => {
 									into
 								</Paragraph>
 								{console.log(val, 'val')}
-								<PaymentInfoArea val={val} paymentInfo={paymentInfo} />
+								
 								<div className="d-flex text-start">
 									<FormCheckbox
 										type="checkbox"
