@@ -11,7 +11,7 @@ import Register from "./Pages/Register";
 import UpgradeTeam from "./Pages/UpgradeTeam";
 import LoggedHome from "./Pages/LoggedHome";
 import ErrorPage from "./Pages/ErrorPage";
-import Trades from "./Pages/Trades";
+import Selling from "./Pages/Selling";
 import Buy from "./Pages/Buy";
 import Sell from "./Pages/Sell";
 import Feedback from "./Pages/Feedback";
@@ -36,7 +36,7 @@ import PaymentMethods from "./Pages/Profile/PaymentMethods";
 import AccountUpgrade from "./Pages/Profile/AccountUpgrade";
 import Offer from "./Pages/Offer";
 import MyListings from "./Pages/MyListings";
-import Trade from './Pages/Trade';
+import Buying from './Pages/Buying';
 
 
 
@@ -84,7 +84,7 @@ const App = () => {
             ;
             <Route path="/Buy" element={<Buy />} />
             <Route path="/Sell" element={<Sell />} />
-            <Route path="/Trades" element={<Trades />} />
+            <Route path="/Selling" element={<Selling />} />
             <Route path="/Offer" element={<Offer />} />
             <Route path="/TradeHistory" element={<TradeHistory />} />
             <Route path="/Feedback" element={<Feedback />} />
@@ -106,7 +106,7 @@ const App = () => {
             />
             <Route path="/Profile/AccountUpgrade" element={<AccountUpgrade />} />
             <Route path="/MyListings" element={<MyListings />} />
-            <Route path="/Trade" element={<Trade />} />
+            <Route path="/Buying" element={<Buying />} />
 
           </Routes>
         </Router>
