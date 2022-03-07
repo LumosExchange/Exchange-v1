@@ -85,10 +85,13 @@ const Offer = () => {
 	const [registeredDate, setRegisteredDate] = useState("");
 	const [feedbackScore, setFeedbackScore] = useState("");
 	const [escrowReleaseTime, setEscrowReleaseTime] = useState("");
-	const [liveTradeID, setLiveTradeID] = useState("");
+
+	const [custom, setCustom] = useState("");
 
 	const { state } = useLocation();
 	const { val } = state;
+
+	const navigate = useNavigate();
 	
 	const getCurrentSolPrice = () => {
 		fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp").then((response) =>
@@ -147,12 +150,10 @@ const Offer = () => {
 			paymentCurrency: currency,
 			message: offerMessage,
 		}).then((response) => {
-			setLiveTradeID(response.data.insertId);
-			console.log('LIVE ID ' , response.data.insertId);
-
-			//Handle response here any errors etc
+			console.log('Live Trade ID' , response.data.insertId);
+			console.log(response.data, 'data length');
+			setCustom(response.data.insertId);
 		});
-		
 	};
 
 	useEffect(() => {
@@ -160,8 +161,9 @@ const Offer = () => {
 		getSellerInfo();
 	}, []);
 
+	console.log(custom, 'custom here hurr');
+
 	const filteredPaymentMethods = ["Please Select", val.paymentMethod1, val.paymentMethod2];
-	const navigate = useNavigate();
 
 	const currency = state.currency;
 	const formattedCurrency = convertCurrencyToSymbol(state.currency);
@@ -169,8 +171,6 @@ const Offer = () => {
 	console.log(offerAmount, "offer amount in GBP");
 	console.log(offerAmountInSol, "offer amount in SOL");
 	console.log(offerAmountInCurrency, "offer amount in currency");
-
-	console.log('Live trade id: ', liveTradeID);
 	console.log('val: ', val);
 
 	return (
@@ -292,6 +292,7 @@ const Offer = () => {
 									))}
 								</StyledDropdown>
 							</div>
+							{console.log(custom, 'custom')}
 							<div className="w-100 p-0 mt-3">
 								<GradientButton
 									text="Open Trade"
@@ -300,11 +301,13 @@ const Offer = () => {
 									className="w-100"
 									onClick={() => {
 										openTrade();
-										navigate("/Buying", {
-											state: {
-												liveTradeID,
-											},
-										});
+										if (custom.length !== 0){
+											navigate("/Buying", {
+												state: {
+													custom,
+												}
+											});
+										}
 									}}
 									disabled={
 										offerMessage.length === 0 ||
@@ -314,11 +317,7 @@ const Offer = () => {
 								/>
 								<button
 									onClick={() => {
-										navigate("/Selling", {
-											state: {
-												liveTradeID,
-											},
-										});
+										navigate("/Selling");
 									}}
 								></button>
 							</div>
