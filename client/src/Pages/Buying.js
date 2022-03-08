@@ -88,7 +88,7 @@ const Buying = () => {
 	const [messageList, setMessageList] = useState([]);
 	const [paymentInfo, setPaymentInfo] = useState([]);
 	const [room, setRoom] = useState("");
-	const [userNameSeller, setUserName]Seller = useState("");
+	const [userNameSeller, setUserNameSeller] = useState("");
 	const [reference, setReference] = useState("");
 	const [solAmount, setSolAmount] = useState("");
 	const [buyerID, setBuyerID] = useState("");
@@ -99,6 +99,7 @@ const Buying = () => {
 	const [userSolPrice, setUserSolPrice] = useState("");
 	const [paymentMethod, setPaymentMethod] = useState("");
 	const [firstMessage, setFirstMessage] = useState("");
+	const [userName, setUserName] = useState("");
 
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
@@ -109,27 +110,26 @@ const Buying = () => {
 	//Get trade ID then use that to populate other things
 
 	const getTradeDetails = () => {
-		console.log('Live Trade ID : ', state.liveTradeID);
 		axios.post("http://localhost:3001/GetLiveTradeDetails", {
 			liveTradeID: liveTradeID
 		}).then((response) => {
 			//Can map all details needed here from the response get seller ID and payment method from response
-			console.log(response.data);
-			setReference(response.data.Reference);
-			setSolAmount(response.data.amountOfSol);
-			setBuyerID(response.data.buyerID);
-			setSellerID(response.data.sellerID);
-			setFiatAmount(response.data.fiatAmount);
-			setPaymentCurrency(response.data.paymentCurrency);
-			setPaymentRecieved(response.data.paymentRecieved);
-			setUserSolPrice(response.data.userSolPrice);
-			setPaymentMethod(response.data.paymentMethod);
-			setFirstMessage(response.data.message);
+		console.log(response.data[0].Reference);
+			setReference(response.data[0].Reference);
+			setSolAmount(response.data[0].amountOfSol);
+			setBuyerID(response.data[0].buyerID);
+			setSellerID(response.data[0].sellerID);
+			setFiatAmount(response.data[0].fiatAmount);
+			setPaymentCurrency(response.data[0].paymentCurrency);
+			setPaymentRecieved(response.data[0].paymentRecieved);
+			setUserSolPrice(response.data[0].userSolPrice);
+			setPaymentMethod(response.data[0].paymentMethod);
+			setFirstMessage(response.data[0].message);
 		});
 	}
 
 	//Join the user to the room
-	const joinRoom = () => {
+	const joinRoom = async () => {
 		if (userName !== "" && room !== "") {
 			socket.emit("join_room", room);
 
@@ -140,9 +140,10 @@ const Buying = () => {
 				time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
 		}
 			await socket.emit("send_message", messageDataFirst);
-			setMessageList((list) => [...list, messageData]);
+			setMessageList((list) => [...list, messageDataFirst]);
 			setCurrentMessage("");
 	};
+};
 
 
 	const getDetails = () => {
@@ -165,7 +166,13 @@ const Buying = () => {
 		});
 	  }
 
-	//chat stuff here
+	  const getUserName = () =>{
+		Axios.get("http://localhost:3001/getUserNameNav", {
+		}).then((response) => {
+			setUserName(response?.data);
+		});
+
+	  }
 
 	const sendMessage = async () => {
 		if (currentMessage !== "") {
@@ -182,11 +189,13 @@ const Buying = () => {
 	};
 
 	useEffect(() => {
-		getTradeDetails();
-		getUserName();
-		joinRoom();
+
 		if (paymentInfo.length === 0) {
+			getTradeDetails();
 			getDetails();
+			getUserName();
+			getsellerUserName();
+			joinRoom(); 
 		}
 		socket.on("recieve_message", (data) => {
 			setMessageList((list) => [...list, data]);
@@ -278,7 +287,7 @@ const Buying = () => {
 								<Heading className="me-2">Buying</Heading>
 								<Heading bold>{solAmount} SOL</Heading>
 								<Heading className="mx-2">for</Heading>
-								<Heading bold>{formattedCurrency}{fiatAmount * amountOfSol}</Heading>
+								<Heading bold>{formattedCurrency}{fiatAmount * solAmount}</Heading>
 							</div>
 							<Paragraph size="18px" className="pb-3">
 								1 SOL = {formattedCurrency}
@@ -287,8 +296,8 @@ const Buying = () => {
 							<HorizontalDivider />
 							<div className="d-flex justify-content-center flex-column">
 								<Paragraph bold size="24px" className="me-2">
-									Please pay {formattedCurrency}
-									{fiatAmount * amountOfSol}
+									Please pay 
+									
 								</Paragraph>
 								<Paragraph size="18px" className="me-2">
 									into
