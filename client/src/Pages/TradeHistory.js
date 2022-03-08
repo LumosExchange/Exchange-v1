@@ -11,28 +11,56 @@ import Card from '../Components/Card';
 import { convertCurrencyToSymbol } from '../Helpers'
 import GradientButton from "../Components/GradientButton";
 import { convertAssetToSvg } from '../Pages/Buy';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useNavigate } from "react-router";
+import { CardDivider } from "../Components/TradeCard";
 
 const Reference = styled(Paragraph)`text-transform: uppercase;`;
 const TitledIcon = styled.i`cursor: help;`;
-const MaxHeightBarrier = styled.div`
-	max-height: 1000px;
+
+const MaxHeightBarrier = styled.div(({ theme }) => css`
+	max-height: 750px;
 	overflow: auto;
 	padding-right: 10px;
-`;
+
+	@media screen and (min-width: ${theme.breakpoints.md}){
+		max-height: 1000px;
+	}
+`);
+
+const CancelButton = styled(InvisibleButton)(({ theme }) => css`
+	background: ${theme.colors.invalid};
+	border-radius: 50px;
+	padding: 10px 25px;
+	color: ${theme.colors.actual_white};
+	font-size: 20px;
+
+	&:hover {
+		transform: scale(1.05);
+	}
+`);
 
 const ActiveTradeCard = ({ tradeInfo, type }) => {
+	const [message, setMessage] = useState('');
+
 	const formattedDate = tradeInfo.Date.replace('T', ' at ').replace('.000Z', ' ');
 	const formattedCurrencySymbol = convertCurrencyToSymbol(tradeInfo.paymentCurrency);
 	const liveTradeId = tradeInfo.LiveTradeID;
+
 	const navigate = useNavigate();
-	console.log(type, 'type?');
+
+	const deleteLiveTrade = ({ liveTradeId }) => {
+		Axios.post("http://localhost:3001/DeleteLiveTrade", {
+			liveTradeId,
+		}).then((response) => {
+			setMessage(response.data.message);
+		});
+	}
 
 	return (
 		<Card className="w-100 p-4 mb-3" color="grey" key={tradeInfo.Reference}>
 			<div className="row">
-				<div className="col-3">
+				<div className="col-12 col-lg-3">
 					<div className="d-flex flex-column">
 						<Heading bold size="20px">MetaData</Heading>
 						<div className="d-flex">
@@ -46,12 +74,15 @@ const ActiveTradeCard = ({ tradeInfo, type }) => {
 						{tradeInfo.Message && (
 							<div className="d-flex">
 								<TitledIcon className="material-icons me-2" title="Message from Seller">message</TitledIcon>
-								<Paragraph size="18px" className="mb-2">{tradeInfo.Message}</Paragraph>
+								<Paragraph size="18px" className="mb-0">{tradeInfo.Message}</Paragraph>
 							</div>
 						)}
 					</div>
 				</div>
-				<div className="col-3">
+				<div className="col-12 d-lg-none">
+					<CardDivider />
+				</div>
+				<div className="col-12 col-lg-3">
 					<Heading bold size="20px">Price/Coin Data</Heading>
 					<div className="d-flex">
 						<TitledIcon className="me-2" title="Price per SOL">{convertAssetToSvg('SOL')}</TitledIcon>
@@ -63,10 +94,13 @@ const ActiveTradeCard = ({ tradeInfo, type }) => {
 					</div>
 					<div className="d-flex">
 						<TitledIcon className="material-icons me-2" title="Amount in FIAT">paid</TitledIcon>
-						<Paragraph size="18px" className="mb-2">{formattedCurrencySymbol}{tradeInfo.fiatAmount}</Paragraph>
+						<Paragraph size="18px" className="mb-0">{formattedCurrencySymbol}{tradeInfo.fiatAmount}</Paragraph>
 					</div>
 				</div>
-				<div className="col-3">
+				<div className="col-12 d-lg-none">
+					<CardDivider />
+				</div>
+				<div className="col-12 col-lg-3 mb-4 mb-md-0">
 					<Heading bold size="20px">Payment Data</Heading>
 					<div className="d-flex">
 						<TitledIcon className="material-icons me-2" title="Payment Method">account_balance_wallet</TitledIcon>
@@ -85,9 +119,17 @@ const ActiveTradeCard = ({ tradeInfo, type }) => {
 						<Reference size="18px" className="mb-2">{tradeInfo.Reference}</Reference>
 					</div>
 				</div>
-				<div className="col-3 d-flex align-items-end justify-content-end">
+				<div className="col-12 col-lg-3 d-flex align-items-end justify-content-end flex-column">
+					<CancelButton
+						fontSize="20px"
+						className="mb-3 w-100"
+						onClick={ () => deleteLiveTrade() }
+					>
+						Delete Trade
+					</CancelButton>
 					<GradientButton
-						text="View this Trade"
+						text="View Trade"
+						className="w-100 mb-2"
 						fontSize="20px"
 						onClick={ () => navigate(type === "buying" ? "/Buying" : "/Selling", {
 							state: {
@@ -152,7 +194,7 @@ const TradeHistory = () => {
 						className="d-flex align-items-center pt-2"
 					>
 						<ToggleIcon toggled={activeBuyTradesExpanded} alt="Dropdown" className="small me-3" />
-						<Heading size="24px" className="mb-0">Active Trades (Buying)</Heading>
+						<Heading size="24px" className="mb-0">{liveTradesBuyer.length} Active Buy Trades</Heading>
 					</InvisibleButton>
 					<MaxHeightBarrier>
 						<Collapse orientation="horizontal" in={activeBuyTradesExpanded}>
@@ -169,7 +211,7 @@ const TradeHistory = () => {
 						className="d-flex align-items-center pt-2"
 					>
 						<ToggleIcon toggled={activeSellTradesExpanded} alt="Dropdown" className="small me-3" />
-						<Heading size="24px" className="mb-0">Active Trades (Selling)</Heading>
+						<Heading size="24px" className="mb-0">{liveTradesSeller.length} Active Sell Trades</Heading>
 					</InvisibleButton>
 					<MaxHeightBarrier>
 						<Collapse orientation="horizontal" in={activeSellTradesExpanded}>

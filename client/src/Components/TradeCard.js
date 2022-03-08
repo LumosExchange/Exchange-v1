@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { LoadingState } from "./Profile";
 import { convertCurrencyToSymbol } from "../Helpers";
 
-const CardDivider = styled.hr(({ theme }) => css`
+export const CardDivider = styled.hr(({ theme }) => css`
     :not([size]){
         color: ${theme.colors.text_primary};
         height: 1px;
