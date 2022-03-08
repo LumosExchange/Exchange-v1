@@ -361,7 +361,7 @@ app.get("/getAllListings", (req, res) => {
 app.get("/getUserNameSeller", (req, res) => {
   let params = req.query.sellerID;
   db.query(
-    "SELECT * FROM users WHERE (userID) = (?)",
+    "SELECT userName FROM users WHERE (userID) = (?)",
     [params],
     (err, result) => {
       res.send(result);
@@ -1679,8 +1679,9 @@ app.post("/CloseTrade", (req,res) => {
 
 })
 
-app.post("/GetLiveTradeDetails", (req, res) => {
-  const liveTradeID = req.body.liveTradeID;
+app.get("/GetLiveTradeDetails", (req, res) => {
+  const liveTradeID = req.query.liveTradeID;
+  console.log('Live Trade ID : ',liveTradeID);
 
   db.query(
     "SELECT * FROM LiveTrades WHERE liveTradeID = ?",
@@ -1695,10 +1696,10 @@ app.post("/GetLiveTradeDetails", (req, res) => {
 
 });
 
-app.post("/GetLiveTradePaymentInfo", (req, res) => {
-  const sellerID = req.body.sellerID;
+app.get("/GetLiveTradePaymentInfo", (req, res) => {
+  const sellerID = req.query.sellerID;
   console.log('Seller ID: ', sellerID);
-  const paymentMethod = req.body.paymentMethod;
+  const paymentMethod = req.query.paymentMethod;
   console.log('Payment Method: ',paymentMethod);
 
   switch(paymentMethod){
