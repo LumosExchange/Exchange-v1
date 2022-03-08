@@ -123,6 +123,7 @@ const Buying = () => {
       .then((response) => {
         //Can map all details needed here from the response get seller ID and payment method from response
         setReference(response.data[0].Reference);
+
         setRoom(response.data[0].Reference);
         setSolAmount(response.data[0].amountOfSol);
         setPaymentMethod(response.data[0].paymentMethod);
@@ -132,7 +133,7 @@ const Buying = () => {
         setPaymentCurrency(response.data[0].paymentCurrency);
         setPaymentRecieved(response.data[0].paymentRecieved);
         setUserSolPrice(response.data[0].userSolPrice);
-        setFirstMessage(response.data[0].message);
+        setFirstMessage(response.data[0].Message);
 
         axios
           .get("http://localhost:3001/GetLiveTradePaymentInfo", {
@@ -144,43 +145,51 @@ const Buying = () => {
           .then((response2) => {
             setPaymentInfo(response2);
 
+            axios
+              .get("http://localhost:3001/getUserNameSeller", {
+                params: {
+                  sellerID: response.data[0].sellerID,
+                },
+              })
+              .then((response3) => {
+                setUserNameSeller(response.data[0].userName);
 
-				Axios.get("http://localhost:3001/getUserNameSeller", {
-					params: {
-						sellerID: response.data[0].sellerID
-					}}).then((response) => {
-					console.log(response.data[0].userName);
-				  }
-				);
-			  
+                Axios.get("http://localhost:3001/getUserNameNav", {}).then(
+                  (response4) => {
+                    setUserName(response4.data);
+
+                    const messageData = {
+                      room: response.data[0].Reference,
+                      author: response4.data,
+                      message: response.data[0].Message,
+                      time:
+                        new Date(Date.now()).getHours() +
+                        ":" +
+                        new Date(Date.now()).getMinutes(),
+                    };
+                    socket.emit("send_message", messageData);
+					setMessageList((list) => [...list, messageData]);
+					setCurrentMessage("");
+                  }
+                );
+              });
           });
       });
   };
 
-
-
-
+  const getUserName = () => {
+    Axios.get("http://localhost:3001/getUserNameNav", {}).then((response) => {
+      console.log("get user name fired");
+      setUserName(response?.data);
+    });
+  };
 
   //Join the user to the room
   const joinRoom = async () => {
     if (userName !== "" && room !== "") {
       socket.emit("join_room", room);
-
-      const messageDataFirst = {
-        room: room,
-        author: userName,
-        message: firstMessage,
-        time:
-          new Date(Date.now()).getHours() +
-          ":" +
-          new Date(Date.now()).getMinutes(),
-      };
-      await socket.emit("send_message", messageDataFirst);
-      setMessageList((list) => [...list, messageDataFirst]);
-      setCurrentMessage("");
     }
   };
-
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
@@ -200,6 +209,7 @@ const Buying = () => {
   };
 
   useEffect(() => {
+    getUserName();
     getTradeDetails();
     joinRoom();
 
