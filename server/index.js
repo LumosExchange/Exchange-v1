@@ -1697,118 +1697,103 @@ app.post("/GetLiveTradeDetails", (req, res) => {
 
 app.post("/GetLiveTradePaymentInfo", (req, res) => {
   const sellerID = req.body.sellerID;
-  const buyerID = req.session.user[0].userID;
+  console.log('Seller ID: ', sellerID);
   const paymentMethod = req.body.paymentMethod;
-  let reference = " ";
+  console.log('Payment Method: ',paymentMethod);
 
-  db.query(
-    "SELECT Reference FROM LiveTrades WHERE sellerID = ? AND buyerID = ?",
-    [sellerID, buyerID],
-    (err, result) => {
-      if (err) {
-        res.send(err);  
-      } else {
-        reference =  result[0].Reference;
-        console.log(result[0].Reference);
-        switch(paymentMethod){
+  switch(paymentMethod){
      
-          case "UK Bank Transfer":
-            db.query(
-              "SELECT Name, sortCode, accountNumber FROM UKBankAccounts WHERE userID = ?",
-              [sellerID],
-              (err, result) => {
-                if (err) {
-                  res.send(err);
-                } else {
-                  res.send({
-                    name: result[0].Name,
-                    sortCode: result[0].sortCode,
-                    accountNumber: result[0].accountNumber,
-                    reference: reference,
-                  });
-                }
-              }
-            );
-            break;
-            case "EU Bank Transfer":
-             db.query(
-               "SELECT bankName, BIC, IBAN FROM EUBankAccounts WHERE userID = ?",
-               [sellerID],
-               (err, result) => {
-                 if (err) {
-                   res.send(err);
-                 } else {
-                   res.send({
-                     bankName: result[0].bankName,
-                     BIC: result[0].BIC,
-                     IBAN: result[0].IBAN,
-                     reference: reference,
-                   });
-                 }
-               }  
-             );
-             break;
-             case "International Wire Transfer":
-              db.query(
-                "SELECT bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE userID = ?",
-                [sellerID],
-                (err, result) => {
-                  if (err) {
-                    res.send(err);
-                  } else {
-                    res.send({
-                      bankName: result[0].bankName,
-                      bankCity: result[0].bankCity,
-                      bankCountry: result[0].bankCountry,
-                      SWIFTCode: result[0].SWIFTCode,
-                      payeesName: result[0].payeesName,
-                      interBankName: result[0].interBankName,
-                      interBankCity: result[0].interBankCity,
-                      interBankCountry: result[0].interBankCountry,
-                      interBankAccountNumber: result[0].interBankAccountNumber,
-                      interBankRoutingNumber: result[0].interBankRoutingNumber,
-                      reference: reference,
-                    });
-                  }
-                }  
-              );
-              break;
-              case "Paypal Transfer":
-              db.query(
-                "SELECT paypalEmail FROM paypalAccounts WHERE userID = ?",
-                [sellerID],
-                (err, result) => {
-                  if (err) {
-                    res.send(err);
-                  } else {
-                    res.send({
-                      paypalEmail: result[0].paypalEmail,
-                      reference: reference,
-                    });
-                  }
-                }  
-              );
-              break;
-              case "Skrill Transfer":
-              db.query(
-                "SELECT paypalEmail FROM skrillAccounts WHERE userID = ?",
-                [sellerID],
-                (err, result) => {
-                  if (err) {
-                    res.send(err);
-                  } else {
-                    res.send({
-                      skrillEmail: result[0].skrillEmail,
-                      reference: reference,
-                    });
-                  }
-                }  
-              );
-        };  
-    }});
+    case "UK Bank Transfer":
+      db.query(
+        "SELECT Name, sortCode, accountNumber FROM UKBankAccounts WHERE userID = ?",
+        [sellerID],
+        (err, result) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.send({
+              name: result[0].Name,
+              sortCode: result[0].sortCode,
+              accountNumber: result[0].accountNumber,
+            });
+          }
+        }
+      );
+      break;
+      case "EU Bank Transfer":
+       db.query(
+         "SELECT bankName, BIC, IBAN FROM EUBankAccounts WHERE userID = ?",
+         [sellerID],
+         (err, result) => {
+           if (err) {
+             res.send(err);
+           } else {
+             res.send({
+               bankName: result[0].bankName,
+               BIC: result[0].BIC,
+               IBAN: result[0].IBAN,
+             });
+           }
+         }  
+       );
+       break;
+       case "International Wire Transfer":
+        db.query(
+          "SELECT bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE userID = ?",
+          [sellerID],
+          (err, result) => {
+            if (err) {
+              res.send(err);
+            } else {
+              res.send({
+                bankName: result[0].bankName,
+                bankCity: result[0].bankCity,
+                bankCountry: result[0].bankCountry,
+                SWIFTCode: result[0].SWIFTCode,
+                payeesName: result[0].payeesName,
+                interBankName: result[0].interBankName,
+                interBankCity: result[0].interBankCity,
+                interBankCountry: result[0].interBankCountry,
+                interBankAccountNumber: result[0].interBankAccountNumber,
+                interBankRoutingNumber: result[0].interBankRoutingNumber,
+              });
+            }
+          }  
+        );
+        break;
+        case "Paypal Transfer":
+        db.query(
+          "SELECT paypalEmail FROM paypalAccounts WHERE userID = ?",
+          [sellerID],
+          (err, result) => {
+            if (err) {
+              res.send(err);
+            } else {
+              res.send({
+                paypalEmail: result[0].paypalEmail,
+              });
+            }
+          }  
+        );
+        break;
+        case "Skrill Transfer":
+        db.query(
+          "SELECT paypalEmail FROM skrillAccounts WHERE userID = ?",
+          [sellerID],
+          (err, result) => {
+            if (err) {
+              res.send(err);
+            } else {
+              res.send({
+                skrillEmail: result[0].skrillEmail,
+              });
+            }
+          }  
+        );
+  };  
 
-   
-  
+
+ 
 
 
 });
