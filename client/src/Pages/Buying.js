@@ -82,7 +82,93 @@ const ChatWrapper = styled.div(
   `
 );
 
-const solQuantity = 2;
+const PaymentInfoArea = ({ paymentInfo, paymentMethod }) => (
+	<Card className="p-3 mb-4 d-flex flex-column" color="grey">
+		<Paragraph size="24px" bold color="primary_cta">
+			{paymentMethod}
+		</Paragraph>
+		{paymentInfo.data?.name && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">Name:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.name}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.sortCode && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">Sort:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.sortCode}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.accountNumber && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">Acc No:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.accountNumber}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.reference && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">Ref:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.reference}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.email && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">Sort:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.email}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.email && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">Email:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.email}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.bankName && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">Bank Name:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.bankName}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.bankCity && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">Bank City:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.bankCity}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.IBAN && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">IBAN:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.IBAN}
+				</Paragraph>
+			</div>
+		)}
+		{paymentInfo.data?.BIC && (
+			<div className="d-flex justify-content-center">
+				<Paragraph bold size="20px" className="me-2">BIC/SWIFT:</Paragraph>
+				<Paragraph className="text-uppercase" size="20px">
+					{paymentInfo.data.BIC}
+				</Paragraph>
+			</div>
+		)}
+	</Card>
+);
 
 const socket = io.connect("http://localhost:3002");
 
@@ -123,6 +209,7 @@ const Buying = () => {
       .then((response) => {
         //Can map all details needed here from the response get seller ID and payment method from response
         setReference(response.data[0].Reference);
+
         setRoom(response.data[0].Reference);
         setSolAmount(response.data[0].amountOfSol);
         setPaymentMethod(response.data[0].paymentMethod);
@@ -132,7 +219,7 @@ const Buying = () => {
         setPaymentCurrency(response.data[0].paymentCurrency);
         setPaymentRecieved(response.data[0].paymentRecieved);
         setUserSolPrice(response.data[0].userSolPrice);
-        setFirstMessage(response.data[0].message);
+        setFirstMessage(response.data[0].Message);
 
         axios
           .get("http://localhost:3001/GetLiveTradePaymentInfo", {
@@ -144,43 +231,51 @@ const Buying = () => {
           .then((response2) => {
             setPaymentInfo(response2);
 
+            axios
+              .get("http://localhost:3001/getUserNameSeller", {
+                params: {
+                  sellerID: response.data[0].sellerID,
+                },
+              })
+              .then((response3) => {
+                setUserNameSeller(response.data[0].userName);
 
-				Axios.get("http://localhost:3001/getUserNameSeller", {
-					params: {
-						sellerID: response.data[0].sellerID
-					}}).then((response) => {
-					console.log(response.data[0].userName);
-				  }
-				);
-			  
+                Axios.get("http://localhost:3001/getUserNameNav", {}).then(
+                  (response4) => {
+                    setUserName(response4.data);
+
+                    const messageData = {
+                      room: response.data[0].Reference,
+                      author: response4.data,
+                      message: response.data[0].Message,
+                      time:
+                        new Date(Date.now()).getHours() +
+                        ":" +
+                        new Date(Date.now()).getMinutes(),
+                    };
+                    socket.emit("send_message", messageData);
+					setMessageList((list) => [...list, messageData]);
+					setCurrentMessage("");
+                  }
+                );
+              });
           });
       });
   };
 
-
-
-
+  const getUserName = () => {
+    Axios.get("http://localhost:3001/getUserNameNav", {}).then((response) => {
+      console.log("get user name fired");
+      setUserName(response?.data);
+    });
+  };
 
   //Join the user to the room
   const joinRoom = async () => {
     if (userName !== "" && room !== "") {
       socket.emit("join_room", room);
-
-      const messageDataFirst = {
-        room: room,
-        author: userName,
-        message: firstMessage,
-        time:
-          new Date(Date.now()).getHours() +
-          ":" +
-          new Date(Date.now()).getMinutes(),
-      };
-      await socket.emit("send_message", messageDataFirst);
-      setMessageList((list) => [...list, messageDataFirst]);
-      setCurrentMessage("");
     }
   };
-
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
@@ -200,6 +295,7 @@ const Buying = () => {
   };
 
   useEffect(() => {
+    getUserName();
     getTradeDetails();
     joinRoom();
 
@@ -208,9 +304,9 @@ const Buying = () => {
     });
   }, [socket]);
 
-  console.log(hasFetched, "has fetched data?");
+  console.log(paymentInfo, "payment info");
 
-  const formattedCurrency = convertCurrencyToSymbol(state.currency);
+  const formattedCurrency = convertCurrencyToSymbol(paymentCurrency);
 
   return (
     <PageBody>
@@ -295,15 +391,13 @@ const Buying = () => {
           </div>
           <div className="col-12 col-md-5 row mt-4">
             <div className="col-12 text-center">
-              <div className="d-flex">
-                <Heading className="me-2">Buying</Heading>
-                <Heading bold>{solAmount} SOL</Heading>
-                <Heading className="mx-2">for</Heading>
-                <Heading bold>
+                <Heading className="me-2 d-inline-block">Buying</Heading>
+                <Heading bold className="d-inline-block">{solAmount} SOL</Heading>
+                <Heading className="mx-2 d-inline-block">for</Heading>
+                <Heading bold className="d-inline-block">
                   {formattedCurrency}
-                  {fiatAmount * solAmount}
+                  {fiatAmount}
                 </Heading>
-              </div>
               <Paragraph size="18px" className="pb-3">
                 1 SOL = {formattedCurrency}
                 {userSolPrice}
@@ -311,11 +405,12 @@ const Buying = () => {
               <HorizontalDivider />
               <div className="d-flex justify-content-center flex-column">
                 <Paragraph bold size="24px" className="me-2">
-                  Please pay
+                  Please pay {formattedCurrency}{fiatAmount}
                 </Paragraph>
                 <Paragraph size="18px" className="me-2">
                   into
                 </Paragraph>
+				<PaymentInfoArea paymentInfo={paymentInfo} paymentMethod={paymentMethod} />
                 <div className="d-flex text-start">
                   <FormCheckbox
                     type="checkbox"
