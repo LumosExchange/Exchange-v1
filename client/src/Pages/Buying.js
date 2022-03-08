@@ -88,8 +88,18 @@ const Buying = () => {
 	const [messageList, setMessageList] = useState([]);
 	const [paymentInfo, setPaymentInfo] = useState([]);
 	const [room, setRoom] = useState("");
-	const [userName, setUserName] = useState("");
-	
+	const [userNameSeller, setUserName]Seller = useState("");
+	const [reference, setReference] = useState("");
+	const [solAmount, setSolAmount] = useState("");
+	const [buyerID, setBuyerID] = useState("");
+	const [sellerID, setSellerID] = useState("");
+	const [fiatAmount, setFiatAmount] = useState("");
+	const [paymentCurrency, setPaymentCurrency] =  useState("");
+	const [paymentRecieved, setPaymentRecieved] = useState("");
+	const [userSolPrice, setUserSolPrice] = useState("");
+	const [paymentMethod, setPaymentMethod] = useState("");
+	const [firstMessage, setFirstMessage] = useState("");
+
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
 	console.log(state, 'st8')
@@ -105,18 +115,41 @@ const Buying = () => {
 		}).then((response) => {
 			//Can map all details needed here from the response get seller ID and payment method from response
 			console.log(response.data);
+			setReference(response.data.Reference);
+			setSolAmount(response.data.amountOfSol);
+			setBuyerID(response.data.buyerID);
+			setSellerID(response.data.sellerID);
+			setFiatAmount(response.data.fiatAmount);
+			setPaymentCurrency(response.data.paymentCurrency);
+			setPaymentRecieved(response.data.paymentRecieved);
+			setUserSolPrice(response.data.userSolPrice);
+			setPaymentMethod(response.data.paymentMethod);
+			setFirstMessage(response.data.message);
 		});
-
-		//get the payment method and do getliveTrade info 
 	}
 
+	//Join the user to the room
+	const joinRoom = () => {
+		if (userName !== "" && room !== "") {
+			socket.emit("join_room", room);
+
+			const messageDataFirst = {
+				room: room,
+				author: userName,
+				message: firstMessage,
+				time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
+		}
+			await socket.emit("send_message", messageDataFirst);
+			setMessageList((list) => [...list, messageData]);
+			setCurrentMessage("");
+	};
 
 
 	const getDetails = () => {
 		axios
 			.post("http://localhost:3001/GetLiveTradePaymentInfo", {
-				sellerID: liveTradeID,
-				paymentMethod: state.paymentMethod,
+				sellerID: sellerID,
+				paymentMethod: paymentMethod,
 			})
 			.then((response) => {
 				setPaymentInfo(response);
@@ -125,20 +158,14 @@ const Buying = () => {
 			});
 	};
 
-	const getUserName = () => {
-		Axios.get("http://localhost:3001/getUserNameNav", {
+	const getsellerUserName = () => {
+		Axios.get("http://localhost:3001/getUserNameSeller", {
 		}).then((response) => {
-		  console.log('get user name fired');
-			setUserName(response?.data);
+			setUserNameSeller(response?.data);
 		});
 	  }
 
 	//chat stuff here
-	const joinRoom = () => {
-		if (userName !== "" && room !== "") {
-			socket.emit("join_room", room);
-		}
-	};
 
 	const sendMessage = async () => {
 		if (currentMessage !== "") {
@@ -156,24 +183,17 @@ const Buying = () => {
 
 	useEffect(() => {
 		getTradeDetails();
-		if (paymentInfo.length === 0) {
-		//	getDetails();
-		}
-
 		getUserName();
-
+		joinRoom();
+		if (paymentInfo.length === 0) {
+			getDetails();
+		}
 		socket.on("recieve_message", (data) => {
 			setMessageList((list) => [...list, data]);
 		});
 	}, [socket]);
 
-	//console.log(messageList, 'message list');
-	//console.log(currentMessage, 'current message');
-
-	//console.log(paymentInfo, "payment info");
-
 	const formattedCurrency = convertCurrencyToSymbol(state.currency);
-	console.log(state.liveTradeID, 'live trade id');
 
 	return (
 		<PageBody>
@@ -181,7 +201,7 @@ const Buying = () => {
 				<div className="row pt-5">
 					<div className="col-12 mb-5 pb-5">
 						<Heading size="26px" className="mb-4">
-							Offers &gt; Buy SOL from {"USERNAME"} with {"PAYMENT METHOD"}.
+							Offers &gt; Buy SOL from {userNameSeller} with {paymentMethod}.
 						</Heading>
 					</div>
 					<div className="col-12 col-md-6 row">
@@ -239,7 +259,6 @@ const Buying = () => {
 								<SendButton
 									icon="send"
 									onClick={() => {
-										joinRoom();
 										sendMessage();
 										setCurrentMessage('');
 									}}
@@ -257,19 +276,19 @@ const Buying = () => {
 						<div className="col-12 text-center">
 							<div className="d-flex">
 								<Heading className="me-2">Buying</Heading>
-								<Heading bold>{solQuantity} SOL</Heading>
+								<Heading bold>{solAmount} SOL</Heading>
 								<Heading className="mx-2">for</Heading>
-								<Heading bold>{formattedCurrency}{"state.solGbp * solQuantity"}</Heading>
+								<Heading bold>{formattedCurrency}{fiatAmount * amountOfSol}</Heading>
 							</div>
 							<Paragraph size="18px" className="pb-3">
 								1 SOL = {formattedCurrency}
-								{state.solGbp}
+								{userSolPrice}
 							</Paragraph>
 							<HorizontalDivider />
 							<div className="d-flex justify-content-center flex-column">
 								<Paragraph bold size="24px" className="me-2">
 									Please pay {formattedCurrency}
-									{state.solGbp * solQuantity}
+									{fiatAmount * amountOfSol}
 								</Paragraph>
 								<Paragraph size="18px" className="me-2">
 									into
