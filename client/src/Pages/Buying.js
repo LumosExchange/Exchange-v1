@@ -100,6 +100,7 @@ const Buying = () => {
 	const [paymentMethod, setPaymentMethod] = useState("");
 	const [firstMessage, setFirstMessage] = useState("");
 	const [userName, setUserName] = useState("");
+	const [hasFetched, setHasFetched] = useState(false);
 
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
@@ -114,17 +115,19 @@ const Buying = () => {
 			liveTradeID: liveTradeID
 		}).then((response) => {
 			//Can map all details needed here from the response get seller ID and payment method from response
-		console.log(response.data[0].Reference);
-			setReference(response.data[0].Reference);
-			setSolAmount(response.data[0].amountOfSol);
-			setBuyerID(response.data[0].buyerID);
-			setSellerID(response.data[0].sellerID);
-			setFiatAmount(response.data[0].fiatAmount);
-			setPaymentCurrency(response.data[0].paymentCurrency);
-			setPaymentRecieved(response.data[0].paymentRecieved);
-			setUserSolPrice(response.data[0].userSolPrice);
-			setPaymentMethod(response.data[0].paymentMethod);
-			setFirstMessage(response.data[0].message);
+			if (response.status === 200){
+				setReference(response.data[0].Reference);
+				setSolAmount(response.data[0].amountOfSol);
+				setBuyerID(response.data[0].buyerID);
+				setSellerID(response.data[0].sellerID);
+				setFiatAmount(response.data[0].fiatAmount);
+				setPaymentCurrency(response.data[0].paymentCurrency);
+				setPaymentRecieved(response.data[0].paymentRecieved);
+				setUserSolPrice(response.data[0].userSolPrice);
+				setPaymentMethod(response.data[0].paymentMethod);
+				setFirstMessage(response.data[0].message);
+				setHasFetched(true);
+			}
 		});
 	}
 
@@ -142,9 +145,8 @@ const Buying = () => {
 			await socket.emit("send_message", messageDataFirst);
 			setMessageList((list) => [...list, messageDataFirst]);
 			setCurrentMessage("");
+		};
 	};
-};
-
 
 	const getDetails = () => {
 		axios
@@ -160,19 +162,16 @@ const Buying = () => {
 	};
 
 	const getsellerUserName = () => {
-		Axios.get("http://localhost:3001/getUserNameSeller", {
-		}).then((response) => {
+		Axios.get("http://localhost:3001/getUserNameSeller", {}).then((response) => {
 			setUserNameSeller(response?.data);
 		});
-	  }
+	};
 
-	  const getUserName = () =>{
-		Axios.get("http://localhost:3001/getUserNameNav", {
-		}).then((response) => {
+	const getUserName = () => {
+		Axios.get("http://localhost:3001/getUserNameNav", {}).then((response) => {
 			setUserName(response?.data);
 		});
-
-	  }
+	};
 
 	const sendMessage = async () => {
 		if (currentMessage !== "") {
@@ -189,18 +188,22 @@ const Buying = () => {
 	};
 
 	useEffect(() => {
+		getTradeDetails();
 
-		if (paymentInfo.length === 0) {
-			getTradeDetails();
+		// run these after
+		if (hasFetched === true){
 			getDetails();
 			getUserName();
 			getsellerUserName();
 			joinRoom(); 
 		}
+
 		socket.on("recieve_message", (data) => {
 			setMessageList((list) => [...list, data]);
 		});
 	}, [socket]);
+
+	console.log(hasFetched, 'has fetched data?');
 
 	const formattedCurrency = convertCurrencyToSymbol(state.currency);
 
