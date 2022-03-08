@@ -86,8 +86,6 @@ const Offer = () => {
 	const [feedbackScore, setFeedbackScore] = useState("");
 	const [escrowReleaseTime, setEscrowReleaseTime] = useState("");
 
-	const [custom, setCustom] = useState("");
-
 	const { state } = useLocation();
 	const { val } = state;
 
@@ -150,7 +148,6 @@ const Offer = () => {
 			paymentCurrency: currency,
 			message: offerMessage,
 		}).then((response) => {
-			console.log(response, 'response');
 			if (response.status === 200){
 				navigate("/Buying", {
 					state: {
@@ -164,8 +161,6 @@ const Offer = () => {
 		getCurrentSolPrice();
 		getSellerInfo();
 	}, []);
-
-	console.log(custom, 'custom here hurr');
 
 	const filteredPaymentMethods = ["Please Select", val.paymentMethod1, val.paymentMethod2];
 
