@@ -86,8 +86,7 @@ const solQuantity = 2;
 
 const socket = io.connect("http://localhost:3002");
 
-const Selling = () => {
-
+const Selling = ({ userName }) => {
 	const [currentMessage, setCurrentMessage] = useState("");
 	const [messageList, setMessageList] = useState([]);
 	const [paymentInfo, setPaymentInfo] = useState([]);
@@ -104,9 +103,6 @@ const Selling = () => {
 	const [userSolPrice, setUserSolPrice] = useState("");
 	const [paymentMethod, setPaymentMethod] = useState("");
 	const [firstMessage, setFirstMessage] = useState("");
-	const [userName, setUserName] = useState("");
-
-
 
 	const { state } = useLocation()
 	const liveTradeID = state.liveTradeID;
@@ -158,7 +154,7 @@ const Selling = () => {
 			})
 		
 		});
-		}
+	}
 
 	//chat stuff here
 	const joinRoom = async () => {

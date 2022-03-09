@@ -84,6 +84,7 @@ const ChatWrapper = styled.div(
 
 const PaymentInfoArea = ({ paymentInfo, paymentMethod, reference }) => (
 	<Card className="p-3 mb-4 d-flex flex-column" color="grey">
+		<Paragraph>The buyer will transfer funds using the following details:</Paragraph>
 		<Paragraph size="24px" bold color="primary_cta">
 			{paymentMethod}
 		</Paragraph>
@@ -192,12 +193,12 @@ const PaymentInfoArea = ({ paymentInfo, paymentMethod, reference }) => (
 
 const socket = io.connect("http://localhost:3002");
 
-const Buying = ({ userName }) => {
+const Selling2 = ({ userName }) => {
 	const [currentMessage, setCurrentMessage] = useState("");
 	const [messageList, setMessageList] = useState([]);
 	const [paymentInfo, setPaymentInfo] = useState([]);
 	const [room, setRoom] = useState("");
-	const [userNameSeller, setUserNameSeller] = useState("");
+	const [userNameBuyer, setUserNameBuyer] = useState("");
 	const [reference, setReference] = useState("");
 	const [solAmount, setSolAmount] = useState("");
 	const [buyerID, setBuyerID] = useState("");
@@ -221,82 +222,49 @@ const Buying = ({ userName }) => {
 
 	const getTradeDetails = () => {
 		axios
-			.get("http://localhost:3001/GetLiveTradeDetails", {
-				params: {
-					liveTradeID: liveTradeID,
-				},
+		.get("http://localhost:3001/GetLiveTradeDetails", {
+		  params: {
+			liveTradeID: liveTradeID,
+		  },
+		}).then((response) => {
+			setReference(response.data[0].Reference);
+			setRoom(response.data[0].Reference);
+			socket.emit("join_room", response.data[0].Reference);
+			setSolAmount(response.data[0].amountOfSol);
+			setPaymentMethod(response.data[0].paymentMethod);
+			setBuyerID(response.data[0].buyerID);
+			setSellerID(response.data[0].sellerID);
+			setFiatAmount(response.data[0].fiatAmount);
+			setPaymentCurrency(response.data[0].paymentCurrency);
+			setPaymentRecieved(response.data[0].paymentRecieved);
+			setUserSolPrice(response.data[0].userSolPrice);
+			setFirstMessage(response.data[0].Message);
+
+			//Get buyer username 
+
+			axios.get("http://localhost:3001/getUserNameBuyer", { params: {
+				buyerID: response.data[0].buyerID,
+			}}).then((response2) => {
+				setUserNameBuyer(response2.data[0].userName);
+				console.log('Buyer username : ', response2.data[0].userName);
+
+				const messageData = {
+					room: response.data[0].Reference,
+					author: response2.data[0].userName,
+					message: response.data[0].Message,
+					time:
+					  new Date(Date.now()).getHours() +
+					  ":" +
+					  new Date(Date.now()).getMinutes(),
+				  };
+				  socket.emit("send_message", messageData);
+							setMessageList((list) => [...list, messageData]);
+							setCurrentMessage("");
+				
 			})
-			.then((response) => {
-				//Can map all details needed here from the response get seller ID and payment method from response
-				setReference(response.data[0].Reference);
-
-				setRoom(response.data[0].Reference);
-				setSolAmount(response.data[0].amountOfSol);
-				setPaymentMethod(response.data[0].paymentMethod);
-				setBuyerID(response.data[0].buyerID);
-				setSellerID(response.data[0].sellerID);
-				setFiatAmount(response.data[0].fiatAmount);
-				setPaymentCurrency(response.data[0].paymentCurrency);
-				setPaymentRecieved(response.data[0].paymentRecieved);
-				setUserSolPrice(response.data[0].userSolPrice);
-				setFirstMessage(response.data[0].Message);
-
-				axios
-					.get("http://localhost:3001/GetLiveTradePaymentInfo", {
-						params: {
-							sellerID: response.data[0].sellerID,
-							paymentMethod: response.data[0].paymentMethod,
-						},
-					})
-					.then((response2) => {
-						setPaymentInfo(response2);
-
-						axios
-							.get("http://localhost:3001/getUserNameSeller", {
-								params: {
-									sellerID: response.data[0].sellerID,
-								},
-							})
-							.then((response3) => {
-								setUserNameSeller(response.data[0].userName);
-
-								const messageData = {
-									room: reference,
-									author: userName,
-									message: response.data[0].Message,
-									time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
-								};
-								socket.emit("send_message", messageData);
-								setMessageList((list) => [...list, messageData]);
-								setCurrentMessage("");
-							});
-					});
-			});
-	};
-
-  const sentPayment = () =>{
-    axios.post(
-      "http://localhost:3001/updateLiveTradePayment", {
-        liveTradeID,
-        userName
-      }).then((response) => {
-        if(response.data.update === true) {
-          //send message to convo letting the seller know youve sent the payment
-          const messageData = {
-            room: room,
-            author: userName,
-            message: ("Please note " + userName + " has confirmed they have sent the payment"),
-            time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
-          };
-          socket.emit("send_message", messageData);
-          setMessageList((list) => [...list, messageData]);
-          setCurrentMessage("");
-        } else {
-          //handle error here some sort of popup / message to say error please try again 
-
-        }
-      })
-  }
+		
+		});
+	}
 
 	//Join the user to the room
 	const joinRoom = async () => {
@@ -338,7 +306,7 @@ const Buying = ({ userName }) => {
 				<div className="row pt-5">
 					<div className="col-12 mb-5 pb-5">
 						<Heading size="26px" className="mb-4">
-							Offers &gt; Buy SOL from {userNameSeller} with {paymentMethod}.
+							Offers &gt; Sell SOL to {userNameBuyer} with {paymentMethod}.
 						</Heading>
 					</div>
 					<div className="col-12 col-md-6 row">
@@ -413,7 +381,7 @@ const Buying = ({ userName }) => {
 					</div>
 					<div className="col-12 col-md-5 row mt-4">
 						<div className="col-12 text-center">
-							<Heading className="me-2 d-inline-block">Buying</Heading>
+							<Heading className="me-2 d-inline-block">Selling</Heading>
 							<Heading bold className="d-inline-block">
 								{solAmount} SOL
 							</Heading>
@@ -429,12 +397,18 @@ const Buying = ({ userName }) => {
 							<HorizontalDivider />
 							<div className="d-flex justify-content-center flex-column">
 								<Paragraph bold size="24px" className="me-2">
-									Please pay {formattedCurrency}
-									{fiatAmount}
+									Waiting for payment from the buyer
 								</Paragraph>
-								<Paragraph size="18px" className="me-2">
-									into
+								<Paragraph size="18px" className="me-2 mb-0 d-none">
+									Your SOL is now secured in escrow!
 								</Paragraph>
+								<Paragraph size="18px" className="me-2 mb-0" color="primary_cta">
+									Please ensure you have received the payment
+								</Paragraph>
+								<Paragraph size="18px" className="me-2 mb-5">
+									before continuing.
+								</Paragraph>
+
 								<PaymentInfoArea
 									paymentInfo={paymentInfo}
 									paymentMethod={paymentMethod}
@@ -448,8 +422,8 @@ const Buying = ({ userName }) => {
 										className="me-4"
 									/>
 									<StyledLabel className="p-0" htmlFor="checkedPayment">
-										<HighlightedText className="me-1">YES!</HighlightedText> I have sent the payment
-										to the seller.
+										<HighlightedText className="me-1">YES!</HighlightedText> I recieved the payment
+										from the buyer.
 									</StyledLabel>
 								</div>
 								<div className="row mt-5">
@@ -466,7 +440,7 @@ const Buying = ({ userName }) => {
 										<PrimaryButton
 											text="Continue"
 											className="m-auto mt-3"
-											onClick={sentPayment}
+											onClick={null}
 											type="check"
 											value="check"
 											hasIcon
@@ -482,4 +456,4 @@ const Buying = ({ userName }) => {
 	);
 };
 
-export default Buying;
+export default Selling2;

@@ -37,6 +37,7 @@ import AccountUpgrade from "./Pages/Profile/AccountUpgrade";
 import Offer from "./Pages/Offer";
 import MyListings from "./Pages/MyListings";
 import Buying from './Pages/Buying';
+import Selling2 from "./Pages/Selling2";
 
 
 
@@ -122,7 +123,7 @@ const App = () => {
             ;
             <Route path="/Buy" element={<Buy solGbp={solGbp} solUsd={solUsd} currency={currency} />} />
             <Route path="/Sell" element={<Sell />} />
-            <Route path="/Selling" element={<Selling />} />
+            <Route path="/Selling" element={<Selling2 userName={userName} />} />
             <Route path="/Offer" element={<Offer solGbp={solGbp} solUsd={solUsd} currency={currency} />} />
             <Route path="/TradeHistory" element={<TradeHistory />} />
             <Route path="/Feedback" element={<Feedback />} />
