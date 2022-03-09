@@ -17,39 +17,9 @@ export const CardDivider = styled.hr(({ theme }) => css`
     }
 `);
 
-const TradeCard = ({ val, children, withoutButton }) => {
-    const [currency, setCurrency] = useState();
-	const [solgbp, setSolGbp] = useState();
-	const [solusd, setSolUsd] = useState();
-
+const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) => {
     const navigate = useNavigate();
-
-    const getCurrency = () => {
-		Axios.get("http://localhost:3001/getUserSettings").then((response) => {
-			if (response.data[0]?.currency === 'GBP') {
-				setCurrency('GBP');
-				//Get GBP price of SOlana
-				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp').then((response) => response.json().then(function (data) {
-					setSolGbp(data.solana.gbp);
-				}));	
-			} else if (response.data[0]?.currency === 'USD') {
-				setCurrency('USD');
-				//Get USD price of solana
-				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd').then((response) => response.json().then(function (data) {
-					setSolUsd(data.solana.usd);
-				}));
-			} else {
-				//handle other currencys
-				setCurrency('GBP');
-			}
-		});
-	}
-
-    useEffect(() => {
-        if (currency === undefined){
-            getCurrency();
-        }
-	}, [currency]);
+    console.log(solGbp, 'sol price');
 
     return (
         <Card className="p-4 mb-3" color="grey">
@@ -77,12 +47,8 @@ const TradeCard = ({ val, children, withoutButton }) => {
                 </div>
                 <div className="col-12 col-xl-3 d-flex flex-column align-items-xl-end mb-3 mb-xl-0">
                     <Heading size="24px" bold color="primary_cta" className="mb-0">
-                        {convertCurrencyToSymbol(currency)}{val.aboveOrBelow === 'above' && ((solgbp / 100) * (100 + val.percentChange)).toFixed(2)}
-                        {solgbp !== undefined ? (
-                            val.aboveOrBelow === 'below' && ((solgbp / 100) * (100 - val.percentChange)).toFixed(2)
-                        ) : (
-                            <LoadingState />
-                        )}
+                        {convertCurrencyToSymbol(currency)}{val.aboveOrBelow === 'above' && ((solGbp / 100) * (100 + val.percentChange)).toFixed(2)}
+                        {val.aboveOrBelow === 'below' && ((solGbp / 100) * (100 - val.percentChange)).toFixed(2)}
                     </Heading>
                     <Paragraph size="16px" className="mb-0">{val.amountForSale} for sale</Paragraph>
                 </div>

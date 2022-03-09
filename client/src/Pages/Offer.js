@@ -13,72 +13,67 @@ import IconSolana from "../Images/icon-circle-solana.svg";
 import TradeCard from "../Components/TradeCard";
 import { convertCurrencyToSymbol } from "../Helpers";
 
-const SwitchButton = styled.button(
-	({ theme }) => css`
-		width: 50px;
-		min-width: 50px;
-		height: 50px;
-		border-radius: 50px;
-		border: 0px;
-		background: ${theme.colors.primary_cta};
-		color: ${theme.colors.base_bg};
-	`
-);
+const SwitchButton = styled.button(({ theme }) => css`
+	width: 50px;
+	min-width: 50px;
+	height: 50px;
+	border-radius: 50px;
+	border: 0px;
+	background: ${theme.colors.primary_cta};
+	color: ${theme.colors.base_bg};
+`);
 
-const ConversionArea = styled.div(
-	({ theme }) => css`
+const ConversionArea = styled.div(({ theme }) => css`
+	min-height: 60px;
+	background: ${theme.colors.grey};
+	border-radius: 10px;
+	display: flex;
+	align-items: center;
+	padding: 0;
+	cursor: text;
+
+	.icon-area {
 		min-height: 60px;
-		background: ${theme.colors.grey};
-		border-radius: 10px;
-		display: flex;
-		align-items: center;
-		padding: 0;
-		cursor: text;
+		padding: 10px 20px 10px 10px;
+		border-radius: 10px 0 0 10px;
 
-		.icon-area {
-			min-height: 60px;
-			padding: 10px 20px 10px 10px;
-			border-radius: 10px 0 0 10px;
-
-			i {
-				color: ${theme.colors.text_primary};
-			}
-
-			img {
-				width: 24px;
-				height: 24px;
-			}
-		}
-	`
-);
-
-const HorizontalDivider = styled.hr(
-	({ theme }) => css`
-		:not([size]) {
+		i {
 			color: ${theme.colors.text_primary};
-			height: 1px;
-			opacity: 0.2;
 		}
-	`
-);
 
-const VerticalDivider = styled.hr(
-	({ theme }) => css`
-		:not([size]) {
-			color: ${theme.colors.text_primary};
-			height: 100%;
-			width: 1px;
-			opacity: 0.2;
+		img {
+			width: 24px;
+			height: 24px;
 		}
-	`
-);
+	}
+`);
 
-const Offer = () => {
+const HorizontalDivider = styled.hr(({ theme }) => css`
+	:not([size]) {
+		color: ${theme.colors.text_primary};
+		height: 1px;
+		opacity: 0.2;
+	}
+`);
+
+const VerticalDivider = styled.hr(({ theme }) => css`
+	:not([size]) {
+		color: ${theme.colors.text_primary};
+		height: 100%;
+		width: 1px;
+		opacity: 0.2;
+	}
+`);
+
+const YellowIcon = styled.i(({ theme }) => css`
+	color: ${theme.colors.primary_cta};
+`);
+
+const Offer = ({ solGbp, solUsd, currency}) => {
 	const [offerAmount, setOfferAmount] = useState("");
 	const [offerAmountInSol, setOfferAmountInSol] = useState("");
 	const [offerAmountInCurrency, setOfferAmountInCurrency] = useState("");
 	const [offerMessage, setOfferMessage] = useState("");
-	const [solGbp, setSolGbp] = useState("");
 	const [conversionMode, setConversionMode] = useState("FIATtoSOL");
 	const [paymentMethod, setPaymentMethod] = useState("Please Select");
 
@@ -86,33 +81,33 @@ const Offer = () => {
 	const [feedbackScore, setFeedbackScore] = useState("");
 	const [escrowReleaseTime, setEscrowReleaseTime] = useState("");
 
+	const [listingPrice, setListingPrice] = useState(0.00);
+
 	const { state } = useLocation();
 	const { val } = state;
 
 	const navigate = useNavigate();
 	
-	const getCurrentSolPrice = () => {
-		fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp").then((response) =>
-			response.json().then(function (data) {
-				if (val.aboveOrBelow === "above") {
-					const listingPrice = (data.solana.gbp / 100) * (100 + val.percentChange);
-					setSolGbp(listingPrice.toFixed(2));
-				} else {
-					const listingPrice = (data.solana.gbp / 100) * (100 - val.percentChange);
-					setSolGbp(listingPrice.toFixed(2));
-				}
-			})
-		);
+	const getListingPrice = () => {
+		if (val.aboveOrBelow === "above") {
+			const listingPrice = (solGbp / 100) * (100 + val.percentChange);
+			setListingPrice(listingPrice.toFixed(2));
+		} else {
+			const listingPrice = (solGbp / 100) * (100 - val.percentChange);
+			setListingPrice(listingPrice.toFixed(2));
+		}
 	};
 
 	const convertAmountToSOL = (amount) => {
-		const convertedAmount = amount / solGbp;
+		const convertedAmount = amount / listingPrice;
 		setOfferAmountInSol(convertedAmount);
 	};
 
 	const convertSolToAmount = (amount) => {
-		const convertedAmount2 = solGbp * amount;
-		setOfferAmountInCurrency(convertedAmount2);
+		if(listingPrice !== 0.00){
+			const convertedAmount2 = listingPrice * amount;
+			setOfferAmountInCurrency(convertedAmount2);
+		}
 	};
 
 	const switchConversionMode = () => {
@@ -158,14 +153,13 @@ const Offer = () => {
 	};
 
 	useEffect(() => {
-		getCurrentSolPrice();
+		getListingPrice();
 		getSellerInfo();
 	}, []);
 
 	const filteredPaymentMethods = ["Please Select", val.paymentMethod1, val.paymentMethod2];
 
-	const currency = state.currency;
-	const formattedCurrency = convertCurrencyToSymbol(state.currency);
+	const formattedCurrency = convertCurrencyToSymbol(currency);
 
 	console.log(offerAmount, "offer amount in GBP");
 	console.log(offerAmountInSol, "offer amount in SOL");
@@ -178,7 +172,7 @@ const Offer = () => {
 				<div className="row pt-5">
 					<div className="col-12 mb-4">
 						<InvisibleButton className="d-flex align-items-center" onClick={() => navigate("/Buy")}>
-							<i className="material-icons me-2">arrow_back</i>
+							<YellowIcon className="material-icons me-2">arrow_back</YellowIcon>
 							<Paragraph size="20px" className="mb-0" color="primary_cta">
 								Back to Buy
 							</Paragraph>
@@ -189,7 +183,7 @@ const Offer = () => {
 							Buy SOL from {val.userName} with {val.paymentMethod1}{" "}
 							{val.paymentMethod2 && `or ${val.paymentMethod2}`}.
 						</Heading>
-						<TradeCard val={val} withoutButton />
+						<TradeCard val={val} withoutButton solGbp={solGbp} currency={currency} listingPrice={listingPrice} />
 					</div>
 					<div className="col-12 col-md-6 row">
 						<div className="col d-flex align-items-center" style={{ maxHeight: "200px" }}>
@@ -319,7 +313,7 @@ const Offer = () => {
 						<div className="col-12 text-center">
 							<Heading bold>
 								1 SOL = {formattedCurrency}
-								{solGbp}
+								{listingPrice}
 							</Heading>
 							<Paragraph size="18px" className="pb-3">
 								SOL/GBP rate is secured for 111 seconds.
@@ -329,7 +323,7 @@ const Offer = () => {
 						<div className="col-6">
 							<Paragraph bold>About the Trader</Paragraph>
 							<div className="d-flex mb-2">
-								<i className="material-icons me-1">person</i>
+								<YellowIcon className="material-icons me-1">person</YellowIcon>
 								<Paragraph color="primary_cta" size="20px" bold className="mb-0">
 									{val.userName}
 								</Paragraph>

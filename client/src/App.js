@@ -45,28 +45,56 @@ import Buying from './Pages/Buying';
 const App = () => {
   const [theme, toggleTheme] = useDarkMode();
   const themeMode = theme === "light" ? lightTheme : darkTheme;
+  const [currency, setCurrency] = useState("");
+  const [solGbp, setSolGbp] = useState("");
+  const [solUsd, setSolUsd] = useState("");
+  const [loginStatus, setLoginStatus] = useState(false);
 
   //Check
   Axios.defaults.withCredentials = true;
-  const [loginStatus, setLoginStatus] = useState(false);
 
-  useEffect(() => {
+
+  // Set global params
+	const getCurrencyAndSolPrice = () => {
+		Axios.get("http://localhost:3001/getUserSettings").then((response) => {
+			if(response.data[0]?.currency === 'GBP') {
+				setCurrency('GBP');
+				//Get GBP price of SOlana
+				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp').then((response) => response.json().then(function (data) {
+					setSolGbp(data.solana.gbp);
+				}));	
+			} else if (response.data[0]?.currency === 'USD') {
+				setCurrency('USD');
+				//Get USD price of solana
+				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd').then((response) => response.json().then(function (data) {
+					setSolUsd(data.solana.usd);
+				}));
+			} else {
+				//handle other currencys
+				setCurrency('GBP');
+			}
+		});
+	}
+
+  const getUserLoginStatus = () => {
     Axios.get("http://localhost:3001/login").then((response) => {
       if (response.data.loggedIn === true) {
         setLoginStatus(true);
         console.log(response);
       }
     });
+  }
+
+  useEffect(() => {
+    getUserLoginStatus();
+    getCurrencyAndSolPrice();
   }, []);
 
-  //check if user is logged in if so print logged in navbar else normal nav
-
-  console.log();
   return (
     <React.Fragment>
       <ThemeProvider theme={themeMode}>
         <Router>
-          <ThemeToggler theme={theme} toggleTheme={toggleTheme} />
+          <ThemeToggler theme={theme} toggleTheme={toggleTheme} solgbp={solGbp} currency={currency} />
           <Navbar loginStatus={loginStatus} />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -82,10 +110,10 @@ const App = () => {
               <Route path="/Home" element={<LoggedHome />} />
             )}
             ;
-            <Route path="/Buy" element={<Buy />} />
+            <Route path="/Buy" element={<Buy solGbp={solGbp} solUsd={solUsd} currency={currency} />} />
             <Route path="/Sell" element={<Sell />} />
             <Route path="/Selling" element={<Selling />} />
-            <Route path="/Offer" element={<Offer />} />
+            <Route path="/Offer" element={<Offer solGbp={solGbp} solUsd={solUsd} currency={currency} />} />
             <Route path="/TradeHistory" element={<TradeHistory />} />
             <Route path="/Feedback" element={<Feedback />} />
             <Route path="/TwoFactorAuth" element={<TwoFactorAuth />} />

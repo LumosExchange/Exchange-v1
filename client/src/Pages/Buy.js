@@ -98,16 +98,9 @@ export const convertAssetToSvg = (asset) => {
 	)}
     if (asset === ''){ return <i className="material-icons">token</i> }
 }
-
-const Buy = () => {
+const Buy = ({ solGbp, solUsd, currency }) => {
 	const [allListings, setAllListings] = useState([]);
 	const [selectedCrypto, selectCrypto] = useState(CRYPTO_SOL);
-	const [selectedMode, selectMode] = useState('buy');
-	const [selectedCurrency, selectCurrency] = useState();
-	const [solgbp, setSolGbp] = useState();
-	const [solusd, setSolUsd] = useState();
-	const [currencySymbol, setCurrencySymbol] = useState();
-	const [filteredData, setFilteredData] = useState(null);
 	const [searchCriteriaPayment, setSearchCriteriaPayment] = useState('Please Select');
 	const [searchCriteriaLocation, setSearchCriteriaLocation] = useState('Please Select');
 	const [filteredListings, setFilteredListings] = useState([]);
@@ -134,29 +127,6 @@ const Buy = () => {
 		max-height: 100vh;
 		overflow-y: auto;
 	`;
-
-	const getCurrency = () => {
-		Axios.get("http://localhost:3001/getUserSettings").then((response) => {
-			if(response.data[0]?.currency === 'GBP') {
-				selectCurrency('GBP');
-				setCurrencySymbol('£');
-				//Get GBP price of SOlana
-				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp').then((response) => response.json().then(function (data) {
-					setSolGbp(data.solana.gbp);
-				}));	
-			} else if (response.data[0]?.currency === 'USD') {
-				selectCurrency('USD');
-				setCurrencySymbol('$');
-				//Get USD price of solana
-				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd').then((response) => response.json().then(function (data) {
-					setSolUsd(data.solana.usd);
-				}));
-			} else {
-				//handle other currencys
-				selectCurrency('GBP');
-			}
-		});
-	}
 
 	const getUserName = () => {
 		Axios.get("http://localhost:3001/getUserNameNav", {
@@ -210,7 +180,6 @@ const Buy = () => {
 
     useEffect(() => {
 		getUserName();
-		getCurrency();
 		getAllListings();
 	}, []);
 
@@ -356,10 +325,10 @@ const Buy = () => {
 							)}
 							{isFiltering ? (
 								filteredListings.map((val) => (
-									<TradeCard val={val} />
+									<TradeCard val={val} solGbp={solGbp} solUsd={solUsd} currency={currency} />
 							))) : (
 								filteredAllListings.map((val) => (
-									<TradeCard val={val} />
+									<TradeCard val={val} solGbp={solGbp} solUsd={solUsd} currency={currency} />
 								))
 							)}
 						</ListingArea>

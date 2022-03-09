@@ -36,29 +36,10 @@ const CircleToggle = styled.div(({ theme, isLight }) => css`
 	};
 `);
 
-const ThemeToggler = ({ theme, toggleTheme }) => {
-	const [solgbp, setSolGbp] = useState("");
-	const [currency, setCurrency] = useState("");
+const ThemeToggler = ({ theme, toggleTheme, currency, solgbp }) => {
   	const isLight = theme === 'light';
 
-	const getUserSettings = () => {
-		Axios.get("http://localhost:3001/getUserSettings").then((response) => {
-			if (response.data[0]?.currency === 'GBP') {
-				setCurrency(response.data[0]?.currency);
-				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp')
-				.then((response) => response.json()
-				.then(function (data) {
-					setSolGbp(data.solana.gbp);
-				}));
-			}
-		});
-	}
-
 	console.log(solgbp, 'sol price');
-
-	useEffect(() => {
-		getUserSettings();
-	}, []);
 
   	return (
 		<ThemeBarContainer isLight={isLight} className="pt-3">
