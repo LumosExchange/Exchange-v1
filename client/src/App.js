@@ -46,9 +46,10 @@ const App = () => {
   const [theme, toggleTheme] = useDarkMode();
   const themeMode = theme === "light" ? lightTheme : darkTheme;
   const [currency, setCurrency] = useState("");
-  const [solGbp, setSolGbp] = useState("");
-  const [solUsd, setSolUsd] = useState("");
+  const [solGbp, setSolGbp] = useState(0);
+  const [solUsd, setSolUsd] = useState(0);
   const [loginStatus, setLoginStatus] = useState(false);
+  const [userName, setUserName] = useState("");
 
   //Check
   Axios.defaults.withCredentials = true;
@@ -85,17 +86,26 @@ const App = () => {
     });
   }
 
+  const getUserName = () => {
+		Axios.get("http://localhost:3001/getUserNameNav").then((response) => {
+			setUserName(response.data);
+		});
+	};
+
   useEffect(() => {
     getUserLoginStatus();
     getCurrencyAndSolPrice();
+    getUserName();
   }, []);
+
+  console.log(userName, 'username');
 
   return (
     <React.Fragment>
       <ThemeProvider theme={themeMode}>
         <Router>
           <ThemeToggler theme={theme} toggleTheme={toggleTheme} solgbp={solGbp} currency={currency} />
-          <Navbar loginStatus={loginStatus} />
+          <Navbar loginStatus={loginStatus} userName={userName} />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/Login" element={<Login />} />
@@ -134,7 +144,7 @@ const App = () => {
             />
             <Route path="/Profile/AccountUpgrade" element={<AccountUpgrade />} />
             <Route path="/MyListings" element={<MyListings />} />
-            <Route path="/Buying" element={<Buying />} />
+            <Route path="/Buying" element={<Buying userName={userName} />} />
 
           </Routes>
         </Router>

@@ -172,7 +172,7 @@ const PaymentInfoArea = ({ paymentInfo, paymentMethod }) => (
 
 const socket = io.connect("http://localhost:3002");
 
-const Buying = () => {
+const Buying = ({ userName }) => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   const [paymentInfo, setPaymentInfo] = useState([]);
@@ -188,7 +188,6 @@ const Buying = () => {
   const [userSolPrice, setUserSolPrice] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [firstMessage, setFirstMessage] = useState("");
-  const [userName, setUserName] = useState("");
   const [hasFetched, setHasFetched] = useState(false);
 
   const { state } = useLocation();
@@ -240,13 +239,9 @@ const Buying = () => {
               .then((response3) => {
                 setUserNameSeller(response.data[0].userName);
 
-                Axios.get("http://localhost:3001/getUserNameNav", {}).then(
-                  (response4) => {
-                    setUserName(response4.data);
-
                     const messageData = {
                       room: response.data[0].Reference,
-                      author: response4.data,
+                      author: userName,
                       message: response.data[0].Message,
                       time:
                         new Date(Date.now()).getHours() +
@@ -260,14 +255,6 @@ const Buying = () => {
                 );
               });
           });
-      });
-  };
-
-  const getUserName = () => {
-    Axios.get("http://localhost:3001/getUserNameNav", {}).then((response) => {
-      console.log("get user name fired");
-      setUserName(response?.data);
-    });
   };
 
   //Join the user to the room
@@ -295,7 +282,6 @@ const Buying = () => {
   };
 
   useEffect(() => {
-    getUserName();
     getTradeDetails();
     joinRoom();
 

@@ -45,13 +45,13 @@ const ActiveTradeCard = ({ tradeInfo, type }) => {
 
 	const formattedDate = tradeInfo.Date.replace('T', ' at ').replace('.000Z', ' ');
 	const formattedCurrencySymbol = convertCurrencyToSymbol(tradeInfo.paymentCurrency);
-	const liveTradeId = tradeInfo.LiveTradeID;
+	const liveTradeID = tradeInfo.LiveTradeID;
 
 	const navigate = useNavigate();
 
-	const deleteLiveTrade = ({ liveTradeId }) => {
+	const deleteLiveTrade = ({ liveTradeID }) => {
 		Axios.post("http://localhost:3001/DeleteLiveTrade", {
-			liveTradeId,
+			liveTradeID,
 		}).then((response) => {
 			setMessage(response.data.message);
 		});
@@ -133,7 +133,7 @@ const ActiveTradeCard = ({ tradeInfo, type }) => {
 						fontSize="20px"
 						onClick={ () => navigate(type === "buying" ? "/Buying" : "/Selling", {
 							state: {
-								liveTradeId,
+								liveTradeID,
 							}
 						})}
 					/>

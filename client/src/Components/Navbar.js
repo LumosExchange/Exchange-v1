@@ -66,16 +66,8 @@ const NavActionButton = styled(InvisibleButton)(
 	`
 );
 
-const Navbar = ({ loginStatus }) => {
+const Navbar = ({ loginStatus, userName }) => {
 	const [showMobileMenu, setMenuOpen] = useState(false);
-	const [userName, setUserName] = useState("");
-
-	const getUserName = () => {
-		Axios.get("http://localhost:3001/getUserNameNav", {}).then((response) => {
-			console.log("get user name fired");
-			setUserName(response?.data);
-		});
-	};
 
 	const navigate = useNavigate();
 
@@ -86,12 +78,6 @@ const Navbar = ({ loginStatus }) => {
 			window.location.reload(true);
 		});
 	};
-
-	useEffect(() => {
-		if (loginStatus === true) {
-			getUserName();
-		}
-	}, [loginStatus]);
 
 	return (
 		<Base className="d-flex justify-content-center">

@@ -98,14 +98,13 @@ export const convertAssetToSvg = (asset) => {
 	)}
     if (asset === ''){ return <i className="material-icons">token</i> }
 }
-const Buy = ({ solGbp, solUsd, currency }) => {
+const Buy = ({ solGbp, solUsd, currency, userName }) => {
 	const [allListings, setAllListings] = useState([]);
 	const [selectedCrypto, selectCrypto] = useState(CRYPTO_SOL);
 	const [searchCriteriaPayment, setSearchCriteriaPayment] = useState('Please Select');
 	const [searchCriteriaLocation, setSearchCriteriaLocation] = useState('Please Select');
 	const [filteredListings, setFilteredListings] = useState([]);
 	const [isFiltering, setIsFiltering] = useState(false);
-	const [userName, setUserName] = useState('');
   
 	const navigate = useNavigate();
 	
@@ -127,14 +126,6 @@ const Buy = ({ solGbp, solUsd, currency }) => {
 		max-height: 100vh;
 		overflow-y: auto;
 	`;
-
-	const getUserName = () => {
-		Axios.get("http://localhost:3001/getUserNameNav", {
-		}).then((response) => {
-		  console.log('get user name fired');
-			setUserName(response?.data);
-		});
-	  }
 
 	const getAllListings = () => {
 		Axios.get("http://localhost:3001/getAllListings").then((response) => {
@@ -179,7 +170,6 @@ const Buy = ({ solGbp, solUsd, currency }) => {
 	}
 
     useEffect(() => {
-		getUserName();
 		getAllListings();
 	}, []);
 
