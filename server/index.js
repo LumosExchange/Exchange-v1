@@ -1948,6 +1948,27 @@ app.post("/GetLiveTradesSeller", (req, res) => {
   )  
 });
 
+app.post("/updateLiveTradePayment", (req, res) => {
+  const liveTadeID = req.body.liveTradeID;
+  const userName = req.body.userName;
+
+  const String = ("Please note " + userName + " has confirmed they have sent the payment");
+
+  db.query(
+    "UPDATE LiveTrades SET paymentRecieved = ?, Message = ? WHERE LiveTradeID = ?",
+    ["YES", String, liveTadeID],
+    (err, result) => {
+      if(err) {
+        res.send(err);
+        console.log(" error : ", err);
+      } else {
+        res.send({
+          update : true,
+        });
+      }
+    }
+  );
+});
 
 
 server.listen(3002, () => {

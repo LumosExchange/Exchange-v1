@@ -275,6 +275,30 @@ const Buying = ({ userName }) => {
 			});
 	};
 
+  const sentPayment = () =>{
+    axios.post(
+      "http://localhost:3001/updateLiveTradePayment", {
+        liveTradeID,
+        userName
+      }).then((response) => {
+        if(response.data.update === true) {
+          //send message to convo letting the seller know youve sent the payment
+          const messageData = {
+            room: room,
+            author: userName,
+            message: ("Please note " + userName + " has confirmed they have sent the payment"),
+            time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
+          };
+          socket.emit("send_message", messageData);
+          setMessageList((list) => [...list, messageData]);
+          setCurrentMessage("");
+        } else {
+          //handle error here some sort of popup / message to say error please try again 
+
+        }
+      })
+  }
+
 	//Join the user to the room
 	const joinRoom = async () => {
 		if (userName !== "" && room !== "") {
@@ -443,7 +467,7 @@ const Buying = ({ userName }) => {
 										<PrimaryButton
 											text="Continue"
 											className="m-auto mt-3"
-											onClick={null}
+											onClick={sentPayment}
 											type="check"
 											value="check"
 											hasIcon
