@@ -249,8 +249,8 @@ const Buying = ({ userName }) => {
                         new Date(Date.now()).getMinutes(),
                     };
                     socket.emit("send_message", messageData);
-					setMessageList((list) => [...list, messageData]);
-					setCurrentMessage("");
+				          	setMessageList((list) => [...list, messageData]);
+				          	setCurrentMessage("");
                   }
                 );
               });
@@ -325,8 +325,8 @@ const Buying = ({ userName }) => {
                       <div
                         className={
                           userName !== messageContent.author
-                            ? "d-flex justify-content-end align-self-end"
-                            : "d-flex justify-content-start align-self-start"
+                          ? "message self justify-content-start align-self-start"
+                          : "message justify-content-end align-self-end"
                         }
                       >
                         <Paragraph size="16px" className="mb-0 me-2" bold>
