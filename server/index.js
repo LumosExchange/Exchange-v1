@@ -369,6 +369,17 @@ app.get("/getUserNameSeller", (req, res) => {
   );
 });
 
+app.get("/getUserNameBuyer", (req, res) => {
+  let params = req.query.buyerID;
+  db.query(
+    "SELECT userName FROM users WHERE (userID) = (?)",
+    [params],
+    (err, result) => {
+      res.send(result);
+    }
+  );
+});
+
 //get username for navbar after user is logegd in
 app.get("/getUserNameNav", (req, res) => {
   const name = req.session?.user[0].userName;

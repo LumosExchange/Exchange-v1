@@ -87,51 +87,81 @@ const solQuantity = 2;
 const socket = io.connect("http://localhost:3002");
 
 const Selling = () => {
-	const [solGbp, setSolGbp] = useState("");
-	const [registeredDate, setRegisteredDate] = useState("");
-	const [feedbackScore, setFeedbackScore] = useState("");
-	const [escrowReleaseTime, setEscrowReleaseTime] = useState("");
+
 	const [currentMessage, setCurrentMessage] = useState("");
 	const [messageList, setMessageList] = useState([]);
-	const [showChat, setShowChat] = useState(false);
 	const [paymentInfo, setPaymentInfo] = useState([]);
-	const [room, setRoom] = useState("9f30c282c6");
-	const [buyer, setBuyer] = useState(false);
+	const [room, setRoom] = useState("");
+	const [userNameSeller, setUserNameSeller] = useState("");
+	const [userNameBuyer, setUserNameBuyer] = useState("");
+	const [reference, setReference] = useState("");
+	const [solAmount, setSolAmount] = useState("");
+	const [buyerID, setBuyerID] = useState("");
+	const [sellerID, setSellerID] = useState("");
+	const [fiatAmount, setFiatAmount] = useState("");
+	const [paymentCurrency, setPaymentCurrency] = useState("");
+	const [paymentRecieved, setPaymentRecieved] = useState("");
+	const [userSolPrice, setUserSolPrice] = useState("");
+	const [paymentMethod, setPaymentMethod] = useState("");
+	const [firstMessage, setFirstMessage] = useState("");
+	const [userName, setUserName] = useState("");
 
-	const { state } = useLocation();
+
+
+	const { state } = useLocation()
+	const liveTradeID = state.liveTradeID;
 	const { val } = state;
 
 	const navigate = useNavigate();
 
-	//if (state.buyerOrSeller === "Buyer") {
-	//	setBuyer(true);
+	const getTradeDetails = () => {
+		axios
+		.get("http://localhost:3001/GetLiveTradeDetails", {
+		  params: {
+			liveTradeID: liveTradeID,
+		  },
+		}).then((response) => {
+			setReference(response.data[0].Reference);
+			setRoom(response.data[0].Reference);
+			socket.emit("join_room", response.data[0].Reference);
+			setSolAmount(response.data[0].amountOfSol);
+			setPaymentMethod(response.data[0].paymentMethod);
+			setBuyerID(response.data[0].buyerID);
+			setSellerID(response.data[0].sellerID);
+			setFiatAmount(response.data[0].fiatAmount);
+			setPaymentCurrency(response.data[0].paymentCurrency);
+			setPaymentRecieved(response.data[0].paymentRecieved);
+			setUserSolPrice(response.data[0].userSolPrice);
+			setFirstMessage(response.data[0].Message);
 
-	//show buyer state
-	//} else {
-	//	setBuyer(false);
-	//show seller side
-	//	}
+			//Get buyer username 
 
-	//Get userName && reference
-	//room will be refernce so buyer and seller can connect
+			axios.get("http://localhost:3001/getUserNameBuyer", { params: {
+				buyerID: response.data[0].buyerID,
+			}}).then((response2) => {
+				setUserNameBuyer(response2.data[0].userName);
+				console.log('Buyer username : ', response2.data[0].userName);
 
-	//const getDetails = () => {
-	//	axios
-	//		.post("http://localhost:3001/GetLiveTradeInfo", {
-	//		sellerID: state.ID,
-	//		paymentMethod: state.paymentMethod,
-	//	})
-	//	.then((response) => {
-	//		setPaymentInfo(response);
-	//		console.log(response);
-	//		setRoom(response.data.reference);
-	//	});
-	//};
-
-	const userName = "ABC";
+				const messageData = {
+					room: response.data[0].Reference,
+					author: response2.data[0].userName,
+					message: response.data[0].Message,
+					time:
+					  new Date(Date.now()).getHours() +
+					  ":" +
+					  new Date(Date.now()).getMinutes(),
+				  };
+				  socket.emit("send_message", messageData);
+							setMessageList((list) => [...list, messageData]);
+							setCurrentMessage("");
+				
+			})
+		
+		});
+		}
 
 	//chat stuff here
-	const joinRoom = () => {
+	const joinRoom = async () => {
 		if (userName !== "" && room !== "") {
 			socket.emit("join_room", room);
 		}
@@ -152,19 +182,14 @@ const Selling = () => {
 	};
 
 	useEffect(() => {
-		//	if (paymentInfo.length === 0) {
-		//		getDetails();
-		//	}
-
+		getTradeDetails();
+		joinRoom();
 		socket.on("recieve_message", (data) => {
 			setMessageList((list) => [...list, data]);
 		});
 	}, [socket]);
 
-	//console.log(messageList, 'message list');
-	//console.log(currentMessage, 'current message');
 
-	//	console.log(paymentInfo, "payment info");
 
 	return (
 		<PageBody>
@@ -172,7 +197,7 @@ const Selling = () => {
 				<div className="row pt-5">
 					<div className="col-12 mb-5 pb-5">
 						<Heading size="26px" className="mb-4">
-							Offers &gt; Sell SOL to {val.userName} with {val.paymentMethod1}.
+							Offers &gt; Sell SOL to {userNameBuyer} with {paymentMethod}.
 						</Heading>
 					</div>
 					<div className="col-12 col-md-6 row">
@@ -232,7 +257,7 @@ const Selling = () => {
 								<SendButton
 									icon="send"
 									onClick={() => {
-										joinRoom();
+									//	joinRoom();
 										sendMessage();
 										setCurrentMessage("");
 									}}
