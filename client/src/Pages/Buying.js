@@ -14,6 +14,7 @@ import ScrollToBottom from "react-scroll-to-bottom";
 import axios from "axios";
 import SendButton from "../Components/SendButton";
 import { convertCurrencyToSymbol } from "../Helpers";
+import { Stepper, HalfStepper } from '../Components/TradeComponents';
 
 const HorizontalDivider = styled.hr(
 	({ theme }) => css`
@@ -199,132 +200,6 @@ const PaymentInfoArea = ({ paymentInfo, paymentMethod, reference }) => (
 
 const socket = io.connect("http://localhost:3002");
 
-const Step = styled.div(({ theme, background }) => css`
-	width: 75px;
-	height: 75px;
-	border-radius: 50px;
-	background: ${background};
-
-	i {
-		color: ${theme.colors.actual_white};
-		font-size: 40px;
-	}
-`);
-
-const StepLine = styled.div(({ theme, background }) => css`
-	width: 100%;
-	height: 8px;
-	background: ${background};
-`);
-
-const Stepper = () => (
-	<div className="col-12 mb-4">
-		<div className="d-flex">
-			<div className="col-3 d-flex justify-content-end">
-				<div className="d-flex">
-					<Step
-						className="d-flex align-items-center justify-content-center"
-						background="linear-gradient(90deg, rgba(255,230,0,1) 0%, rgba(255,146,83,1) 80%, rgba(255,104,139,1) 100%);"
-					>
-						<i className="material-icons">lock</i>
-					</Step>
-				</div>
-			</div>
-			<div className="col-2 d-flex align-items-center">
-				<StepLine background="linear-gradient(90deg, rgba(255,104,139,1) 0%, rgba(211,106,189,1) 100%);"/>
-			</div>
-			<div className="d-flex justify-content-start">
-				<div className="d-flex">
-					<Step
-						className="d-flex align-items-center justify-content-center"
-						background="linear-gradient(90deg, rgba(211,106,189,1) 0%, rgba(211,106,189,1) 100%);"
-					>
-						<i className="material-icons">payments</i>
-					</Step>
-				</div>
-			</div>
-			<div className="col-2 d-flex align-items-center">
-				<StepLine background="linear-gradient(90deg, rgba(211,106,189,1) 0%, rgba(104,132,255,1) 100%);" />
-			</div>
-			<div className="col-3 d-flex justify-content-start">
-				<div className="d-flex">
-					<Step
-						className="d-flex align-items-center justify-content-center"
-						background="rgba(104,132,255,1)"
-					>
-						<i className="material-icons">check</i>
-					</Step>
-				</div>
-			</div>
-		</div>
-		<div className="d-flex">
-			<div className="col-4 d-flex justify-content-center">
-				<Paragraph className="text-center mt-3 p-2">Put SOL in Escrow</Paragraph>
-			</div>
-			<div className="col-4 d-flex justify-content-center">
-				<Paragraph className="text-center mt-3 p-2">Received Buyer’s Payment</Paragraph>
-			</div>
-			<div className="col-4 d-flex justify-content-center">
-				<Paragraph className="text-center mt-3 p-2">Escrow Released to buyer</Paragraph>
-			</div>
-		</div>
-	</div>
-);
-
-const HalfStepper = () => (
-	<div className="col-12 mb-4">
-		<div className="d-flex">
-			<div className="col-3 d-flex justify-content-end">
-				<div className="d-flex">
-					<Step
-						className="d-flex align-items-center justify-content-center"
-						background="linear-gradient(90deg, rgba(255,230,0,1) 0%, rgba(255,146,83,1) 80%, rgba(255,104,139,1) 100%);"
-					>
-						<i className="material-icons">lock</i>
-					</Step>
-				</div>
-			</div>
-			<div className="col-2 d-flex align-items-center">
-				<StepLine background="linear-gradient(90deg, rgba(255,104,139,1) 0%, #C4C4C4 100%);"/>
-			</div>
-			<div className="d-flex justify-content-start">
-				<div className="d-flex">
-					<Step
-						className="d-flex align-items-center justify-content-center"
-						background="#C4C4C4"
-					>
-						<i className="material-icons">payments</i>
-					</Step>
-				</div>
-			</div>
-			<div className="col-2 d-flex align-items-center">
-				<StepLine background="#C4C4C4" />
-			</div>
-			<div className="col-3 d-flex justify-content-start">
-				<div className="d-flex">
-					<Step
-						className="d-flex align-items-center justify-content-center"
-						background="#C4C4C4"
-					>
-						<i className="material-icons">check</i>
-					</Step>
-				</div>
-			</div>
-		</div>
-		<div className="d-flex">
-			<div className="col-4 d-flex justify-content-center">
-				<Paragraph className="text-center mt-3 p-2">Put SOL in Escrow</Paragraph>
-			</div>
-			<div className="col-4 d-flex justify-content-center">
-				<Paragraph className="text-center mt-3 p-2">Received Buyer’s Payment</Paragraph>
-			</div>
-			<div className="col-4 d-flex justify-content-center">
-				<Paragraph className="text-center mt-3 p-2">Escrow Released to buyer</Paragraph>
-			</div>
-		</div>
-	</div>
-);
-
 const Buying = ({ userName }) => {
 	const [currentMessage, setCurrentMessage] = useState("");
 	const [messageList, setMessageList] = useState([]);
@@ -362,6 +237,8 @@ const Buying = ({ userName }) => {
 				},
 			})
 			.then((response) => {
+				console.log(response.data[0], 'response data');
+				
 				//Can map all details needed here from the response get seller ID and payment method from response
 				setReference(response.data[0].Reference);
 
@@ -394,7 +271,6 @@ const Buying = ({ userName }) => {
 							})
 							.then((response3) => {
 								setUserNameSeller(response3.data[0].userName);
-								console.log('username seller: ',response.data);
 
 								const messageData = {
 									room: reference,
@@ -645,7 +521,10 @@ const Buying = ({ userName }) => {
 									<div className="row mt-5">
 										<div className="col-6">
 											<Paragraph size="18px" bold>Seller</Paragraph>
-											<Paragraph size="18px" bold>{userNameSeller}</Paragraph>
+											<div className="d-flex">
+												<i className="material-icons">person</i>
+												<Paragraph size="18px" bold>{userNameSeller}</Paragraph>
+											</div>
 										</div>
 										<div className="col-6">
 											Right

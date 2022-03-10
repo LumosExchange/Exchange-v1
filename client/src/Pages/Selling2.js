@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import Axios from "axios";
 import { PageBody, TextArea } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
@@ -14,6 +14,7 @@ import ScrollToBottom from "react-scroll-to-bottom";
 import axios from "axios";
 import SendButton from "../Components/SendButton";
 import { convertCurrencyToSymbol } from "../Helpers";
+import { Stepper, HalfStepper } from '../Components/TradeComponents';
 
 const HorizontalDivider = styled.hr(({ theme }) => css`
 	:not([size]) {
@@ -179,6 +180,78 @@ const PaymentInfoArea = ({ paymentInfo, paymentMethod, reference }) => (
 	</Card>
 );
 
+const PulseIcon = keyframes`
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+	100% { transform: scale(1); }
+`;
+
+const PositiveFeedbackButton = styled.button(({ theme }) => css`
+	background: ${theme.colors.valid};
+	color: ${theme.colors.actual_white};
+	border-radius: 20px 0 0 20px;
+	border: 0;
+
+	&.active i {
+		animation: ${PulseIcon} 0.5s linear 1;
+	}
+`);
+
+const NeutralFeedbackButton = styled.button(({ theme }) => css`
+	background: ${theme.colors.grey};
+	color: ${theme.colors.text_primary};
+	border-radius: 0;
+	border: 0;
+
+	&.active i {
+		animation: ${PulseIcon} 0.5s linear 1;
+	}
+`);
+
+const NegativeFeedbackButton = styled.button(({ theme }) => css`
+	background: ${theme.colors.invalid};
+	color: ${theme.colors.actual_white};
+	border-radius: 0 20px 20px 0;
+	border: 0;
+
+	&.active i {
+		animation: ${PulseIcon} 0.5s linear 1;
+	}
+`);
+
+const GiveFeedback = () => {
+	const [feedBack, setFeedback] = useState("");
+	console.log(feedBack, 'feedback');
+	return (
+		<div className="d-flex justify-content-center">
+			<div>
+				<PositiveFeedbackButton
+					className={`d-flex align-items-center justify-content-center ps-3 pe-2 py-2 ${feedBack === "positive" && 'active'}`}
+					onClick={() => setFeedback('positive')}
+				>
+					<i className="material-icons">thumb_up</i>
+				</PositiveFeedbackButton>
+			</div>
+			<div>
+				<NeutralFeedbackButton
+					className={`d-flex align-items-center justify-content-center px-3 py-2 ${feedBack === "neutral" && 'active'}`}
+					onClick={() => setFeedback('neutral')}
+				>
+					<i className="material-icons">sentiment_neutral</i>
+				</NeutralFeedbackButton>
+			</div>
+			<div>
+				<NegativeFeedbackButton
+					className={`d-flex align-items-center justify-content-center ps-2 pe-3 py-2 ${feedBack === "negative" && 'active'}`}
+					onClick={() => setFeedback('negative')}
+				>
+					<i className="material-icons">thumb_down</i>
+				</NegativeFeedbackButton>
+			</div>
+		</div>
+	);
+}
+
 const socket = io.connect("http://localhost:3002");
 
 const Selling2 = ({ userName }) => {
@@ -197,6 +270,8 @@ const Selling2 = ({ userName }) => {
 	const [userSolPrice, setUserSolPrice] = useState("");
 	const [paymentMethod, setPaymentMethod] = useState("");
 	const [firstMessage, setFirstMessage] = useState("");
+	const [currentStep, setCurrentStep] = useState("selling");
+	const [isPaymentSent, setIsPaymentSent] = useState(false);
 
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
@@ -367,9 +442,81 @@ const Selling2 = ({ userName }) => {
 					<div className="col-1 d-flex justify-content-center">
 						<VerticalDivider />
 					</div>
-					<div className="col-12 col-md-5 row mt-4">
+					{currentStep === "selling" && (
+						<div className="col-12 col-md-5 row mt-4">
+							<div className="col-12 text-center">
+								<Heading className="me-2 d-inline-block">Selling</Heading>
+								<Heading bold className="d-inline-block">
+									{solAmount} SOL
+								</Heading>
+								<Heading className="mx-2 d-inline-block">for</Heading>
+								<Heading bold className="d-inline-block">
+									{formattedCurrency}
+									{fiatAmount}
+								</Heading>
+								<Paragraph size="18px" className="pb-3">
+									1 SOL = {formattedCurrency}
+									{userSolPrice}
+								</Paragraph>
+								<HorizontalDivider />
+								<div className="d-flex justify-content-center flex-column">
+									<Paragraph bold size="24px" className="me-2">
+										Waiting for payment from the buyer
+									</Paragraph>
+									<Paragraph size="18px" className="me-2 mb-0 d-none">
+										Your SOL is now secured in escrow!
+									</Paragraph>
+									<Paragraph size="18px" className="me-2 mb-0" color="primary_cta">
+										Please ensure you have received the payment
+									</Paragraph>
+									<Paragraph size="18px" className="me-2 mb-5">
+										before continuing.
+									</Paragraph>
+
+									<PaymentInfoArea
+										paymentInfo={paymentInfo}
+										paymentMethod={paymentMethod}
+										reference={reference}
+									/>
+									<div className="d-flex text-start">
+										<PrimaryButton
+											text={isPaymentSent ? "Payment marked as received" : "I've received the payment"}
+											className="w-100"
+											onClick={() => setIsPaymentSent(true)}
+											disabled={isPaymentSent}
+										/>
+									</div>
+									<div className="row mt-5">
+										<div className="col-6">
+											<SecondaryButton
+												text="Cancel"
+												className="m-auto mt-3"
+												onClick={null}
+												type="check"
+												value="check"
+											/>
+										</div>
+										<div className="col-6">
+											<PrimaryButton
+												text="Continue"
+												className="m-auto mt-3"
+												onClick={ () => setCurrentStep("sold")}
+												type="check"
+												value="check"
+												hasIcon
+												disabled={!isPaymentSent}
+											/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					)}
+					{currentStep === "sold" && (
+						<div className="col-12 col-md-5 row mt-4">
+						<Stepper />
 						<div className="col-12 text-center">
-							<Heading className="me-2 d-inline-block">Selling</Heading>
+							<Heading className="me-2 d-inline-block">Bought</Heading>
 							<Heading bold className="d-inline-block">
 								{solAmount} SOL
 							</Heading>
@@ -384,60 +531,26 @@ const Selling2 = ({ userName }) => {
 							</Paragraph>
 							<HorizontalDivider />
 							<div className="d-flex justify-content-center flex-column">
-								<Paragraph bold size="24px" className="me-2">
-									Waiting for payment from the buyer
-								</Paragraph>
-								<Paragraph size="18px" className="me-2 mb-0 d-none">
-									Your SOL is now secured in escrow!
-								</Paragraph>
-								<Paragraph size="18px" className="me-2 mb-0" color="primary_cta">
-									Please ensure you have received the payment
-								</Paragraph>
-								<Paragraph size="18px" className="me-2 mb-5">
-									before continuing.
-								</Paragraph>
-
-								<PaymentInfoArea
-									paymentInfo={paymentInfo}
-									paymentMethod={paymentMethod}
-									reference={reference}
-								/>
-								<div className="d-flex text-start">
-									<FormCheckbox
-										type="checkbox"
-										id="checkedPayment"
-										name="checkedPayment"
-										className="me-4"
-									/>
-									<StyledLabel className="p-0" htmlFor="checkedPayment">
-										<HighlightedText className="me-1">YES!</HighlightedText> I recieved the payment
-										from the buyer.
-									</StyledLabel>
-								</div>
 								<div className="row mt-5">
-									<div className="col-6">
-										<SecondaryButton
-											text="Cancel"
-											className="m-auto mt-3"
-											onClick={null}
-											type="check"
-											value="check"
-										/>
+									<div className="col-6 text-start">
+										<Paragraph size="18px" bold>Buyer</Paragraph>
+										<div className="d-flex">
+											<i className="material-icons">person</i>
+											<Paragraph size="18px" bold>{userNameBuyer}</Paragraph>
+										</div>
+										<Paragraph size="18px">Buyer Feedback Here</Paragraph>
+										<Paragraph size="18px">Buyer Register Date Here</Paragraph>
+										<Paragraph size="18px">Total Trades Here</Paragraph>
 									</div>
 									<div className="col-6">
-										<PrimaryButton
-											text="Continue"
-											className="m-auto mt-3"
-											onClick={null}
-											type="check"
-											value="check"
-											hasIcon
-										/>
+										<Paragraph size="18px">How was the buyer?</Paragraph>
+										<GiveFeedback />
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+					)}
 				</div>
 			</div>
 		</PageBody>
