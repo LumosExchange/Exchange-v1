@@ -298,11 +298,6 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 										offerAmountInSol.length === 0
 									}
 								/>
-								<button
-									onClick={() => {
-										navigate("/Selling");
-									}}
-								></button>
 							</div>
 						</div>
 					</div>
@@ -316,7 +311,7 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 								{listingPrice}
 							</Heading>
 							<Paragraph size="18px" className="pb-3">
-								SOL/GBP rate is secured for 111 seconds.
+								SOL/GBP rate is secured for 120 seconds.
 							</Paragraph>
 							<HorizontalDivider />
 						</div>

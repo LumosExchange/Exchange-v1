@@ -15,35 +15,28 @@ import axios from "axios";
 import SendButton from "../Components/SendButton";
 import { convertCurrencyToSymbol } from "../Helpers";
 
-const HorizontalDivider = styled.hr(
-	({ theme }) => css`
-		:not([size]) {
-			color: ${theme.colors.text_primary};
-			height: 1px;
-			opacity: 0.2;
-		}
-	`
-);
+const HorizontalDivider = styled.hr(({ theme }) => css`
+	:not([size]) {
+		color: ${theme.colors.text_primary};
+		height: 1px;
+		opacity: 0.2;
+	}
+`);
 
-const VerticalDivider = styled.hr(
-	({ theme }) => css`
-		:not([size]) {
-			color: ${theme.colors.text_primary};
-			height: 100%;
-			width: 1px;
-			opacity: 0.2;
-		}
-	`
-);
+const VerticalDivider = styled.hr(({ theme }) => css`
+	:not([size]) {
+		color: ${theme.colors.text_primary};
+		height: 100%;
+		width: 1px;
+		opacity: 0.2;
+	}
+`);
 
-const HighlightedText = styled.span(
-	({ theme }) => css`
-		color: ${theme.colors.primary_cta};
-	`
-);
+const HighlightedText = styled.span(({ theme }) => css`
+	color: ${theme.colors.primary_cta};
+`);
 
-const ChatWrapper = styled.div(
-	({ theme }) => css`
+const ChatWrapper = styled.div(({ theme }) => css`
 		display: flex;
 		flex-direction: column;
 		position: relative;
@@ -63,15 +56,11 @@ const ChatWrapper = styled.div(
 			margin-bottom: 28px;
 			width: auto;
 			display: flex;
-			// justify-content: flex-end;
-			// align-self: flex-end;
 
 			&.self {
 				border-radius: 0px 20px 20px 20px;
 				background: ${theme.colors.primary_cta};
 				color: ${theme.colors.base_bg};
-				// justify-content: flex-start;
-				// align-self: flex-start;
 			}
 		}
 
@@ -79,12 +68,11 @@ const ChatWrapper = styled.div(
 			font-size: 48px;
 			color: ${theme.colors.text_primary};
 		}
-	`
-);
+`);
 
 const PaymentInfoArea = ({ paymentInfo, paymentMethod, reference }) => (
 	<Card className="p-3 mb-4 d-flex flex-column" color="grey">
-		<Paragraph>The buyer will transfer funds using the following details:</Paragraph>
+		<Paragraph size="20px">The buyer will transfer funds using the following details:</Paragraph>
 		<Paragraph size="24px" bold color="primary_cta">
 			{paymentMethod}
 		</Paragraph>
