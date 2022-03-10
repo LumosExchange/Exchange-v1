@@ -393,7 +393,8 @@ const Buying = ({ userName }) => {
 								},
 							})
 							.then((response3) => {
-								setUserNameSeller(response.data[0].userName);
+								setUserNameSeller(response3.data[0].userName);
+								console.log('username seller: ',response.data);
 
 								const messageData = {
 									room: reference,

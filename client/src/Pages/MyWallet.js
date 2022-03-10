@@ -12,6 +12,8 @@ import SolanaIcon from '../Images/icon-solana.svg';
 import DropdownIcon from '../Images/icon-dropdown.svg';
 import StyledTable from "../Components/Tables";
 
+
+
 const ToggleIconBase = styled.svg(({ toggled, theme }) => css`
 	transform: ${toggled && 'rotate(180deg)'};
 
