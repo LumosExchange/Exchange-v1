@@ -70,6 +70,9 @@ const KnowYourCustomer = () => {
           <ProfileTabLink href="/Profile/AccountUpgrade">
             Account Upgrade
           </ProfileTabLink>
+          <ProfileTabLink href="/Profile/UpgradeInfo">
+            Upgrade information
+          </ProfileTabLink>
         </Tabs>
         <ContentTab className="text-white">
           <div className="d-flex p-4 row">

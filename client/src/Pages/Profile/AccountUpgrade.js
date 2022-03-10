@@ -19,6 +19,7 @@ import {
   currentYear,
 } from "../../Constants/Index";
 import { InlineInput, StyledDropdown } from "../../Components/FormInputs";
+import { useNavigate } from "react-router";
 
 const AccountUpgrade = () => {
   //step 1 upgrade bronze / silver
@@ -41,6 +42,7 @@ const AccountUpgrade = () => {
   const [accountTier, setAccountTier] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
   const [confirmationMessage, setConfirmationMessage] = useState("");
+  const navigate = useNavigate();
 
   const getAccountTier = () => {
     Axios.get("http://localhost:3001/getUserAccountLevel").then((response) => {
@@ -93,6 +95,9 @@ const AccountUpgrade = () => {
           </ProfileTabLink>
           <ProfileTabLink href="/Profile/AccountUpgrade" className="selected">
             Account Upgrade
+          </ProfileTabLink>
+          <ProfileTabLink href="/Profile/UpgradeInfo">
+            Upgrade information
           </ProfileTabLink>
         </Tabs>
         <ContentTab className="text-white">
@@ -197,7 +202,7 @@ const AccountUpgrade = () => {
                     type="submit"
                     className="m-auto"
                     onClick={upgradeSilver}
-                    text="Upgrade"
+                    text="Upgrade To Silver"
                     hasIcon
                   />
 
@@ -286,14 +291,14 @@ const AccountUpgrade = () => {
                       type="submit"
                       className="m-auto"
                       onClick={upgradeGold}
-                      text="Upgrade"
+                      text="Upgrade To Gold"
                       hasIcon
                     />
                   </form>
                 </React.Fragment>
               )}
             </div>
-            <div className="col-md-3"> </div>
+
             <div className="d-flex col-12 col-md-3 mb-3 flex-column">
               <Heading size="20px" bold className="text-center">
                 Current Tier
@@ -301,6 +306,18 @@ const AccountUpgrade = () => {
               <Heading size="20px" bold className="text-center">
                 {accountTier}
               </Heading>
+            </div>
+            <div className="d-flex col-12 col-md-3 mb-3 flex-column justify-content-end">
+              <Heading size="20px" bold className="text-center">
+                You can find everything about our upgrade system and each level
+                here
+              </Heading>
+              <PrimaryButton
+                type="submit"
+                text="Learn More"
+                onClick={() => navigate("/Profile/UpgradeInfo")}
+                hasIcon
+              />
             </div>
           </div>
         </ContentTab>

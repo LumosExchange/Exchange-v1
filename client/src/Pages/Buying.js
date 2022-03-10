@@ -73,6 +73,13 @@ const ChatWrapper = styled.div(
 				// justify-content: flex-start;
 				// align-self: flex-start;
 			}
+
+			&.admin {
+				background: none;
+				border-radius: 20px;
+				font-family: "THICCCBOI-BOLD";
+				color: ${theme.colors.primary_cta};
+			}
 		}
 
 		.messages-icon {
@@ -192,6 +199,132 @@ const PaymentInfoArea = ({ paymentInfo, paymentMethod, reference }) => (
 
 const socket = io.connect("http://localhost:3002");
 
+const Step = styled.div(({ theme, background }) => css`
+	width: 75px;
+	height: 75px;
+	border-radius: 50px;
+	background: ${background};
+
+	i {
+		color: ${theme.colors.actual_white};
+		font-size: 40px;
+	}
+`);
+
+const StepLine = styled.div(({ theme, background }) => css`
+	width: 100%;
+	height: 8px;
+	background: ${background};
+`);
+
+const Stepper = () => (
+	<div className="col-12 mb-4">
+		<div className="d-flex">
+			<div className="col-3 d-flex justify-content-end">
+				<div className="d-flex">
+					<Step
+						className="d-flex align-items-center justify-content-center"
+						background="linear-gradient(90deg, rgba(255,230,0,1) 0%, rgba(255,146,83,1) 80%, rgba(255,104,139,1) 100%);"
+					>
+						<i className="material-icons">lock</i>
+					</Step>
+				</div>
+			</div>
+			<div className="col-2 d-flex align-items-center">
+				<StepLine background="linear-gradient(90deg, rgba(255,104,139,1) 0%, rgba(211,106,189,1) 100%);"/>
+			</div>
+			<div className="d-flex justify-content-start">
+				<div className="d-flex">
+					<Step
+						className="d-flex align-items-center justify-content-center"
+						background="linear-gradient(90deg, rgba(211,106,189,1) 0%, rgba(211,106,189,1) 100%);"
+					>
+						<i className="material-icons">payments</i>
+					</Step>
+				</div>
+			</div>
+			<div className="col-2 d-flex align-items-center">
+				<StepLine background="linear-gradient(90deg, rgba(211,106,189,1) 0%, rgba(104,132,255,1) 100%);" />
+			</div>
+			<div className="col-3 d-flex justify-content-start">
+				<div className="d-flex">
+					<Step
+						className="d-flex align-items-center justify-content-center"
+						background="rgba(104,132,255,1)"
+					>
+						<i className="material-icons">check</i>
+					</Step>
+				</div>
+			</div>
+		</div>
+		<div className="d-flex">
+			<div className="col-4 d-flex justify-content-center">
+				<Paragraph className="text-center mt-3 p-2">Put SOL in Escrow</Paragraph>
+			</div>
+			<div className="col-4 d-flex justify-content-center">
+				<Paragraph className="text-center mt-3 p-2">Received Buyer’s Payment</Paragraph>
+			</div>
+			<div className="col-4 d-flex justify-content-center">
+				<Paragraph className="text-center mt-3 p-2">Escrow Released to buyer</Paragraph>
+			</div>
+		</div>
+	</div>
+);
+
+const HalfStepper = () => (
+	<div className="col-12 mb-4">
+		<div className="d-flex">
+			<div className="col-3 d-flex justify-content-end">
+				<div className="d-flex">
+					<Step
+						className="d-flex align-items-center justify-content-center"
+						background="linear-gradient(90deg, rgba(255,230,0,1) 0%, rgba(255,146,83,1) 80%, rgba(255,104,139,1) 100%);"
+					>
+						<i className="material-icons">lock</i>
+					</Step>
+				</div>
+			</div>
+			<div className="col-2 d-flex align-items-center">
+				<StepLine background="linear-gradient(90deg, rgba(255,104,139,1) 0%, #C4C4C4 100%);"/>
+			</div>
+			<div className="d-flex justify-content-start">
+				<div className="d-flex">
+					<Step
+						className="d-flex align-items-center justify-content-center"
+						background="#C4C4C4"
+					>
+						<i className="material-icons">payments</i>
+					</Step>
+				</div>
+			</div>
+			<div className="col-2 d-flex align-items-center">
+				<StepLine background="#C4C4C4" />
+			</div>
+			<div className="col-3 d-flex justify-content-start">
+				<div className="d-flex">
+					<Step
+						className="d-flex align-items-center justify-content-center"
+						background="#C4C4C4"
+					>
+						<i className="material-icons">check</i>
+					</Step>
+				</div>
+			</div>
+		</div>
+		<div className="d-flex">
+			<div className="col-4 d-flex justify-content-center">
+				<Paragraph className="text-center mt-3 p-2">Put SOL in Escrow</Paragraph>
+			</div>
+			<div className="col-4 d-flex justify-content-center">
+				<Paragraph className="text-center mt-3 p-2">Received Buyer’s Payment</Paragraph>
+			</div>
+			<div className="col-4 d-flex justify-content-center">
+				<Paragraph className="text-center mt-3 p-2">Escrow Released to buyer</Paragraph>
+			</div>
+		</div>
+	</div>
+);
+
 const Buying = ({ userName }) => {
 	const [currentMessage, setCurrentMessage] = useState("");
 	const [messageList, setMessageList] = useState([]);
@@ -208,6 +341,8 @@ const Buying = ({ userName }) => {
 	const [userSolPrice, setUserSolPrice] = useState("");
 	const [paymentMethod, setPaymentMethod] = useState("");
 	const [firstMessage, setFirstMessage] = useState("");
+	const [currentStep, setCurrentStep] = useState("buying");
+	const [isPaymentSent, setIsPaymentSent] = useState(false);
 
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
@@ -285,18 +420,22 @@ const Buying = ({ userName }) => {
           //send message to convo letting the seller know youve sent the payment
           const messageData = {
             room: room,
-            author: userName,
+            author: "admin",
             message: ("Please note " + userName + " has confirmed they have sent the payment"),
             time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
           };
           socket.emit("send_message", messageData);
           setMessageList((list) => [...list, messageData]);
           setCurrentMessage("");
+		  setCurrentStep("bought")
         } else {
           //handle error here some sort of popup / message to say error please try again 
-
         }
       })
+  }
+
+  const setPaymentAsSent = () => {
+	  setPaymentAsSent(true);
   }
 
 	//Join the user to the room
@@ -361,9 +500,10 @@ const Buying = ({ userName }) => {
 										<div className="d-flex flex-column">
 											<div
 												className={
-													userName !== messageContent.author
-														? "d-flex justify-content-end align-self-end"
-														: "d-flex justify-content-start align-self-start"
+													(messageContent.author === "admin" && "d-flex justify-content-center align-self-center")
+													|| (userName !== messageContent.author
+														? "d-flex self justify-content-end align-self-end"
+														: `d-flex justify-content-start align-self-start`)
 												}
 											>
 												<Paragraph size="16px" className="mb-0 me-2" bold>
@@ -375,9 +515,12 @@ const Buying = ({ userName }) => {
 											</div>
 											<div
 												className={
-													userName === messageContent.author
+													(messageContent.author === "admin" && "message admin justify-content-center")
+													|| (userName === messageContent.author
 														? "message self justify-content-start align-self-start"
 														: "message justify-content-end align-self-end"
+													)
+				
 												}
 											>
 												{messageContent.message}
@@ -395,6 +538,11 @@ const Buying = ({ userName }) => {
 									onChange={(event) => {
 										setCurrentMessage(event.target.value);
 									}}
+									onKeyPress={(event) => {
+										event.key === "Enter" 
+										&& sendMessage()
+										&& setCurrentMessage("");
+									}}
 								/>
 								<SendButton
 									icon="send"
@@ -402,9 +550,7 @@ const Buying = ({ userName }) => {
 										sendMessage();
 										setCurrentMessage("");
 									}}
-									onKeyPress={(event) => {
-										event.key === "Enter" && sendMessage();
-									}}
+									disabled={currentMessage === ""}
 								/>
 							</div>
 						</ChatWrapper>
@@ -412,71 +558,103 @@ const Buying = ({ userName }) => {
 					<div className="col-1 d-flex justify-content-center">
 						<VerticalDivider />
 					</div>
-					<div className="col-12 col-md-5 row mt-4">
-						<div className="col-12 text-center">
-							<Heading className="me-2 d-inline-block">Buying</Heading>
-							<Heading bold className="d-inline-block">
-								{solAmount} SOL
-							</Heading>
-							<Heading className="mx-2 d-inline-block">for</Heading>
-							<Heading bold className="d-inline-block">
-								{formattedCurrency}
-								{fiatAmount}
-							</Heading>
-							<Paragraph size="18px" className="pb-3">
-								1 SOL = {formattedCurrency}
-								{userSolPrice}
-							</Paragraph>
-							<HorizontalDivider />
-							<div className="d-flex justify-content-center flex-column">
-								<Paragraph bold size="24px" className="me-2">
-									Please pay {formattedCurrency}
+					{currentStep === "buying" && (
+						<div className="col-12 col-md-5 row">
+							<HalfStepper />
+							<div className="col-12 text-center">
+								<Heading className="me-2 d-inline-block">Buying</Heading>
+								<Heading bold className="d-inline-block">
+									{solAmount} SOL
+								</Heading>
+								<Heading className="mx-2 d-inline-block">for</Heading>
+								<Heading bold className="d-inline-block">
+									{formattedCurrency}
 									{fiatAmount}
+								</Heading>
+								<Paragraph size="18px" className="pb-3">
+									1 SOL = {formattedCurrency}
+									{userSolPrice}
 								</Paragraph>
-								<Paragraph size="18px" className="me-2">
-									into
-								</Paragraph>
-								<PaymentInfoArea
-									paymentInfo={paymentInfo}
-									paymentMethod={paymentMethod}
-									reference={reference}
-								/>
-								<div className="d-flex text-start">
-									<FormCheckbox
-										type="checkbox"
-										id="checkedPayment"
-										name="checkedPayment"
-										className="me-4"
+								<HorizontalDivider />
+								<div className="d-flex justify-content-center flex-column">
+									<Paragraph bold size="24px" className="me-2">
+										Please pay {formattedCurrency}
+										{fiatAmount}
+									</Paragraph>
+									<Paragraph size="18px" className="me-2">
+										into
+									</Paragraph>
+									<PaymentInfoArea
+										paymentInfo={paymentInfo}
+										paymentMethod={paymentMethod}
+										reference={reference}
 									/>
-									<StyledLabel className="p-0" htmlFor="checkedPayment">
-										<HighlightedText className="me-1">YES!</HighlightedText> I have sent the payment
-										to the seller.
-									</StyledLabel>
-								</div>
-								<div className="row mt-5">
-									<div className="col-6">
-										<SecondaryButton
-											text="Cancel"
-											className="m-auto mt-3"
-											onClick={null}
-											type="check"
-											value="check"
+									<div className="d-flex text-start">
+										<PrimaryButton
+											text={isPaymentSent ? "Payment marked as sent" : "I've sent the payment"}
+											className="w-100"
+											onClick={() => setIsPaymentSent(true)}
+											disabled={isPaymentSent}
 										/>
 									</div>
-									<div className="col-6">
-										<PrimaryButton
-											text="Continue"
-											className="m-auto mt-3"
-											onClick={sentPayment}
-											type="check"
-											value="check"
-											hasIcon
-										/>
+									<div className="row mt-5">
+										<div className="col-6">
+											<SecondaryButton
+												text="Cancel"
+												className="m-auto mt-3"
+												onClick={null}
+												type="check"
+												value="check"
+											/>
+										</div>
+										<div className="col-6">
+											<PrimaryButton
+												text="Continue"
+												className="m-auto mt-3"
+												onClick={sentPayment}
+												type="check"
+												value="check"
+												hasIcon
+												disabled={!isPaymentSent}
+											/>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+					)}
+					{currentStep === "bought" && (
+						<div className="col-12 col-md-5 row mt-4">
+							<Stepper />
+							<div className="col-12 text-center">
+								<Heading className="me-2 d-inline-block">Bought</Heading>
+								<Heading bold className="d-inline-block">
+									{solAmount} SOL
+								</Heading>
+								<Heading className="mx-2 d-inline-block">for</Heading>
+								<Heading bold className="d-inline-block">
+									{formattedCurrency}
+									{fiatAmount}
+								</Heading>
+								<Paragraph size="18px" className="pb-3">
+									1 SOL = {formattedCurrency}
+									{userSolPrice}
+								</Paragraph>
+								<HorizontalDivider />
+								<div className="d-flex justify-content-center flex-column">
+									<div className="row mt-5">
+										<div className="col-6">
+											<Paragraph size="18px" bold>Seller</Paragraph>
+											<Paragraph size="18px" bold>{userNameSeller}</Paragraph>
+										</div>
+										<div className="col-6">
+											Right
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					)}
 				</div>
 			</div>
 		</PageBody>
