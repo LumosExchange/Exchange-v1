@@ -73,6 +73,13 @@ const ChatWrapper = styled.div(
 				// justify-content: flex-start;
 				// align-self: flex-start;
 			}
+
+			&.admin {
+				background: none;
+				border-radius: 20px;
+				font-family: "THICCCBOI-BOLD";
+				color: ${theme.colors.primary_cta};
+			}
 		}
 
 		.messages-icon {
@@ -335,6 +342,7 @@ const Buying = ({ userName }) => {
 	const [paymentMethod, setPaymentMethod] = useState("");
 	const [firstMessage, setFirstMessage] = useState("");
 	const [currentStep, setCurrentStep] = useState("buying");
+	const [isPaymentSent, setIsPaymentSent] = useState(false);
 
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
@@ -411,18 +419,22 @@ const Buying = ({ userName }) => {
           //send message to convo letting the seller know youve sent the payment
           const messageData = {
             room: room,
-            author: userName,
+            author: "admin",
             message: ("Please note " + userName + " has confirmed they have sent the payment"),
             time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
           };
           socket.emit("send_message", messageData);
           setMessageList((list) => [...list, messageData]);
           setCurrentMessage("");
+		  setCurrentStep("bought")
         } else {
           //handle error here some sort of popup / message to say error please try again 
-
         }
       })
+  }
+
+  const setPaymentAsSent = () => {
+	  setPaymentAsSent(true);
   }
 
 	//Join the user to the room
@@ -487,9 +499,10 @@ const Buying = ({ userName }) => {
 										<div className="d-flex flex-column">
 											<div
 												className={
-													userName !== messageContent.author
-														? "d-flex justify-content-end align-self-end"
-														: "d-flex justify-content-start align-self-start"
+													(messageContent.author === "admin" && "d-flex justify-content-center align-self-center")
+													|| (userName !== messageContent.author
+														? "d-flex self justify-content-end align-self-end"
+														: `d-flex justify-content-start align-self-start`)
 												}
 											>
 												<Paragraph size="16px" className="mb-0 me-2" bold>
@@ -501,9 +514,12 @@ const Buying = ({ userName }) => {
 											</div>
 											<div
 												className={
-													userName === messageContent.author
+													(messageContent.author === "admin" && "message admin justify-content-center")
+													|| (userName === messageContent.author
 														? "message self justify-content-start align-self-start"
 														: "message justify-content-end align-self-end"
+													)
+				
 												}
 											>
 												{messageContent.message}
@@ -521,6 +537,11 @@ const Buying = ({ userName }) => {
 									onChange={(event) => {
 										setCurrentMessage(event.target.value);
 									}}
+									onKeyPress={(event) => {
+										event.key === "Enter" 
+										&& sendMessage()
+										&& setCurrentMessage("");
+									}}
 								/>
 								<SendButton
 									icon="send"
@@ -528,9 +549,7 @@ const Buying = ({ userName }) => {
 										sendMessage();
 										setCurrentMessage("");
 									}}
-									onKeyPress={(event) => {
-										event.key === "Enter" && sendMessage();
-									}}
+									disabled={currentMessage === ""}
 								/>
 							</div>
 						</ChatWrapper>
@@ -570,16 +589,12 @@ const Buying = ({ userName }) => {
 										reference={reference}
 									/>
 									<div className="d-flex text-start">
-										<FormCheckbox
-											type="checkbox"
-											id="checkedPayment"
-											name="checkedPayment"
-											className="me-4"
+										<PrimaryButton
+											text={isPaymentSent ? "Payment marked as sent" : "I've sent the payment"}
+											className="w-100"
+											onClick={() => setIsPaymentSent(true)}
+											disabled={isPaymentSent}
 										/>
-										<StyledLabel className="p-0" htmlFor="checkedPayment">
-											<HighlightedText className="me-1">YES!</HighlightedText> I have sent the payment
-											to the seller.
-										</StyledLabel>
 									</div>
 									<div className="row mt-5">
 										<div className="col-6">
@@ -599,6 +614,7 @@ const Buying = ({ userName }) => {
 												type="check"
 												value="check"
 												hasIcon
+												disabled={!isPaymentSent}
 											/>
 										</div>
 									</div>
@@ -625,29 +641,13 @@ const Buying = ({ userName }) => {
 								</Paragraph>
 								<HorizontalDivider />
 								<div className="d-flex justify-content-center flex-column">
-									<Paragraph bold size="24px" className="me-2">
-										Please pay {formattedCurrency}
-										{fiatAmount}
-									</Paragraph>
 									<div className="row mt-5">
 										<div className="col-6">
-											<SecondaryButton
-												text="Cancel"
-												className="m-auto mt-3"
-												onClick={null}
-												type="check"
-												value="check"
-											/>
+											<Paragraph size="18px" bold>Seller</Paragraph>
+											<Paragraph size="18px" bold>{userNameSeller}</Paragraph>
 										</div>
 										<div className="col-6">
-											<PrimaryButton
-												text="Continue"
-												className="m-auto mt-3"
-												onClick={sentPayment}
-												type="check"
-												value="check"
-												hasIcon
-											/>
+											Right
 										</div>
 									</div>
 								</div>
