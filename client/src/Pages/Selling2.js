@@ -14,7 +14,7 @@ import ScrollToBottom from "react-scroll-to-bottom";
 import axios from "axios";
 import SendButton from "../Components/SendButton";
 import { convertCurrencyToSymbol } from "../Helpers";
-import { Stepper, HalfStepper } from '../Components/TradeComponents';
+import { Stepper, HalfStepper, GiveFeedback } from '../Components/TradeComponents';
 
 const HorizontalDivider = styled.hr(({ theme }) => css`
 	:not([size]) {
@@ -179,78 +179,6 @@ const PaymentInfoArea = ({ paymentInfo, paymentMethod, reference }) => (
 		)}
 	</Card>
 );
-
-const PulseIcon = keyframes`
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-	100% { transform: scale(1); }
-`;
-
-const PositiveFeedbackButton = styled.button(({ theme }) => css`
-	background: ${theme.colors.valid};
-	color: ${theme.colors.actual_white};
-	border-radius: 20px 0 0 20px;
-	border: 0;
-
-	&.active i {
-		animation: ${PulseIcon} 0.5s linear 1;
-	}
-`);
-
-const NeutralFeedbackButton = styled.button(({ theme }) => css`
-	background: ${theme.colors.grey};
-	color: ${theme.colors.text_primary};
-	border-radius: 0;
-	border: 0;
-
-	&.active i {
-		animation: ${PulseIcon} 0.5s linear 1;
-	}
-`);
-
-const NegativeFeedbackButton = styled.button(({ theme }) => css`
-	background: ${theme.colors.invalid};
-	color: ${theme.colors.actual_white};
-	border-radius: 0 20px 20px 0;
-	border: 0;
-
-	&.active i {
-		animation: ${PulseIcon} 0.5s linear 1;
-	}
-`);
-
-const GiveFeedback = () => {
-	const [feedBack, setFeedback] = useState("");
-	console.log(feedBack, 'feedback');
-	return (
-		<div className="d-flex justify-content-center">
-			<div>
-				<PositiveFeedbackButton
-					className={`d-flex align-items-center justify-content-center ps-3 pe-2 py-2 ${feedBack === "positive" && 'active'}`}
-					onClick={() => setFeedback('positive')}
-				>
-					<i className="material-icons">thumb_up</i>
-				</PositiveFeedbackButton>
-			</div>
-			<div>
-				<NeutralFeedbackButton
-					className={`d-flex align-items-center justify-content-center px-3 py-2 ${feedBack === "neutral" && 'active'}`}
-					onClick={() => setFeedback('neutral')}
-				>
-					<i className="material-icons">sentiment_neutral</i>
-				</NeutralFeedbackButton>
-			</div>
-			<div>
-				<NegativeFeedbackButton
-					className={`d-flex align-items-center justify-content-center ps-2 pe-3 py-2 ${feedBack === "negative" && 'active'}`}
-					onClick={() => setFeedback('negative')}
-				>
-					<i className="material-icons">thumb_down</i>
-				</NegativeFeedbackButton>
-			</div>
-		</div>
-	);
-}
 
 const socket = io.connect("http://localhost:3002");
 
@@ -443,7 +371,8 @@ const Selling2 = ({ userName }) => {
 						<VerticalDivider />
 					</div>
 					{currentStep === "selling" && (
-						<div className="col-12 col-md-5 row mt-4">
+						<div className="col-12 col-md-5 row">
+							<HalfStepper />
 							<div className="col-12 text-center">
 								<Heading className="me-2 d-inline-block">Selling</Heading>
 								<Heading bold className="d-inline-block">

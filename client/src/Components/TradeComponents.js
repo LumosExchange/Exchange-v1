@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import Paragraph from "../Components/Paragraph";
+import PropTypes from 'prop-types';
 
 const Step = styled.div(({ theme, background }) => css`
 	width: 75px;
@@ -20,7 +21,7 @@ const StepLine = styled.div(({ theme, background }) => css`
 	background: ${background};
 `);
 
-export const Stepper = () => (
+export const Stepper = ({ step1Title, step2Title, step3Title }) => (
 	<div className="col-12 mb-4">
 		<div className="d-flex">
 			<div className="col-3 d-flex justify-content-end">
@@ -62,19 +63,31 @@ export const Stepper = () => (
 		</div>
 		<div className="d-flex">
 			<div className="col-4 d-flex justify-content-center">
-				<Paragraph className="text-center mt-3 p-2">Put SOL in Escrow</Paragraph>
+				<Paragraph className="text-center mt-3 p-2">{step1Title}</Paragraph>
 			</div>
 			<div className="col-4 d-flex justify-content-center">
-				<Paragraph className="text-center mt-3 p-2">Received Buyer’s Payment</Paragraph>
+				<Paragraph className="text-center mt-3 p-2">{step2Title}</Paragraph>
 			</div>
 			<div className="col-4 d-flex justify-content-center">
-				<Paragraph className="text-center mt-3 p-2">Escrow Released to buyer</Paragraph>
+				<Paragraph className="text-center mt-3 p-2">{step3Title}</Paragraph>
 			</div>
 		</div>
 	</div>
 );
 
-export const HalfStepper = () => (
+Stepper.propTypes = {
+	step1Title: PropTypes.string,
+	step2Title: PropTypes.string,
+	step3Title: PropTypes.string,
+}
+
+Stepper.defaultProps = {
+	step1Title: "Put SOL in Escrow",
+	step2Title: "Received Buyer’s Payment",
+	step3Title: "Escrow Released to buyer",
+}
+
+export const HalfStepper = ({ step1Title, step2Title, step3Title }) => (
 	<div className="col-12 mb-4">
 		<div className="d-flex">
 			<div className="col-3 d-flex justify-content-end">
@@ -116,14 +129,103 @@ export const HalfStepper = () => (
 		</div>
 		<div className="d-flex">
 			<div className="col-4 d-flex justify-content-center">
-				<Paragraph className="text-center mt-3 p-2">Put SOL in Escrow</Paragraph>
+				<Paragraph className="text-center mt-3 p-2">{step1Title}</Paragraph>
 			</div>
 			<div className="col-4 d-flex justify-content-center">
-				<Paragraph className="text-center mt-3 p-2">Received Buyer’s Payment</Paragraph>
+				<Paragraph className="text-center mt-3 p-2">{step2Title}</Paragraph>
 			</div>
 			<div className="col-4 d-flex justify-content-center">
-				<Paragraph className="text-center mt-3 p-2">Escrow Released to buyer</Paragraph>
+				<Paragraph className="text-center mt-3 p-2">{step3Title}</Paragraph>
 			</div>
 		</div>
 	</div>
 );
+
+HalfStepper.propTypes = {
+	step1Title: PropTypes.string,
+	step2Title: PropTypes.string,
+	step3Title: PropTypes.string,
+}
+
+HalfStepper.defaultProps = {
+	step1Title: "Put SOL in Escrow",
+	step2Title: "Received Buyer’s Payment",
+	step3Title: "Escrow Released to buyer",
+}
+
+const PulseIcon = keyframes`
+    0% { font-size: scale(1); }
+    50% { transform: scale(1.2); }
+	100% { transform: scale(1); }
+`;
+
+const PositiveFeedbackButton = styled.button(({ theme }) => css`
+	background: ${theme.colors.valid};
+	color: ${theme.colors.actual_white};
+	border-radius: 20px 0 0 20px;
+	border: 0;
+
+	&.active { 
+		background: #00994d;
+		i { animation: ${PulseIcon} 0.5s linear 1; }
+	}
+`);
+
+const NeutralFeedbackButton = styled.button(({ theme }) => css`
+	background: ${theme.colors.grey};
+	color: ${theme.colors.text_primary};
+	border-radius: 0;
+	border: 0;
+
+	&.active { 
+		background: #cbcbcb;
+		i { animation: ${PulseIcon} 0.5s linear 1; }
+	}
+`);
+
+const NegativeFeedbackButton = styled.button(({ theme }) => css`
+	background: ${theme.colors.invalid};
+	color: ${theme.colors.actual_white};
+	border-radius: 0 20px 20px 0;
+	border: 0;
+
+	&.active { 
+		background: #c43d3d;
+		i { animation: ${PulseIcon} 0.5s linear 1; }
+	}
+`);
+
+export const GiveFeedback = () => {
+	const [feedBack, setFeedback] = useState("");
+	return (
+		<React.Fragment>
+			<div className="d-flex justify-content-center">
+				<div>
+					<PositiveFeedbackButton
+						className={`d-flex align-items-center justify-content-center ps-3 pe-2 py-2 ${feedBack === "Positive" && 'active'}`}
+						onClick={() => setFeedback('Positive')}
+					>
+						<i className="material-icons">thumb_up</i>
+					</PositiveFeedbackButton>
+				</div>
+				<div>
+					<NeutralFeedbackButton
+						className={`d-flex align-items-center justify-content-center px-3 py-2 ${feedBack === "Neutral" && 'active'}`}
+						onClick={() => setFeedback('Neutral')}
+					>
+						<i className="material-icons">sentiment_neutral</i>
+					</NeutralFeedbackButton>
+				</div>
+				<div>
+					<NegativeFeedbackButton
+						className={`d-flex align-items-center justify-content-center ps-2 pe-3 py-2 ${feedBack === "Negative" && 'active'}`}
+						onClick={() => setFeedback('Negative')}
+					>
+						<i className="material-icons">thumb_down</i>
+					</NegativeFeedbackButton>
+				</div>
+			</div>
+			{feedBack && <Paragraph className="mt-2">Giving {feedBack} feedback.</Paragraph>}
+		</React.Fragment>
+	);
+}

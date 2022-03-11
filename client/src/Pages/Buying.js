@@ -14,7 +14,7 @@ import ScrollToBottom from "react-scroll-to-bottom";
 import axios from "axios";
 import SendButton from "../Components/SendButton";
 import { convertCurrencyToSymbol } from "../Helpers";
-import { Stepper, HalfStepper } from '../Components/TradeComponents';
+import { Stepper, HalfStepper, GiveFeedback } from '../Components/TradeComponents';
 
 const HorizontalDivider = styled.hr(
 	({ theme }) => css`
@@ -436,7 +436,7 @@ const Buying = ({ userName }) => {
 					</div>
 					{currentStep === "buying" && (
 						<div className="col-12 col-md-5 row">
-							<HalfStepper />
+							<HalfStepper step2Title="Send Payment to the Seller" />
 							<div className="col-12 text-center">
 								<Heading className="me-2 d-inline-block">Buying</Heading>
 								<Heading bold className="d-inline-block">
@@ -501,7 +501,7 @@ const Buying = ({ userName }) => {
 					)}
 					{currentStep === "bought" && (
 						<div className="col-12 col-md-5 row mt-4">
-							<Stepper />
+							<Stepper step2Title="Send Payment to the Seller" />
 							<div className="col-12 text-center">
 								<Heading className="me-2 d-inline-block">Bought</Heading>
 								<Heading bold className="d-inline-block">
@@ -518,19 +518,23 @@ const Buying = ({ userName }) => {
 								</Paragraph>
 								<HorizontalDivider />
 								<div className="d-flex justify-content-center flex-column">
-									<div className="row mt-5">
-										<div className="col-6">
-											<Paragraph size="18px" bold>Seller</Paragraph>
-											<div className="d-flex">
-												<i className="material-icons">person</i>
-												<Paragraph size="18px" bold>{userNameSeller}</Paragraph>
-											</div>
+								<div className="row mt-5">
+									<div className="col-6 text-start">
+										<Paragraph size="18px" bold>Seller</Paragraph>
+										<div className="d-flex">
+											<i className="material-icons">person</i>
+											<Paragraph size="18px" bold>{userNameSeller}</Paragraph>
 										</div>
-										<div className="col-6">
-											Right
-										</div>
+										<Paragraph size="18px">Buyer Feedback Here</Paragraph>
+										<Paragraph size="18px">Buyer Register Date Here</Paragraph>
+										<Paragraph size="18px">Total Trades Here</Paragraph>
+									</div>
+									<div className="col-6">
+										<Paragraph size="18px">How was the buyer?</Paragraph>
+										<GiveFeedback />
 									</div>
 								</div>
+							</div>
 							</div>
 						</div>
 					)}
