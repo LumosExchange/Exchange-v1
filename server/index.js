@@ -20,7 +20,6 @@ const { addAbortSignal } = require("stream");
 const { Server } = require("socket.io");
 const http = require("http");
 
-
 require("dotenv").config();
 
 const server = http.createServer(app);
@@ -33,18 +32,16 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
- // console.log('user connected: ', socket.id);
+  // console.log('user connected: ', socket.id);
 
   socket.on("join_room", (data) => {
     socket.join(data);
-    console.log('User with ID : ', socket.id, ' joined the room: ', data );
+    console.log("User with ID : ", socket.id, " joined the room: ", data);
   });
-  
+
   socket.on("send_message", (data) => {
     socket.to(data.room).emit("recieve_message", data);
-    console.log('RECIEVE MESSAGE: ', data);
-    
-
+    console.log("RECIEVE MESSAGE: ", data);
   });
 
   socket.on("disconnect", () => {
@@ -417,10 +414,10 @@ app.get("/getUserAccountLevel", (req, res) => {
   );
 });
 
-app.get("/getUserID" , (req, res) => {
+app.get("/getUserID", (req, res) => {
   id = req.session.user[0].userID;
   req.send(id);
-})
+});
 
 //update user settings
 app.post("/updateUserSettings", (req, res) => {
@@ -1613,7 +1610,7 @@ app.post("/OpenTrade", (req, res) => {
   let saleID = req.body.saleID;
   let sellerID = req.body.sellerID;
   let buyerID = req.session.user[0].userID;
-  var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  var date = new Date().toISOString().slice(0, 19).replace("T", " ");
   let paymentMethod = req.body.paymentMethod;
   let userSolPrice = req.body.userSolPrice;
   let amountOfSol = req.body.amountOfSol;
@@ -1657,9 +1654,8 @@ app.post("/UpdateLiveListing", (req, res) => {
   const sellerID = req.session.user[0].userID;
   const saleID = req.body.saleID;
 
+  var date = new Date().toISOString().slice(0, 19).replace("T", " ");
 
-  var date = new Date().toISOString().slice(0, 19).replace('T', ' ');
-  
   db.query(
     "Update liveTrades SET paymentRecieved = ?, escrowReleaseTime = ? , WHERE sellerID = ? && saleID = ?",
     ["YES", date, sellerID, saleID],
@@ -1668,53 +1664,49 @@ app.post("/UpdateLiveListing", (req, res) => {
         res.send(err);
       } else {
         res.send(result);
-    }});
+      }
+    }
+  );
 });
 
-app.post("/CloseTrade", (req,res) => {
-
+app.post("/CloseTrade", (req, res) => {
   const buyerID = req.session.user[0].userID;
   const saleID = req.body.saleID;
   const sellerID = req.body.sellerID;
   const feedbackScore = req.body.feedbackScore;
   const feedbackComment = req.body.feedbackComment;
 
- 
-  db.query(
-    "")
+  db.query("");
 
   //Calculate escrow release time and add to feedback db
 
   //delete trade from live trade and copy to tardeHistory db
-
-
-})
+});
 
 app.get("/GetLiveTradeDetails", (req, res) => {
   const liveTradeID = req.query.liveTradeID;
-  console.log('Live Trade ID : ',liveTradeID);
+  console.log("Live Trade ID : ", liveTradeID);
 
   db.query(
     "SELECT * FROM LiveTrades WHERE liveTradeID = ?",
     [liveTradeID],
     (err, result) => {
-      if (err){
+      if (err) {
         res.send(err);
       } else {
         res.send(result);
       }
-    })
-
+    }
+  );
 });
 
 app.get("/GetLiveTradePaymentInfo", (req, res) => {
   const sellerID = req.query.sellerID;
-  console.log('Seller ID: ', sellerID);
+  console.log("Seller ID: ", sellerID);
   const paymentMethod = req.query.paymentMethod;
-  console.log('Payment Method: ',paymentMethod);
+  console.log("Payment Method: ", paymentMethod);
 
-  switch(paymentMethod){
-     
+  switch (paymentMethod) {
     case "UK Bank Transfer":
       db.query(
         "SELECT Name, sortCode, accountNumber FROM UKBankAccounts WHERE userID = ?",
@@ -1732,82 +1724,77 @@ app.get("/GetLiveTradePaymentInfo", (req, res) => {
         }
       );
       break;
-      case "EU Bank Transfer":
-       db.query(
-         "SELECT bankName, BIC, IBAN FROM EUBankAccounts WHERE userID = ?",
-         [sellerID],
-         (err, result) => {
-           if (err) {
-             res.send(err);
-           } else {
-             res.send({
-               bankName: result[0].bankName,
-               BIC: result[0].BIC,
-               IBAN: result[0].IBAN,
-             });
-           }
-         }  
-       );
-       break;
-       case "International Wire Transfer":
-        db.query(
-          "SELECT bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE userID = ?",
-          [sellerID],
-          (err, result) => {
-            if (err) {
-              res.send(err);
-            } else {
-              res.send({
-                bankName: result[0].bankName,
-                bankCity: result[0].bankCity,
-                bankCountry: result[0].bankCountry,
-                SWIFTCode: result[0].SWIFTCode,
-                payeesName: result[0].payeesName,
-                interBankName: result[0].interBankName,
-                interBankCity: result[0].interBankCity,
-                interBankCountry: result[0].interBankCountry,
-                interBankAccountNumber: result[0].interBankAccountNumber,
-                interBankRoutingNumber: result[0].interBankRoutingNumber,
-              });
-            }
-          }  
-        );
-        break;
-        case "Paypal Transfer":
-        db.query(
-          "SELECT paypalEmail FROM paypalAccounts WHERE userID = ?",
-          [sellerID],
-          (err, result) => {
-            if (err) {
-              res.send(err);
-            } else {
-              res.send({
-                paypalEmail: result[0].paypalEmail,
-              });
-            }
-          }  
-        );
-        break;
-        case "Skrill Transfer":
-        db.query(
-          "SELECT paypalEmail FROM skrillAccounts WHERE userID = ?",
-          [sellerID],
-          (err, result) => {
-            if (err) {
-              res.send(err);
-            } else {
-              res.send({
-                skrillEmail: result[0].skrillEmail,
-              });
-            }
-          }  
-        );
-  };  
-
-
- 
-
-
+    case "EU Bank Transfer":
+      db.query(
+        "SELECT bankName, BIC, IBAN FROM EUBankAccounts WHERE userID = ?",
+        [sellerID],
+        (err, result) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.send({
+              bankName: result[0].bankName,
+              BIC: result[0].BIC,
+              IBAN: result[0].IBAN,
+            });
+          }
+        }
+      );
+      break;
+    case "International Wire Transfer":
+      db.query(
+        "SELECT bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE userID = ?",
+        [sellerID],
+        (err, result) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.send({
+              bankName: result[0].bankName,
+              bankCity: result[0].bankCity,
+              bankCountry: result[0].bankCountry,
+              SWIFTCode: result[0].SWIFTCode,
+              payeesName: result[0].payeesName,
+              interBankName: result[0].interBankName,
+              interBankCity: result[0].interBankCity,
+              interBankCountry: result[0].interBankCountry,
+              interBankAccountNumber: result[0].interBankAccountNumber,
+              interBankRoutingNumber: result[0].interBankRoutingNumber,
+            });
+          }
+        }
+      );
+      break;
+    case "Paypal Transfer":
+      db.query(
+        "SELECT paypalEmail FROM paypalAccounts WHERE userID = ?",
+        [sellerID],
+        (err, result) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.send({
+              paypalEmail: result[0].paypalEmail,
+            });
+          }
+        }
+      );
+      break;
+    case "Skrill Transfer":
+      db.query(
+        "SELECT paypalEmail FROM skrillAccounts WHERE userID = ?",
+        [sellerID],
+        (err, result) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.send({
+              skrillEmail: result[0].skrillEmail,
+            });
+          }
+        }
+      );
+  }
 });
 
 //Update functionality for updating the user lisitngs
@@ -1897,7 +1884,7 @@ app.post("/GetSellerInfo", (req, res) => {
 
 app.post("/FindUserPaymentMethods", (req, res) => {
   const userID = req.session.user[0].userID;
-  
+
   db.query(
     "SELECT * FROM userPaymentAccounts WHERE (userID) = (?)",
     [userID],
@@ -1906,9 +1893,7 @@ app.post("/FindUserPaymentMethods", (req, res) => {
       res.send(result);
     }
   );
-
 });
-
 
 app.post("/GetLiveTradesBuyer", (req, res) => {
   const userID = req.session.user[0].userID;
@@ -1918,15 +1903,15 @@ app.post("/GetLiveTradesBuyer", (req, res) => {
     (err, result) => {
       if (err) {
         res.send(err);
-      } else if (result.length === 0 ) {
+      } else if (result.length === 0) {
         res.send({
           message: "No live trades",
-        })
+        });
       } else {
         res.send(result);
       }
     }
-  )
+  );
 });
 
 app.post("/GetLiveTradesSeller", (req, res) => {
@@ -1937,39 +1922,103 @@ app.post("/GetLiveTradesSeller", (req, res) => {
     (err, result) => {
       if (err) {
         res.send(err);
-      } else if (result.length === 0 ) {
+      } else if (result.length === 0) {
         res.send({
           message: "No live trades",
-        })
+        });
       } else {
         res.send(result);
       }
     }
-  )  
+  );
 });
 
 app.post("/updateLiveTradePayment", (req, res) => {
   const liveTadeID = req.body.liveTradeID;
   const userName = req.body.userName;
 
-  const String = ("Please note " + userName + " has confirmed they have sent the payment");
+  const String =
+    "Please note " + userName + " has confirmed they have sent the payment";
 
   db.query(
     "UPDATE LiveTrades SET paymentRecieved = ?, Message = ? WHERE LiveTradeID = ?",
     ["YES", String, liveTadeID],
     (err, result) => {
-      if(err) {
+      if (err) {
         res.send(err);
         console.log(" error : ", err);
       } else {
         res.send({
-          update : true,
+          update: true,
         });
       }
     }
   );
 });
 
+app.get("/GetTradeFeedbackInfo", (req, res) => {
+  const id = req.query.UserID;
+
+  console.log("ID : ", id);
+
+  let registeredDate = " ";
+  let totalTrades = 0;
+  let feedbackScore = 0;
+
+  //Get registered date
+
+  db.query(
+    "SELECT registeredDate FROM users WHERE (userID) = (?) ",
+    [id],
+    (err, result) => {
+      console.log('Registered date : ', result);
+      registeredDate = result[0].registeredDate;
+    }
+  );
+
+  //get total trades
+
+  db.query(
+    "SELECT COUNT (*) AS total FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?)",
+    [id, id],
+    (err, result) => {
+      console.log(err);
+      
+      if (err) {
+        res.send(err);
+      } else if (result = 0) {
+        totalTrades = 0;
+      } else {
+        totalTrades = result.total;
+      }
+     
+    }
+  );
+
+  //Get Buyer feedback score
+
+  db.query(
+    "SELECT AVG (feedbackScore) as feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?)",
+    [id, id],
+    (err, result) => {
+      
+      if (err) {
+        res.send(err);
+      } else if (result = 0) {
+        feedbackScore = 0;
+      } else {
+        feedbackScore = result.feedback;
+
+        res.send({
+          registeredDate: registeredDate,
+          totalTrades: totalTrades,
+          feedbackScore: feedbackScore,
+        });
+        console.log('feedback Score : ', result);
+      }
+    }
+  );
+});
 
 server.listen(3002, () => {
   console.log("SERVER RUNNING");
