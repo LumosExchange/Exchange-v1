@@ -218,6 +218,7 @@ const Buying = ({ userName }) => {
 	const [firstMessage, setFirstMessage] = useState("");
 	const [currentStep, setCurrentStep] = useState("buying");
 	const [isPaymentSent, setIsPaymentSent] = useState(false);
+	const [feedbackMessage, setFeedbackMessage] = useState("");
 
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
@@ -525,13 +526,35 @@ const Buying = ({ userName }) => {
 											<i className="material-icons">person</i>
 											<Paragraph size="18px" bold>{userNameSeller}</Paragraph>
 										</div>
-										<Paragraph size="18px">Buyer Feedback Here</Paragraph>
-										<Paragraph size="18px">Buyer Register Date Here</Paragraph>
+										<Paragraph size="18px">Seller Feedback Here</Paragraph>
+										<Paragraph size="18px">Seller Register Date Here</Paragraph>
 										<Paragraph size="18px">Total Trades Here</Paragraph>
 									</div>
 									<div className="col-6">
-										<Paragraph size="18px">How was the buyer?</Paragraph>
+										<Paragraph size="18px">How was the seller?</Paragraph>
 										<GiveFeedback />
+										<div className="d-flex flex-column text-start mt-4">
+											<StyledLabel bold htmlFor="feedbackMessage">Feedback Comment</StyledLabel>
+											<TextArea
+												type="text"
+												placeholder=""
+												value={feedbackMessage}
+												name="feedbackMesage"
+												id="feedbackMessage"
+												className="me-3"
+												onChange={(event) => {
+													setFeedbackMessage(event.target.value);
+												}}
+											/>
+										</div>
+									</div>
+									<div className="col-12 mt-3">
+										<PrimaryButton
+											text="Complete Trade"
+											className="w-100"
+											onClick={() => null}
+											disabled={feedbackMessage.length === 0}
+										/>
 									</div>
 								</div>
 							</div>
