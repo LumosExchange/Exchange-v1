@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import styled, { css, keyframes } from "styled-components";
 import Paragraph from "../Components/Paragraph";
 import PropTypes from 'prop-types';
+import VerifyBG from '../Images/verifybg.svg';
+import ErrorBG from '../Images/errorbg.svg';
+import PositiveFeedbackBG from '../Images/PositiveFeedbackBG.svg';
+import NegativeFeedbackBG from '../Images/NegativeFeedbackBG.svg';
 
 const Step = styled.div(({ theme, background }) => css`
 	width: 75px;
@@ -166,7 +170,7 @@ const PositiveFeedbackButton = styled.button(({ theme }) => css`
 	border: 0;
 
 	&.active { 
-		background: #00994d;
+		background: url(${PositiveFeedbackBG});
 		i { animation: ${PulseIcon} 0.5s linear 1; }
 	}
 `);
@@ -190,7 +194,7 @@ const NegativeFeedbackButton = styled.button(({ theme }) => css`
 	border: 0;
 
 	&.active { 
-		background: #c43d3d;
+		background: url(${NegativeFeedbackBG});
 		i { animation: ${PulseIcon} 0.5s linear 1; }
 	}
 `);

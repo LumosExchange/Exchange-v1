@@ -1,0 +1,26 @@
+<svg width="48px" height="40px" viewBox="0 0 48 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<style>
+    	<![CDATA[@keyframes
+            animateGradRight{
+                0%{stop-color: #00CC66}
+                50%{stop-color: #067C41}
+                100%{stop-color: #00CC66}
+            }
+            @keyframes animateGradLeft{
+                0%{stop-color: #00CC66}
+                50%{stop-color: #067C41}
+                100%{stop-color: #00CC66}
+            }]]>
+  	</style>
+	<defs>
+        <linearGradient x1="100%" y1="15.2777778%" x2="0%" y2="84.7222222%" id="linearGradient-bqmzhi_7ol-1">
+            <stop style="animation:animateGradLeft 3s linear infinite" class="gradStopLeft" offset="0%"/>
+            <stop style="animation:animateGradRight 3s linear infinite" class="gradStopRight" offset="100%"/>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" fill="url(#linearGradient-bqmzhi_7ol-1)">
+            <rect id="Rectangle" x="0" y="0" width="48" height="40"></rect>
+        </g>
+    </g>
+</svg>

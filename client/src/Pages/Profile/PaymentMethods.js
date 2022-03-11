@@ -747,8 +747,6 @@ const PaymentMethods = () => {
                       (isEditing
                         ? "Edit Skrill Account"
                         : "Add Skrill Account"))}
-                  {console.log(isEditing, "is editing?")}
-                  {console.log(modalMode, "modal mode")}
                 </div>
               </ModalHeader>
             )}
