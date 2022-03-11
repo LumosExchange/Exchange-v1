@@ -200,6 +200,7 @@ const Selling2 = ({ userName }) => {
 	const [firstMessage, setFirstMessage] = useState("");
 	const [currentStep, setCurrentStep] = useState("selling");
 	const [isPaymentSent, setIsPaymentSent] = useState(false);
+	const [feedbackMessage, setFeedbackMessage] = useState("");
 
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
@@ -474,6 +475,28 @@ const Selling2 = ({ userName }) => {
 									<div className="col-6">
 										<Paragraph size="18px">How was the buyer?</Paragraph>
 										<GiveFeedback />
+										<div className="d-flex flex-column text-start mt-4">
+											<StyledLabel bold htmlFor="feedbackMessage">Feedback Comment</StyledLabel>
+											<TextArea
+												type="text"
+												placeholder=""
+												value={feedbackMessage}
+												name="feedbackMesage"
+												id="feedbackMessage"
+												className="me-3"
+												onChange={(event) => {
+													setFeedbackMessage(event.target.value);
+												}}
+											/>
+										</div>
+									</div>
+									<div className="col-12 mt-3">
+										<PrimaryButton
+											text="Complete Trade"
+											className="w-100"
+											onClick={() => null}
+											disabled={feedbackMessage.length === 0}
+										/>
 									</div>
 								</div>
 							</div>

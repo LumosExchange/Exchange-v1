@@ -83,7 +83,7 @@ const Navbar = ({ loginStatus, userName }) => {
 		<Base className="d-flex justify-content-center">
 			<div className="container d-flex fixedHeight">
 				<div className="d-flex col-12 justify-content-between align-items-center">
-					<a href="/home">
+					<a href="/">
 						<LumosLogo alt="Logo" className="me-1" />
 					</a>
 					{loginStatus ? (
