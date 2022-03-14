@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext, useMemo } from "react";
 import styled, { css, keyframes } from "styled-components";
 import Axios from "axios";
 import { PageBody, TextArea } from "../Components/FormInputs";
@@ -22,6 +22,7 @@ import {
 	ChatWrapper,
 	PaymentInfoArea,
 	IconPrimaryCta,
+	FeedbackContext,
 } from '../Components/TradeComponents';
 
 const socket = io.connect("http://localhost:3002");
@@ -45,6 +46,7 @@ const Selling2 = ({ userName }) => {
 	const [currentStep, setCurrentStep] = useState("selling");
 	const [isPaymentSent, setIsPaymentSent] = useState(false);
 	const [feedbackMessage, setFeedbackMessage] = useState("");
+	const [feedBack, setFeedback] = useState("");
 
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
@@ -151,6 +153,13 @@ const Selling2 = ({ userName }) => {
 			setCurrentMessage("");
 		}
 	};
+
+	const value = useMemo(() => {
+		return {
+		  feedBack,
+		  setFeedback,
+		}
+	  }, [feedBack, setFeedback]);
 
 	useEffect(() => {
 		getTradeDetails();
@@ -352,7 +361,9 @@ const Selling2 = ({ userName }) => {
 									</div>
 									<div className="col-6">
 										<Paragraph size="18px">How was the buyer?</Paragraph>
-										<GiveFeedback />
+										<FeedbackContext.Provider value={value}>
+											<GiveFeedback />
+										</FeedbackContext.Provider>
 										<div className="d-flex flex-column text-start mt-4">
 											<StyledLabel bold htmlFor="feedbackMessage">Feedback Comment</StyledLabel>
 											<TextArea
@@ -373,7 +384,7 @@ const Selling2 = ({ userName }) => {
 											text="Complete Trade"
 											className="w-100"
 											onClick={() => null}
-											disabled={feedbackMessage.length === 0}
+											disabled={feedBack.length > 0 && feedbackMessage.length === 0}
 										/>
 									</div>
 								</div>

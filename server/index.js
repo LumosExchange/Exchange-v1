@@ -740,8 +740,8 @@ app.post("/UpgradeGold", (req, res) => {
   const EmployerAddress = req.body.EmployerAddress;
   const Occupation = req.body.Occupation;
   const Income = req.body.Income;
-  const addIncome = req.body.AdditionalIncome;
-  const proofEmployment = req.body.ProofEmployment;
+  // const addIncome = req.body.AdditionalIncome;
+  // const proofEmployment = req.body.ProofEmployment;
   const date = new Date();
 
   db.query(
@@ -750,15 +750,16 @@ app.post("/UpgradeGold", (req, res) => {
       EmployerName,
       EmployerAddress,
       Occupation,
-      proofEmployment,
+      // proofEmployment,
       Income,
-      addIncome,
+      // addIncome,
       date,
       user,
     ],
     (err, result) => {
       if (err) {
         res.send(err);
+        console.log(err, 'errors from upgrade')
       } else {
         res.send({
           message: "Account tier now Gold",

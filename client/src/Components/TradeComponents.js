@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import styled, { css, keyframes } from "styled-components";
 import Paragraph from "../Components/Paragraph";
 import PropTypes from 'prop-types';
@@ -7,6 +7,8 @@ import ErrorBG from '../Images/errorbg.svg';
 import PositiveFeedbackBG from '../Images/PositiveFeedbackBG.svg';
 import NegativeFeedbackBG from '../Images/NegativeFeedbackBG.svg';
 import Card from "../Components/Card";
+
+export const FeedbackContext = createContext(null);
 
 const Step = styled.div(({ theme, background }) => css`
 	width: 75px;
@@ -201,7 +203,7 @@ const NegativeFeedbackButton = styled.button(({ theme }) => css`
 `);
 
 export const GiveFeedback = () => {
-	const [feedBack, setFeedback] = useState("");
+	const { feedBack, setFeedback } = useContext(FeedbackContext);
 	return (
 		<React.Fragment>
 			<div className="d-flex justify-content-center">

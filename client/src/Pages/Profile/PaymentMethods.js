@@ -402,14 +402,14 @@ const PaymentMethods = () => {
                 payment method?
               </Paragraph>
               <div className="row">
-                <div className="col-12 mb-3">
-                  <InlineButton className="delete" onClick={deletePayment}>
-                    Remove
-                  </InlineButton>
-                </div>
-                <div className="col-12">
+                <div className="col-6">
                   <InlineButton className="cancel" onClick={toggleDelete}>
                     Cancel
+                  </InlineButton>
+                </div>
+                <div className="col-6 mb-3">
+                  <InlineButton className="delete" onClick={deletePayment}>
+                    Remove
                   </InlineButton>
                 </div>
               </div>
