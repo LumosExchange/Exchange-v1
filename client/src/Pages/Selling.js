@@ -384,7 +384,7 @@ const Selling2 = ({ userName }) => {
 											text="Complete Trade"
 											className="w-100"
 											onClick={() => null}
-											disabled={feedbackMessage.length === 0}
+											disabled={feedBack.length > 0 && feedbackMessage.length === 0}
 										/>
 									</div>
 								</div>
