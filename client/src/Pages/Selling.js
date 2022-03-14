@@ -21,11 +21,8 @@ import {
 	VerticalDivider,
 	ChatWrapper,
 	PaymentInfoArea,
+	IconPrimaryCta,
 } from '../Components/TradeComponents';
-
-const HighlightedText = styled.span(({ theme }) => css`
-	color: ${theme.colors.primary_cta};
-`);
 
 const socket = io.connect("http://localhost:3002");
 
@@ -169,7 +166,7 @@ const Selling2 = ({ userName }) => {
 	return (
 		<PageBody>
 			<div className="container">
-				<div className="row pt-5">
+				<div className="row py-5 mb-5">
 					<div className="col-12 mb-5 pb-5">
 						<Heading size="26px" className="mb-4">
 							Offers &gt; Sell SOL to {userNameBuyer} with {paymentMethod}.
@@ -346,8 +343,8 @@ const Selling2 = ({ userName }) => {
 									<div className="col-6 text-start">
 										<Paragraph size="18px" bold>Buyer</Paragraph>
 										<div className="d-flex">
-											<i className="material-icons">person</i>
-											<Paragraph size="18px" bold>{userNameBuyer}</Paragraph>
+											<IconPrimaryCta className="material-icons">person</IconPrimaryCta>
+											<Paragraph size="18px" bold color="primary_cta">{userNameBuyer}</Paragraph>
 										</div>
 										<Paragraph size="18px">Buyer Feedback Here</Paragraph>
 										<Paragraph size="18px">Buyer Register Date Here</Paragraph>

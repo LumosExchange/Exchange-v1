@@ -427,3 +427,11 @@ export const PaymentInfoArea = ({ paymentInfo, paymentMethod, reference }) => (
 		)}
 	</Card>
 );
+
+export const IconPrimaryCta = styled.i(({ theme }) => css`
+	color: ${theme.colors.primary_cta};
+`);
+
+export const HighlightedText = styled.span(({ theme }) => css`
+    color: ${theme.colors.primary_cta};
+`);

@@ -21,13 +21,8 @@ import {
   VerticalDivider,
   ChatWrapper, 
   PaymentInfoArea,
+  IconPrimaryCta,
 } from "../Components/TradeComponents";
-
-const HighlightedText = styled.span(
-  ({ theme }) => css`
-    color: ${theme.colors.primary_cta};
-  `
-);
 
 const socket = io.connect("http://localhost:3002");
 
@@ -204,7 +199,7 @@ const Buying = ({ userName }) => {
   return (
     <PageBody>
       <div className="container">
-        <div className="row pt-5">
+        <div className="row py-5 mb-5">
           <div className="col-12 mb-5 pb-5">
             <Heading size="26px" className="mb-4">
               Offers &gt; Buy SOL from {userNameSeller} with {paymentMethod}.
@@ -386,8 +381,8 @@ const Buying = ({ userName }) => {
                         Seller
                       </Paragraph>
                       <div className="d-flex">
-                        <i className="material-icons">person</i>
-                        <Paragraph size="18px" bold>
+                        <IconPrimaryCta className="material-icons">person</IconPrimaryCta>
+                        <Paragraph size="18px" bold color="primary_cta">
                           {userNameSeller}
                         </Paragraph>
                       </div>
@@ -395,11 +390,11 @@ const Buying = ({ userName }) => {
                       <Paragraph size="18px">
                         Buyer Register Date {registerdDate}
                       </Paragraph>
-					  {console.log(totalTrades, 'total trades?')}
+					            {console.log(totalTrades, 'total trades?')}
                       <Paragraph size="18px">Total Trades {totalTrades}</Paragraph>
                     </div>
                     <div className="col-6">
-                      <Paragraph size="18px">How was the buyer?</Paragraph>
+                      <Paragraph size="18px">How was the seller?</Paragraph>
                       <GiveFeedback />
 					  <div className="text-start">
 						<StyledLabel htmlFor="feedbackMessage" bold className="mt-3" padding="0">Feedback Message</StyledLabel>
