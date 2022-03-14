@@ -63,6 +63,13 @@ const ChatWrapper = styled.div(({ theme }) => css`
 				background: ${theme.colors.primary_cta};
 				color: ${theme.colors.base_bg};
 			}
+			
+			&.admin {
+				background: none;
+				border-radius: 20px;
+				font-family: "THICCCBOI-BOLD";
+				color: ${theme.colors.primary_cta};
+			}
 		}
 
 		.messages-icon {
@@ -258,6 +265,41 @@ const Selling2 = ({ userName }) => {
 		});
 	}
 
+	const sentPayment = () => {
+		axios
+		  .post("http://localhost:3001/updateLiveTradePayment", {
+			liveTradeID,
+			userName,
+		  })
+		  .then((response) => {
+			if (response.data.update === true) {
+			  //send message to convo letting the seller know youve sent the payment
+			  const messageData = {
+				room: room,
+				author: "Admin",
+				message:
+				  "Please note " +
+				  userName +
+				  " has confirmed they have sent the payment",
+				time:
+				  new Date(Date.now()).getHours() +
+				  ":" +
+				  new Date(Date.now()).getMinutes(),
+			  };
+			  socket.emit("send_message", messageData);
+			  setMessageList((list) => [...list, messageData]);
+			  setCurrentMessage("");
+			  setCurrentStep("bought");
+			} else {
+			  //handle error here some sort of popup / message to say error please try again
+			}
+		  });
+	  };
+
+	  const setPaymentAsSent = () => {
+		setPaymentAsSent(true);
+	  };
+
 	//Join the user to the room
 	const joinRoom = async () => {
 		if (userName !== "" && room !== "") {
@@ -320,9 +362,11 @@ const Selling2 = ({ userName }) => {
 										<div className="d-flex flex-column">
 											<div
 												className={
-													userName !== messageContent.author
-														? "d-flex justify-content-end align-self-end"
-														: "d-flex justify-content-start align-self-start"
+													(messageContent.author === "Admin" &&
+													"d-flex justify-content-center align-self-center") ||
+													(userName !== messageContent.author
+													? "d-flex self justify-content-end align-self-end"
+													: `d-flex justify-content-start align-self-start`)
 												}
 											>
 												<Paragraph size="16px" className="mb-0 me-2" bold>
@@ -334,9 +378,11 @@ const Selling2 = ({ userName }) => {
 											</div>
 											<div
 												className={
-													userName === messageContent.author
-														? "message self justify-content-start align-self-start"
-														: "message justify-content-end align-self-end"
+													(messageContent.author === "Admin" &&
+													"message admin justify-content-center") ||
+													(userName === messageContent.author
+													? "message self justify-content-start align-self-start"
+													: "message justify-content-end align-self-end")
 												}
 											>
 												{messageContent.message}
@@ -430,7 +476,7 @@ const Selling2 = ({ userName }) => {
 											<PrimaryButton
 												text="Continue"
 												className="m-auto mt-3"
-												onClick={ () => setCurrentStep("sold")}
+												onClick={ sentPayment }
 												type="check"
 												value="check"
 												hasIcon

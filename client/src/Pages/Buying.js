@@ -225,6 +225,7 @@ const Buying = ({ userName }) => {
   const [registerdDate, setRegisteredDate] = useState("");
   const [feedbackScore, setFeedbackScore] = useState("");
   const [totalTrades, setTotalTrades] = useState("");
+  const [feedbackMessage, setFeedbackMessage] = useState("");
 
   const { state } = useLocation();
   const liveTradeID = state.liveTradeID;
@@ -411,7 +412,7 @@ const Buying = ({ userName }) => {
                     <div className="d-flex flex-column">
                       <div
                         className={
-                          (messageContent.author === "admin" &&
+                          (messageContent.author === "Admin" &&
                             "d-flex justify-content-center align-self-center") ||
                           (userName !== messageContent.author
                             ? "d-flex self justify-content-end align-self-end"
@@ -427,7 +428,7 @@ const Buying = ({ userName }) => {
                       </div>
                       <div
                         className={
-                          (messageContent.author === "admin" &&
+                          (messageContent.author === "Admin" &&
                             "message admin justify-content-center") ||
                           (userName === messageContent.author
                             ? "message self justify-content-start align-self-start"
@@ -572,12 +573,35 @@ const Buying = ({ userName }) => {
                       <Paragraph size="18px">
                         Buyer Register Date {registerdDate}
                       </Paragraph>
+					  {console.log(totalTrades, 'total trades?')}
                       <Paragraph size="18px">Total Trades {totalTrades}</Paragraph>
                     </div>
                     <div className="col-6">
                       <Paragraph size="18px">How was the buyer?</Paragraph>
                       <GiveFeedback />
+					  <div className="text-start">
+						<StyledLabel htmlFor="feedbackMessage" bold className="mt-3" padding="0">Feedback Message</StyledLabel>
+						<TextArea
+							type="text"
+							placeholder=""
+							name="feedbackMessage"
+							id="feedbackMessage"
+							value={feedbackMessage}
+							className="me-3"
+							onChange={(event) => {
+								setFeedbackMessage(event.target.value);
+							}}
+							/>
+						</div>
                     </div>
+					<div className="col-12">
+						<PrimaryButton
+							text="Complete Trade"
+							className="w-100 mt-3"
+							onClick={() => null}
+							disabled={feedbackMessage.length === 0}
+						/>
+					</div>
                   </div>
                 </div>
               </div>
