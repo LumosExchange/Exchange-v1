@@ -157,6 +157,16 @@ const Buying = ({ userName }) => {
       });
   };
 
+  const completeTrade = () => {
+    //get feedback and send to db 
+    axios.post("http://localhost:3001/CompleteTrade", {
+      liveTradeID,
+    })
+    .then((response) => {
+
+    })
+  };
+
   const setPaymentAsSent = () => {
     setPaymentAsSent(true);
   };
@@ -386,9 +396,9 @@ const Buying = ({ userName }) => {
                           {userNameSeller}
                         </Paragraph>
                       </div>
-                      <Paragraph size="18px">Buyer Feedback Score {feedbackScore}</Paragraph>
+                      <Paragraph size="18px">Feedback Score {feedbackScore}</Paragraph>
                       <Paragraph size="18px">
-                        Buyer Register Date {registerdDate}
+                       Registered Date {registerdDate}
                       </Paragraph>
 					            {console.log(totalTrades, 'total trades?')}
                       <Paragraph size="18px">Total Trades {totalTrades}</Paragraph>
@@ -415,7 +425,7 @@ const Buying = ({ userName }) => {
 						<PrimaryButton
 							text="Complete Trade"
 							className="w-100 mt-3"
-							onClick={() => null}
+							onClick={() => completeTrade()}
 							disabled={feedbackMessage.length === 0}
 						/>
 					</div>
