@@ -1,97 +1,39 @@
 import React, { useState, useEffect } from "react";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import Axios from "axios";
 import { PageBody, TextArea } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
-import GradientButton from "../Components/GradientButton";
 import PrimaryButton, { SecondaryButton } from "../Components/Buttons";
 import { FormInput, StyledLabel, FormCheckbox } from "../Components/FormInputs";
 import { useNavigate, useLocation } from "react-router-dom";
-import Card from "../Components/Card";
 import io from "socket.io-client";
 import ScrollToBottom from "react-scroll-to-bottom";
 import axios from "axios";
 import SendButton from "../Components/SendButton";
 import { convertCurrencyToSymbol } from "../Helpers";
+import {
+	Stepper,
+	HalfStepper,
+	GiveFeedback,
+	LumosIcon,
+	HorizontalDivider,
+	VerticalDivider,
+	ChatWrapper,
+	PaymentInfoArea,
+} from '../Components/TradeComponents';
 
-const HorizontalDivider = styled.hr(
-	({ theme }) => css`
-		:not([size]) {
-			color: ${theme.colors.text_primary};
-			height: 1px;
-			opacity: 0.2;
-		}
-	`
-);
-
-const VerticalDivider = styled.hr(
-	({ theme }) => css`
-		:not([size]) {
-			color: ${theme.colors.text_primary};
-			height: 100%;
-			width: 1px;
-			opacity: 0.2;
-		}
-	`
-);
-
-const HighlightedText = styled.span(
-	({ theme }) => css`
-		color: ${theme.colors.primary_cta};
-	`
-);
-
-const ChatWrapper = styled.div(
-	({ theme }) => css`
-		display: flex;
-		flex-direction: column;
-		position: relative;
-
-		.chat-body {
-			overflow-y: auto;
-			max-height: 500px;
-			min-height: 500px;
-		}
-
-		.message {
-			border-radius: 20px 20px 0 20px;
-			background: ${theme.colors.grey};
-			color: ${theme.colors.text_primary};
-			padding: 10px 20px;
-			font-size: 18px;
-			margin-bottom: 28px;
-			width: auto;
-			display: flex;
-			// justify-content: flex-end; justify-content-end align-self-end
-			// align-self: flex-end;
-
-			&.self {
-				border-radius: 0px 20px 20px 20px;
-				background: ${theme.colors.primary_cta};
-				color: ${theme.colors.base_bg};
-				// justify-content: flex-start;
-				// align-self: flex-start;
-			}
-		}
-
-		.messages-icon {
-			font-size: 48px;
-			color: ${theme.colors.text_primary};
-		}
-	`
-);
-
-const solQuantity = 2;
+const HighlightedText = styled.span(({ theme }) => css`
+	color: ${theme.colors.primary_cta};
+`);
 
 const socket = io.connect("http://localhost:3002");
 
-const Selling = ({ userName }) => {
+const Selling2 = ({ userName }) => {
 	const [currentMessage, setCurrentMessage] = useState("");
 	const [messageList, setMessageList] = useState([]);
 	const [paymentInfo, setPaymentInfo] = useState([]);
 	const [room, setRoom] = useState("");
-	const [userNameSeller, setUserNameSeller] = useState("");
 	const [userNameBuyer, setUserNameBuyer] = useState("");
 	const [reference, setReference] = useState("");
 	const [solAmount, setSolAmount] = useState("");
@@ -103,13 +45,14 @@ const Selling = ({ userName }) => {
 	const [userSolPrice, setUserSolPrice] = useState("");
 	const [paymentMethod, setPaymentMethod] = useState("");
 	const [firstMessage, setFirstMessage] = useState("");
+	const [currentStep, setCurrentStep] = useState("selling");
+	const [isPaymentSent, setIsPaymentSent] = useState(false);
+	const [feedbackMessage, setFeedbackMessage] = useState("");
 
-	const { state } = useLocation()
+	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
-	const { val } = state;
 
-	const navigate = useNavigate();
-
+	//Get trade ID then use that to populate other things
 	const getTradeDetails = () => {
 		axios
 		.get("http://localhost:3001/GetLiveTradeDetails", {
@@ -156,7 +99,42 @@ const Selling = ({ userName }) => {
 		});
 	}
 
-	//chat stuff here
+	const sentPayment = () => {
+		axios
+		  .post("http://localhost:3001/updateLiveTradePayment", {
+			liveTradeID,
+			userName,
+		  })
+		  .then((response) => {
+			if (response.data.update === true) {
+			  //send message to convo letting the seller know youve sent the payment
+			  const messageData = {
+				room: room,
+				author: "Lumos Exchange",
+				message:
+				  "Please note " +
+				  userName +
+				  " has confirmed they have sent the payment",
+				time:
+				  new Date(Date.now()).getHours() +
+				  ":" +
+				  new Date(Date.now()).getMinutes(),
+			  };
+			  socket.emit("send_message", messageData);
+			  setMessageList((list) => [...list, messageData]);
+			  setCurrentMessage("");
+			  setCurrentStep("bought");
+			} else {
+			  //handle error here some sort of popup / message to say error please try again
+			}
+		  });
+	  };
+
+	  const setPaymentAsSent = () => {
+		setPaymentAsSent(true);
+	  };
+
+	//Join the user to the room
 	const joinRoom = async () => {
 		if (userName !== "" && room !== "") {
 			socket.emit("join_room", room);
@@ -180,12 +158,13 @@ const Selling = ({ userName }) => {
 	useEffect(() => {
 		getTradeDetails();
 		joinRoom();
+
 		socket.on("recieve_message", (data) => {
 			setMessageList((list) => [...list, data]);
 		});
 	}, [socket]);
 
-
+	const formattedCurrency = convertCurrencyToSymbol(paymentCurrency);
 
 	return (
 		<PageBody>
@@ -215,11 +194,16 @@ const Selling = ({ userName }) => {
 										<div className="d-flex flex-column">
 											<div
 												className={
-													userName === messageContent.author
-														? "message self justify-content-start align-self-start"
-														: "message justify-content-end align-self-end"
+													(messageContent.author === "Lumos Exchange" &&
+													"d-flex justify-content-center align-self-center") ||
+													(userName !== messageContent.author
+													? "d-flex self justify-content-end align-self-end"
+													: `d-flex justify-content-start align-self-start`)
 												}
 											>
+												{messageContent.author === "Lumos Exchange" && (
+													<LumosIcon className="me-1 mb-2" />
+												)}
 												<Paragraph size="16px" className="mb-0 me-2" bold>
 													{messageContent.author}
 												</Paragraph>
@@ -229,9 +213,11 @@ const Selling = ({ userName }) => {
 											</div>
 											<div
 												className={
-													userName === messageContent.author
-														? "message self justify-content-start align-self-start"
-														: "message justify-content-end align-self-end"
+													(messageContent.author === "Lumos Exchange" &&
+													"message admin justify-content-center text-center px-5") ||
+													(userName === messageContent.author
+													? "message self justify-content-start align-self-start"
+													: "message justify-content-end align-self-end")
 												}
 											>
 												{messageContent.message}
@@ -253,7 +239,6 @@ const Selling = ({ userName }) => {
 								<SendButton
 									icon="send"
 									onClick={() => {
-									//	joinRoom();
 										sendMessage();
 										setCurrentMessage("");
 									}}
@@ -267,63 +252,142 @@ const Selling = ({ userName }) => {
 					<div className="col-1 d-flex justify-content-center">
 						<VerticalDivider />
 					</div>
-					<div className="col-12 col-md-5 row mt-4">
-						<div className="col-12 text-center">
-							<div className="d-flex">
-								<Heading className="me-2">Selling</Heading>
-								<Heading bold>{solQuantity} SOL</Heading>
-								<Heading className="mx-2">for</Heading>
-								<Heading bold>
-									{convertCurrencyToSymbol(state.currency)}
-									{state.solGbp * solQuantity}
+					{currentStep === "selling" && (
+						<div className="col-12 col-md-5 row">
+							<HalfStepper />
+							<div className="col-12 text-center">
+								<Heading className="me-2 d-inline-block">Selling</Heading>
+								<Heading bold className="d-inline-block">
+									{solAmount} SOL
 								</Heading>
+								<Heading className="mx-2 d-inline-block">for</Heading>
+								<Heading bold className="d-inline-block">
+									{formattedCurrency}
+									{fiatAmount}
+								</Heading>
+								<Paragraph size="18px" className="pb-3">
+									1 SOL = {formattedCurrency}
+									{userSolPrice}
+								</Paragraph>
+								<HorizontalDivider />
+								<div className="d-flex justify-content-center flex-column">
+									<Paragraph bold size="24px" className="me-2">
+										Waiting for payment from the buyer
+									</Paragraph>
+									<Paragraph size="18px" className="me-2 mb-0 d-none">
+										Your SOL is now secured in escrow!
+									</Paragraph>
+									<Paragraph size="18px" className="me-2 mb-0" color="primary_cta">
+										Please ensure you have received the payment
+									</Paragraph>
+									<Paragraph size="18px" className="me-2 mb-5">
+										before continuing.
+									</Paragraph>
+
+									<PaymentInfoArea
+										paymentInfo={paymentInfo}
+										paymentMethod={paymentMethod}
+										reference={reference}
+									/>
+									<div className="d-flex text-start">
+										<PrimaryButton
+											text={isPaymentSent ? "Payment marked as received" : "I've received the payment"}
+											className="w-100"
+											onClick={() => setIsPaymentSent(true)}
+											disabled={isPaymentSent}
+										/>
+									</div>
+									<div className="row mt-5">
+										<div className="col-6">
+											<SecondaryButton
+												text="Cancel"
+												className="m-auto mt-3"
+												onClick={null}
+												type="check"
+												value="check"
+											/>
+										</div>
+										<div className="col-6">
+											<PrimaryButton
+												text="Continue"
+												className="m-auto mt-3"
+												onClick={ sentPayment }
+												type="check"
+												value="check"
+												hasIcon
+												disabled={!isPaymentSent}
+											/>
+										</div>
+									</div>
+								</div>
 							</div>
+						</div>
+					)}
+					{currentStep === "sold" && (
+						<div className="col-12 col-md-5 row mt-4">
+						<Stepper />
+						<div className="col-12 text-center">
+							<Heading className="me-2 d-inline-block">Bought</Heading>
+							<Heading bold className="d-inline-block">
+								{solAmount} SOL
+							</Heading>
+							<Heading className="mx-2 d-inline-block">for</Heading>
+							<Heading bold className="d-inline-block">
+								{formattedCurrency}
+								{fiatAmount}
+							</Heading>
 							<Paragraph size="18px" className="pb-3">
-								1 SOL = {convertCurrencyToSymbol(state.currency)}
-								{state.solGbp}
+								1 SOL = {formattedCurrency}
+								{userSolPrice}
 							</Paragraph>
 							<HorizontalDivider />
 							<div className="d-flex justify-content-center flex-column">
-								<div className="d-flex text-start">
-									<FormCheckbox
-										type="checkbox"
-										id="checkedPayment"
-										name="checkedPayment"
-										className="me-4"
-									/>
-									<StyledLabel className="p-0" htmlFor="checkedPayment">
-										<HighlightedText className="me-1">YES!</HighlightedText> I have received the
-										payment from the buyer.
-									</StyledLabel>
-								</div>
 								<div className="row mt-5">
-									<div className="col-6">
-										<SecondaryButton
-											text="Cancel"
-											className="m-auto mt-3"
-											onClick={null}
-											type="check"
-											value="check"
-										/>
+									<div className="col-6 text-start">
+										<Paragraph size="18px" bold>Buyer</Paragraph>
+										<div className="d-flex">
+											<i className="material-icons">person</i>
+											<Paragraph size="18px" bold>{userNameBuyer}</Paragraph>
+										</div>
+										<Paragraph size="18px">Buyer Feedback Here</Paragraph>
+										<Paragraph size="18px">Buyer Register Date Here</Paragraph>
+										<Paragraph size="18px">Total Trades Here</Paragraph>
 									</div>
 									<div className="col-6">
+										<Paragraph size="18px">How was the buyer?</Paragraph>
+										<GiveFeedback />
+										<div className="d-flex flex-column text-start mt-4">
+											<StyledLabel bold htmlFor="feedbackMessage">Feedback Comment</StyledLabel>
+											<TextArea
+												type="text"
+												placeholder=""
+												value={feedbackMessage}
+												name="feedbackMesage"
+												id="feedbackMessage"
+												className="me-3"
+												onChange={(event) => {
+													setFeedbackMessage(event.target.value);
+												}}
+											/>
+										</div>
+									</div>
+									<div className="col-12 mt-3">
 										<PrimaryButton
-											text="Continue"
-											className="m-auto mt-3"
-											onClick={null}
-											type="check"
-											value="check"
-											hasIcon
+											text="Complete Trade"
+											className="w-100"
+											onClick={() => null}
+											disabled={feedbackMessage.length === 0}
 										/>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+					)}
 				</div>
 			</div>
 		</PageBody>
 	);
 };
 
-export default Selling;
+export default Selling2;

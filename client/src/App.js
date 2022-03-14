@@ -38,7 +38,6 @@ import AccountUpgrade from "./Pages/Profile/AccountUpgrade";
 import Offer from "./Pages/Offer";
 import MyListings from "./Pages/MyListings";
 import Buying from "./Pages/Buying";
-import Selling2 from "./Pages/Selling2";
 
 const App = () => {
   const [theme, toggleTheme] = useDarkMode();
@@ -136,7 +135,7 @@ const App = () => {
               }
             />
             <Route path="/Sell" element={<Sell />} />
-            <Route path="/Selling" element={<Selling2 userName={userName} />} />
+            <Route path="/Selling" element={<Selling userName={userName} />} />
             <Route
               path="/Offer"
               element={

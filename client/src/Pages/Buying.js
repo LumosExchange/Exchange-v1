@@ -4,11 +4,9 @@ import Axios from "axios";
 import { PageBody, TextArea } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
-import GradientButton from "../Components/GradientButton";
 import PrimaryButton, { SecondaryButton } from "../Components/Buttons";
 import { FormInput, StyledLabel, FormCheckbox } from "../Components/FormInputs";
 import { useNavigate, useLocation } from "react-router-dom";
-import Card from "../Components/Card";
 import io from "socket.io-client";
 import ScrollToBottom from "react-scroll-to-bottom";
 import axios from "axios";
@@ -18,188 +16,17 @@ import {
   Stepper,
   HalfStepper,
   GiveFeedback,
+  LumosIcon,
+  HorizontalDivider,
+  VerticalDivider,
+  ChatWrapper, 
+  PaymentInfoArea,
 } from "../Components/TradeComponents";
-
-const HorizontalDivider = styled.hr(
-  ({ theme }) => css`
-    :not([size]) {
-      color: ${theme.colors.text_primary};
-      height: 1px;
-      opacity: 0.2;
-    }
-  `
-);
-
-const VerticalDivider = styled.hr(
-  ({ theme }) => css`
-    :not([size]) {
-      color: ${theme.colors.text_primary};
-      height: 100%;
-      width: 1px;
-      opacity: 0.2;
-    }
-  `
-);
 
 const HighlightedText = styled.span(
   ({ theme }) => css`
     color: ${theme.colors.primary_cta};
   `
-);
-
-const ChatWrapper = styled.div(
-  ({ theme }) => css`
-    display: flex;
-    flex-direction: column;
-    position: relative;
-
-    .chat-body {
-      overflow-y: auto;
-      max-height: 500px;
-      min-height: 500px;
-    }
-
-    .message {
-      border-radius: 20px 20px 0 20px;
-      background: ${theme.colors.grey};
-      color: ${theme.colors.text_primary};
-      padding: 10px 20px;
-      font-size: 18px;
-      margin-bottom: 28px;
-      width: auto;
-      display: flex;
-      // justify-content: flex-end;
-      // align-self: flex-end;
-
-      &.self {
-        border-radius: 0px 20px 20px 20px;
-        background: ${theme.colors.primary_cta};
-        color: ${theme.colors.base_bg};
-        // justify-content: flex-start;
-        // align-self: flex-start;
-      }
-
-      &.admin {
-        background: none;
-        border-radius: 20px;
-        font-family: "THICCCBOI-BOLD";
-        color: ${theme.colors.primary_cta};
-      }
-    }
-
-    .messages-icon {
-      font-size: 48px;
-      color: ${theme.colors.text_primary};
-    }
-  `
-);
-
-const PaymentInfoArea = ({ paymentInfo, paymentMethod, reference }) => (
-  <Card className="p-3 mb-4 d-flex flex-column" color="grey">
-    <Paragraph size="24px" bold color="primary_cta">
-      {paymentMethod}
-    </Paragraph>
-    {paymentInfo.data?.name && (
-      <div className="d-flex justify-content-center">
-        <Paragraph bold size="20px" className="me-2">
-          Name:
-        </Paragraph>
-        <Paragraph className="text-uppercase" size="20px">
-          {paymentInfo.data.name}
-        </Paragraph>
-      </div>
-    )}
-    {paymentInfo.data?.sortCode && (
-      <div className="d-flex justify-content-center">
-        <Paragraph bold size="20px" className="me-2">
-          Sort:
-        </Paragraph>
-        <Paragraph className="text-uppercase" size="20px">
-          {paymentInfo.data.sortCode}
-        </Paragraph>
-      </div>
-    )}
-    {paymentInfo.data?.accountNumber && (
-      <div className="d-flex justify-content-center">
-        <Paragraph bold size="20px" className="me-2">
-          Acc No:
-        </Paragraph>
-        <Paragraph className="text-uppercase" size="20px">
-          {paymentInfo.data.accountNumber}
-        </Paragraph>
-      </div>
-    )}
-    {reference && (
-      <div className="d-flex justify-content-center">
-        <Paragraph bold size="20px" className="me-2">
-          Ref:
-        </Paragraph>
-        <Paragraph className="text-uppercase" size="20px">
-          {reference}
-        </Paragraph>
-      </div>
-    )}
-    {paymentInfo.data?.email && (
-      <div className="d-flex justify-content-center">
-        <Paragraph bold size="20px" className="me-2">
-          Sort:
-        </Paragraph>
-        <Paragraph className="text-uppercase" size="20px">
-          {paymentInfo.data.email}
-        </Paragraph>
-      </div>
-    )}
-    {paymentInfo.data?.email && (
-      <div className="d-flex justify-content-center">
-        <Paragraph bold size="20px" className="me-2">
-          Email:
-        </Paragraph>
-        <Paragraph className="text-uppercase" size="20px">
-          {paymentInfo.data.email}
-        </Paragraph>
-      </div>
-    )}
-    {paymentInfo.data?.bankName && (
-      <div className="d-flex justify-content-center">
-        <Paragraph bold size="20px" className="me-2">
-          Bank Name:
-        </Paragraph>
-        <Paragraph className="text-uppercase" size="20px">
-          {paymentInfo.data.bankName}
-        </Paragraph>
-      </div>
-    )}
-    {paymentInfo.data?.bankCity && (
-      <div className="d-flex justify-content-center">
-        <Paragraph bold size="20px" className="me-2">
-          Bank City:
-        </Paragraph>
-        <Paragraph className="text-uppercase" size="20px">
-          {paymentInfo.data.bankCity}
-        </Paragraph>
-      </div>
-    )}
-    {paymentInfo.data?.IBAN && (
-      <div className="d-flex justify-content-center">
-        <Paragraph bold size="20px" className="me-2">
-          IBAN:
-        </Paragraph>
-        <Paragraph className="text-uppercase" size="20px">
-          {paymentInfo.data.IBAN}
-        </Paragraph>
-      </div>
-    )}
-    {paymentInfo.data?.BIC && (
-      <div className="d-flex justify-content-center">
-        <Paragraph bold size="20px" className="me-2">
-          BIC/SWIFT:
-        </Paragraph>
-        <Paragraph className="text-uppercase" size="20px">
-          {paymentInfo.data.BIC}
-        </Paragraph>
-      </div>
-    )}
-  </Card>
 );
 
 const socket = io.connect("http://localhost:3002");
@@ -229,14 +56,8 @@ const Buying = ({ userName }) => {
 
   const { state } = useLocation();
   const liveTradeID = state.liveTradeID;
-  console.log(state, "st8");
-
-  console.log(reference, "reference?");
-
-  const navigate = useNavigate();
 
   //Get trade ID then use that to populate other things
-
   const getTradeDetails = () => {
     axios
       .get("http://localhost:3001/GetLiveTradeDetails", {
@@ -321,7 +142,7 @@ const Buying = ({ userName }) => {
           //send message to convo letting the seller know youve sent the payment
           const messageData = {
             room: room,
-            author: "Admin",
+            author: "Lumos Exchange",
             message:
               "Please note " +
               userName +
@@ -378,8 +199,6 @@ const Buying = ({ userName }) => {
     });
   }, [socket]);
 
-
-
   const formattedCurrency = convertCurrencyToSymbol(paymentCurrency);
 
   return (
@@ -412,13 +231,16 @@ const Buying = ({ userName }) => {
                     <div className="d-flex flex-column">
                       <div
                         className={
-                          (messageContent.author === "Admin" &&
+                          (messageContent.author === "Lumos Exchange" &&
                             "d-flex justify-content-center align-self-center") ||
                           (userName !== messageContent.author
                             ? "d-flex self justify-content-end align-self-end"
                             : `d-flex justify-content-start align-self-start`)
                         }
                       >
+												{messageContent.author === "Lumos Exchange" && (
+													<LumosIcon className="me-1 mb-2" />
+												)}
                         <Paragraph size="16px" className="mb-0 me-2" bold>
                           {messageContent.author}
                         </Paragraph>
@@ -428,8 +250,8 @@ const Buying = ({ userName }) => {
                       </div>
                       <div
                         className={
-                          (messageContent.author === "Admin" &&
-                            "message admin justify-content-center") ||
+                          (messageContent.author === "Lumos Exchange" &&
+                            "message admin justify-content-center text-center px-5") ||
                           (userName === messageContent.author
                             ? "message self justify-content-start align-self-start"
                             : "message justify-content-end align-self-end")
