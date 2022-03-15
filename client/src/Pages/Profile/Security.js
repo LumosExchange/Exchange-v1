@@ -8,6 +8,7 @@ import {
   TwoFAOption,
   ProfileTabLink,
   Tabs,
+  ProfileTabs,
 } from "../../Components/Profile";
 import { useNavigate } from "react-router";
 import { FormInput, PageBody, InlineInput } from "../../Components/FormInputs";
@@ -57,22 +58,7 @@ const Security = () => {
   return (
     <PageBody>
       <div className="container pt-5">
-        <Tabs>
-          <ProfileTabLink href="/Profile/Basic">Basic</ProfileTabLink>
-          <ProfileTabLink href="/Profile/Security" className="selected">
-            Security
-          </ProfileTabLink>
-          <ProfileTabLink href="/Profile/KYC">KYC</ProfileTabLink>
-          <ProfileTabLink href="/Profile/PaymentMethods">
-            Payment Methods
-          </ProfileTabLink>
-          <ProfileTabLink href="/Profile/AccountUpgrade">
-            Account Upgrade
-          </ProfileTabLink>
-          <ProfileTabLink href="/Profile/UpgradeInfo">
-            Upgrade information
-          </ProfileTabLink>
-        </Tabs>
+        <ProfileTabs selected="Security" />
         <ContentTab>
           <div className="d-flex p-4 row">
             <div className="col-12 col-lg-6 d-flex flex-column">

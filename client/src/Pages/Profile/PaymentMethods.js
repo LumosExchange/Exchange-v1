@@ -11,6 +11,7 @@ import {
   LoadingState,
   ProfileTabLink,
   Tabs,
+  ProfileTabs,
 } from "../../Components/Profile";
 import {
   FormInput,
@@ -672,20 +673,7 @@ const PaymentMethods = () => {
   return (
     <PageBody>
       <div className="container pt-5">
-        <Tabs>
-          <ProfileTabLink href="/Profile/Basic">Basic</ProfileTabLink>
-          <ProfileTabLink href="/Profile/Security">Security</ProfileTabLink>
-          <ProfileTabLink href="/Profile/KYC">KYC</ProfileTabLink>
-          <ProfileTabLink href="/Profile/PaymentMethods" className="selected">
-            Payment Methods
-          </ProfileTabLink>
-          <ProfileTabLink href="/Profile/AccountUpgrade">
-            Account Upgrade
-          </ProfileTabLink>
-          <ProfileTabLink href="/Profile/UpgradeInfo" >
-            Upgrade information
-          </ProfileTabLink>
-        </Tabs>
+        <ProfileTabs selected="PaymentMethods" />
         <ContentTab className="text-white">
           <div className="d-flex p-4 row">
             <div className="col-12">

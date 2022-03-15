@@ -27,7 +27,7 @@ import {
 
 const socket = io.connect("http://localhost:3002");
 
-const Selling2 = ({ userName }) => {
+const Selling = ({ userName }) => {
 	const [currentMessage, setCurrentMessage] = useState("");
 	const [messageList, setMessageList] = useState([]);
 	const [paymentInfo, setPaymentInfo] = useState([]);
@@ -122,7 +122,7 @@ const Selling2 = ({ userName }) => {
 			  socket.emit("send_message", messageData);
 			  setMessageList((list) => [...list, messageData]);
 			  setCurrentMessage("");
-			  setCurrentStep("bought");
+			  setCurrentStep("sold");
 			} else {
 			  //handle error here some sort of popup / message to say error please try again
 			}
@@ -398,4 +398,4 @@ const Selling2 = ({ userName }) => {
 	);
 };
 
-export default Selling2;
+export default Selling;

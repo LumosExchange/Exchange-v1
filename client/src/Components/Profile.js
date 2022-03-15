@@ -202,3 +202,20 @@ export const TopBanner = styled.span(({ theme }) => css`
     background: ${theme.colors.panel_accent};
     border-bottom: 1px solid ${theme.colors.grey};
 `);
+
+export const ProfileTabs = ({ selected }) => (
+	<Tabs>
+		<ProfileTabLink href="/Profile/Basic" className={selected === "Basic" && "selected"}>
+			Basic
+		</ProfileTabLink>
+		<ProfileTabLink href="/Profile/Security" className={selected === "Security" && "selected"}>
+			Security
+		</ProfileTabLink>
+		<ProfileTabLink href="/Profile/KYC" className={selected === "KYC" && "selected"}>
+			KYC
+		</ProfileTabLink>
+		<ProfileTabLink href="/Profile/PaymentMethods" className={selected === "PaymentMethods" && "selected"}>Payment Methods</ProfileTabLink>
+		<ProfileTabLink href="/Profile/AccountUpgrade" className={selected === "AccountUpgrade" && "selected"}>Account Upgrade</ProfileTabLink>
+		<ProfileTabLink href="/Profile/Wallets" className={selected === "Wallets" && "selected"}>Wallets</ProfileTabLink>
+	</Tabs>
+);

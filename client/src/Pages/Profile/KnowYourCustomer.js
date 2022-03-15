@@ -4,16 +4,11 @@ import PrimaryButton from "../../Components/Buttons";
 import Axios from "axios";
 import {
   ContentTab,
-  EditableOption,
-  TwoFAOption,
-  ProfileTabLink,
-  Tabs,
+  ProfileTabs,
 } from "../../Components/Profile";
-import { useNavigate } from "react-router";
 import {
   FormInput,
   PageBody,
-  InlineInput,
   StyledDropdown,
 } from "../../Components/FormInputs";
 import {
@@ -58,22 +53,7 @@ const KnowYourCustomer = () => {
   return (
     <PageBody>
       <div className="container pt-5">
-        <Tabs>
-          <ProfileTabLink href="/Profile/Basic">Basic</ProfileTabLink>
-          <ProfileTabLink href="/Profile/Security">Security</ProfileTabLink>
-          <ProfileTabLink href="/Profile/KYC" className="selected">
-            KYC
-          </ProfileTabLink>
-          <ProfileTabLink href="/Profile/PaymentMethods">
-            Payment Methods
-          </ProfileTabLink>
-          <ProfileTabLink href="/Profile/AccountUpgrade">
-            Account Upgrade
-          </ProfileTabLink>
-          <ProfileTabLink href="/Profile/UpgradeInfo">
-            Upgrade information
-          </ProfileTabLink>
-        </Tabs>
+        <ProfileTabs selected="KYC" />
         <ContentTab className="text-white">
           <div className="d-flex p-4 row">
             <div className="col-12 col-md-6 mb-3">

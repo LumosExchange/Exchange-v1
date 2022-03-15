@@ -38,6 +38,7 @@ import AccountUpgrade from "./Pages/Profile/AccountUpgrade";
 import Offer from "./Pages/Offer";
 import MyListings from "./Pages/MyListings";
 import Buying from "./Pages/Buying";
+import Wallets from "./Pages/Profile/Wallets";
 
 const App = () => {
   const [theme, toggleTheme] = useDarkMode();
@@ -85,7 +86,6 @@ const App = () => {
     Axios.get("http://localhost:3001/login").then((response) => {
       if (response.data.loggedIn === true) {
         setLoginStatus(true);
-        console.log(response);
       }
     });
   };
@@ -99,10 +99,11 @@ const App = () => {
   useEffect(() => {
     getUserLoginStatus();
     getCurrencyAndSolPrice();
-    getUserName();
-  }, []);
 
-  console.log(userName, "username");
+    if (userName.length === 0){
+      getUserName();
+    }
+  }, [userName]);
 
   return (
     <React.Fragment>
@@ -157,6 +158,7 @@ const App = () => {
             <Route path="/Profile/Basic" element={<ProfileBasic />} />
             <Route path="/Profile/KYC" element={<ProfileKYC />} />
             <Route path="/Profile/UpgradeInfo" element={<UpgradeInfo />} />
+            <Route path="/Profile/Wallets" element={<Wallets />} />
             <Route
               path="/Profile/PaymentMethods"
               element={<PaymentMethods />}

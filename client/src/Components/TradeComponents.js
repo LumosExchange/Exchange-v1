@@ -174,7 +174,7 @@ const PositiveFeedbackButton = styled.button(({ theme }) => css`
 
 	&.active { 
 		background: url(${PositiveFeedbackBG});
-		i { animation: ${PulseIcon} 0.5s linear 1; }
+		i { animation: ${PulseIcon} 0.3s linear 1; }
 	}
 `);
 
@@ -186,7 +186,7 @@ const NeutralFeedbackButton = styled.button(({ theme }) => css`
 
 	&.active { 
 		background: #cbcbcb;
-		i { animation: ${PulseIcon} 0.5s linear 1; }
+		i { animation: ${PulseIcon} 0.3s linear 1; }
 	}
 `);
 
@@ -198,7 +198,7 @@ const NegativeFeedbackButton = styled.button(({ theme }) => css`
 
 	&.active { 
 		background: url(${NegativeFeedbackBG});
-		i { animation: ${PulseIcon} 0.5s linear 1; }
+		i { animation: ${PulseIcon} 0.3s linear 1; }
 	}
 `);
 

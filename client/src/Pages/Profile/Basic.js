@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   PageBody,
   StyledDropdown,
-  FormInput,
 } from "../../Components/FormInputs";
 import Heading from "../../Components/Heading";
 import GradientButton from "../../Components/GradientButton";
@@ -14,20 +13,10 @@ import {
   CheckIcon,
   ContentTab,
   ProfileInitials,
-  EditableOption,
   LoadingState,
-  ProfileTab,
-  TwoFAOption,
   TopBanner,
-  ProfileTabLink,
-  Tabs,
+  ProfileTabs,
 } from "../../Components/Profile";
-import { useNavigate } from "react-router";
-
-const TAB_TITLE_BASIC = "basic";
-const TAB_TITLE_SECURITY = "security";
-const TAB_TITLE_KYC = "kyc";
-const TAB_TITLE_UPGRADEINFO = "Upgrade Info";
 
 const AccountTier = ({ tier, selectedTier, limit, title }) => (
   <AccountTierCard
@@ -121,22 +110,7 @@ const Basic = () => {
   return (
     <PageBody>
       <div className="container pt-5">
-        <Tabs>
-          <ProfileTabLink href="/Profile/Basic" className="selected">
-            Basic
-          </ProfileTabLink>
-          <ProfileTabLink href="/Profile/Security">Security</ProfileTabLink>
-          <ProfileTabLink href="/Profile/KYC">KYC</ProfileTabLink>
-          <ProfileTabLink href="/Profile/PaymentMethods">
-            Payment Methods
-          </ProfileTabLink>
-          <ProfileTabLink href="/Profile/accountUpgrade">
-            Upgrade Tier
-          </ProfileTabLink>
-          <ProfileTabLink href="/Profile/UpgradeInfo">
-            Upgrade information
-          </ProfileTabLink>
-        </Tabs>
+        <ProfileTabs selected="Basic" />
         <ContentTab className="position-relative">
           {isLoading && <LoadingState />}
           <TopBanner className="d-flex p-4">

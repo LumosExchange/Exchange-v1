@@ -4,7 +4,7 @@ import Axios from "axios";
 import { FormInput, PageBody } from "../../Components/FormInputs";
 import PrimaryButton from "../../Components/Buttons";
 import Heading from "../../Components/Heading";
-import { ContentTab, EditableOption, TwoFAOption, ProfileTabLink, Tabs } from "../../Components/Profile";
+import { ContentTab, ProfileTabs } from "../../Components/Profile";
 import {
 	countryOptions,
 	birthDayOptions,
@@ -82,16 +82,7 @@ const AccountUpgrade = () => {
 	return (
 		<PageBody>
 			<div className="container pt-5">
-				<Tabs>
-					<ProfileTabLink href="/Profile/Basic">Basic</ProfileTabLink>
-					<ProfileTabLink href="/Profile/Security">Security</ProfileTabLink>
-					<ProfileTabLink href="/Profile/KYC">KYC</ProfileTabLink>
-					<ProfileTabLink href="/Profile/PaymentMethods">Payment Methods</ProfileTabLink>
-					<ProfileTabLink href="/Profile/AccountUpgrade" className="selected">
-						Account Upgrade
-					</ProfileTabLink>
-					<ProfileTabLink href="/Profile/UpgradeInfo">Upgrade information</ProfileTabLink>
-				</Tabs>
+				<ProfileTabs selected="AccountUpgrade" />
 				<ContentTab className="text-white">
 					<div className="d-flex p-4 row">
 						<div className="d-flex col-12 col-md-6 mb-3 flex-column">
