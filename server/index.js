@@ -2006,12 +2006,15 @@ app.get("/GetTradeFeedbackInfo", (req, res) => {
 });
 
 app.post("/CompleteTrade", (req, res) => {
-  const liveTradeID = req.body.liveTradeID;
-  const feedbackMessage = req.body.feedbackMessage;
-  const feedbackScore = req.body.feedBack;
-  const sellerID = req.body.sellerID;
-  const buyerID = req.body.buyerID;
-  var date = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+const liveTradeID = req.body.liveTradeID;
+const feedbackMessage = req.body.feedbackMessage;
+const feedbackScore = req.body.formattedFeedBack;
+const sellerID = req.body.sellerID;
+const buyerID = req.body.buyerID;
+var date = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+let EscrowTime = " ";
 
 
   //Update the escrow release time
