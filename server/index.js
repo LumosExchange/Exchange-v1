@@ -759,7 +759,7 @@ app.post("/UpgradeGold", (req, res) => {
     (err, result) => {
       if (err) {
         res.send(err);
-        console.log(err, 'errors from upgrade')
+        console.log(err, "errors from upgrade");
       } else {
         res.send({
           message: "Account tier now Gold",
@@ -1670,7 +1670,6 @@ app.post("/UpdateLiveListing", (req, res) => {
   );
 });
 
-
 app.get("/GetLiveTradeDetails", (req, res) => {
   const liveTradeID = req.query.liveTradeID;
   console.log("Live Trade ID : ", liveTradeID);
@@ -1959,7 +1958,7 @@ app.get("/GetTradeFeedbackInfo", (req, res) => {
     "SELECT registeredDate FROM users WHERE (userID) = (?) ",
     [id],
     (err, result) => {
-      console.log('Registered date : ', result);
+      console.log("Registered date : ", result);
       registeredDate = result[0].registeredDate;
     }
   );
@@ -1971,15 +1970,14 @@ app.get("/GetTradeFeedbackInfo", (req, res) => {
     [id, id],
     (err, result) => {
       console.log(err);
-      
+
       if (err) {
         res.send(err);
-      } else if (result = 0) {
+      } else if ((result = 0)) {
         totalTrades = 0;
       } else {
         totalTrades = result.total;
       }
-     
     }
   );
 
@@ -1989,10 +1987,9 @@ app.get("/GetTradeFeedbackInfo", (req, res) => {
     "SELECT AVG (feedbackScore) as feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?)",
     [id, id],
     (err, result) => {
-      
       if (err) {
         res.send(err);
-      } else if (result = 0) {
+      } else if ((result = 0)) {
         feedbackScore = 0;
       } else {
         feedbackScore = result.feedback;
@@ -2002,22 +1999,19 @@ app.get("/GetTradeFeedbackInfo", (req, res) => {
           totalTrades: totalTrades,
           feedbackScore: feedbackScore,
         });
-        console.log('feedback Score : ', result);
+        console.log("feedback Score : ", result);
       }
     }
   );
 });
 
 app.post("/CompleteTrade", (req, res) => {
-
-const liveTradeID = req.body.liveTradeID;
-const feedbackMessage = req.body.feedbackMessage;
-const feedbackScore = req.body.feedBack;
-const sellerID = req.body.sellerID;
-const buyerID = req.body.buyerID;
-var date = new Date().toISOString().slice(0, 19).replace("T", " ");
-
-let EscrowTime = " ";
+  const liveTradeID = req.body.liveTradeID;
+  const feedbackMessage = req.body.feedbackMessage;
+  const feedbackScore = req.body.feedBack;
+  const sellerID = req.body.sellerID;
+  const buyerID = req.body.buyerID;
+  var date = new Date().toISOString().slice(0, 19).replace("T", " ");
 
 
   //Update the escrow release time
@@ -2029,72 +2023,168 @@ let EscrowTime = " ";
         res.send(err);
       } else {
       }
-    });
+    }
+  );
 
   //insert into tradeHistory
-
   db.query(
     "INSERT INTO TradeHistory SELECT * FROM LiveTrades WHERE LiveTradeID = ?",
     [liveTradeID],
     (err, results) => {
       if (err) {
-        res.send(err);  
+        res.send(err);
+      } else {
+      }
+    }
+  );
+
+  //update feedback and calulate escrow release time
+  db.query(
+    "SELECT Date, escrowReleaseTime, TIMESTAMPDIFF(SECOND, Date, escrowReleaseTime) AS escrowTime FROM LiveTrades WHERE  LiveTradeID = ?",
+    [liveTradeID],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send(err);
+      } else {
+        db.query(
+          "INSERT INTO feedback (saleID, sellerUserID, EscrowReleaseTime, Comments, date, buyerUserID, feedbackScore) VALUES (?,?,?,?,?,?,?)",
+          [
+            liveTradeID,
+            sellerID,
+            result[0].escrowTime,
+            feedbackMessage,
+            date,
+            buyerID,
+            feedbackScore,
+          ],
+          (err, resultss) => {
+            if (err) {
+              console.log(err);
+              res.send(err);
+            } else {
+              console.log(resultss);
+              //Return some sort of reponse
+            }
+          }
+        );
+      }
+    }
+  );
+
+  //delete trade from live lisiting
+  db.query(
+    "DELETE FROM LiveTrades WHERE LiveTradeID = ?",
+    [liveTradeID],
+    (err, results) => {
+      if (err) {
+        res.send(err);
+      } else {
+      }
+    }
+  );
+});
+
+
+//ADD WALLET 
+app.post("/AddWallet", (req, res) => {
+  const userID = req.session.user[0].userID;
+  const walletID = req.body.walletID;
+  const walletAddress = req.body.walletAddress;
+
+  db.query(
+    "INSERT INTO SolAddress (userID, sol"+walletID+") VALUES (?,?)",
+    [userID, walletAddress],
+    (err, result) => {
+      if (err) {
+        res.send(err);
       } else {
 
+        res.send({
+          message: "Succesfully added wallet"
+        })
       }
+    })
 });
 
-//update feedback and calulate escrow release time
-db.query(
-  "SELECT Date, escrowReleaseTime, TIMESTAMPDIFF(SECOND, Date, escrowReleaseTime) AS escrowTime FROM LiveTrades WHERE  LiveTradeID = ?",
-  [liveTradeID],
-  (err, result) => {
-    if (err) {
-      console.log(err);
-      res.send(err);
-    } else {
+//EDIT WALLET
+app.post("/EditWallet", (req, res) => {
+  const userID = req.session.user[0].userID;
+  const walletID = req.body.walletID;
+  const walletAddress = req.body.walletAddress;
 
-      db.query(
-        "INSERT INTO feedback (saleID, sellerUserID, EscrowReleaseTime, Comments, date, buyerUserID, feedbackScore) VALUES (?,?,?,?,?,?,?)",
-        [liveTradeID, sellerID, result[0].escrowTime, feedbackMessage, date ,buyerID, feedbackScore],
-        (err, resultss) => {
-          if (err) {
-            console.log(err);
-            res.send(err);
-          } else {
-            console.log(resultss);
-          }
-        });
+  db.query(
+    "UPDATE SolAddress SET sol"+walletID+" =? WHERE userID =?",
+    [walletAddress, userID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send({
+          message: "Wallet address succefully updated!"
+        })
+      }
     }
-  });
-
-
-
-
-
-
-//delete trade from live lisiting 
-//db.query(
- // "DELETE FROM LiveTrades WHERE LiveTradeID = ?",
-//  [liveTradeID],
-//  (err, results) => {
-//    if (err) {
- //     res.send(err);
- //   } else {
-
- //   }
-//  }
-//)
-
-
-
-
-
-
-
+  )
+  
 });
 
+//DELETE WALLET
+app.post("/DeleteWallet", (req, res) => {
+  const userID = req.session.user[0].userID;
+  const walletID = req.body.walletID;
+  const walletAddress = req.body.walletAddress;
 
+  db.query(
+    "UPDATE SolAddress SET sol"+walletID+" = null  WHERE userID = ?",
+    [userID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send({
+          message: "Wallet succesfully deleted"
+        })
+      }
+    }
+  )
+});
+
+app.post("/GetWallets", (req, res) => {
+  const userID = req.session.user[0].userID;
+
+  db.query(
+    "SELECT * FROM SolAddress WHERE (userID) = (?)",
+    [userID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send([
+         {walletID: 1,
+          address: result.sol1,
+         },
+        {
+          walletID: 2,
+          address: result.sol2
+        },
+        {
+          walletID: 3,
+          address: result.sol3
+        },
+        {
+          walletID: 4,
+          address: result.sol4
+        },
+        {
+          walletID: 5,
+          address: result.sol5
+        }
+      ])
+     }
+    }
+  )
+});
 
 server.listen(3002, () => {
   console.log("SERVER RUNNING");

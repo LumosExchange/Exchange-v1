@@ -93,8 +93,9 @@ const Wallets = ({ userID }) => {
   };
 
   const addWallet= () => {
-    Axios.post("http://localhost:3001/RegisterWallet", {
+    Axios.post("http://localhost:3001/AddWallet", {
       walletAddress,
+      
     }).then((response) => {
       if (!response.data.code) {
         setConfirmationMessage(response.data.message);
