@@ -163,6 +163,10 @@ const Buying = ({ userName }) => {
     //get feedback and send to db 
     axios.post("http://localhost:3001/CompleteTrade", {
       liveTradeID,
+      feedbackMessage,
+      feedBack,
+      sellerID,
+      buyerID,
     })
     .then((response) => {
 

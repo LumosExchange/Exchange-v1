@@ -2011,7 +2011,13 @@ app.get("/GetTradeFeedbackInfo", (req, res) => {
 app.post("/CompleteTrade", (req, res) => {
 
 const liveTradeID = req.body.liveTradeID;
+const feedbackMessage = req.body.feedbackMessage;
+const feedbackScore = req.body.feedBack;
+const sellerID = req.body.sellerID;
+const buyerID = req.body.buyerID;
 var date = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+let EscrowTime = " ";
 
 
   //Update the escrow release time
@@ -2038,21 +2044,51 @@ var date = new Date().toISOString().slice(0, 19).replace("T", " ");
       }
 });
 
-//delete trade from live lisiting 
-
+//update feedback and calulate escrow release time
 db.query(
-  "DELETE FROM LiveTrades WHERE LiveTradeID = ?",
+  "SELECT Date, escrowReleaseTime, TIMESTAMPDIFF(SECOND, Date, escrowReleaseTime) AS escrowTime FROM LiveTrades WHERE  LiveTradeID = ?",
   [liveTradeID],
-  (err, results) => {
+  (err, result) => {
     if (err) {
+      console.log(err);
       res.send(err);
     } else {
 
+      db.query(
+        "INSERT INTO feedback (saleID, sellerUserID, EscrowReleaseTime, Comments, date, buyerUserID, feedbackScore) VALUES (?,?,?,?,?,?,?)",
+        [liveTradeID, sellerID, result[0].escrowTime, feedbackMessage, date ,buyerID, feedbackScore],
+        (err, resultss) => {
+          if (err) {
+            console.log(err);
+            res.send(err);
+          } else {
+            console.log(resultss);
+          }
+        });
     }
-  }
-)
+  });
 
-//update feedback and calulate escrow release time
+
+
+
+
+
+//delete trade from live lisiting 
+//db.query(
+ // "DELETE FROM LiveTrades WHERE LiveTradeID = ?",
+//  [liveTradeID],
+//  (err, results) => {
+//    if (err) {
+ //     res.send(err);
+ //   } else {
+
+ //   }
+//  }
+//)
+
+
+
+
 
 
 
