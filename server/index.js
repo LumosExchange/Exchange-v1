@@ -2150,6 +2150,42 @@ app.post("/DeleteWallet", (req, res) => {
   )
 });
 
+app.post("/GetWallets", (req, res) => {
+  const userID = req.session.user[0].userID;
+
+  db.query(
+    "SELECT * FROM SolAddress WHERE (userID) = (?)",
+    [userID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send([
+         {walletID: 1,
+          address: result.sol1,
+         },
+        {
+          walletID: 2,
+          address: result.sol2
+        },
+        {
+          walletID: 3,
+          address: result.sol3
+        },
+        {
+          walletID: 4,
+          address: result.sol4
+        },
+        {
+          walletID: 5,
+          address: result.sol5
+        }
+      ])
+     }
+    }
+  )
+});
+
 server.listen(3002, () => {
   console.log("SERVER RUNNING");
 });
