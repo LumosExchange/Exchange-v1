@@ -1670,19 +1670,6 @@ app.post("/UpdateLiveListing", (req, res) => {
   );
 });
 
-app.post("/CloseTrade", (req, res) => {
-  const buyerID = req.session.user[0].userID;
-  const saleID = req.body.saleID;
-  const sellerID = req.body.sellerID;
-  const feedbackScore = req.body.feedbackScore;
-  const feedbackComment = req.body.feedbackComment;
-
-  db.query("");
-
-  //Calculate escrow release time and add to feedback db
-
-  //delete trade from live trade and copy to tardeHistory db
-});
 
 app.get("/GetLiveTradeDetails", (req, res) => {
   const liveTradeID = req.query.liveTradeID;
@@ -2020,6 +2007,58 @@ app.get("/GetTradeFeedbackInfo", (req, res) => {
     }
   );
 });
+
+app.post("/CompleteTrade", (req, res) => {
+
+const liveTradeID = req.body.liveTradeID;
+var date = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+
+  //Update the escrow release time
+  db.query(
+    "UPDATE LiveTrades SET escrowReleaseTime = ? WHERE LiveTradeID = ?",
+    [date, liveTradeID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+      }
+    });
+
+  //insert into tradeHistory
+
+  db.query(
+    "INSERT INTO TradeHistory SELECT * FROM LiveTrades WHERE LiveTradeID = ?",
+    [liveTradeID],
+    (err, results) => {
+      if (err) {
+        res.send(err);  
+      } else {
+
+      }
+});
+
+//delete trade from live lisiting 
+
+db.query(
+  "DELETE FROM LiveTrades WHERE LiveTradeID = ?",
+  [liveTradeID],
+  (err, results) => {
+    if (err) {
+      res.send(err);
+    } else {
+
+    }
+  }
+)
+
+//update feedback and calulate escrow release time
+
+
+
+});
+
+
 
 server.listen(3002, () => {
   console.log("SERVER RUNNING");
