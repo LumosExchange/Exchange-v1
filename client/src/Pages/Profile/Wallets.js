@@ -67,6 +67,7 @@ const Wallets = ({ userID }) => {
 
 	const [editModalMode, setEditModalMode] = useState("initial");
 	const [editWalletModal, setEditWalletModal] = useState(false);
+	const [deleteModalMode, setDeleteModalMode] = useState("");
 
 	// Wallet Addresses
 	const [wallets, setWallets] = useState([]);
@@ -114,7 +115,20 @@ const Wallets = ({ userID }) => {
 			console.log(response, "response from editSkrill");
 			if (!response.data.code) {
 				setConfirmationMessage(response.data.message);
-				setModalMode("confirmation");
+				setEditModalMode("confirmation");
+			} else {
+				setErrorMessage(response.data.sqlMessage);
+			}
+		});
+	};
+
+	const deleteWallet = () => {
+		Axios.post("http://localhost:3001/DeleteWallet", {
+			walletAddress,
+		}).then((response) => {
+			if (!response.data.code) {
+				setConfirmationMessage(response.data.message);
+				setDeleteModalMode("confirmation");
 			} else {
 				setErrorMessage(response.data.sqlMessage);
 			}
@@ -127,9 +141,8 @@ const Wallets = ({ userID }) => {
 		}).then((response) => {
 			console.log(response, "response from /GetWallets");
 			if (!response.data.code) {
-				setWallets(response.data);
-				setConfirmationMessage(response.data.message);
-				setModalMode("confirmation");
+				const formattedWallets = response.data.filter(fw => fw.address !== undefined);
+				setWallets(formattedWallets);
 			} else {
 				setErrorMessage(response.data.sqlMessage);
 			}
@@ -140,7 +153,9 @@ const Wallets = ({ userID }) => {
 		window.location.reload(true);
 	};
 
-	useEffect(() => {}, []);
+	useEffect(() => {
+		getWalletAddresses();
+	}, []);
 
 	return (
 		<PageBody>
@@ -157,8 +172,9 @@ const Wallets = ({ userID }) => {
 									<InlineButton onClick={toggleAddWallet}>Add a Wallet</InlineButton>
 								</div>
 							</div>
-							<div className="d-flex p-4 row">
-								{FakeWalletData.map((wallet) => (
+							{wallets.length > 0 ? (
+							<div className="d-flex p-4">
+								{wallets.map((wallet) => (
 									<WalletCard className="p-4 mb-3 d-flex justify-content-between">
 										<div className="d-flex">
 											<i className="material-icons me-2">wallet</i>
@@ -177,6 +193,12 @@ const Wallets = ({ userID }) => {
 									</WalletCard>
 								))}
 							</div>
+							) : (
+								<div className="col-12 mt-3">
+									<Paragraph size="18px">No Wallets Added</Paragraph>
+								</div>
+							)}
+
 						</div>
 					</div>
 					{/* ------ Add Wallets ------ */}
@@ -207,7 +229,7 @@ const Wallets = ({ userID }) => {
 					</StyledModal>
 					{/* ------ Edit Wallets ------ */}
 					<StyledModal centered isOpen={editWalletModal} toggle={toggleEditWallet}>
-						{modalMode !== "confirmation" && (
+						{editModalMode !== "confirmation" && (
 							<ModalHeader className="d-flex align-items-center">Edit Wallet Address</ModalHeader>
 						)}
 						{editModalMode === "initial" && (
@@ -233,10 +255,10 @@ const Wallets = ({ userID }) => {
 					</StyledModal>
 					{/* ------ Delete Wallets ------ */}
 					<StyledModal centered isOpen={deleteWalletModal} toggle={toggleDeleteWallet}>
-						{modalMode !== "confirmation" && (
+						{deleteModalMode !== "confirmation" && (
 							<ModalHeader className="d-flex align-items-center">Remove Wallet Address</ModalHeader>
 						)}
-						{editModalMode === "initial" && (
+						{deleteModalMode === "initial" && (
 							<ModalBody className="pt-0">
 								<div className="d-flex align-items-center mb-3 overflow-auto">
 									<i className="material-icons me-2">wallet</i>
@@ -254,7 +276,7 @@ const Wallets = ({ userID }) => {
 								</div>
 							</ModalBody>
 						)}
-						{editModalMode === "confirmation" && <ModalBody>Wallet Added</ModalBody>}
+						{deleteModalMode === "confirmation" && <ModalBody>Wallet Added</ModalBody>}
 					</StyledModal>
 				</ContentTab>
 			</div>
