@@ -159,17 +159,30 @@ const Buying = ({ userName }) => {
       });
   };
 
+  const convertFeedbackToInteger = (feedback) => {
+    if (feedBack === "Positive"){
+      return 3;
+    }
+    if (feedBack === "Neutral"){
+      return 2;
+    }
+    if (feedBack === "Negaitve"){
+      return 3;
+    }
+  }
+
   const completeTrade = () => {
+    const formattedFeedBack = convertFeedbackToInteger(feedBack);
     //get feedback and send to db 
     axios.post("http://localhost:3001/CompleteTrade", {
       liveTradeID,
       feedbackMessage,
-      feedBack,
+      formattedFeedBack,
       sellerID,
       buyerID,
     })
     .then((response) => {
-
+      
     })
   };
 
