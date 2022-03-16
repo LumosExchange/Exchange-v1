@@ -83,8 +83,12 @@ const AccountUpgrade = () => {
   };
 
   // called every time a file's `status` changes
-  const handleChangeStatus = ({ meta, file }, status) => {
-    console.log(status, meta, file);
+  const handleChangeStatus = ({ meta, file, xhr}, status) => {
+    if (status === 'done'){
+        let response = JSON.parse(xhr.response);
+        console.log(response, 'response from httpbin');
+        console.log(response.files.file);
+    }
   };
 
   // receives array of files that are done uploading when submit button is clicked

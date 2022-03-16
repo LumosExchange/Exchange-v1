@@ -123,7 +123,9 @@ const Wallets = ({ userID }) => {
 	};
 
 	const addWallet = () => {
+		console.log(walletCount, 'wallet count in addwallet');
 		Axios.post("http://localhost:3001/AddWallet", {
+			walletID: walletCount,
 			walletAddress,
 		}).then((response) => {
 			if (!response.data.code) {
@@ -175,6 +177,8 @@ const Wallets = ({ userID }) => {
 			}
 		});
 	};
+
+	const walletCount = wallets.length + 1;
 
 	const reloadPayments = () => {
 		window.location.reload(true);
@@ -253,7 +257,7 @@ const Wallets = ({ userID }) => {
 								<PrimaryButton
 									className="w-100 mt-3"
 									text="Add Wallet"
-									onClick={null}
+									onClick={() => addWallet()}
 									disabled={(walletAddress.length > 44) || (walletAddress.length < 32)}
 								/>
 							</ModalBody>
