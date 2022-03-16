@@ -123,7 +123,7 @@ const Wallets = ({ userID }) => {
 	};
 
 	const addWallet = () => {
-		Axios.post("http://localhost:3001/RegisterWallet", {
+		Axios.post("http://localhost:3001/AddWallet", {
 			walletAddress,
 		}).then((response) => {
 			if (!response.data.code) {
@@ -136,7 +136,7 @@ const Wallets = ({ userID }) => {
 	};
 
 	const editWallet = () => {
-		Axios.post("http://localhost:3001/UpdateWallet", {
+		Axios.post("http://localhost:3001/EditWallet", {
 			walletAddress,
 		}).then((response) => {
 			console.log(response, "response from editSkrill");
