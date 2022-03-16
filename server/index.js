@@ -2105,7 +2105,7 @@ app.post("/AddWallet", (req, res) => {
     [userID],
     (err, result) => {
     
-      if (result.length >= 0) {
+      if (result.length <= 0) {
 
         //Insert
         db.query(
