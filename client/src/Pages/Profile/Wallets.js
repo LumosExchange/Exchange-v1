@@ -59,6 +59,33 @@ const StyledCode = styled.code(({ theme }) => css`
 	color: ${theme.colors.primary_cta};
 `);
 
+const ValidationBase = styled.div(({ theme }) => css`
+	.valid {
+		color: ${theme.colors.valid};
+	}
+	.invalid {
+		color: ${theme.colors.invalid};
+	}
+`);
+
+const InlineLabelValidation = ({ walletAddress, min, max }) => (
+	<ValidationBase className="d-flex justify-content-between">
+		<StyledLabel padding="0" bold htmlFor="walletAddress">
+			Address
+		</StyledLabel>
+		<Paragraph
+			size="18px"
+			bold
+			className={
+				(walletAddress.length > 44 || walletAddress.length < 32)
+				? 'invalid' : 'valid'
+			}
+		>
+			{walletAddress.length} / 44
+		</Paragraph>
+	</ValidationBase>
+);
+
 const Wallets = ({ userID }) => {
 	// Modal Controls
 	const [modalMode, setModalMode] = useState("initial");
@@ -208,9 +235,7 @@ const Wallets = ({ userID }) => {
 						)}
 						{modalMode === "initial" && (
 							<ModalBody>
-								<StyledLabel padding="0" bold htmlFor="walletAddress">
-									Address
-								</StyledLabel>
+								<InlineLabelValidation walletAddress={walletAddress} />
 								<FormInput
 									type="text"
 									id="walletAddress"
@@ -220,9 +245,17 @@ const Wallets = ({ userID }) => {
 									onChange={(e) => {
 										setWalletAddress(e.target.value);
 									}}
-									className="w-100"
+									className={`
+										w-100 ${(walletAddress.length > 44 || walletAddress.length < 32)
+										&& 'invalid'}
+									`}
 								/>
-								<PrimaryButton className="w-100 mt-3" text="Add Wallet" onClick={null} />
+								<PrimaryButton
+									className="w-100 mt-3"
+									text="Add Wallet"
+									onClick={null}
+									disabled={(walletAddress.length > 44) || (walletAddress.length < 32)}
+								/>
 							</ModalBody>
 						)}
 						{modalMode === "confirmation" && <ModalBody>Wallet Added</ModalBody>}
