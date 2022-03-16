@@ -170,7 +170,8 @@ const Wallets = ({ userID }) => {
 		}).then((response) => {
 			console.log(response, "response from /GetWallets");
 			if (!response.data.code) {
-				const formattedWallets = response.data.filter(fw => fw.address !== undefined);
+				const formattedWallets = response.data.filter(fw => fw.address.length > 1);
+				console.log(formattedWallets);
 				setWallets(formattedWallets);
 			} else {
 				setErrorMessage(response.data.sqlMessage);
@@ -204,9 +205,9 @@ const Wallets = ({ userID }) => {
 								</div>
 							</div>
 							{wallets.length > 0 ? (
-							<div className="d-flex p-4">
+							<div className="d-flex py-4">
 								{wallets.map((wallet) => (
-									<WalletCard className="p-4 mb-3 d-flex justify-content-between">
+									<WalletCard className="p-4 mb-3 d-flex justify-content-between w-100 align-items-center">
 										<div className="d-flex">
 											<i className="material-icons me-2">wallet</i>
 											<Paragraph className="mb-0" size="18px">
