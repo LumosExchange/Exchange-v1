@@ -94,7 +94,7 @@ const Wallets = ({ userID }) => {
 
 	const [editModalMode, setEditModalMode] = useState("initial");
 	const [editWalletModal, setEditWalletModal] = useState(false);
-	const [deleteModalMode, setDeleteModalMode] = useState("");
+	const [deleteModalMode, setDeleteModalMode] = useState("initial");
 
 	// Wallet Addresses
 	const [wallets, setWallets] = useState([]);
@@ -180,6 +180,7 @@ const Wallets = ({ userID }) => {
 	};
 
 	const walletCount = wallets.length + 1;
+	console.log(walletCount, 'amount of wallets');
 
 	const reloadPayments = () => {
 		window.location.reload(true);
@@ -205,7 +206,7 @@ const Wallets = ({ userID }) => {
 								</div>
 							</div>
 							{wallets.length > 0 ? (
-							<div className="d-flex py-4">
+							<div className="d-flex py-4 flex-column">
 								{wallets.map((wallet) => (
 									<WalletCard className="p-4 mb-3 d-flex justify-content-between w-100 align-items-center">
 										<div className="d-flex">
