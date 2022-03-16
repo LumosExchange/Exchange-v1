@@ -2173,8 +2173,8 @@ app.post("/DeleteWallet", (req, res) => {
   const walletAddress = req.body.walletAddress;
 
   db.query(
-    "UPDATE SolAddress SET sol"+walletID+" = null  WHERE userID = ?",
-    [userID],
+    "UPDATE SolAddress SET sol"+walletID+" WHERE userID = ?",
+    [0, userID],
     (err, result) => {
       if (err) {
         res.send(err);
