@@ -183,6 +183,7 @@ app.post("/register", (req, res) => {
       (err, result) => {
         console.log(err);
       }
+  
     );
   });
 });
@@ -2095,17 +2096,50 @@ app.post("/AddWallet", (req, res) => {
   const walletID = req.body.walletID;
   const walletAddress = req.body.walletAddress;
 
+  
+
+  //check if user has a wallet if not insert else update
+
   db.query(
-    "INSERT INTO SolAddress (userID, sol"+walletID+") VALUES (?,?)",
-    [userID, walletAddress],
+    "SELECT * FROM SolAddress WHERE (userID) = (?)",
+    [userID],
     (err, result) => {
-      if (err) {
-        res.send(err);
+    
+      if (result.length >= 0) {
+
+        //Insert
+        db.query(
+          "INSERT INTO SolAddress (userID, sol"+walletID+") VALUES (?,?)",
+          [userID, walletAddress],
+          (err, result) => {
+            if (err) {
+              console.log(err);
+              res.send(err);      
+            } else {
+              console.log(result);     
+              res.send({
+                message: "Succesfully added wallet"
+              })
+            }
+          });
+      
       } else {
 
-        res.send({
-          message: "Succesfully added wallet"
-        })
+        //Update
+        db.query(
+          "UPDATE SolAddress SET sol"+walletID+" =? WHERE userID =?",
+          [walletAddress, userID],
+          (err, result) => {
+            if (err) {
+              console.log(err);
+              res.send(err);
+            } else {
+              console.log(result);
+              res.send({
+                message: "Wallet address succefully Added!"
+              })
+            }
+          });
       }
     })
 });
@@ -2165,23 +2199,23 @@ app.post("/GetWallets", (req, res) => {
       } else {
         res.send([
          {walletID: 1,
-          address: result.sol1,
+          address: result[0].sol1,
          },
         {
           walletID: 2,
-          address: result.sol2
+          address: result[0].sol2
         },
         {
           walletID: 3,
-          address: result.sol3
+          address: result[0].sol3
         },
         {
           walletID: 4,
-          address: result.sol4
+          address: result[0].sol4
         },
         {
           walletID: 5,
-          address: result.sol5
+          address: result[0].sol5
         }
       ])
      }
