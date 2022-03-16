@@ -1,75 +1,60 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation, browserRouter } from "react-router-dom";
 import Axios from "axios";
+import { PageBody, StyledLabel, StyledDropdown } from "../Components/FormInputs";
+import styled, { css } from 'styled-components';
+import Heading from "../Components/Heading";
+import Card from "../Components/Card";
+import Paragraph from "../Components/Paragraph";
 
-function Feedback() {
-  const [userFeedback, setUserFeedback] = useState([]);
-  const { state } = useLocation();
-  const { id, sellerID } = state;
-  const navigate = useNavigate();
+const Feedback = () => {
+	const [historyExpanded, expandHistory] = useState(false);
 
- 
+	useEffect(() => {}, []);
 
-  //Create lookup for seller Feedback
-  useEffect(() => {
-    Axios.get("http://localhost:3001/getUserFeedback", {
-      params: {
-        sellerID: state.sellerID,
-      },
-    }).then((response) => {
-      setUserFeedback(response.data);
-      document.getElementById("sellerName").innerHTML = state.sellerFirst + " " + state.sellerLast;
- 
-    });
-  }, []);
-
-
- 
-
-
-  return (
-    <div className="feedback">
-      <div className="sellerFeedback">
-        <h1>Seller: </h1>
-        <h2 id="sellerName"></h2>
-        <h1> Average Rating</h1>
-        <h2 id="sellerRating"></h2>
-        <h1>Average Speed:</h1>
-        <h2 is="sellerSpeed"></h2>
-      </div>
-
-      <div className="feedbackTable">
-        <div>
-          <table id="myTable" border="1">
-            <thead>
-              <tr>
-                <th>FeedbackID</th>
-                <th>Feedback</th>
-                <th>Rating</th>
-                <th>Speed</th>
-              </tr>
-            </thead>
-
-            {userFeedback.map((val) => {
-              return (
-                <tbody key={val.feedbackID}>
-                  <tr>
-                    <td>{val.feedbackID}</td>
-                    <td>{val.Feedback}</td>
-                    <td>{val.Rating}</td>
-                    <td>{val.speed}</td>
-                  </tr>
-                </tbody>
-              );
-            })}
-          </table>
-        </div>
-      </div>
-      <button>
-          Go back
-      </button>
-    </div>
-  );
+	return (
+		<PageBody className="d-flex align-items-start flex-column">
+			<div className="container">
+				<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
+					<div className="row">
+						<div className="col-12">
+							<Heading>userName</Heading>
+						</div>
+						<div className="row d-flex justify-content-between">
+							<div className="col-12 col-md-5">
+								<Card radius="6px" className="p-4 row">
+									<table class="tg">
+										<thead>
+										<tr>
+											<td>
+												<Paragraph size="18px" bold className="d-inline">Total Trades</Paragraph>
+											</td>
+											<td>
+												<Paragraph size="18px" className="d-inline">0</Paragraph>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<Paragraph size="18px" bold className="d-inline">Feedback Score</Paragraph>
+											</td>
+											<td>
+												<Paragraph size="18px" className="d-inline">100%</Paragraph>
+											</td>
+										</tr>
+										</thead>
+									</table>
+								</Card>
+							</div>
+							<div className="col-12 col-md-5">
+								<Card radius="6px" className="p-4 row">
+									verification here
+								</Card>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</PageBody>
+	);
 }
 
 export default Feedback;

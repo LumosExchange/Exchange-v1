@@ -95,6 +95,7 @@ const Wallets = ({ userID }) => {
 	const [editModalMode, setEditModalMode] = useState("initial");
 	const [editWalletModal, setEditWalletModal] = useState(false);
 	const [deleteModalMode, setDeleteModalMode] = useState("initial");
+	const [deletingWalletID, setDeletingWalletID] = useState(0);
 
 	// Wallet Addresses
 	const [wallets, setWallets] = useState([]);
@@ -120,6 +121,7 @@ const Wallets = ({ userID }) => {
 	const toggleDeleteWallet = (wallet) => {
 		setDeleteWalletModal(!deleteWalletModal);
 		setDeletingWalletAddress(wallet.address);
+		setDeletingWalletID(wallet.walletID);
 	};
 
 	const addWallet = () => {
@@ -153,7 +155,8 @@ const Wallets = ({ userID }) => {
 
 	const deleteWallet = () => {
 		Axios.post("http://localhost:3001/DeleteWallet", {
-			walletAddress,
+			walletID: deletingWalletID,
+			walletAddress: deletingWalletAddress,
 		}).then((response) => {
 			if (!response.data.code) {
 				setConfirmationMessage(response.data.message);
@@ -310,7 +313,9 @@ const Wallets = ({ userID }) => {
 										</InlineButton>
 									</div>
 									<div className="col-6">
-										<InlineButton className="delete">Remove Wallet</InlineButton>
+										<InlineButton className="delete" onClick={() => deleteWallet() }>
+											Remove Wallet
+										</InlineButton>
 									</div>
 								</div>
 							</ModalBody>

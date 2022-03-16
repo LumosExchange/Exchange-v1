@@ -14,7 +14,6 @@ import ErrorPage from "./Pages/ErrorPage";
 import Selling from "./Pages/Selling";
 import Buy from "./Pages/Buy";
 import Sell from "./Pages/Sell";
-import Feedback from "./Pages/Feedback";
 import Axios from "axios";
 import Footer from "./Components/Footer";
 import TwoFactorAuth from "./Pages/Auth/TwoFactorAuth";
@@ -39,6 +38,7 @@ import Offer from "./Pages/Offer";
 import MyListings from "./Pages/MyListings";
 import Buying from "./Pages/Buying";
 import Wallets from "./Pages/Profile/Wallets";
+import Feedback from "./Pages/Feedback";
 
 const App = () => {
   const [theme, toggleTheme] = useDarkMode();

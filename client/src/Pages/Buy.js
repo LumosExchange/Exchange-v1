@@ -181,7 +181,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 		<PageBody>
 			<div className="container">
 				<div className="row pt-5">
-					<div className="col-12 col-md-5">
+					<div className="col-12 col-md-5 col-xl-4">
 						<Card radius="10px" className="p-4">
 						<div className="d-flex">
 							<div className="col-6">
@@ -300,7 +300,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 							</div>
 						</Card>
 					</div>
-					<div className="col-12 col-md-7 mt-4 mt-md-0">
+					<div className="col-12 col-md-7 col-xl-8 mt-4 mt-md-0">
 						<Heading size="24px">Buy {selectedCrypto} from these Sellers</Heading>
 						<ListingArea>
 							{isFiltering && (
