@@ -11,6 +11,9 @@ import { Collapse } from "@material-ui/core";
 import SolanaIcon from '../Images/icon-solana.svg';
 import DropdownIcon from '../Images/icon-dropdown.svg';
 import StyledTable from "../Components/Tables";
+import * as solanaWeb3 from '@solana/web3.js';
+
+
 
 
 
@@ -71,6 +74,20 @@ const MyWallet = () => {
   const [walletExpanded, expandWallet] = useState(false);
   const [rewardsExpanded, expandRewards] = useState(false);
 
+  const getProvider = () => {
+    if ("solana" in window) {
+      const provider = window.solana;
+      if (provider.isPhantom) {
+        console.log("Is Phantom installed?  ", provider.isPhantom);
+        return provider;
+      }
+    } else {
+      window.open("https://www.phantom.app/", "_blank");
+    }
+  };
+
+  console.log(solanaWeb3);
+
   return (
 		<PageBody className="d-flex align-items-center">
 			<div className="container d-flex align-items-center justify-content-center py-5 flex-column">
@@ -81,6 +98,9 @@ const MyWallet = () => {
 							<Paragraph size="18px" bold>
 								Manage your credits, and grab a chance to earn with our reward pool.
 							</Paragraph>
+							<PrimaryButton className="w-100 mt-3" text="Connect Wallet" onClick={getProvider()} />
+
+							
 						</div>
 					</div>
 					<div className="col-12 col-lg-4">
