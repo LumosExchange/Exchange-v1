@@ -83,6 +83,10 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 
 	const [listingPrice, setListingPrice] = useState(0.00);
 
+	const [userWallets, setUserWallets] =  useState([]);
+	const [wallet, setWallet] = useState("Please Select");
+	const [userID, setUserID] = useState(0);
+
 	const { state } = useLocation();
 	const { val } = state;
 
@@ -131,6 +135,20 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 		});
 	};
 
+	const getUserWallets = () => {
+		Axios.post("http://localhost:3001/GetWallets", {}
+		).then((response) => {
+			console.log(response, "response from /GetWallets");
+			if (!response.data.code) {
+				const formattedWallets = response.data.filter(fw => fw.address.length > 1);
+				console.log(formattedWallets);
+				setUserWallets(formattedWallets);
+			} else {
+				console.log(response.data.sqlMessage);
+			}
+		});
+	};
+
 	const openTrade = () => {
 		console.log(val.saleID);
 		Axios.post("http://localhost:3001/OpenTrade", {
@@ -155,16 +173,11 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 	useEffect(() => {
 		getListingPrice();
 		getSellerInfo();
+		getUserWallets();
 	}, []);
 
 	const filteredPaymentMethods = ["Please Select", val.paymentMethod1, val.paymentMethod2];
-
 	const formattedCurrency = convertCurrencyToSymbol(currency);
-
-	console.log(offerAmount, "offer amount in GBP");
-	console.log(offerAmountInSol, "offer amount in SOL");
-	console.log(offerAmountInCurrency, "offer amount in currency");
-	console.log('val: ', val);
 
 	return (
 		<PageBody>
@@ -269,7 +282,6 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 									Select Payment Method
 								</StyledLabel>
 								<StyledDropdown
-									type="change"
 									placeholder="preferredPayment"
 									name="preferredPayment"
 									id="preferredPayment"
@@ -285,6 +297,28 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 									))}
 								</StyledDropdown>
 							</div>
+							<div className="w-100 pt-2 pb-3 mt-3">
+								<StyledLabel padding="0 0 10px 0" bold htmlFor="payToWallet">
+									Select Wallet
+								</StyledLabel>
+								<StyledDropdown
+									placeholder="payToWallet"
+									name="payToWallet"
+									id="payToWallet"
+									color="btn"
+									onChange={(e) => {
+										setWallet(e.target.value);
+									}}
+									className="w-100"
+									required
+								>
+									<option value="Please Select">Please Select</option>
+									{userWallets.map((option) => (
+					
+										<option value={option.address}>{option.address}</option>
+									))}
+								</StyledDropdown>
+							</div>
 							<div className="w-100 p-0 mt-3">
 								<GradientButton
 									text="Open Trade"
@@ -295,7 +329,8 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 									disabled={
 										offerMessage.length === 0 ||
 										paymentMethod === "Please Select" ||
-										offerAmountInSol.length === 0
+										offerAmountInSol.length === 0 ||
+										wallet === "Please Select"
 									}
 								/>
 							</div>

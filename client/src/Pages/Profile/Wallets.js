@@ -86,7 +86,7 @@ const InlineLabelValidation = ({ walletAddress, min, max }) => (
 	</ValidationBase>
 );
 
-const Wallets = ({ userID }) => {
+const Wallets = () => {
 	// Modal Controls
 	const [modalMode, setModalMode] = useState("initial");
 	const [addWalletModal, setAddWalletModal] = useState(false);
@@ -168,9 +168,7 @@ const Wallets = ({ userID }) => {
 	};
 
 	const getWalletAddresses = () => {
-		Axios.post("http://localhost:3001/GetWallets", {
-			userID,
-		}).then((response) => {
+		Axios.post("http://localhost:3001/GetWallets").then((response) => {
 			console.log(response, "response from /GetWallets");
 			if (!response.data.code) {
 				const formattedWallets = response.data.filter(fw => fw.address.length > 1);
@@ -183,7 +181,6 @@ const Wallets = ({ userID }) => {
 	};
 
 	const walletCount = wallets.length + 1;
-	console.log(walletCount, 'amount of wallets');
 
 	const reloadPayments = () => {
 		window.location.reload(true);

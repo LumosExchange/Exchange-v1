@@ -183,7 +183,7 @@ const Feedback = () => {
 										</Paragraph>
 									</div>
 									{fakeFeedbackComments.map((fb) => (
-										<Striped className="d-flex px-4 py-2 mb-2 flex-column">
+										<Striped className="d-flex px-4 py-3 mb-2 flex-column">
 											<Paragraph size="14px" className="mb-1">
 												{fb.timestamp}
 											</Paragraph>
