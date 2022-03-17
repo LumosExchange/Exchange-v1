@@ -19,6 +19,7 @@ const { resolveNaptr } = require("dns");
 const { addAbortSignal } = require("stream");
 const { Server } = require("socket.io");
 const http = require("http");
+const { send } = require("process");
 
 require("dotenv").config();
 
@@ -2221,6 +2222,92 @@ app.post("/GetWallets", (req, res) => {
      }
     }
   )
+});
+
+app.post("/GetFeedbackPage", (req, res) => {
+
+  const userID = req.body.userName;
+
+  let totalTrades = 0;
+  let feedbackScore = 0;
+  let registeredDate = "";
+
+  
+ //get totaltrades
+  db.query(
+    "SELECT COUNT (*) AS total FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?)",
+    [userID, userID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      }else {
+        totalTrades = result.total;
+      }
+    }
+  );
+
+
+  //feedbackScore
+
+  db.query(
+    "SELECT AVG (feedbackScore) AS feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?)",
+    [userID, userID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      }else {
+       feedbackScore = result.feedback;
+      }
+    }
+  );
+    //date registered
+
+  db.query(
+    "SELECT registeredDate AS registeredDate FROM users WHERE (userID) = (?) ",
+    [userID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      }else {
+       registeredDate = result.registeredDate;
+      }
+    }
+  );
+
+  //Location
+
+  db.query(
+    "SELECT Country AS Country FROM userInformation WHERE (userID) = (?) ",
+    [userID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      }else {
+       country = result.Country;
+      }
+    }
+  );
+
+  //verification status of email and phone
+  db.query(
+    "SELECT emailVerified, phoneNumber FROM userAuth WHERE (userID) = (?)",
+    [userID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send({
+          userID: userID,
+          totalTrades: totalTrades,
+          feedbackScore: feedbackScore,
+          registeredDate: registeredDate,
+          country: country,
+          emailVerified: result[0].emailVerified,
+          phoneVerified: result[0].phoneNumber
+        })
+      }
+    }
+    );
 });
 
 server.listen(3002, () => {
