@@ -111,6 +111,8 @@ const Wallets = () => {
 
 	const toggleAddWallet = () => {
 		setAddWalletModal(!addWalletModal);
+		setWalletAddress("");
+		setModalMode('initial');
 	};
 
 	const toggleEditWallet = (wallet) => {
@@ -264,7 +266,21 @@ const Wallets = () => {
 								/>
 							</ModalBody>
 						)}
-						{modalMode === "confirmation" && <ModalBody>Wallet Added</ModalBody>}
+						{modalMode === "confirmation" && (
+							<ModalBody>
+								<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+									<i className="material-icons me-2">check_circle</i>
+									<Paragraph bold size="20px" className="mb-0">
+										{confirmationMessage}
+									</Paragraph>
+								</CodeSentMessage>
+								<PrimaryButton
+									text="OK"
+									onClick={toggleAddWallet}
+									className="w-100"
+								/>
+							</ModalBody>
+						)}
 					</StyledModal>
 					{/* ------ Edit Wallets ------ */}
 					<StyledModal centered isOpen={editWalletModal} toggle={toggleEditWallet}>
