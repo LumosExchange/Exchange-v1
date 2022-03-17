@@ -144,7 +144,7 @@ const App = () => {
               }
             />
             <Route path="/TradeHistory" element={<TradeHistory />} />
-            <Route path="/Feedback" element={<Feedback />} />
+            <Route path={`/profile/user/${userName}`} element={<Feedback />} />
             <Route path="/TwoFactorAuth" element={<TwoFactorAuth />} />
             <Route path="/ConnectWallet" element={<ConnectWallet />} />
             <Route path="/ChangePassword" element={<ChangePassword />} />

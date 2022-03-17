@@ -210,8 +210,8 @@ const Wallets = ({ userID }) => {
 							</div>
 							{wallets.length > 0 ? (
 							<div className="d-flex py-4 flex-column">
-								{wallets.map((wallet) => (
-									<WalletCard className="p-4 mb-3 d-flex justify-content-between w-100 align-items-center">
+								{wallets.map((wallet, index) => (
+									<WalletCard className="p-4 mb-3 d-flex justify-content-between w-100 align-items-center" key={index + 1}>
 										<div className="d-flex">
 											<i className="material-icons me-2">wallet</i>
 											<Paragraph className="mb-0" size="18px">
