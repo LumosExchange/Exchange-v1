@@ -86,7 +86,7 @@ const InlineLabelValidation = ({ walletAddress, min, max }) => (
 	</ValidationBase>
 );
 
-const Wallets = ({ userID }) => {
+const Wallets = () => {
 	// Modal Controls
 	const [modalMode, setModalMode] = useState("initial");
 	const [addWalletModal, setAddWalletModal] = useState(false);
@@ -111,6 +111,8 @@ const Wallets = ({ userID }) => {
 
 	const toggleAddWallet = () => {
 		setAddWalletModal(!addWalletModal);
+		setWalletAddress("");
+		setModalMode('initial');
 	};
 
 	const toggleEditWallet = (wallet) => {
@@ -168,9 +170,7 @@ const Wallets = ({ userID }) => {
 	};
 
 	const getWalletAddresses = () => {
-		Axios.post("http://localhost:3001/GetWallets", {
-			userID,
-		}).then((response) => {
+		Axios.post("http://localhost:3001/GetWallets").then((response) => {
 			console.log(response, "response from /GetWallets");
 			if (!response.data.code) {
 				const formattedWallets = response.data.filter(fw => fw.address.length > 1);
@@ -183,7 +183,6 @@ const Wallets = ({ userID }) => {
 	};
 
 	const walletCount = wallets.length + 1;
-	console.log(walletCount, 'amount of wallets');
 
 	const reloadPayments = () => {
 		window.location.reload(true);
@@ -267,7 +266,21 @@ const Wallets = ({ userID }) => {
 								/>
 							</ModalBody>
 						)}
-						{modalMode === "confirmation" && <ModalBody>Wallet Added</ModalBody>}
+						{modalMode === "confirmation" && (
+							<ModalBody>
+								<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+									<i className="material-icons me-2">check_circle</i>
+									<Paragraph bold size="20px" className="mb-0">
+										{confirmationMessage}
+									</Paragraph>
+								</CodeSentMessage>
+								<PrimaryButton
+									text="OK"
+									onClick={toggleAddWallet}
+									className="w-100"
+								/>
+							</ModalBody>
+						)}
 					</StyledModal>
 					{/* ------ Edit Wallets ------ */}
 					<StyledModal centered isOpen={editWalletModal} toggle={toggleEditWallet}>
