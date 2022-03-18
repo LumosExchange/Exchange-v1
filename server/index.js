@@ -2310,6 +2310,27 @@ app.post("/GetFeedbackPage", (req, res) => {
     );
 });
 
+app.post("/FeedbackComments", (req, res) => {
+
+  const userID = req.body.userName;
+
+  db.query(
+    "SELECT feedbackScore, date, Comments WHERE (sellerID) = (?) OR (buyerID) = (?) LIMIT 5 ORDER BY date LIMIT 5 ",
+    [userID, userID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      }else {
+       res.send({
+         rating: result.feedbackScore,
+         comment: result.Comment,
+         timestamp: result.date
+       });
+      }
+    }
+  );
+})
+
 server.listen(3002, () => {
   console.log("SERVER RUNNING");
 });
