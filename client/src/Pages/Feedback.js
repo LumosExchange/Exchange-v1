@@ -52,7 +52,43 @@ const fakeFeedbackComments = [
 ];
 
 const Feedback = () => {
+
 	const [historyExpanded, expandHistory] = useState(false);
+	const [totalTrades, setTotalTrades] =  useState("");
+	const [feedbackScore, setFeedbackScore] = useState("");
+	const [registeredDate, setRegisteredDdate] = useState("");
+	const [country, setCountry] = useState("");
+	const [emailVerified, setEmailVerified] = useState("");
+	const [phoneVerified, setPhoneVerified] = useState("");
+	const [feedbackComments, setFeedbackComments] = useState([]);
+
+	//we need to get userID form previous page 
+
+
+	const tradeInfo = () => {
+		Axios.post("http://localhost:3001/GetFeedbackPage", {
+			userID: userID
+		}).then((response) => {
+			setTotalTrades(response.data.totalTrades);
+			setFeedbackScore(response.data.feedbackScore);
+			setRegisteredDdate(response.data.registeredDate);
+			setCountry(response.data.country);
+			setEmailVerified(response.data.emailVerified);
+			setPhoneVerified(response.data.phoneVerified);
+		})
+
+	};
+
+	const feedback = () => {
+		Axios.post("http://localhost:3001/FeedbackComments", {
+			userID: userID
+		}).then((response) => {
+			//Will need to map this 
+			setFeedbackComments(response.data);
+		
+		})
+
+	}
 
 	useEffect(() => {}, []);
 
