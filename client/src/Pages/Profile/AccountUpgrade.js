@@ -51,7 +51,7 @@ const AccountUpgrade = () => {
 
   //Create function to get current tier
   const [accountTier, setAccountTier] = useState("");
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(null);
   const [confirmationMessage, setConfirmationMessage] = useState("");
   const [expanded, setExpanded] = useState(null);
 
@@ -119,8 +119,15 @@ const AccountUpgrade = () => {
 	getAccountTier();
     if (accountTier !== '') {
       setExpanded(accountTier)
+
+	  if (accountTier === "Standard"){setCurrentStep(1);}
+	  if (accountTier === "Bronze"){setCurrentStep(1);}
+	  if (accountTier === "Silver"){setCurrentStep(2);}
+	  if (accountTier === "Gold"){setCurrentStep(3);}
     }
   }, [accountTier]);
+
+  console.log(accountTier, 'account tier');
 
   return (
 		<PageBody>
@@ -129,6 +136,9 @@ const AccountUpgrade = () => {
 				<ContentTab className="text-white">
 					<div className="d-flex p-4 row">
 						<div className="d-flex col-12 col-md-6 mb-3 flex-column">
+							{currentStep === 0 && (
+								<Paragraph size="20px">Please complete KYC verification</Paragraph>
+							)}
 							{currentStep === 1 && (
 								<React.Fragment>
 									<Heading size="20px" bold>
@@ -332,15 +342,17 @@ const AccountUpgrade = () => {
 									</form>
 								</React.Fragment>
 							)}
-							{currentStep === 3 && <Paragraph>Thanks for completing this fam</Paragraph>}
+							{currentStep === 3 && (
+								<Paragraph size="20px">Account Successfully Upgraded to Gold</Paragraph>
+							)}
 						</div>
 						<div className="d-flex col-12 col-md-6 mb-3 flex-column justify-content-center">
-							<StyledAccordion expanded={expanded === "New"} onChange={handleChange("New")} className={accountTier === "New" && 'expanded'}>
+							<StyledAccordion expanded={expanded === "Standard"} onChange={handleChange("Standard")} className={accountTier === "Standard" && 'expanded'}>
 								<AccordionSummary
 									aria-controls="panel1bh-content"
 									id="panel1bh-header"
 								>
-									<Paragraph size="20px" bold className="mb-0">New User Tier</Paragraph>
+									<Paragraph size="20px" bold className="mb-0">Standard User Tier</Paragraph>
 								</AccordionSummary>
 								<AccordionDetails className="d-flex">
 									<Paragraph bold className="me-2 mb-0" size="18px">
