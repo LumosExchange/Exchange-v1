@@ -363,7 +363,7 @@ const AccountUpgrade = () => {
                     Trade Volume:
                   </Paragraph>
                   <Paragraph className="mb-0" size="18px">
-                    1 SOL per month
+                    1 SOL per month (No Requirements)
                   </Paragraph>
                 </AccordionDetails>
               </StyledAccordion>
@@ -385,7 +385,7 @@ const AccountUpgrade = () => {
                     Trade Volume:
                   </Paragraph>
                   <Paragraph className="mb-0" size="18px">
-                    5 SOL per month
+                    5 SOL per month (Requires KYC verification)
                   </Paragraph>
                 </AccordionDetails>
               </StyledAccordion>
@@ -407,7 +407,7 @@ const AccountUpgrade = () => {
                     Trade Volume:
                   </Paragraph>
                   <Paragraph className="mb-0" size="18px">
-                    10 SOL per month
+                    10 SOL per month (Requires Bronze Tier)
                   </Paragraph>
                 </AccordionDetails>
               </StyledAccordion>
@@ -438,7 +438,7 @@ const AccountUpgrade = () => {
                     Trade Volume:
                   </Paragraph>
                   <Paragraph className="mb-0" size="18px">
-                    25 SOL per month
+                    25 SOL per month (Requires Silver Tier)
                   </Paragraph>
                 </AccordionDetails>
               </StyledAccordion>
@@ -460,7 +460,7 @@ const AccountUpgrade = () => {
                     Trade Volume:
                   </Paragraph>
                   <Paragraph className="mb-0" size="18px">
-                    50 SOL per month
+                    50 SOL per month (Requires Gold Tier for a Year)
                   </Paragraph>
                 </AccordionDetails>
               </StyledAccordion>
@@ -485,7 +485,7 @@ const AccountUpgrade = () => {
                     Trade Volume:
                   </Paragraph>
                   <Paragraph className="mb-0" size="18px">
-                    100 SOL per month
+                    100 SOL per month (For Lumos Exchange Team Members)
                   </Paragraph>
                 </AccordionDetails>
               </StyledAccordion>
