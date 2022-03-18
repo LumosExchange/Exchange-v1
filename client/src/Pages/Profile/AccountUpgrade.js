@@ -33,6 +33,10 @@ const StyledAccordion = styled(Accordion)(
   `
 );
 
+const reloadPage = () => {
+	window.location.reload(true);
+};
+
 const AccountUpgrade = () => {
   //step 1 upgrade bronze / silver
   const [birthDayReg, setBirthDayReg] = useState("");
@@ -80,6 +84,7 @@ const AccountUpgrade = () => {
 
       //Go to next step
       setCurrentStep(2);
+	  reloadPage();
     });
   };
 
@@ -92,6 +97,7 @@ const AccountUpgrade = () => {
     }).then((response) => {
       setConfirmationMessage(response.data.message);
       setCurrentStep(3);
+	  reloadPage();
     });
   };
 
@@ -111,7 +117,7 @@ const AccountUpgrade = () => {
           setCurrentStep(2);
         }
         if (accountTier === "Gold") {
-          setCurrentStep(1);
+          setCurrentStep(3);
         }
       }
     },
