@@ -111,7 +111,7 @@ const AccountUpgrade = () => {
           setCurrentStep(2);
         }
         if (accountTier === "Gold") {
-          setCurrentStep(3);
+          setCurrentStep(1);
         }
       }
     },
