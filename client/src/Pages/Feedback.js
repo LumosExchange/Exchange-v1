@@ -67,7 +67,7 @@ const Feedback = () => {
 	//we need to get userID form previous page 
 
 
-	const tradeInfo = () => {
+	const tradeInfo = ({ userID }) => {
 		Axios.post("http://localhost:3001/GetFeedbackPage", {
 			userID: userID
 		}).then((response) => {
@@ -81,7 +81,7 @@ const Feedback = () => {
 
 	};
 
-	const feedback = () => {
+	const feedback = ({ userID }) => {
 		Axios.post("http://localhost:3001/FeedbackComments", {
 			userID: userID
 		}).then((response) => {
