@@ -53,6 +53,8 @@ const fakeFeedbackComments = [
 
 const Feedback = () => {
 
+	const userID = 1;
+
 	const [historyExpanded, expandHistory] = useState(false);
 	const [totalTrades, setTotalTrades] =  useState("");
 	const [feedbackScore, setFeedbackScore] = useState("");
