@@ -101,6 +101,7 @@ const Wallets = () => {
 	const [wallets, setWallets] = useState([]);
 	const [walletAddress, setWalletAddress] = useState("");
 	const [editingWalletAddress, setEditingWalletAddress] = useState("");
+	const [editingWalletID, setEditingWalletID] = useState("");
 	const [deletingWalletAddress, setDeletingWalletAddress] = useState("");
 
 	// Response Handling
@@ -115,16 +116,36 @@ const Wallets = () => {
 		setModalMode('initial');
 	};
 
+	const completeAddAddress = () => {
+		setAddWalletModal(!addWalletModal);
+		setModalMode('initial');
+		reloadPayments();
+	}
+
 	const toggleEditWallet = (wallet) => {
 		setEditWalletModal(!editWalletModal);
-		setEditingWalletAddress(wallet);
+		setEditingWalletID(wallet.walletID);
+		setEditingWalletAddress(wallet.address);
 	};
 
-	const toggleDeleteWallet = (wallet) => {
+	const toggleDeleteWallet = (wallet, index) => {
 		setDeleteWalletModal(!deleteWalletModal);
 		setDeletingWalletAddress(wallet.address);
-		setDeletingWalletID(wallet.walletID);
+		console.log(index, 'index is delete modal');
+		setDeletingWalletID(index);
 	};
+
+	const completeDeleteAddress = () => {
+		setAddWalletModal(!addWalletModal);
+		setModalMode('initial');
+		reloadPayments();
+	}
+
+	const completeEditAddress = () => {
+		setDeleteWalletModal(!deleteWalletModal);
+		setDeleteModalMode('initial');
+		reloadPayments();
+	}
 
 	const addWallet = () => {
 		console.log(walletCount, 'wallet count in addwallet');
@@ -141,9 +162,10 @@ const Wallets = () => {
 		});
 	};
 
-	const editWallet = () => {
+	const updateWallet = () => {
 		Axios.post("http://localhost:3001/EditWallet", {
-			walletAddress,
+			walletID: editingWalletID,
+			walletAddress: editingWalletAddress,
 		}).then((response) => {
 			console.log(response, "response from editSkrill");
 			if (!response.data.code) {
@@ -218,10 +240,10 @@ const Wallets = () => {
 											</Paragraph>
 										</div>
 										<div className="d-flex">
-											<InvisibleButton onClick={() => toggleEditWallet(wallet.address)}>
+											<InvisibleButton onClick={() => toggleEditWallet(wallet)}>
 												<i className="material-icons edit">edit</i>
 											</InvisibleButton>
-											<InvisibleButton onClick={() => toggleDeleteWallet(wallet)}>
+											<InvisibleButton onClick={() => toggleDeleteWallet(wallet, index + 1)}>
 												<i className="material-icons remove">delete</i>
 											</InvisibleButton>
 										</div>
@@ -276,7 +298,7 @@ const Wallets = () => {
 								</CodeSentMessage>
 								<PrimaryButton
 									text="OK"
-									onClick={toggleAddWallet}
+									onClick={completeAddAddress}
 									className="w-100"
 								/>
 							</ModalBody>
@@ -303,10 +325,24 @@ const Wallets = () => {
 									}}
 									className="w-100"
 								/>
-								<PrimaryButton className="w-100 mt-3" text="Update Wallet" onClick={null} />
+								<PrimaryButton className="w-100 mt-3" text="Update Wallet" onClick={updateWallet} />
 							</ModalBody>
 						)}
-						{editModalMode === "confirmation" && <ModalBody>Wallet Added</ModalBody>}
+						{editModalMode === "confirmation" && (
+							<ModalBody>
+								<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+									<i className="material-icons me-2">check_circle</i>
+									<Paragraph bold size="20px" className="mb-0">
+										{confirmationMessage}
+									</Paragraph>
+								</CodeSentMessage>
+								<PrimaryButton
+									text="OK"
+									onClick={completeEditAddress}
+									className="w-100"
+								/>
+							</ModalBody>
+						)}
 					</StyledModal>
 					{/* ------ Delete Wallets ------ */}
 					<StyledModal centered isOpen={deleteWalletModal} toggle={toggleDeleteWallet}>
@@ -333,7 +369,21 @@ const Wallets = () => {
 								</div>
 							</ModalBody>
 						)}
-						{deleteModalMode === "confirmation" && <ModalBody>Wallet Added</ModalBody>}
+						{deleteModalMode === "confirmation" && (
+							<ModalBody>
+								<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+									<i className="material-icons me-2">check_circle</i>
+									<Paragraph bold size="20px" className="mb-0">
+										{confirmationMessage}
+									</Paragraph>
+								</CodeSentMessage>
+								<PrimaryButton
+									text="OK"
+									onClick={completeDeleteAddress}
+									className="w-100"
+								/>
+							</ModalBody>
+						)}
 					</StyledModal>
 				</ContentTab>
 			</div>

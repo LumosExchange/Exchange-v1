@@ -448,15 +448,15 @@ const Buying = ({ userName }) => {
 							}}
 							/>
 						</div>
+                  </div>
+                    <div className="col-12">
+                      <PrimaryButton
+                        text="Complete Trade"
+                        className="w-100 mt-3"
+                        onClick={() => completeTrade()}
+                        disabled={feedBack.length === 0 || feedbackMessage.length === 0}
+                      />
                     </div>
-					<div className="col-12">
-						<PrimaryButton
-							text="Complete Trade"
-							className="w-100 mt-3"
-							onClick={() => completeTrade()}
-							disabled={feedBack.length === 0 || feedbackMessage.length === 0}
-						/>
-					</div>
                   </div>
                 </div>
               </div>
