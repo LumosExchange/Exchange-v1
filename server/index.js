@@ -2144,7 +2144,7 @@ app.post("/AddWallet", (req, res) => {
             } else {
               console.log(result);
               res.send({
-                message: "Wallet address succefully Added!"
+                message: "Wallet address succesfully Added!"
               })
             }
           });
