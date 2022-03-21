@@ -36,7 +36,7 @@ const MissingIcon = styled.i(({ theme }) => css`
 	color: ${theme.colors.primary_cta};
 `);
 
-const MyListings = () => {
+const MyListings = ({ solGbp, currency }) => {
 	const [userListings, setUserListings] = useState([]);
 	const [modal, setModal] = useState(false);
 	const [deleteModal, setDeleteModal] = useState(false);
@@ -50,12 +50,6 @@ const MyListings = () => {
 	const [percentageDifference, setPercentageDifference] = useState('');
 	const [volumeForSale, setVolumeForSale] = useState('');
 
-	// Currency
-	const [selectedCurrency, selectCurrency] = useState('');
-	const [solgbp, setSolGbp] = useState('');
-	const [solusd, setSolUsd] = useState('');
-	const [currencySymbol, setCurrencySymbol] = useState('');
-
 	// Delete Listings
 	const [saleID, setSaleId] = useState('');
 	const [userID, setUserId] = useState('');
@@ -65,29 +59,6 @@ const MyListings = () => {
 	const getUserListings = () => {
 		Axios.get("http://localhost:3001/getListings").then((response) => {
 			setUserListings(response.data);
-		});
-	}
-
-	const getCurrency = () => {
-		Axios.get("http://localhost:3001/getUserSettings").then((response) => {
-			if(response.data[0]?.currency === 'GBP') {
-				selectCurrency('GBP');
-				setCurrencySymbol('£');
-				//Get GBP price of SOlana
-				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp').then((response) => response.json().then(function (data) {
-					setSolGbp(data.solana.gbp);
-				}));	
-			} else if (response.data[0]?.currency === 'USD') {
-				selectCurrency('USD');
-				setCurrencySymbol('$');
-				//Get USD price of solana
-				fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd').then((response) => response.json().then(function (data) {
-					setSolUsd(data.solana.usd);
-				}));
-			} else {
-				//handle other currencys
-				selectCurrency('GBP');
-			}
 		});
 	}
 
@@ -157,7 +128,6 @@ const MyListings = () => {
 
 	useEffect(() => {
 		getUserListings();
-		getCurrency();
 	}, []);
 
 	const navigate = useNavigate();
@@ -174,7 +144,7 @@ const MyListings = () => {
 			)}
 			<div className="col-12 col-lg-6 col-xl-9">
 				{userListings.map((val) => (
-					<TradeCard val={val} withoutButton>
+					<TradeCard val={val} withoutButton solGbp={solGbp} currency={currency}>
 						<div className="col-3 d-flex align-items-end justify-content-end">
 							<CardActionButton onClick={ () => openEditModal(val) } title="Edit">
 								<i className="material-icons edit">edit</i>

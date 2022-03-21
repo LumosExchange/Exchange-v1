@@ -167,7 +167,7 @@ const App = () => {
               path="/Profile/AccountUpgrade"
               element={<AccountUpgrade />}
             />
-            <Route path="/MyListings" element={<MyListings />} />
+            <Route path="/MyListings" element={<MyListings solGbp={solGbp} solUsd={solUsd} currency={currency} />} />
             <Route path="/Buying" element={<Buying userName={userName} />} />
           </Routes>
         </Router>

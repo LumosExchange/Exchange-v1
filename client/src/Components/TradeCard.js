@@ -47,6 +47,7 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
                 </div>
                 <div className="col-12 col-xl-3 d-flex flex-column align-items-xl-end mb-3 mb-xl-0">
                     <Heading size="24px" bold color="primary_cta" className="mb-0">
+                        {console.log(solGbp, 'sol gbp')}
                         {convertCurrencyToSymbol(currency)}{val.aboveOrBelow === 'above' && ((solGbp / 100) * (100 + val.percentChange)).toFixed(2)}
                         {val.aboveOrBelow === 'below' && ((solGbp / 100) * (100 - val.percentChange)).toFixed(2)}
                     </Heading>
