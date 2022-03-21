@@ -24,6 +24,7 @@ import {
   IconPrimaryCta,
   FeedbackContext,
 } from "../Components/TradeComponents";
+import { Link } from 'react-router-dom';
 
 const socket = io.connect("http://localhost:3002");
 
@@ -418,9 +419,9 @@ const Buying = ({ userName }) => {
                       </Paragraph>
                       <div className="d-flex">
                         <IconPrimaryCta className="material-icons">person</IconPrimaryCta>
-                        <Paragraph size="18px" bold color="primary_cta">
-                          {userNameSeller}
-                        </Paragraph>
+                        <Link to={`/profile/user/${sellerID}`} params={{ sellerID }} style={{ textDecoration: 'none' }}>
+												  <Paragraph size="18px" bold color="primary_cta">{userNameSeller}</Paragraph>
+											  </Link>
                       </div>
                       <Paragraph size="18px">Feedback Score {feedbackScore}</Paragraph>
                       <Paragraph size="18px">

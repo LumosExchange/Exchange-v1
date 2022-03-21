@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components';
 import Heading from "../Components/Heading";
 import Card from "../Components/Card";
 import Paragraph from "../Components/Paragraph";
+import { useParams } from "react-router-dom";
 
 const VerifiedIcon = styled.i(({ theme }) => css`
 	&.true { color: ${theme.colors.valid} };
@@ -57,6 +58,8 @@ const fakeFeedbackComments = [
 ];
 
 const Feedback = () => {
+	const { id } = useParams();
+	console.log(id, 'id of user');
 
 	const userID = 1;
 
