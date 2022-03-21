@@ -5,12 +5,11 @@ import styled, { css } from 'styled-components';
 import Heading from "../Components/Heading";
 import Card from "../Components/Card";
 import Paragraph from "../Components/Paragraph";
-import { useParams } from "react-router-dom";
 
 const VerifiedIcon = styled.i(({ theme }) => css`
 	&.true { color: ${theme.colors.valid} };
 	&.false { color: ${theme.colors.invalid} };
-	&.neutral { color: ${theme.colors.silver} };
+	&.neutral { color: ${theme.colors.grey} };
 `);
 
 const Striped = styled.div(({ theme }) => css`
@@ -43,23 +42,16 @@ const fakeFeedbackComments = [
 	{
 		rating: 1,
 		comment: "Sent payment fast great buyer",
-		timestamp: "May 30, 2020, 12:31 a.m.",
-	},
-	{
-		rating: 2,
-		comment: "Didn't say hi",
-		timestamp: "May 31, 2021, 10:12 a.m.",
+		timestamp: "May 30, 2021, 12:31 a.m.",
 	},
 	{
 		rating: 3,
-		comment: "Took ages to send, kicked my dog when we met",
-		timestamp: "June 2, 2021, 13:37 p.m.",
+		comment: "Took ages to send",
+		timestamp: "May 30, 2021, 12:31 a.m.",
 	}
 ];
 
 const Feedback = () => {
-	const { id } = useParams();
-	console.log(id, 'id of user');
 
 	const userID = 1;
 
@@ -75,7 +67,7 @@ const Feedback = () => {
 	//we need to get userID form previous page 
 
 
-	const tradeInfo = ({ userID }) => {
+	const tradeInfo = () => {
 		Axios.post("http://localhost:3001/GetFeedbackPage", {
 			userID: userID
 		}).then((response) => {
@@ -89,7 +81,7 @@ const Feedback = () => {
 
 	};
 
-	const feedback = ({ userID }) => {
+	const feedback = () => {
 		Axios.post("http://localhost:3001/FeedbackComments", {
 			userID: userID
 		}).then((response) => {
@@ -100,7 +92,7 @@ const Feedback = () => {
 
 	}
 
-	useEffect(() => {}, []);
+	useEffect(() => {tradeInfo();}, []);
 
 	return (
 		<PageBody className="d-flex align-items-start flex-column">
@@ -108,7 +100,7 @@ const Feedback = () => {
 				<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
 					<div className="row">
 						<div className="col-12 mb-3">
-							<Heading size="30px" bold>ABC</Heading>
+							<Heading size="24px">userName</Heading>
 						</div>
 						<div className="row d-flex justify-content-between">
 							<div className="col-12 col-md-6">
@@ -152,7 +144,7 @@ const Feedback = () => {
 												</td>
 												<td>
 													<Paragraph size="18px" className="d-inline">
-														10/10/2020
+														10/10/2021
 													</Paragraph>
 												</td>
 											</tr>
