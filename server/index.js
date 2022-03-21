@@ -234,6 +234,11 @@ app.get("/login", (req, res) => {
   }
 });
 
+app.post('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
+
 //create JWT aauth
 const verifyJWT = (req, res, next) => {
   const token = req.headers["x-access-token"];
@@ -417,8 +422,9 @@ app.get("/getUserAccountLevel", (req, res) => {
 });
 
 app.get("/getUserID", (req, res) => {
+  console.log(req.session.user?.userID, ' getuserid');
   id = req.session.user[0].userID;
-  req.send(id);
+  res.send(id);
 });
 
 //update user settings
