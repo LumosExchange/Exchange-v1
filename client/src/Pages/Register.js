@@ -5,11 +5,11 @@ import Axios from "axios";
 import { useNavigate } from "react-router";
 import Heading from "../Components/Heading";
 import PrimaryButton from "../Components/Buttons";
-import { FormInput, FormCheckbox, StyledLabel, PageBody } from "../Components/FormInputs";
+import { FormInput, FormCheckbox, StyledLabel, PageBody, StyledDropdown } from "../Components/FormInputs";
 import WarningTriangle from '../Images/icon-park-outline_caution.svg';
 import Paragraph from "../Components/Paragraph";
 import Buttons from "../Components/Buttons";
-
+import { Nationalities } from "../Constants/Index";
 
 
 const WarningIconBase = styled.svg(({ theme }) => css`
@@ -27,20 +27,43 @@ const Warning = () => (
 	</WarningIconBase>
 );
 
+const ValidationMessage = styled(Paragraph)(({ theme }) => css`
+	&.invalid { color: ${theme.colors.invalid}; }
+	&.valid { color: ${theme.colors.valid}; }
+`);
+
+const InputValidator = ({ value, min, max }) => (
+	<div className="d-flex">
+		<ValidationMessage
+			bold
+			size="18px"
+			className={`mb-0 ${(value.length >= min && value.length <= max) ? 'valid' : 'invalid'}`}>
+				{value.length} / {max}
+		</ValidationMessage>
+	</div>
+);
+
+const StyledIcon = styled.i(({ theme, color }) => css`
+	color: ${theme.colors[color]};
+`);
+
+
 const Register = () => {
 	const [emailReg, setEmailReg] = useState('');
 	const [passwordReg, setPasswordReg] = useState('');
-
-	/* Unused */
 	const [nationalityReg, setNationalityReg] = useState('');
 	const [firstNameReg, setFirstNameReg] = useState('');
 	const [lastNameReg, setLastNameReg] = useState('');
 	const [userNameReg, setUserNameReg] = useState('');
-
+	const [passwordNoted, setPasswordNoted] = useState(false);
+	const [termsAgreed, setTermsAgreed] = useState(false);
+	const [newsLetterAgreed, setNewsLetterAgreed] = useState(false);
 	const [secret, setSecret] = useState([]);
 
 	const navigate = useNavigate();
 
+	const formattedUserName = userNameReg.replace(/\s/g, "");
+	console.log(formattedUserName, 'formatted user name');
 
 	const register = () => {
 		Axios.all([
@@ -73,9 +96,6 @@ const Register = () => {
 			});
 	}
 
-	
-
-
 	return (
 		<PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid">
 			<div className="row">
@@ -105,17 +125,42 @@ const Register = () => {
 							placeholder="Last Name"
 							onChange={(e) => { setLastNameReg(e.target.value); }}
 						/>
-						<StyledLabel htmlFor="userName" padding="0 0 5px 0" bold fontSize="20px">
-							Username
-						</StyledLabel>
+						<div className="d-flex justify-content-between align-items-center">
+							<StyledLabel htmlFor="userName" padding="0 0 5px 0" bold fontSize="20px">
+								Username
+							</StyledLabel>
+							<InputValidator value={userNameReg} min={4} max={30} />
+						</div>
 						<FormInput
 							id="userName"
-							className="mb-3 w-100"
 							type="text"
 							form="register"
 							placeholder="User Name"
-							onChange={(e) => { setUserNameReg(e.target.value); }}
+							maxLength={30}
+							className={`
+								mb-3 w-100
+								${((userNameReg.length > 0 && userNameReg.length < 4) || userNameReg.includes(" ") || userNameReg.match(/[^A-Za-z 0-9]/g)) && 'invalid'}
+							`}
+							onChange={e => setUserNameReg(e.target.value)}
 						/>
+						{userNameReg.length > 0 && userNameReg.length < 4 && (
+							<div className="d-flex">
+								<StyledIcon className="material-icons me-1" color="invalid">cancel</StyledIcon>
+								<Paragraph size="18px" color="invalid">Username too short</Paragraph>
+							</div>
+						)}
+						{userNameReg.includes(" ") && (
+							<div className="d-flex">
+								<StyledIcon className="material-icons me-1" color="invalid">cancel</StyledIcon>
+								<Paragraph size="18px" color="invalid">Contains a space</Paragraph>
+							</div>
+						)}
+						{userNameReg.match(/[^A-Za-z 0-9]/g) && (
+							<div className="d-flex">
+								<StyledIcon className="material-icons me-1" color="invalid">cancel</StyledIcon>
+								<Paragraph size="18px" color="invalid">Contains a special character</Paragraph>
+							</div>
+						)}
 						<StyledLabel htmlFor="email" padding="0 0 5px 0" bold fontSize="20px">
 							Email
 						</StyledLabel>
@@ -141,14 +186,18 @@ const Register = () => {
 						<StyledLabel htmlFor="nationality" padding="0 0 5px 0" bold fontSize="20px">
 							Nationality
 						</StyledLabel>
-						<FormInput
+						<StyledDropdown
 							id="nationality"
 							className="mb-3 w-100"
 							type="text"
 							form="register"
 							placeholder="Nationality"
 							onChange={(e) => { setNationalityReg(e.target.value); }}
-						/>
+						>
+							{Nationalities.map((data) => (
+								<option value={data}>{data}</option>
+							))}
+						</StyledDropdown>
 						<div className="d-flex align-items-start mb-4 pt-2">
 							<Warning alt="Warning" />
 							<div className="d-flex flex-column">
@@ -157,11 +206,11 @@ const Register = () => {
 							</div>
 						</div>
 						<div className="d-flex align-items-center mb-4">
-							<FormCheckbox type="checkbox" id="passNoted" name="passNoted" />
+							<FormCheckbox type="checkbox" id="passNoted" name="passNoted" onChange={(e) => setPasswordNoted(e.target.checked) } />
 							<StyledLabel htmlFor="passNoted">I've noted down my password</StyledLabel>
 						</div>
 						<div className="d-flex align-items-center mb-4">
-							<FormCheckbox type="checkbox" id="termsAgreed" name="termsAgreed" />
+							<FormCheckbox type="checkbox" id="termsAgreed" name="termsAgreed" onChange={(e) => setTermsAgreed(e.target.checked) } />
 							<StyledLabel htmlFor="termsAgreed">
 								I've read and agree with Lumos Exchange <a href="terms" alt="terms &amp; conditions">Service Terms</a> and <a href="terms" alt="terms &amp; conditions">Terms of Use.</a>
 							</StyledLabel>
@@ -172,7 +221,24 @@ const Register = () => {
 								I would like to subscribe to the free newsletter to receive free crypto news digests.
 							</StyledLabel>
 						</div>
-						<PrimaryButton type="submit" className="m-auto" onClick={register} text="Create An Account" hasIcon />
+						<PrimaryButton
+							type="submit"
+							className="m-auto"
+							onClick={register}
+							text="Create An Account"
+							hasIcon
+							disabled={
+								firstNameReg.length === 0 ||
+								lastNameReg.length === 0 ||
+								userNameReg.length < 4 ||
+								emailReg.length === 0 ||
+								passwordReg.length === 0 ||
+								nationalityReg === "Please Select" ||
+								!passwordNoted ||
+								!termsAgreed ||
+								((userNameReg.length > 0 && userNameReg.length < 4) || userNameReg.includes(" ") || userNameReg.match(/[^A-Za-z 0-9]/g))
+							}
+						/>
 					</form>
 				</div>
 			</div>

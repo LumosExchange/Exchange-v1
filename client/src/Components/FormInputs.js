@@ -196,6 +196,7 @@ const StyledCheckbox = styled.input(
 		-moz-appearance: none;
 		-o-appearance: none;
 		appearance: none;
+		cursor: pointer;
 
 		&:checked {
 			background-color: ${theme.colors.primary_cta};
@@ -211,8 +212,8 @@ const StyledCheckbox = styled.input(
 	`
 );
 
-export const FormCheckbox = ({ className, id, name }) => (
-	<StyledCheckbox type="checkbox" className={`me-4 ${className}`} id={id} name={name} />
+export const FormCheckbox = ({ className, id, name, onChange }) => (
+	<StyledCheckbox type="checkbox" className={`me-4 ${className}`} id={id} name={name} onChange={onChange} />
 );
 
 export const StyledLabel = styled.label(

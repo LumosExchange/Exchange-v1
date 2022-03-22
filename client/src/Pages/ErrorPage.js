@@ -10,8 +10,8 @@ const test = () => {
 
 function ErrorPage() {
     return <div>
-
-    </div>;
+        error
+    </div>
 
 
 
