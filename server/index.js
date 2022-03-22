@@ -1629,9 +1629,10 @@ app.post("/OpenTrade", (req, res) => {
   let message = req.body.message;
   let reference = crypto.randomBytes(5).toString("hex");
   let no = "NO";
+  const walletAddress = req.body.walletAddress;
 
   db.query(
-    "INSERT INTO LiveTrades (saleID, sellerID, buyerID, Date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, Message, Reference, paymentRecieved, escrowReleaseTime) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+    "INSERT INTO LiveTrades (saleID, sellerID, buyerID, Date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, Message, Reference, paymentRecieved, escrowReleaseTime, walletAddress) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
     [
       saleID,
       sellerID,
@@ -1646,6 +1647,7 @@ app.post("/OpenTrade", (req, res) => {
       reference,
       no,
       date,
+      walletAddress,
     ],
     (err, result) => {
       if (err) {

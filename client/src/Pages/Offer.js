@@ -160,6 +160,8 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 			fiatAmount: offerAmount || offerAmountInCurrency,
 			paymentCurrency: currency,
 			message: offerMessage,
+			walletAddress: wallet
+
 		}).then((response) => {
 			if (response.status === 200){
 				navigate("/Buying", {
