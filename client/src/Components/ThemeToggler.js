@@ -39,8 +39,6 @@ const CircleToggle = styled.div(({ theme, isLight }) => css`
 const ThemeToggler = ({ theme, toggleTheme, currency, solgbp }) => {
   	const isLight = theme === 'light';
 
-	console.log(solgbp, 'sol price');
-
   	return (
 		<ThemeBarContainer isLight={isLight} className="pt-3">
 			<div className="container d-flex justify-content-between">

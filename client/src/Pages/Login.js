@@ -69,8 +69,6 @@ const Login = () => {
     });
   }, []);
 
-  console.log(loginError, 'error message');
-
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">
       <Heading className="pb-4">Sign in with Lumos account</Heading>
