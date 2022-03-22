@@ -62,9 +62,6 @@ const Register = () => {
 
 	const navigate = useNavigate();
 
-	const formattedUserName = userNameReg.replace(/\s/g, "");
-	console.log(formattedUserName, 'formatted user name');
-
 	const register = () => {
 		Axios.all([
 		Axios.post("http://localhost:3001/register", {
