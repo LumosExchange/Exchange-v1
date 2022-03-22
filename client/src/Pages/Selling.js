@@ -48,6 +48,7 @@ const Selling = ({ userName }) => {
 	const [isPaymentSent, setIsPaymentSent] = useState(false);
 	const [feedbackMessage, setFeedbackMessage] = useState("");
 	const [feedBack, setFeedback] = useState("");
+	const [walletAddress, setWalletAddress] = useState("");
 
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
@@ -72,6 +73,7 @@ const Selling = ({ userName }) => {
 			setPaymentRecieved(response.data[0].paymentRecieved);
 			setUserSolPrice(response.data[0].userSolPrice);
 			setFirstMessage(response.data[0].Message);
+			setWalletAddress(response.data[0].walletAddress);
 
 			//Get buyer username 
 
@@ -334,7 +336,7 @@ const Selling = ({ userName }) => {
 						<div className="col-12 col-md-5 row mt-4">
 						<Stepper />
 						<div className="col-12 text-center">
-							<Heading className="me-2 d-inline-block">Bought</Heading>
+							<Heading className="me-2 d-inline-block">Selling</Heading>
 							<Heading bold className="d-inline-block">
 								{solAmount} SOL
 							</Heading>

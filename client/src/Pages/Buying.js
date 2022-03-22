@@ -51,6 +51,7 @@ const Buying = ({ userName }) => {
   const [totalTrades, setTotalTrades] = useState("");
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [feedBack, setFeedback] = useState("");
+  const [walletAddress, setWalletAddress] = useState("");
 
   const { state } = useLocation();
   const liveTradeID = state.liveTradeID;
@@ -78,6 +79,7 @@ const Buying = ({ userName }) => {
         setPaymentRecieved(response.data[0].paymentRecieved);
         setUserSolPrice(response.data[0].userSolPrice);
         setFirstMessage(response.data[0].Message);
+        setWalletAddress(response.data[0].walletAddress);
 
         axios
           .get("http://localhost:3001/GetLiveTradePaymentInfo", {
