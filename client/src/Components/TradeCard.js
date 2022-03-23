@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { LoadingState } from "./Profile";
 import { convertCurrencyToSymbol } from "../Helpers";
 import FlagUK from '../Images/flag-icons/gb.png';
+import { Link } from "react-router-dom";
 
 export const CardDivider = styled.hr(({ theme }) => css`
     :not([size]){
@@ -29,20 +30,37 @@ const convertCountryToFlag = (country) => {
     }
 }
 
+const ProfileLink = styled(Link)(({ theme }) => css`
+    text-decoration: none;
+
+    p:hover {
+        text-decoration: underline;
+    }
+
+    i {
+        color: ${theme.colors.primary_cta};
+    }
+`);
+
 const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) => {
     const navigate = useNavigate();
-    console.log(solGbp, 'sol price');
+    console.log(val, 'val');
+
+    const userID = val.userID;
 
     return (
         <Card className="p-3 mb-3" color="grey">
             <div className="row">
                 <div className="col-12 col-xl-3 d-flex justify-content-center flex-column mb-0">
-                    <div className="d-flex">
+                    <ProfileLink
+                        to={`/profile/user/${userID}`}
+                        className="d-flex align-items-center"
+                    >
                         <i className="material-icons me-2">person</i>
-                        <Heading size="24px" bold className="mb-0">
+                        <Paragraph size="24px" bold color="primary_cta" className="mb-0">
                             {val.userName}
-                        </Heading>
-                    </div>
+                        </Paragraph>
+                    </ProfileLink>
                 </div>
                 <div className="col-12 col-xl-6 d-flex align-items-center mb-0">
                     {convertCountryToFlag(val.Country)}

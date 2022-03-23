@@ -105,7 +105,7 @@ const App = () => {
 		if (loginStatus === true) {
 			getUserName();
 		}
-	}, [loginStatus, solGbp]);
+	}, [loginStatus, solGbp, userName]);
 
 	return (
 		<React.Fragment>
