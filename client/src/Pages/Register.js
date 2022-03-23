@@ -19,8 +19,8 @@ const WarningIconBase = styled.svg(({ theme }) => css`
 	path { stroke: ${theme.colors.primary_cta}; }
 `);
 
-const Warning = () => (
-	<WarningIconBase width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="me-3 mt-1">
+export const Warning = () => (
+	<WarningIconBase width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="me-3">
 		<path d="M24 5L2 43H46L24 5Z" strokeWidth="4" strokeLinejoin="round"/>
 		<path d="M24 35V36" strokeWidth="4" strokeLinecap="round"/>
 		<path d="M24 19L24.008 29" strokeWidth="4" strokeLinecap="round"/>

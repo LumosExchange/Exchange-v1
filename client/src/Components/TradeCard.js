@@ -8,6 +8,7 @@ import GradientButton from "../Components/GradientButton";
 import { useNavigate } from "react-router-dom";
 import { LoadingState } from "./Profile";
 import { convertCurrencyToSymbol } from "../Helpers";
+import FlagUK from '../Images/flag-icons/gb.png';
 
 export const CardDivider = styled.hr(({ theme }) => css`
     :not([size]){
@@ -17,29 +18,33 @@ export const CardDivider = styled.hr(({ theme }) => css`
     }
 `);
 
+const FlagIcon = styled.img`
+    width: 20px;
+`;
+
+const convertCountryToFlag = (country) => {
+    if (country === "United Kingdom"){
+        return <FlagIcon src={FlagUK} alt="UK" className="me-2" />
+    }
+}
+
 const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) => {
     const navigate = useNavigate();
     console.log(solGbp, 'sol price');
 
     return (
-        <Card className="p-4 mb-3" color="grey">
+        <Card className="p-3 mb-3" color="grey">
             <div className="row">
-                <div className="col-12 col-xl-3 d-flex justify-content-center flex-column mb-0 mb-xl-4">
+                <div className="col-12 col-xl-3 d-flex justify-content-center flex-column mb-0">
                     <div className="d-flex">
                         <i className="material-icons me-2">person</i>
                         <Heading size="24px" bold className="mb-0">
                             {val.userName}
                         </Heading>
                     </div>
-                    <div className="d-flex">
-                        <i className="material-icons me-2">swap_horiz</i>
-                        <Paragraph size="16px" className="mb-0">
-                            {val.tradeHistory}{' '}{val.tradeHistory === 1 ? 'Trade' : 'Trades'}
-                        </Paragraph>
-                    </div>
                 </div>
-                <div className="col-12 col-xl-6 d-flex align-items-center mb-0 mb-xl-4">
-                    <i className="material-icons me-2">place</i>
+                <div className="col-12 col-xl-6 d-flex align-items-center mb-0">
+                    {convertCountryToFlag(val.Country)}
                     <Paragraph size="18px" className="mb-0">{val.Town}, {val.Country}</Paragraph>
                 </div>
                 <div className="d-block d-xl-none">
@@ -47,27 +52,31 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
                 </div>
                 <div className="col-12 col-xl-3 d-flex flex-column align-items-xl-end mb-3 mb-xl-0">
                     <Heading size="24px" bold color="primary_cta" className="mb-0">
-                        {console.log(solGbp, 'sol gbp')}
                         {convertCurrencyToSymbol(currency)}{val.aboveOrBelow === 'above' && ((solGbp / 100) * (100 + val.percentChange)).toFixed(2)}
                         {val.aboveOrBelow === 'below' && ((solGbp / 100) * (100 - val.percentChange)).toFixed(2)}
                     </Heading>
-                    <Paragraph size="16px" className="mb-0">{val.amountForSale} for sale</Paragraph>
-                </div>
-                <div className="col-12 col-xl-6 d-flex align-items-center mb-3 mb-xl-0">
-                    <i className="material-icons me-2 align-self-start">account_balance_wallet</i>
-                    <Paragraph size="18px" className="mb-0">
-                        {val.paymentMethod1}{' & '}{val.paymentMethod2}
-                    </Paragraph>
-                </div>
-                <div className="col-12 col-xl-3 d-flex align-items-center justify-content-xl-end mb-3 mb-xl-0">
-                    <i className="material-icons me-2">vertical_align_center</i>
-                    <Paragraph size="18px" className="mb-0">
+                    <Paragraph size="16px" className="mb-0">
                         {val.percentChange}%
                         {' '}{val.aboveOrBelow}{' '}market
                     </Paragraph>
+                    <Paragraph size="16px" className="mb-0 d-none">{val.amountForSale} for sale</Paragraph>
+                </div>
+                <div className="col-12 col-xl-3 d-flex align-items-center">
+                    <div className="d-flex">
+                        <i className="material-icons me-2">swap_horiz</i>
+                        <Paragraph size="16px" className="mb-0">
+                            {val.tradeHistory}{' '}{val.tradeHistory === 1 ? 'Trade' : 'Trades'}
+                        </Paragraph>
+                    </div>
+                </div>
+                <div className="col-12 col-xl-6 d-flex align-items-center mb-3 mb-xl-0">
+                    <i className="material-icons me-2">account_balance_wallet</i>
+                    <Paragraph size="18px" className="mb-0 overflow-hidden text-truncate">
+                        {val.paymentMethod1}{' & '}{val.paymentMethod2}
+                    </Paragraph>
                 </div>
                 {!withoutButton && (
-                    <div className="col-12 col-xl-3 d-flex align-items-end">
+                    <div className="col-12 col-xl-3 d-flex align-items-end pt-3">
                         <GradientButton
                             text="Buy"
                             fontSize="24px"

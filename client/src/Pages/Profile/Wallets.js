@@ -54,7 +54,7 @@ const WalletCard = styled(Card)(({ theme }) => css`
 	}
 `);
 
-const StyledCode = styled.code(({ theme }) => css`
+export const StyledCode = styled.code(({ theme }) => css`
 	font-size: 18px;
 	color: ${theme.colors.primary_cta};
 `);
