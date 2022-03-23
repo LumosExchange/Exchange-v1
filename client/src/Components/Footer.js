@@ -50,21 +50,21 @@ const Footer = () => (
 					<div className="row">
 						<div className="col-4 col-sm-3 d-flex flex-column mb-5 mb-md-0">
 							<Heading size="20px" bold>Sitemap</Heading>
-							<FooterLink href="/About" alt="About">About</FooterLink>
-							<FooterLink href="/Solutions" alt="Solutions">Solutions</FooterLink>
-							<FooterLink href="/Investing" alt="Investing">Investing</FooterLink>
-							<FooterLink href="/Team" alt="Team">Team</FooterLink>
-							<FooterLink href="/Careers" alt="Careers">Careers</FooterLink>
-							<FooterLink href="/Contract" alt="Contract">Contact</FooterLink>
+							<FooterLink href="https://www.lumos.exchange/about" alt="About">About</FooterLink>
+							<FooterLink href="https://www.lumos.exchange/solutions" alt="Solutions">Solutions</FooterLink>
+							<FooterLink href="https://www.lumos.exchange/coming-soon/investing" alt="Investing">Investing</FooterLink>
+							<FooterLink href="https://www.lumos.exchange/team" alt="Team">Team</FooterLink>
+							<FooterLink href="https://www.lumos.exchange/careers" alt="Careers">Careers</FooterLink>
+							<FooterLink href="https://www.lumos.exchange/contact" alt="Contact">Contact</FooterLink>
 						</div>
 						<div className="col-4 col-sm-3 col-md-2 d-flex flex-column">
 							<div className="spacer" />
-							<FooterLink href="/NFTs" alt="NFTs">NFTs</FooterLink>
-							<FooterLink href="/Partners" alt="Partners">Partners</FooterLink>
-							<FooterLink href="/Library" alt="Library">Library</FooterLink>
-							<FooterLink href="/Roadmap" alt="Roadmap">Roadmap</FooterLink>
-							<FooterLink href="/Greenmap" alt="Greenmap">Greenmap</FooterLink>
-							<FooterLink href="/Whitepaper" alt="Whitepaper">Whitepaper</FooterLink>
+							<FooterLink href="https://www.lumos.exchange/coming-soon/nfts" alt="NFTs">NFTs</FooterLink>
+							<FooterLink href="https://www.lumos.exchange/partners" alt="Partners">Partners</FooterLink>
+							<FooterLink href="https://library.lumos.exchange/" alt="Library">Library</FooterLink>
+							<FooterLink href="https://library.lumos.exchange/view-roadmap" alt="Roadmap">Roadmap</FooterLink>
+							<FooterLink href="https://library.lumos.exchange/view-greenmap" alt="Greenmap">Greenmap</FooterLink>
+							<FooterLink href="https://www.lumos.exchange/coming-soon/whitepaper" alt="Whitepaper">Whitepaper</FooterLink>
 						</div>
 						<div className="col-4 col-sm-3 d-flex flex-column mb-5 mb-md-0">
 							<Heading size="20px" bold>Legal</Heading>
