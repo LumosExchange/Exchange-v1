@@ -20,6 +20,7 @@ export const CardDivider = styled.hr(({ theme }) => css`
 
 const FlagIcon = styled.img`
     width: 20px;
+    height: 15px;
 `;
 
 const convertCountryToFlag = (country) => {
