@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components';
 import Heading from "../Components/Heading";
 import Card from "../Components/Card";
 import Paragraph from "../Components/Paragraph";
+import { useLocation } from 'react-router-dom';
 
 const VerifiedIcon = styled.i(({ theme }) => css`
 	&.true { color: ${theme.colors.valid} };
@@ -51,10 +52,8 @@ const fakeFeedbackComments = [
 	}
 ];
 
+
 const Feedback = () => {
-
-	const userID = 1;
-
 	const [historyExpanded, expandHistory] = useState(false);
 	const [totalTrades, setTotalTrades] =  useState("");
 	const [feedbackScore, setFeedbackScore] = useState("");
@@ -64,7 +63,8 @@ const Feedback = () => {
 	const [phoneVerified, setPhoneVerified] = useState("");
 	const [feedbackComments, setFeedbackComments] = useState([]);
 
-	//we need to get userID form previous page 
+	// get userID from the url to profile links
+	const userID = window.location.pathname.match(/\d+/)[0];
 
 
 	const tradeInfo = () => {
@@ -92,7 +92,9 @@ const Feedback = () => {
 
 	}
 
-	useEffect(() => {tradeInfo();}, []);
+	useEffect(() => {
+		tradeInfo();
+	}, []);
 
 	return (
 		<PageBody className="d-flex align-items-start flex-column">

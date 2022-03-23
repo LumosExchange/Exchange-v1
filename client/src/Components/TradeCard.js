@@ -44,8 +44,6 @@ const ProfileLink = styled(Link)(({ theme }) => css`
 
 const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) => {
     const navigate = useNavigate();
-    console.log(val, 'val');
-
     const userID = val.userID;
 
     return (
