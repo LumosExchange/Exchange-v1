@@ -25,6 +25,8 @@ import {
 	FeedbackContext,
 } from '../Components/TradeComponents';
 import { Link } from 'react-router-dom';
+import { StyledCode } from "./Profile/Wallets";
+import { Warning } from "./Register";
 
 const socket = io.connect("http://localhost:3002");
 
@@ -49,6 +51,7 @@ const Selling = ({ userName }) => {
 	const [feedbackMessage, setFeedbackMessage] = useState("");
 	const [feedBack, setFeedback] = useState("");
 	const [walletAddress, setWalletAddress] = useState("");
+	const [confirmation, setConfirmation] = useState(false);
 
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
@@ -125,7 +128,7 @@ const Selling = ({ userName }) => {
 			  socket.emit("send_message", messageData);
 			  setMessageList((list) => [...list, messageData]);
 			  setCurrentMessage("");
-			  setCurrentStep("sold");
+			  setCurrentStep("transfer");
 			} else {
 			  //handle error here some sort of popup / message to say error please try again
 			}
@@ -332,11 +335,44 @@ const Selling = ({ userName }) => {
 							</div>
 						</div>
 					)}
+					{currentStep === "transfer" && (
+						<div className="col-12 col-md-5 mt-4">
+							<Stepper step2Title="Send Payment to the Seller" />
+							<div className="col-12 text-center">
+								<Heading bold className="d-inline-block">
+									{solAmount} SOL
+								</Heading>
+								<Paragraph size="18px">Needs to be sent to the wallet addresss:</Paragraph>
+								<StyledCode>Wallet here</StyledCode>
+								<HorizontalDivider />
+								<div className="d-flex align-items-center py-3">
+									<Warning />
+									<Paragraph className="mb-0 text-start" size="18px">
+										Please double and triple check your wallet address before confirming. Do not mark as SOL received until the funds are in your wallet.
+									</Paragraph>
+								</div>
+								<div className="d-flex align-items-center mb-4 pt-3">
+									<FormCheckbox type="checkbox" id="solReceived" name="solReceived" onChange={(e) => setConfirmation(e.target.checked) } />
+									<StyledLabel htmlFor="solReceived">I've sent the SOL to the buyer's wallet address.</StyledLabel>
+								</div>
+								<div className="d-flex justify-content-center flex-column">
+									<div className="col-12">
+										<PrimaryButton
+											text="Continue"
+											className="w-100 mt-3"
+											onClick={() => setCurrentStep("sold")}
+											disabled={!confirmation}
+										/>
+									</div>
+								</div>
+							</div>
+						</div>
+					)}
 					{currentStep === "sold" && (
 						<div className="col-12 col-md-5 row mt-4">
 						<Stepper />
 						<div className="col-12 text-center">
-							<Heading className="me-2 d-inline-block">Selling</Heading>
+							<Heading className="me-2 d-inline-block">Sold</Heading>
 							<Heading bold className="d-inline-block">
 								{solAmount} SOL
 							</Heading>
