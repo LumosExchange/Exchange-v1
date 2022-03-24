@@ -75,7 +75,7 @@ const Navbar = ({ loginStatus, userName }) => {
 		Axios.post("http://localhost:3001/logout").then((response) => {
 			if (response.status === 200){
 				localStorage.clear("token");
-				navigate("/login");
+				navigate("/Login");
 				window.location.reload(true);
 			}
 		});

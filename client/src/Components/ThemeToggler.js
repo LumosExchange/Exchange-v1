@@ -6,6 +6,7 @@ import { InvisibleButton } from './Buttons';
 import Paragraph from './Paragraph';
 import IconSolana from '../Images/icon-circle-solana.svg';
 import { convertCurrencyToSymbol } from '../Helpers'
+import LoadingState from '../Images/TextLoadingState.svg';
 
 const ThemeBarContainer = styled.div(({ theme, isLight }) => css`
     background: ${theme.colors.base_bg};
@@ -36,8 +37,30 @@ const CircleToggle = styled.div(({ theme, isLight }) => css`
 	};
 `);
 
+export const useDarkMode = () => {
+    const [theme, setTheme] = useState('light');
+    const toggleTheme = () => {
+      if (theme === 'light') {
+        window.localStorage.setItem('theme', 'dark')
+        setTheme('dark')
+      } else {
+        window.localStorage.setItem('theme', 'light')
+        setTheme('light')
+      }
+    };
+  
+    useEffect(() => {
+      const localTheme = window.localStorage.getItem('theme');
+      localTheme && setTheme(localTheme);
+    }, []);
+
+    return [theme, toggleTheme];
+  };
+
 const ThemeToggler = ({ theme, toggleTheme, currency, solgbp }) => {
   	const isLight = theme === 'light';
+
+	  console.log(solgbp, 'sol price');
 
   	return (
 		<ThemeBarContainer isLight={isLight} className="pt-3">
@@ -60,7 +83,7 @@ const ThemeToggler = ({ theme, toggleTheme, currency, solgbp }) => {
 				<div className="d-flex align-items-center">
 					<img src={IconSolana} alt="Solana" className="solana-icon me-2" />
 					<Paragraph color="primary_cta" size="18px" className="mb-0">
-						{convertCurrencyToSymbol(currency)}{solgbp}
+						{solgbp === 0 ? <img src={LoadingState} alt="loading" /> : convertCurrencyToSymbol(currency) + solgbp}
 					</Paragraph>
 				</div>
 			</div>
@@ -74,23 +97,3 @@ ThemeToggler.propTypes = {
 }
 
 export default ThemeToggler;
-
-export const useDarkMode = () => {
-    const [theme, setTheme] = useState('light');
-    const toggleTheme = () => {
-      if (theme === 'light') {
-        window.localStorage.setItem('theme', 'dark')
-        setTheme('dark')
-      } else {
-        window.localStorage.setItem('theme', 'light')
-        setTheme('light')
-      }
-    };
-  
-    useEffect(() => {
-      const localTheme = window.localStorage.getItem('theme');
-      localTheme && setTheme(localTheme);
-    }, []);
-
-    return [theme, toggleTheme];
-  };

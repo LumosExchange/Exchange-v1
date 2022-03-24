@@ -52,16 +52,17 @@ const AccountTier = ({ tier, selectedTier, limit, title }) => (
 const Basic = () => {
   const [userSetting, setUserSettings] = useState([]);
   const [userAccountLevel, setUserAccountLevel] = useState("");
-  const [selectedTheme, selectTheme] = useState("");
   const [selectedTimezone, selectTimezone] = useState("");
   const [selectedCurrency, selectCurrency] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [userEmail, setUserEmail] = useState("");
+  const [userInitials, setUserInitials] = useState("");
 
   const getUserEmail = () => {
     // get user email
     Axios.get("http://localhost:3001/getUserEmail", {}).then((response) => {
       setUserEmail(response.data);
+      setUserInitials(response.data.substring(0, 2));
     });
   };
 
@@ -69,7 +70,6 @@ const Basic = () => {
     // get user settings from usersettings db
     Axios.get("http://localhost:3001/getUserSettings", {}).then((response) => {
       setUserSettings(response?.data);
-      selectTheme(response.data[0]?.theme);
       selectTimezone(response.data[0]?.timezone);
       selectCurrency(response.data[0]?.currency);
     });
@@ -88,7 +88,6 @@ const Basic = () => {
   const updateUserSettings = () => {
     setIsLoading(true);
     Axios.post("http://localhost:3001/updateUserSettings", {
-      theme: selectedTheme,
       timezone: selectedTimezone,
       currency: selectedCurrency,
     }).then((response) => {
@@ -105,8 +104,6 @@ const Basic = () => {
     getAccountLevel();
   }, []);
 
-  console.log(selectedTheme, "selected theme");
-
   return (
     <PageBody>
       <div className="container pt-5">
@@ -115,7 +112,7 @@ const Basic = () => {
           {isLoading && <LoadingState />}
           <TopBanner className="d-flex p-4">
             <div className="col-12 d-flex">
-              <ProfileInitials>KC</ProfileInitials>
+              <ProfileInitials>{userInitials}</ProfileInitials>
               <div className="d-flex ms-3 flex-column justify-content-center">
                 <Paragraph size="20px" className="mb-0">
                   {userEmail}
@@ -127,19 +124,6 @@ const Basic = () => {
             </div>
           </TopBanner>
           <div className="d-flex p-4 row">
-            <div className="col-12 col-lg-4">
-              <Heading size="20px" bold>
-                Theme
-              </Heading>
-              <StyledDropdown
-                className="w-100"
-                value={selectedTheme}
-                onChange={(e) => selectTheme(e.currentTarget.value)}
-              >
-                <option value="Dark">Dark</option>
-                <option value="Light">Light</option>
-              </StyledDropdown>
-            </div>
             <div className="col-12 col-lg-4 my-3 my-lg-0">
               <Heading size="20px" bold>
                 Timezone
@@ -174,7 +158,6 @@ const Basic = () => {
                 className="w-100"
                 onClick={updateUserSettings}
                 disabled={
-                  userSetting[0]?.theme === selectedTheme &&
                   userSetting[0]?.timezone === selectedTimezone &&
                   userSetting[0]?.currency === selectedCurrency
                 }

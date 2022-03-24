@@ -54,15 +54,17 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
                         to={`/profile/user/${userID}`}
                         className="d-flex align-items-center"
                     >
-                        <i className="material-icons me-2">person</i>
                         <Paragraph size="24px" bold color="primary_cta" className="mb-0">
                             {val.userName}
                         </Paragraph>
                     </ProfileLink>
                 </div>
-                <div className="col-12 col-xl-6 d-flex align-items-center mb-0">
+                <div className="col-12 col-xl-4 d-flex align-items-center mb-0">
                     {convertCountryToFlag(val.Country)}
-                    <Paragraph size="18px" className="mb-0">{val.Town}, {val.Country}</Paragraph>
+                    <Paragraph size="18px" className="mb-0 text-truncate overflow-hidden">{val.Town}, {val.Country}</Paragraph>
+                </div>
+                <div className="col-12 col-xl-2 d-flex align-items-center justify-content-end mb-3 mb-xl-0">
+                    <Paragraph size="18px" className="mb-0">{val.amountForSale} for sale</Paragraph>
                 </div>
                 <div className="d-block d-xl-none">
                     <CardDivider />
@@ -76,7 +78,6 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
                         {val.percentChange}%
                         {' '}{val.aboveOrBelow}{' '}market
                     </Paragraph>
-                    <Paragraph size="16px" className="mb-0 d-none">{val.amountForSale} for sale</Paragraph>
                 </div>
                 <div className="col-12 col-xl-3 d-flex align-items-center">
                     <div className="d-flex">

@@ -24,7 +24,7 @@ const MaxHeightBarrier = styled.div(({ theme }) => css`
 	padding-right: 10px;
 
 	@media screen and (min-width: ${theme.breakpoints.md}){
-		max-height: 1000px;
+		max-height: 590px;
 	}
 `);
 
@@ -46,6 +46,7 @@ const ActiveTradeCard = ({ tradeInfo, type }) => {
 	const formattedDate = tradeInfo.Date.replace('T', ' at ').replace('.000Z', ' ');
 	const formattedCurrencySymbol = convertCurrencyToSymbol(tradeInfo.paymentCurrency);
 	const liveTradeID = tradeInfo.LiveTradeID;
+	const paymentSent = tradeInfo.paymentRecieved;
 
 	const navigate = useNavigate();
 
@@ -74,7 +75,7 @@ const ActiveTradeCard = ({ tradeInfo, type }) => {
 						{tradeInfo.Message && (
 							<div className="d-flex">
 								<TitledIcon className="material-icons me-2" title="Message from Seller">message</TitledIcon>
-								<Paragraph size="18px" className="mb-0">{tradeInfo.Message}</Paragraph>
+								<Paragraph size="18px" className="mb-0 overflow-hidden text-truncate">{tradeInfo.Message}</Paragraph>
 							</div>
 						)}
 					</div>
@@ -134,6 +135,7 @@ const ActiveTradeCard = ({ tradeInfo, type }) => {
 						onClick={ () => navigate(type === "buying" ? "/Buying" : "/Selling", {
 							state: {
 								liveTradeID,
+								paymentSent,
 							}
 						})}
 					/>
@@ -199,7 +201,10 @@ const TradeHistory = () => {
 					<MaxHeightBarrier>
 						<Collapse orientation="horizontal" in={activeBuyTradesExpanded}>
 							{liveTradesBuyer.map((tradeInfo) => (
+								<React.Fragment>
 								<ActiveTradeCard tradeInfo={tradeInfo} type="buying" />
+								{console.log(tradeInfo)}
+								</React.Fragment>
 							))}
 							{messageForPurchases && <Paragraph size="20px" className="ms-2">{messageForPurchases}</Paragraph>}
 						</Collapse>
@@ -216,7 +221,7 @@ const TradeHistory = () => {
 					<MaxHeightBarrier>
 						<Collapse orientation="horizontal" in={activeSellTradesExpanded}>
 							{liveTradesSeller.map((tradeInfo) => (
-								<ActiveTradeCard tradeInfo={tradeInfo}  type="selling" />
+								<ActiveTradeCard tradeInfo={tradeInfo} type="selling" />
 							))}
 							{messageForSales && <Paragraph size="20px" className="ms-2">{messageForSales}</Paragraph>}
 						</Collapse>

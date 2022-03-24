@@ -6,6 +6,7 @@ import Heading from "./Heading";
 import Paragraph from "./Paragraph";
 import LumosLogo from "./LumosLogo";
 import { FooterLink } from "./Link";
+import { Link } from 'react-router-dom';
 
 const FooterBase = styled.footer(({ theme }) => css`
 	background: ${theme.colors.base_bg};
@@ -83,7 +84,7 @@ const Footer = () => (
 				</div>
 				<div className="row">
 					<div className="d-flex col-12 justify-content-between align-items-center subfooter pt-4 mt-5">
-						<a href="/home">
+						<a href="/">
 							<LumosLogo width="150px" alt="Logo" className="me-1 w-50" />
 						</a>
 						<Paragraph>&copy; 2022 Lumos Exchange</Paragraph>

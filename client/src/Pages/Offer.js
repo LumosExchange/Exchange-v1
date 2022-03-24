@@ -198,7 +198,13 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 							Buy SOL from {val.userName} with {val.paymentMethod1}{" "}
 							{val.paymentMethod2 && `or ${val.paymentMethod2}`}.
 						</Heading>
-						<TradeCard val={val} withoutButton solGbp={solGbp} currency={currency} listingPrice={listingPrice} />
+						<TradeCard val={val} withoutButton solGbp={solGbp} currency={currency} listingPrice={listingPrice}>
+							<div className="col-3 text-end">
+								<Paragraph className="mb-0">
+									{val.amountForSale} for sale
+								</Paragraph>
+							</div>
+						</TradeCard>
 					</div>
 					<div className="col-12 col-md-6 row">
 						<div className="col d-flex align-items-center" style={{ maxHeight: "200px" }}>

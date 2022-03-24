@@ -10,6 +10,7 @@ import PrimaryButton, { InvisibleButton } from "../Components/Buttons";
 import { FormInput, StyledLabel } from "../Components/FormInputs";
 import { useNavigate } from "react-router-dom";
 import TradeCard from "../Components/TradeCard";
+import { LoadingState } from "../Components/Profile";
 
 const CRYPTO_KIN = 'KIN';
 const CRYPTO_SOL = 'SOL';
@@ -46,6 +47,11 @@ const QuadButton = styled.button(({ theme }) => css`
 		background: ${theme.colors.primary_cta};
 		font-family: 'THICCCBOI-BOLD';
 		color: ${theme.colors.base_bg};
+	}
+
+	:disabled {
+		opacity: 70%;
+		cursor: not-allowed;
 	}
 `);
 
@@ -105,6 +111,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 	const [searchCriteriaLocation, setSearchCriteriaLocation] = useState('Please Select');
 	const [filteredListings, setFilteredListings] = useState([]);
 	const [isFiltering, setIsFiltering] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
   
 	const navigate = useNavigate();
 	
@@ -219,6 +226,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 									<QuadButton
 										className={`w-100 me-1 mb-1 d-flex justify-content-center align-items-center ${selectedCrypto === CRYPTO_KIN && 'selected'}`}
 										onClick={ () => selectCrypto(CRYPTO_KIN) }
+										disabled
 									>
 										{convertAssetToSvg(CRYPTO_KIN)}
 										<span className="ms-2">{CRYPTO_KIN}</span>
@@ -228,6 +236,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 									<QuadButton
 										className={`w-100 me-1 mb-1 d-flex justify-content-center align-items-center ${selectedCrypto === CRYPTO_COPE && 'selected'}`}
 										onClick={ () => selectCrypto(CRYPTO_COPE) }
+										disabled
 									>
 										{convertAssetToSvg(CRYPTO_COPE)}
 										<span className="ms-2">{CRYPTO_COPE}</span>
@@ -237,6 +246,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 									<QuadButton
 										className={`w-100 me-1 mb-1 d-flex justify-content-center align-items-center ${selectedCrypto === CRYPTO_LRA && 'selected'}`}
 										onClick={ () => selectCrypto(CRYPTO_LRA) }
+										disabled
 									>
 										{convertAssetToSvg(CRYPTO_LRA)}
 										<span className="ms-2">{CRYPTO_LRA}</span>
@@ -300,7 +310,10 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 							</div>
 						</Card>
 					</div>
-					<div className="col-12 col-md-7 col-xl-8 mt-4 mt-md-0">
+					<div className="col-12 col-md-7 col-xl-8 mt-4 mt-md-0 position-relative">
+						{filteredAllListings.length === 0 && (
+							<LoadingState />
+						)}
 						<Heading size="24px">Buy {selectedCrypto} from these Sellers</Heading>
 						<ListingArea>
 							{isFiltering && (

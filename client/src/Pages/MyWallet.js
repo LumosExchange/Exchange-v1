@@ -82,7 +82,7 @@ const MyWallet = () => {
         return provider;
       }
     } else {
-      window.open("https://www.phantom.app/", "_blank");
+      // window.open("https://www.phantom.app/", "_blank");
     }
   };
 

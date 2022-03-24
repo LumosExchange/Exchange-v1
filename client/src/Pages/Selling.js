@@ -55,6 +55,7 @@ const Selling = ({ userName }) => {
 
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
+	const paymentSentSetter = state.paymentSent;
 
 	//Get trade ID then use that to populate other things
 	const getTradeDetails = () => {
@@ -170,6 +171,12 @@ const Selling = ({ userName }) => {
 	useEffect(() => {
 		getTradeDetails();
 		joinRoom();
+
+		if (paymentSentSetter === "YES") {
+			setCurrentStep("transfer");
+		} else {
+			setCurrentStep("selling");
+		}
 
 		socket.on("recieve_message", (data) => {
 			setMessageList((list) => [...list, data]);
