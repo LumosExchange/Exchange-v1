@@ -18,6 +18,7 @@ import { InlineButton } from "../Components/Buttons";
 import { CodeSentMessage } from "./ChangePassword";
 import { useNavigate } from "react-router";
 import TradeCard from "../Components/TradeCard";
+import { LoadingState } from "../Components/Profile";
 
 const PaymentMethods = [
 	"Please Select",
@@ -56,9 +57,12 @@ const MyListings = ({ solGbp, currency }) => {
 	const [confirmationMessage, setConfirmationMessage] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
 
+	const [isLoading, setIsLoading] = useState(true);
+
 	const getUserListings = () => {
 		Axios.get("http://localhost:3001/getListings").then((response) => {
 			setUserListings(response.data);
+			setIsLoading(false);
 		});
 	}
 
@@ -133,8 +137,9 @@ const MyListings = ({ solGbp, currency }) => {
 	const navigate = useNavigate();
 
   	return (
-		<PageBody className="d-flex align-items-start">
+		<PageBody className="d-flex align-items-start position-relative">
 			<div className="container d-flex justify-content-center py-5 flex-column">
+			{isLoading && <LoadingState />}
 			{userListings.length === 0 && (
 				<div className="d-flex align-items-center justify-content-center flex-column">
 					<MissingIcon className="material-icons mb-3">manage_search</MissingIcon>
