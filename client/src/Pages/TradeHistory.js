@@ -14,6 +14,7 @@ import { convertAssetToSvg } from '../Pages/Buy';
 import styled, { css } from 'styled-components';
 import { useNavigate } from "react-router";
 import { CardDivider } from "../Components/TradeCard";
+import { LoadingState } from "../Components/Profile";
 
 const Reference = styled(Paragraph)`text-transform: uppercase;`;
 const TitledIcon = styled.i`cursor: help;`;
@@ -148,19 +149,24 @@ const ActiveTradeCard = ({ tradeInfo, type }) => {
 const TradeHistory = () => {
 	// Collapse Sections
 	const [historyExpanded, expandHistory] = useState(false);
-	const [activeBuyTradesExpanded, expandActiveBuyTrades] = useState(true);
-	const [activeSellTradesExpanded, expandActiveSellTrades] = useState(true);
+	const [activeBuyTradesExpanded, expandActiveBuyTrades] = useState(false);
+	const [activeSellTradesExpanded, expandActiveSellTrades] = useState(false);
 	const [messageForSales, setMessageForSales] = useState('');
 	const [messageForPurchases, setMessageForPurchases] = useState('');
 	const [liveTradesBuyer, setLiveTradesBuyer] = useState([]);
 	const [liveTradesSeller, setLiveTradesSeller] = useState([]);
+	const [isLoadingBuyTrades, setIsLoadingBuyTrades] = useState(true);
+	const [isLoadingSellTrades, setIsLoadingSellTrades] = useState(true);
 
 	const getLiveTradesBuyer = () => {
 		Axios.post("http://localhost:3001/GetLiveTradesBuyer").then((response) => {
+			console.log(response, 'response from getlivetradesbuyer')
 			if (response.data.message){
 				setMessageForPurchases(response.data.message);
 			} else {
 				setLiveTradesBuyer(response.data);
+				setIsLoadingBuyTrades(false);
+				expandActiveBuyTrades(true);
 			}
 		}
 	)}
@@ -171,12 +177,11 @@ const TradeHistory = () => {
 				setMessageForSales(response.data.message);
 			} else {
 				setLiveTradesSeller(response.data);
+				setIsLoadingSellTrades(false);
+				expandActiveSellTrades(true);
 			}
 		}
 	)}
-
-	console.log(liveTradesBuyer, 'live trades buyer side');
-	console.log(liveTradesSeller, 'live trades seller side');
 
 	useEffect(() => {
 		if(liveTradesBuyer.length === 0){
@@ -185,12 +190,13 @@ const TradeHistory = () => {
 		if(liveTradesSeller.length === 0){
 			getLiveTradesSeller();
 		}
-	}, []);
+	}, [liveTradesBuyer, liveTradesSeller]);
 
 	return (
 		<PageBody className="d-flex align-items-start flex-column">
 			<div className="container">
 				<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
+				{(isLoadingSellTrades || isLoadingBuyTrades) && <LoadingState />}
 					<InvisibleButton
 						onClick={ () => expandActiveBuyTrades((prev) => !prev)}
 						className="d-flex align-items-center pt-2"
@@ -203,7 +209,6 @@ const TradeHistory = () => {
 							{liveTradesBuyer.map((tradeInfo) => (
 								<React.Fragment>
 								<ActiveTradeCard tradeInfo={tradeInfo} type="buying" />
-								{console.log(tradeInfo)}
 								</React.Fragment>
 							))}
 							{messageForPurchases && <Paragraph size="20px" className="ms-2">{messageForPurchases}</Paragraph>}
