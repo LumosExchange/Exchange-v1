@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  PageBody,
-  StyledDropdown,
-} from "../../Components/FormInputs";
+import { PageBody, StyledDropdown } from "../../Components/FormInputs";
 import Heading from "../../Components/Heading";
 import GradientButton from "../../Components/GradientButton";
 import PrimaryButton from "../../Components/Buttons";
@@ -148,6 +145,7 @@ const Basic = () => {
               >
                 <option value="GBP">British Pounds (GBP)</option>
                 <option value="AUS">Australian Dollars (AUS)</option>
+                <option value="EURO">European Euros (EURO)</option>
               </StyledDropdown>
             </div>
           </div>
