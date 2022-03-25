@@ -34,7 +34,7 @@ const StyledAccordion = styled(Accordion)(
 );
 
 const reloadPage = () => {
-	window.location.reload(true);
+  window.location.reload(true);
 };
 
 const AccountUpgrade = () => {
@@ -84,7 +84,7 @@ const AccountUpgrade = () => {
 
       //Go to next step
       setCurrentStep(2);
-	  reloadPage();
+      reloadPage();
     });
   };
 
@@ -97,7 +97,7 @@ const AccountUpgrade = () => {
     }).then((response) => {
       setConfirmationMessage(response.data.message);
       setCurrentStep(3);
-	  reloadPage();
+      reloadPage();
     });
   };
 
@@ -108,7 +108,7 @@ const AccountUpgrade = () => {
         setExpanded(accountTier);
 
         if (accountTier === "Standard") {
-          setCurrentStep(1);
+          setCurrentStep(0);
         }
         if (accountTier === "Bronze") {
           setCurrentStep(1);
