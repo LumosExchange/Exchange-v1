@@ -34,37 +34,36 @@ const MobileMenuIcon = () => (
 );
 
 // Components
-const Base = styled.div(
-	({ theme }) => css`
-		background: ${theme.colors.base_bg};
-		font-family: Arial, Helvetica, sans-serif;
+const Base = styled.div(({ theme }) => css`
+	background: ${theme.colors.base_bg};
+	font-family: Arial, Helvetica, sans-serif;
 
-		.fixedHeight {
-			min-height: 80px;
-		}
+	.fixedHeight {
+		min-height: 80px;
+	}
 
-		svg g {
-			fill: ${theme.colors.primary_cta};
-		}
-	`
-);
+	svg g {
+		fill: ${theme.colors.primary_cta};
+	}
+`);
 
-const MenuBase = styled.div(
-	({ theme }) => css`
-		background: ${theme.colors.base_bg};
-		z-index: 2;
-		color: ${theme.colors.primary_cta};
-	`
-);
+const MenuBase = styled.div(({ theme }) => css`
+	background: ${theme.colors.base_bg};
+	z-index: 2;
+	color: ${theme.colors.primary_cta};
+`);
 
-const NavActionButton = styled(InvisibleButton)(
-	({ theme }) => css`
-		color: ${theme.colors.primary_cta};
-		&:hover {
-			color: ${theme.colors.text_primary};
-		}
-	`
-);
+const NavActionButton = styled(InvisibleButton)(({ theme }) => css`
+	color: ${theme.colors.primary_cta};
+	&:hover {
+		color: ${theme.colors.text_primary};
+	}
+`);
+
+const MobileProfileLink = styled.i(({ theme }) => css`
+	color: ${theme.colors.primary_cta};
+	font-size: 30px; 
+`);
 
 const Navbar = ({ loginStatus, userName }) => {
 	const [showMobileMenu, setMenuOpen] = useState(false);
@@ -80,6 +79,8 @@ const Navbar = ({ loginStatus, userName }) => {
 			}
 		});
 	};
+
+	useEffect(() => {}, [loginStatus]);
 
 	return (
 		<Base className="d-flex justify-content-center">
@@ -144,7 +145,22 @@ const Navbar = ({ loginStatus, userName }) => {
 							</div>
 						</React.Fragment>
 					)}
-					<div className="d-lg-none">
+					<div className="d-lg-none d-flex align-items-center">
+						{loginStatus && (
+							<React.Fragment>
+								<button className="bg-transparent border-0" onClick={() => navigate('/Profile/Basic')}>
+									<MobileProfileLink className="material-icons">person</MobileProfileLink>
+								</button>
+								<button className="bg-transparent border-0" onClick={() => logOut()}>
+									<MobileProfileLink className="material-icons">logout</MobileProfileLink>
+								</button>
+							</React.Fragment>
+						)}
+						{!loginStatus && (
+							<button className="bg-transparent border-0 me-2" onClick={() => navigate('/Login')}>
+								<MobileProfileLink className="material-icons">login</MobileProfileLink>
+							</button>
+						)}
 						<button className="bg-transparent border-0" onClick={() => setMenuOpen(true)}>
 							<MobileMenuIcon alt="Menu" />
 						</button>
@@ -158,33 +174,47 @@ const Navbar = ({ loginStatus, userName }) => {
 							<a href="/home">
 								<LumosLogo alt="Logo" className="me-1" />
 							</a>
-							<button className="bg-transparent border-0" onClick={() => setMenuOpen(false)}>
-								<MobileMenuIcon alt="Menu" />
-							</button>
+							<div className="d-flex align-items-center">
+								{loginStatus && (
+									<React.Fragment>
+										<button className="bg-transparent border-0" onClick={() => navigate('/Profile/Basic')}>
+											<MobileProfileLink className="material-icons">person</MobileProfileLink>
+										</button>
+										<button className="bg-transparent border-0" onClick={() => logOut()}>
+											<MobileProfileLink className="material-icons">logout</MobileProfileLink>
+										</button>
+									</React.Fragment>
+								)}
+								{!loginStatus && (
+									<button className="bg-transparent border-0 me-2" onClick={() => navigate('/Login')}>
+										<MobileProfileLink className="material-icons">login</MobileProfileLink>
+									</button>
+								)}
+								<button className="bg-transparent border-0" onClick={() => setMenuOpen(false)}>
+									<MobileMenuIcon alt="Menu" />
+								</button>
+							</div>
 						</div>
 					</div>
 					{loginStatus ? (
 						<div className="container d-flex flex-column p-4 pt-3">
-							<Link href="/Offers" className="mb-3">
-								Offers
+							<Link href="/Buy" className="mb-3">
+								Buy &amp; Sell
 							</Link>
-							<Link href="/Cryptos" className="mb-3">
-								Cryptos
+							<Link href="/MyListings" className="mb-3">
+								My Listings
 							</Link>
-							<Link href="/Trade" className="mb-3">
-								How to Trade
+							<Link href="/TradeHistory" className="mb-3">
+								My Trades
 							</Link>
-							<Link href="/Wallet" className="mb-3">
-								Reviews
+							<Link href="/MyWallet" className="mb-3">
+								Wallet
 							</Link>
-							<Link href="/Faq" className="mb-3">
-								FAQ
-							</Link>
-							<Link href="/Airdrops">Airdrops</Link>
+							<Link href="/AirDrops">Airdrops</Link>
 						</div>
 					) : (
 						<React.Fragment>
-							<div className="d-flex flex-column p-4 pt-3">
+							<div className="d-flex container flex-column p-4 pt-3">
 								<Link href="/Offers" className="mb-3">
 									Offers
 								</Link>
@@ -201,13 +231,13 @@ const Navbar = ({ loginStatus, userName }) => {
 									FAQ
 								</Link>
 								<Link href="/Airdrops">Airdrops</Link>
-							</div>
-							<div className="p-4">
+								<div className="py-4">
 								<GradientButton
 									text="Register Interest"
 									linkTo="/Register"
 									className="text-decoration-none w-100"
 								/>
+							</div>
 							</div>
 						</React.Fragment>
 					)}

@@ -29,3 +29,15 @@ export const FooterLink = styled.a(({ theme }) => css`
 		text-decoration: underline;	
 	}
 `);
+
+export const AltLink = styled.a(({ theme }) => css`
+	color: ${theme.colors.primary_cta};
+	text-decoration: none;
+	font-size: 18px;
+    font-family: "THICCCBOI-REGULAR";
+	
+	&:hover, &:focus, &:active {
+		color: ${theme.colors.primary_cta};
+		text-decoration: underline;	
+	}
+`);

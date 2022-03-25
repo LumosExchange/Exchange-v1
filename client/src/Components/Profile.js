@@ -65,10 +65,15 @@ export const ProfileTabLink = styled.a(({ theme }) => css`
             border-bottom: 2px solid ${theme.colors.primary_cta};
             font-family: "THICCCBOI-BOLD";
         }
+
+        &.wide {
+            min-width: 200px;
+            text-align: center;
+        }
 `);
 
 export const Tabs = styled.div`
-      padding: 0 0 9px 9px;
+      padding: 0 0 0 9px;
 `;
   
 export const AccountTierCard = styled.div(({ theme, tier }) => css`
@@ -204,7 +209,7 @@ export const TopBanner = styled.span(({ theme }) => css`
 `);
 
 export const ProfileTabs = ({ selected }) => (
-	<Tabs>
+	<Tabs className="d-flex overflow-scroll align-items-end">
 		<ProfileTabLink href="/Profile/Basic" className={selected === "Basic" && "selected"}>
 			Basic
 		</ProfileTabLink>
@@ -214,8 +219,8 @@ export const ProfileTabs = ({ selected }) => (
 		<ProfileTabLink href="/Profile/KYC" className={selected === "KYC" && "selected"}>
 			KYC
 		</ProfileTabLink>
-		<ProfileTabLink href="/Profile/PaymentMethods" className={selected === "PaymentMethods" && "selected"}>Payment Methods</ProfileTabLink>
-		<ProfileTabLink href="/Profile/AccountUpgrade" className={selected === "AccountUpgrade" && "selected"}>Account Upgrade</ProfileTabLink>
+		<ProfileTabLink href="/Profile/PaymentMethods" className={`wide ${selected === "PaymentMethods" && "selected"}`}>Payment Methods</ProfileTabLink>
+		<ProfileTabLink href="/Profile/AccountUpgrade" className={`wide ${selected === "AccountUpgrade" && "selected"}`}>Account Upgrade</ProfileTabLink>
 		<ProfileTabLink href="/Profile/Wallets" className={selected === "Wallets" && "selected"}>Wallets</ProfileTabLink>
 	</Tabs>
 );

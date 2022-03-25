@@ -10,11 +10,12 @@ import ConnectWalletButton from "../Components/ConnectWalletButton";
 import PhantomIcon from "../Images/phantom-icon-purple.svg";
 import SolflareIcon from "../Images/solflare-icon.svg";
 import ExodusIcon from "../Images/exodus-icon.svg";
-import Link from "../Components/Link";
+import Link, { AltLink } from "../Components/Link";
 
 const FormBackground = styled.div(({ theme }) => css`
     background: ${theme.colors.card_bg};
     border-radius: 20px;
+    max-width: 550px;
 `);
 
 const Login = () => {
@@ -71,8 +72,8 @@ const Login = () => {
 
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">
-      <Heading className="pb-4">Sign in with Lumos account</Heading>
-      <FormBackground className="col-12 col-md-6 col-xl-5 col-xxl-4 p-5">
+      <Heading className="pb-4 text-center">Sign in with Lumos account</Heading>
+      <FormBackground className="col-12 col-sm-10 col-md-7 col-xl-5 col-xxl-4 p-5">
         <div className="d-flex flex-column m-auto">
           <div className="text-center">
             <form>
@@ -121,6 +122,7 @@ const Login = () => {
             </form>
           </div>
           {loginStatus && <button>Check if authenticated</button>}
+          {/*
           <Paragraph size="18px" className="text-center my-4">
             Or continue with these Solana wallets
           </Paragraph>
@@ -133,10 +135,11 @@ const Login = () => {
             />
             <ConnectWalletButton icon={ExodusIcon} onClick={null} />
           </div>
+          */}
         </div>
       </FormBackground>
       <Paragraph size="18px" className="mt-4">
-        Not got an account yet? <Link href="/Register">Register here</Link>.
+        Not got an account yet? <AltLink href="/Register">Register here</AltLink>.
       </Paragraph>
     </PageBody>
   );

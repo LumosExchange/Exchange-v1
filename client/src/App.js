@@ -101,10 +101,7 @@ const App = () => {
 	useEffect(() => {
 		getUserLoginStatus();
 		getCurrencyAndSolPrice();
-
-		if (loginStatus === true) {
-			getUserName();
-		}
+		getUserName();
 	}, [loginStatus, solGbp, userName]);
 
 	return (
@@ -133,7 +130,7 @@ const App = () => {
 							<Route path="/Selling" element={<Selling userName={userName} />} />
 							<Route path="/Offer" element={<Offer solGbp={solGbp} solUsd={solUsd} currency={currency} />} />
 							<Route path="/TradeHistory" element={<TradeHistory />} />
-							<Route path="/profile/user/:id" element={<Feedback />} />
+							{/* <Route path="/profile/user/:id" element={<Feedback />} /> */}
 							<Route path="/TwoFactorAuth" element={<TwoFactorAuth />} />
 							<Route path="/ConnectWallet" element={<ConnectWallet />} />
 							<Route path="/ChangePassword" element={<ChangePassword />} />

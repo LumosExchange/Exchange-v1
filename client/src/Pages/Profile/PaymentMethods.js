@@ -23,6 +23,7 @@ import {
 import Paragraph from "../../Components/Paragraph";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { CodeSentMessage } from "../ChangePassword";
+import GradientButton from "../../Components/GradientButton";
 
 const MethodIcon = styled.i(
   ({ theme }) => css`
@@ -364,7 +365,7 @@ const PaymentMethods = () => {
         )}
         {filteredUserPayments.map((data) => (
           <PaymentMethodCard className="p-4 mb-3 d-flex align-items-center row position-relative">
-            <div className="col-12 d-flex col-lg-11">
+            <div className="col-12 d-flex col-lg-10">
               {convertMethodToIcon(data.data.type)}
               <Heading size="20px" className="mb-0 ms-2">
                 {data.data.name}
@@ -376,7 +377,7 @@ const PaymentMethods = () => {
                 </PaymentDetails>
               </Heading>
             </div>
-            <div className="col-12 col-lg-1 d-flex">
+            <div className="col-12 col-lg-2 d-none d-lg-flex justify-content-end">
               <InvisibleButton
                 className="me-2"
                 title="Edit"
@@ -390,6 +391,18 @@ const PaymentMethods = () => {
               >
                 <i className="material-icons showError">clear</i>
               </InvisibleButton>
+            </div>
+            <div className="col-12 col-lg-2 d-flex d-lg-none mt-4 flex-column flex-md-row">
+                <div className="col-12 col-md-3 me-3">
+                <InlineButton onClick={() => openEditModal(data.data)} className="w-100">
+                    Edit
+                  </InlineButton>
+                </div>
+                <div className="col-12 col-md-3 mt-2 mt-md-0">
+                  <InlineButton className="delete w-100" onClick={() => openDeleteModal(data.data)}>
+                    Delete
+                  </InlineButton>
+                </div>
             </div>
           </PaymentMethodCard>
         ))}
@@ -677,15 +690,17 @@ const PaymentMethods = () => {
         <ContentTab className="text-white">
           <div className="d-flex p-4 row">
             <div className="col-12">
-              <div className="d-flex justify-content-between align-items-center">
+              <div className="d-flex justify-content-between align-items-center flex-column flex-md-row">
+                <div className="col-12 col-md-6">
                 <Heading size="18px" bold className="mb-0">
                   Payment Methods
                 </Heading>
-                <div className="col-3">
+                </div>
+                <div className="col-12 col-md-6 col-lg-3 mt-2 mt-md-0">
                   <InlineButton onClick={toggle}>
                     Add a Payment Method
                   </InlineButton>
-                </div>
+              </div>
               </div>
               <div className="d-flex p-4 row">
                 <ShowAddedPaymentMethods />
