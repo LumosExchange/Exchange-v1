@@ -59,7 +59,8 @@ app.use(function (req, res, next) {
   res.setHeader(
     "Access-Control-Allow-Origin",
     "http://localhost:3000",
-    "https://api.coingecko.com/api/v3/coins/",
+    "https://api.coingecko.com",
+    "https://api.coingecko.com/api/v3/coins/markets"
   );
   // Request methods you wish to allow
   res.setHeader(
@@ -69,11 +70,12 @@ app.use(function (req, res, next) {
   // Request headers you wish to allow
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
+    "X-Requested-With,content-type",
   );
   // Set to true if you need the website to include cookies in the requests sent
   // to the API (e.g. in case you use sessions)
   res.setHeader("Access-Control-Allow-Credentials", true);
+  "Access-Control-Allow-Origin",
   // Pass to next layer of middleware
   next();
 });
@@ -89,9 +91,9 @@ app.use(
     {
       origin: ["https://api.coingecko.com/api/v3/coins"],
       methods: ["GET", "POST"],
-      credentials: false,
+      credentials: true,
       optionSuccessStatus: 200,
-    }
+    },
   )
 );
 
@@ -237,7 +239,7 @@ app.get("/login", (req, res) => {
 app.post('/logout', (req, res) => {
   req.session.destroy();
   req.session = null;
-  res.redirect('/');
+  res.send('User logged out');
 });
 
 //create JWT aauth

@@ -28,6 +28,7 @@ export const darkTheme = {
     panel_bg: "#2d2d2d",
     panel_accent: "#404040",
     modal_bg: "#272727",
+    disabledGrey: "#494949",
 
     gradients: {
       yellow: "#FCE608",
@@ -98,6 +99,7 @@ export const lightTheme = {
     panel_bg: "#FFF",
     panel_accent: "#F4F4F4",
     modal_bg: "#fff",
+    disabledGrey: "#c5c5c5",
 
     // Hide the gradient on light theme
     gradients: {

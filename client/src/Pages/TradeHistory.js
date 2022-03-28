@@ -29,21 +29,35 @@ const MaxHeightBarrier = styled.div(({ theme }) => css`
 	}
 `);
 
-const CancelButton = styled(InvisibleButton)(({ theme }) => css`
-	background: ${theme.colors.invalid};
+const ActionButton = styled(InvisibleButton)(({ theme, color, textColor }) => css`
+	background: ${theme.colors[color]};
 	border-radius: 50px;
 	padding: 10px 25px;
-	color: ${theme.colors.actual_white};
+	color: ${theme.colors.base_bg};
 	font-size: 20px;
+
+	&.delete {
+		background: ${theme.colors.invalid};
+		color: ${theme.colors.actual_white};
+	}
 
 	&:hover {
 		transform: scale(1.05);
 	}
+
+	&:disabled {
+		background: ${theme.colors.disabledGrey};
+		cursor: not-allowed;
+		color: ${theme.colors.actual_white};
+
+		&:hover {
+			transform: initial;
+		}
+	}
 `);
 
-const ActiveTradeCard = ({ tradeInfo, type }) => {
+const ActiveTradeCard = ({ tradeInfo, type, noButtons }) => {
 	const [message, setMessage] = useState('');
-
 	const formattedDate = tradeInfo.Date.replace('T', ' at ').replace('.000Z', ' ');
 	const formattedCurrencySymbol = convertCurrencyToSymbol(tradeInfo.paymentCurrency);
 	const liveTradeID = tradeInfo.LiveTradeID;
@@ -67,7 +81,7 @@ const ActiveTradeCard = ({ tradeInfo, type }) => {
 						<Heading bold size="20px">MetaData</Heading>
 						<div className="d-flex">
 							<TitledIcon className="material-icons me-2" title="Reference">tag</TitledIcon>
-							<Paragraph size="18px" className="mb-2">{tradeInfo.LiveTradeID}</Paragraph>
+							<Paragraph size="18px" className="mb-2">{tradeInfo.HistoryID ? tradeInfo.HistoryID : tradeInfo.LiveTradeID}</Paragraph>
 						</div>
 						<div className="d-flex">
 							<TitledIcon className="material-icons me-2" title="Date/Time Created">schedule</TitledIcon>
@@ -122,24 +136,29 @@ const ActiveTradeCard = ({ tradeInfo, type }) => {
 					</div>
 				</div>
 				<div className="col-12 col-lg-3 d-flex align-items-end justify-content-end flex-column">
-					<CancelButton
+					<ActionButton
 						fontSize="20px"
-						className="mb-3 w-100"
+						className="mb-3 w-100 delete"
+						disabled={noButtons}
 						onClick={ () => deleteLiveTrade() }
 					>
 						Delete Trade
-					</CancelButton>
-					<GradientButton
-						text="View Trade"
+					</ActionButton>
+					<ActionButton
 						className="w-100 mb-2"
 						fontSize="20px"
+						color="primary_cta"
+						textColor="actual_white"
+						disabled={noButtons}
 						onClick={ () => navigate(type === "buying" ? "/Buying" : "/Selling", {
 							state: {
 								liveTradeID,
 								paymentSent,
 							}
 						})}
-					/>
+					>
+						View Trade
+					</ActionButton>
 				</div>
 			</div>
 		</Card>
@@ -157,10 +176,10 @@ const TradeHistory = () => {
 	const [liveTradesSeller, setLiveTradesSeller] = useState([]);
 	const [isLoadingBuyTrades, setIsLoadingBuyTrades] = useState(true);
 	const [isLoadingSellTrades, setIsLoadingSellTrades] = useState(true);
+	const [tradeHistory, setTradeHistory] = useState([]);
 
 	const getLiveTradesBuyer = () => {
 		Axios.post("http://localhost:3001/GetLiveTradesBuyer").then((response) => {
-			console.log(response, 'response from getlivetradesbuyer')
 			if (response.data.message){
 				setMessageForPurchases(response.data.message);
 			} else {
@@ -184,22 +203,24 @@ const TradeHistory = () => {
 	)}
 
 	const getTradeHistory = () => {
-		Axios.post("http://localhost:3001/TradeHistory".then((response) => {
-			
-		}))
-
+		Axios.post("http://localhost:3001/TradeHistory").then((response) => {
+			setTradeHistory(response.data);
+		});
 	}
 
-
-
 	useEffect(() => {
-		if(liveTradesBuyer.length === 0){
+		if (liveTradesBuyer.length === 0){
 			getLiveTradesBuyer();
 		}
-		if(liveTradesSeller.length === 0){
+		if (liveTradesSeller.length === 0){
 			getLiveTradesSeller();
 		}
+
+		getTradeHistory();
+
 	}, [liveTradesBuyer, liveTradesSeller]);
+
+	console.log(tradeHistory, 'trade history');
 
 	return (
 		<PageBody className="d-flex align-items-start flex-column">
@@ -249,9 +270,13 @@ const TradeHistory = () => {
 						<ToggleIcon toggled={historyExpanded} alt="Dropdown" className="small me-3" />
 						<Heading size="24px" className="mb-0">Trade History</Heading>
 					</InvisibleButton>
-					<Collapse orientation="horizontal" in={historyExpanded}>
-						Trade History Here
-					</Collapse>
+					<MaxHeightBarrier>
+						<Collapse orientation="horizontal" in={historyExpanded}>
+							{tradeHistory.map((trades) => (
+								<ActiveTradeCard tradeInfo={trades} noButtons />
+							))}
+						</Collapse>
+					</MaxHeightBarrier>
 				</div>
 			</div>
 		</PageBody>
