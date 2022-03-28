@@ -77,6 +77,7 @@ const Feedback = () => {
 			setCountry(response.data.country);
 			setEmailVerified(response.data.emailVerified);
 			setPhoneVerified(response.data.phoneVerified);
+			console.log('Trade Info: ', response);
 		})
 
 	};
@@ -87,6 +88,7 @@ const Feedback = () => {
 		}).then((response) => {
 			//Will need to map this 
 			setFeedbackComments(response.data);
+			console.log(response);
 		
 		})
 
@@ -94,6 +96,7 @@ const Feedback = () => {
 
 	useEffect(() => {
 		tradeInfo();
+		feedback();
 	}, []);
 
 	return (
