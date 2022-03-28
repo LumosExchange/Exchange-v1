@@ -183,6 +183,15 @@ const TradeHistory = () => {
 		}
 	)}
 
+	const getTradeHistory = () => {
+		Axios.post("http://localhost:3001/TradeHistory".then((response) => {
+			
+		}))
+
+	}
+
+
+
 	useEffect(() => {
 		if(liveTradesBuyer.length === 0){
 			getLiveTradesBuyer();

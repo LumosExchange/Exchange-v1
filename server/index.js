@@ -2342,7 +2342,23 @@ app.post("/FeedbackComments", (req, res) => {
       }
     }
   );
-})
+});
+
+app.post("/TradeHistory", (req, res) => {
+  const userID = req.session.user[0].userID;
+
+  db.query(
+    "SELECT * FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?)",
+    [userID, userID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(result);
+      }
+    }
+  )
+});
 
 server.listen(3002, () => {
   console.log("SERVER RUNNING");
