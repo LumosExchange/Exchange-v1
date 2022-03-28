@@ -59,7 +59,7 @@ app.use(function (req, res, next) {
   res.setHeader(
     "Access-Control-Allow-Origin",
     "http://localhost:3000",
-    "https://api.coingecko.com"
+    "https://api.coingecko.com/api/v3/coins/",
   );
   // Request methods you wish to allow
   res.setHeader(
@@ -87,7 +87,7 @@ app.use(
       optionSuccessStatus: 200,
     },
     {
-      origin: ["https://api.coingecko.com"],
+      origin: ["https://api.coingecko.com/api/v3/coins"],
       methods: ["GET", "POST"],
       credentials: false,
       optionSuccessStatus: 200,
