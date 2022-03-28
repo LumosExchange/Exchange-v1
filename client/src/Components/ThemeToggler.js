@@ -60,8 +60,6 @@ export const useDarkMode = () => {
 const ThemeToggler = ({ theme, toggleTheme, currency, solgbp }) => {
   	const isLight = theme === 'light';
 
-	  console.log(solgbp, 'sol price');
-
   	return (
 		<ThemeBarContainer isLight={isLight} className="pt-3">
 			<div className="container d-flex justify-content-between">
@@ -83,7 +81,7 @@ const ThemeToggler = ({ theme, toggleTheme, currency, solgbp }) => {
 				<div className="d-flex align-items-center">
 					<img src={IconSolana} alt="Solana" className="solana-icon me-2" />
 					<Paragraph color="primary_cta" size="18px" className="mb-0">
-						{solgbp === 0 ? <img src={LoadingState} alt="loading" /> : convertCurrencyToSymbol(currency) + solgbp}
+						{solgbp && solgbp === 0 ? <img src={LoadingState} alt="loading" /> : `${convertCurrencyToSymbol(currency)} ${solgbp}`}
 					</Paragraph>
 				</div>
 			</div>
