@@ -1,96 +1,56 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "../App.css";
+import React, { useEffect, useState } from "react";
+import CoinGecko from "coingecko-api";
+const CoinGeckoClient = new CoinGecko();
 
-const Coin = ({
-	name,
-	price,
-	symbol,
-	marketcap,
-	volume,
-	image,
-	priceChange,
-  }) => {
-	return (
-	  <div className="coin-container">
-		<div className="coin-row">
-		  <div className="coin">
-			<img src={image} alt="crypto" />
-			<h1>{name}</h1>
-			<p className="coin-symbol">{symbol}</p>
-		  </div>
-		  <div className="coin-data">
-			<p className="coin-price">${price}</p>
-			<p className="coin-volume">${volume.toLocaleString()}</p>
-  
-			{priceChange < 0 ? (
-			  <p className="coin-percent red">{priceChange.toFixed(2)}%</p>
-			) : (
-			  <p className="coin-percent green">{priceChange.toFixed(2)}%</p>
-			)}
-  
-			<p className="coin-marketcap">
-			  Mkt Cap: ${marketcap.toLocaleString()}
-			</p>
-		  </div>
-		</div>
-	  </div>
-	);
-  };
-
-const Prices = () => {
-	const [coins, setCoins] = useState([]);
-	const [search, setSearch] = useState("");
-
-	useEffect(() => {
-		axios.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=gbp&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=24h", { crossDomain: true })
-			.then((res) => {
-				setCoins(res.data);
-				console.log(res.data);
-			})
-			.catch((error) => console.log(error));
-	}, []);
-
-	const handleChange = (e) => {
-		setSearch(e.target.value);
-	};
-
-	const filteredCoins = coins.filter((coin) => coin.name.toLowerCase().includes(search.toLowerCase()));
-
-	return (
-		<div className="coin-app">
-			<div className="coin-search">
-				<h1 className="coin-text">Search a currency</h1>
-
-				<form>
-					<input className="coin-input" type="text" onChange={handleChange} placeholder="Search" />
-				</form>
-			</div>
-			<div className="grid-container">
-				<div className="item1">Name</div>
-				<div className="item2">Symbol</div>
-				<div className="item3">Price</div>
-				<div className="item4">Volume</div>
-				<div className="item4">24h</div>
-				<div className="item5">Market cap</div>
-			</div>
-
-			{filteredCoins.map((coin) => {
-				return (
-					<Coin
-						key={coin.id}
-						name={coin.name}
-						price={coin.current_price}
-						symbol={coin.symbol}
-						marketcap={coin.market_cap}
-						volume={coin.total_volume}
-						image={coin.image}
-						priceChange={coin.price_change_percentage_24h}
-					/>
-				);
-			})}
-		</div>
-	);
+function Prices() {
+  const [coins, setcoins] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      // console.log(fetchURL);
+      var parms = {
+        order: CoinGecko.ORDER.MARKET_CAP_DESC
+      };
+      const result = await CoinGeckoClient.coins.markets({ parms });
+      // let data = await CoinGeckoClient.ping();
+      console.log(result.data[0]);
+      setcoins(result.data);
+    }
+    fetchData();
+  }, []);
+  return (
+    <>
+     
+      <div className="container-fluid" style={{ padding: "4% 10%" }}>
+        <table className="table table-dark">
+          <thead>
+            <tr>
+              <th scope="col">Rank</th>
+              <th scope="col">symbol</th>
+              <th scope="col">price</th>
+              <th scope="col">24 hr change(%)</th>
+              <th scope="col">Market Cap</th>
+            </tr>
+          </thead>
+          <tbody>
+            {coins.map((e, i) => {
+              // console.log(e);
+              return (
+                <tr key={e.id} className="table">
+                  <th scope="row">{i + 1}</th>
+                  <th>
+                    <img src={e.image} alt="{e.name}" width="24" srcset="" />
+                    {" " + e.name + " "}({e.symbol})
+                  </th>
+                  <td>$ {e.current_price}</td>
+                  <td>{e.price_change_percentage_24h} %</td>
+                  <td>$ {e.market_cap}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
 }
-
 export default Prices;
