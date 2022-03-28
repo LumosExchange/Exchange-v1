@@ -2310,11 +2310,11 @@ app.post("/GetFeedbackPage", (req, res) => {
         res.send(err);
       } else {
         res.send({
+          emailVerified: result[0].emailVerified,
+          phoneVerified: result[0].SMS,
           totalTrades: totalTrades,
           feedbackScore: feedbackScore,
           registeredDate: registeredDate,
-          emailVerified: result[0].emailVerified,
-          phoneVerified: result[0].SMS,
           country: country,
         })
       }
