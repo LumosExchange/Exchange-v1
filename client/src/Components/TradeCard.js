@@ -63,7 +63,7 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
                     {convertCountryToFlag(val.Country)}
                     <Paragraph size="18px" className="mb-0 text-truncate overflow-hidden">{val.Town}, {val.Country}</Paragraph>
                 </div>
-                <div className="col-12 col-xl-2 d-flex align-items-center justify-content-end mb-3 mb-xl-0">
+                <div className="col-12 col-xl-2 d-flex align-items-center justify-content-xl-end mb-3 mb-xl-0">
                     <Paragraph size="18px" className="mb-0">{val.amountForSale} for sale</Paragraph>
                 </div>
                 <div className="d-block d-xl-none">

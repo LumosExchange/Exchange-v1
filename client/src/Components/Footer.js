@@ -76,7 +76,7 @@ const Footer = () => (
 							<Heading size="20px" bold>Subscribe to our newsletter</Heading>
 							<Paragraph size="18px">Get regular project updates and access to new events on Discord, Twitter or in the real world.</Paragraph>
 							<div className="col-12 d-flex flex-column flex-lg-row">
-								<FormInput rounded placeholder="Your Email Address" className="me-3 w-100 mb-3 mb-lg-0" />
+								<FormInput rounded placeholder="Your Email Address" className="me-lg-3 w-100 mb-3 mb-lg-0" />
 								<GradientButton as="button" text="Subscribe" />
 							</div>
 						</div>

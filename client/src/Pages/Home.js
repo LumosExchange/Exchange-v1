@@ -18,6 +18,7 @@ import {
     FeeJarIcon,
     CopeIcon,
 } from '../Components/SVGComponents';
+import { useNavigate } from "react-router";
 
 
 const ShowcaseBase = styled.div(({ theme }) => css`
@@ -68,7 +69,9 @@ const Showcase = () => (
     </ShowcaseBase>
 );
 
-const Home = () => (
+const Home = () => {
+    const navigate = useNavigate();
+    return (
     <PageBody className="container-fluid">
         <div className="row pt-5 d-flex justify-content-center container m-auto">
             <div className="col-12 col-lg-6 d-flex align-items-center justify-content-center">
@@ -145,7 +148,7 @@ const Home = () => (
                         className="mt-5 p-0"
                         color="black"
                         textColor="yellow"
-                        onClick={null}
+                        onClick={() => navigate('/Buy')}
                         hasIcon
                         fontSize="28px"
                     />
@@ -201,6 +204,7 @@ const Home = () => (
             </div>
         </div>
     </PageBody>
-);
+    );
+}
 
 export default Home;

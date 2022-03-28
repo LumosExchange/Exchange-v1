@@ -40,6 +40,7 @@ import Buying from "./Pages/Buying";
 import Wallets from "./Pages/Profile/Wallets";
 import Feedback from "./Pages/Feedback";
 import ProtectedRoutes from "./Components/ProtectedRoutes";
+import Prices from './Pages/Prices';
 
 const App = () => {
 	const [theme, toggleTheme] = useDarkMode();
@@ -116,6 +117,7 @@ const App = () => {
 						<Route path="/Login" element={<Login />} />
 						<Route path="/Register" element={<Register />} />
 						<Route path="*" element={<ErrorPage />} />
+						<Route path="/Prices" element={<Prices />} />
 
 						{/* Protected Routes */}
 						<Route path="/" element={<ProtectedRoutes />}>

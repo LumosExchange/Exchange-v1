@@ -392,7 +392,7 @@ const Buying = ({ userName }) => {
 									{solAmount} SOL
 								</Heading>
 								<Paragraph size="18px">Should have been sent to the wallet addresss:</Paragraph>
-								<StyledCode>Wallet here</StyledCode>
+								<StyledCode>{walletAddress}</StyledCode>
 								<HorizontalDivider />
 								<div className="d-flex align-items-center py-3">
 									<Warning />

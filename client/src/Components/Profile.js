@@ -74,6 +74,7 @@ export const ProfileTabLink = styled.a(({ theme }) => css`
 
 export const Tabs = styled.div`
       padding: 0 0 0 9px;
+      overflow-x: auto;
 `;
   
 export const AccountTierCard = styled.div(({ theme, tier }) => css`
@@ -209,7 +210,7 @@ export const TopBanner = styled.span(({ theme }) => css`
 `);
 
 export const ProfileTabs = ({ selected }) => (
-	<Tabs className="d-flex overflow-scroll align-items-end">
+	<Tabs className="d-flex align-items-end">
 		<ProfileTabLink href="/Profile/Basic" className={selected === "Basic" && "selected"}>
 			Basic
 		</ProfileTabLink>
