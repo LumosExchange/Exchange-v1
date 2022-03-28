@@ -102,7 +102,11 @@ const App = () => {
 	useEffect(() => {
 		getUserLoginStatus();
 		getCurrencyAndSolPrice();
-		getUserName();
+
+		if (loginStatus === true){
+			getUserName();
+		}
+		
 	}, [loginStatus, solGbp, userName]);
 
 	return (

@@ -42,13 +42,8 @@ const Prices = () => {
 	const [coins, setCoins] = useState([]);
 	const [search, setSearch] = useState("");
 
-	console.log(search, 'search query');
-
 	useEffect(() => {
-		axios
-			.get(
-				axios.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=gbp&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=24h"' , { crossDomain: true } )
-			)
+		axios.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=gbp&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=24h", { crossDomain: true })
 			.then((res) => {
 				setCoins(res.data);
 				console.log(res.data);
@@ -71,16 +66,14 @@ const Prices = () => {
 					<input className="coin-input" type="text" onChange={handleChange} placeholder="Search" />
 				</form>
 			</div>
-			<body>
-				<div class="grid-container">
-					<div class="item1">Name</div>
-					<div class="item2">Symbol</div>
-					<div class="item3">Price</div>
-					<div class="item4">Volume</div>
-					<div class="item4">24h</div>
-					<div class="item5">Market cap</div>
-				</div>
-			</body>
+			<div className="grid-container">
+				<div className="item1">Name</div>
+				<div className="item2">Symbol</div>
+				<div className="item3">Price</div>
+				<div className="item4">Volume</div>
+				<div className="item4">24h</div>
+				<div className="item5">Market cap</div>
+			</div>
 
 			{filteredCoins.map((coin) => {
 				return (
