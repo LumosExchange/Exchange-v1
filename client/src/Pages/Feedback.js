@@ -77,6 +77,7 @@ const Feedback = () => {
 			setCountry(response.data.country);
 			setEmailVerified(response.data.emailVerified);
 			setPhoneVerified(response.data.phoneVerified);
+			console.log('Trade Info: ', response);
 		})
 
 	};
@@ -87,6 +88,7 @@ const Feedback = () => {
 		}).then((response) => {
 			//Will need to map this 
 			setFeedbackComments(response.data);
+			console.log(response);
 		
 		})
 
@@ -94,6 +96,7 @@ const Feedback = () => {
 
 	useEffect(() => {
 		tradeInfo();
+		feedback();
 	}, []);
 
 	return (
@@ -122,7 +125,7 @@ const Feedback = () => {
 												</td>
 												<td className="pb-2">
 													<Paragraph size="18px" className="d-inline">
-														0
+														{totalTrades}
 													</Paragraph>
 												</td>
 											</tr>
@@ -134,7 +137,7 @@ const Feedback = () => {
 												</td>
 												<td>
 													<Paragraph size="18px" className="d-inline">
-														100%
+														{feedbackScore}
 													</Paragraph>
 												</td>
 											</tr>
@@ -146,7 +149,7 @@ const Feedback = () => {
 												</td>
 												<td>
 													<Paragraph size="18px" className="d-inline">
-														10/10/2021
+														{registeredDate}
 													</Paragraph>
 												</td>
 											</tr>
@@ -158,7 +161,7 @@ const Feedback = () => {
 												</td>
 												<td>
 													<Paragraph size="18px" className="d-inline">
-														United Kingdom
+														{country}
 													</Paragraph>
 												</td>
 											</tr>

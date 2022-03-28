@@ -2235,11 +2235,12 @@ app.post("/GetWallets", (req, res) => {
 
 app.post("/GetFeedbackPage", (req, res) => {
 
-  const userID = req.body.userName;
+  const userID = req.body.userID;
 
   let totalTrades = 0;
   let feedbackScore = 0;
   let registeredDate = "";
+  let country = "";
 
   
  //get totaltrades
@@ -2250,7 +2251,8 @@ app.post("/GetFeedbackPage", (req, res) => {
       if (err) {
         res.send(err);
       }else {
-        totalTrades = result.total;
+        totalTrades = result[0].total;
+        console.log('TotalTrades: ', result[0].total);
       }
     }
   );
@@ -2265,7 +2267,21 @@ app.post("/GetFeedbackPage", (req, res) => {
       if (err) {
         res.send(err);
       }else {
-       feedbackScore = result.feedback;
+       feedbackScore = result[0].feedback;
+       console.log('Feedback : ', result[0].feedback);
+      }
+    }
+  );
+//LOCATION
+  db.query(
+    "SELECT Country AS country FROM userInformation WHERE (userID) = (?) ",
+    [userID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      }else {
+       country = result[0].country;
+       console.log('Registered Country : ', result[0].country);
       }
     }
   );
@@ -2278,41 +2294,28 @@ app.post("/GetFeedbackPage", (req, res) => {
       if (err) {
         res.send(err);
       }else {
-       registeredDate = result.registeredDate;
+       registeredDate = result[0].registeredDate;
+       console.log('Registered Date : ', result[0].registeredDate);
       }
     }
   );
 
-  //Location
-
-  db.query(
-    "SELECT Country AS Country FROM userInformation WHERE (userID) = (?) ",
-    [userID],
-    (err, result) => {
-      if (err) {
-        res.send(err);
-      }else {
-       country = result.Country;
-      }
-    }
-  );
 
   //verification status of email and phone
   db.query(
-    "SELECT emailVerified, phoneNumber FROM userAuth WHERE (userID) = (?)",
+    "SELECT emailVerified, SMS FROM userAuth WHERE (userID) = (?)",
     [userID],
     (err, result) => {
       if (err) {
         res.send(err);
       } else {
         res.send({
-          userID: userID,
+          emailVerified: result[0].emailVerified,
+          phoneVerified: result[0].SMS,
           totalTrades: totalTrades,
           feedbackScore: feedbackScore,
           registeredDate: registeredDate,
           country: country,
-          emailVerified: result[0].emailVerified,
-          phoneVerified: result[0].phoneNumber
         })
       }
     }
@@ -2321,15 +2324,16 @@ app.post("/GetFeedbackPage", (req, res) => {
 
 app.post("/FeedbackComments", (req, res) => {
 
-  const userID = req.body.userName;
+  const userID = req.body.userID;
 
   db.query(
-    "SELECT feedbackScore, date, Comments WHERE (sellerID) = (?) OR (buyerID) = (?) LIMIT 5 ORDER BY date LIMIT 5 ",
+    "SELECT feedbackScore, date, Comments FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?)",
     [userID, userID],
     (err, result) => {
       if (err) {
         res.send(err);
       }else {
+        console.log(result);
        res.send({
          rating: result.feedbackScore,
          comment: result.Comment,
