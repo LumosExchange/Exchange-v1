@@ -56,7 +56,7 @@ const ActionButton = styled(InvisibleButton)(({ theme, color, textColor }) => cs
 	}
 `);
 
-const ActiveTradeCard = ({ tradeInfo, type, noButtons }) => {
+const ActiveTradeCard = ({ tradeInfo, type, noButtons, noMessage }) => {
 	const [message, setMessage] = useState('');
 	const formattedDate = tradeInfo.Date.replace('T', ' at ').replace('.000Z', ' ');
 	const formattedCurrencySymbol = convertCurrencyToSymbol(tradeInfo.paymentCurrency);
@@ -87,7 +87,7 @@ const ActiveTradeCard = ({ tradeInfo, type, noButtons }) => {
 							<TitledIcon className="material-icons me-2" title="Date/Time Created">schedule</TitledIcon>
 							<Paragraph size="18px" className="mb-2">{formattedDate}</Paragraph>
 						</div>
-						{tradeInfo.Message && (
+						{!noMessage && tradeInfo.Message && (
 							<div className="d-flex">
 								<TitledIcon className="material-icons me-2" title="Message from Seller">message</TitledIcon>
 								<Paragraph size="18px" className="mb-0 overflow-hidden text-truncate">{tradeInfo.Message}</Paragraph>
@@ -273,7 +273,7 @@ const TradeHistory = () => {
 					<MaxHeightBarrier>
 						<Collapse orientation="horizontal" in={historyExpanded}>
 							{tradeHistory.map((trades) => (
-								<ActiveTradeCard tradeInfo={trades} noButtons />
+								<ActiveTradeCard tradeInfo={trades} noButtons noMessage />
 							))}
 						</Collapse>
 					</MaxHeightBarrier>

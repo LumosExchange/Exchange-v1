@@ -19,7 +19,6 @@ function Prices() {
   }, []);
   return (
     <>
-     
       <div className="container-fluid" style={{ padding: "4% 10%" }}>
         <table className="table table-dark">
           <thead>
