@@ -81,7 +81,7 @@ const ThemeToggler = ({ theme, toggleTheme, currency, solgbp }) => {
 				<div className="d-flex align-items-center">
 					<img src={IconSolana} alt="Solana" className="solana-icon me-2" />
 					<Paragraph color="primary_cta" size="18px" className="mb-0">
-						{solgbp && solgbp === 0 ? <img src={LoadingState} alt="loading" /> : `${convertCurrencyToSymbol(currency)} ${solgbp}`}
+						{solgbp !== undefined && solgbp === 0 ? <img src={LoadingState} alt="loading" /> : `${convertCurrencyToSymbol(currency)} ${solgbp}`}
 					</Paragraph>
 				</div>
 			</div>

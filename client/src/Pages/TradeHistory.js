@@ -171,17 +171,20 @@ const TradeHistory = () => {
 	const [activeBuyTradesExpanded, expandActiveBuyTrades] = useState(false);
 	const [activeSellTradesExpanded, expandActiveSellTrades] = useState(false);
 	const [messageForSales, setMessageForSales] = useState('');
+	const [messageForHistory, setMessageForHistory] = useState('');
 	const [messageForPurchases, setMessageForPurchases] = useState('');
 	const [liveTradesBuyer, setLiveTradesBuyer] = useState([]);
 	const [liveTradesSeller, setLiveTradesSeller] = useState([]);
 	const [isLoadingBuyTrades, setIsLoadingBuyTrades] = useState(true);
 	const [isLoadingSellTrades, setIsLoadingSellTrades] = useState(true);
+	const [isLoadingTradeHistory, setIsLoadingTradeHistory] = useState(true);
 	const [tradeHistory, setTradeHistory] = useState([]);
 
 	const getLiveTradesBuyer = () => {
 		Axios.post("http://localhost:3001/GetLiveTradesBuyer").then((response) => {
 			if (response.data.message){
 				setMessageForPurchases(response.data.message);
+				setIsLoadingBuyTrades(false);
 			} else {
 				setLiveTradesBuyer(response.data);
 				setIsLoadingBuyTrades(false);
@@ -194,6 +197,7 @@ const TradeHistory = () => {
 		Axios.post("http://localhost:3001/GetLiveTradesSeller").then((response) => {
 			if (response.data.message){
 				setMessageForSales(response.data.message);
+				setIsLoadingSellTrades(false);
 			} else {
 				setLiveTradesSeller(response.data);
 				setIsLoadingSellTrades(false);
@@ -204,7 +208,14 @@ const TradeHistory = () => {
 
 	const getTradeHistory = () => {
 		Axios.post("http://localhost:3001/TradeHistory").then((response) => {
-			setTradeHistory(response.data);
+			if (response.data.message){
+				setMessageForHistory(response.data.message);
+				setIsLoadingTradeHistory(false);
+			} else {
+				setTradeHistory(response.data);
+				setIsLoadingTradeHistory(false);
+				expandHistory(true);
+			}
 		});
 	}
 
@@ -268,13 +279,14 @@ const TradeHistory = () => {
 						className="d-flex align-items-center pt-2"
 					>
 						<ToggleIcon toggled={historyExpanded} alt="Dropdown" className="small me-3" />
-						<Heading size="24px" className="mb-0">Trade History</Heading>
+						<Heading size="24px" className="mb-0">{tradeHistory.length} Completed Trades</Heading>
 					</InvisibleButton>
 					<MaxHeightBarrier>
 						<Collapse orientation="horizontal" in={historyExpanded}>
 							{tradeHistory.map((trades) => (
 								<ActiveTradeCard tradeInfo={trades} noButtons noMessage />
 							))}
+							{messageForHistory && <Paragraph size="20px" className="ms-2">{messageForHistory}</Paragraph>}
 						</Collapse>
 					</MaxHeightBarrier>
 				</div>
