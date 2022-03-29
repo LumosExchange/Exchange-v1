@@ -238,11 +238,13 @@ const Feedback = () => {
 									)}
 									{feedbackComments.length > 0 && feedbackComments.map((fb) => (
 										<Striped className="d-flex px-4 py-3 mb-2 flex-column">
-											<Paragraph size="14px" className="mb-1">
-												{fb.date}
+											<Paragraph size="14px" className="mb-2">
+												{fb.date.replace('T', ' at ').replace('.000Z', ' ')}
 											</Paragraph>
 											<div className="d-flex">
-												{convertScoreToIcon(fb.feedbackSCore)}
+												<Paragraph size="20px" className="mb-0">
+													{convertScoreToIcon(fb.feedbackScore)}
+												</Paragraph>
 												<Paragraph size="20px" className="mb-0">
 													{fb.comment}
 												</Paragraph>
