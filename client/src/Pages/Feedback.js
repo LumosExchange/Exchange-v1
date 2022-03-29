@@ -86,7 +86,7 @@ const Feedback = () => {
 		Axios.post("http://localhost:3001/FeedbackComments", {
 			userID: userID
 		}).then((response) => {
-			console.log(response, 'response from feedbackcomment')
+			console.log('feedback response: ', response);
 			//Will need to map this 
 			if (response.data.length > 0){
 				setFeedbackComments(response.data);
