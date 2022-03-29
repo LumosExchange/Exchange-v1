@@ -2235,112 +2235,6 @@ app.post("/GetWallets", (req, res) => {
   )
 });
 
-app.post("/GetFeedbackPage", (req, res) => {
-
-  const userID = req.body.userID;
-
-  let totalTrades = 0;
-  let feedbackScore = 0;
-  let registeredDate = "";
-  let country = "";
-  let userName = "";
-
-  //gteusername
-
-  db.query(
-    "SELECT userName FROM users WHERE (userID) = (?)",
-    [userID],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-        res.send(err);
-      } else {
-        userName = result[0].userName;
-      }
-    }
-  );
-
-  
- //get totaltrades
-  db.query(
-    "SELECT COUNT (*) AS total FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?)",
-    [userID, userID],
-    (err, result) => {
-      if (err) {
-        res.send(err);
-      } else {
-        totalTrades = result[0].total;
-        console.log('TotalTrades: ', result[0].total);
-      }
-    }
-  );
-
-
-  // feedbackScore
-  db.query(
-    "SELECT AVG (feedbackScore) AS feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?)",
-    [userID, userID],
-    (err, result) => {
-      if (err) {
-        res.send(err);
-      } else {
-       feedbackScore = result[0].feedback;
-       console.log('Feedback : ', result[0].feedback);
-      }
-    }
-  );
-
-  // location
-  db.query(
-    "SELECT Country AS country FROM userInformation WHERE (userID) = (?) ",
-    [userID],
-    (err, result) => {
-      if (err) {
-        res.send(err);
-      } else {
-       country = result[0].country;
-       console.log('Registered Country : ', result[0].country);
-      }
-    }
-  );
-  
-    //date registered
-
-  db.query(
-    "SELECT registeredDate AS registeredDate FROM users WHERE (userID) = (?) ",
-    [userID],
-    (err, result) => {
-      if (err) {
-        res.send(err);
-      } else {
-       registeredDate = result[0].registeredDate;
-       console.log('Registered Date : ', result[0].registeredDate);
-      }
-    }
-  );
-
-
-  //verification status of email and phone
-  db.query(
-    "SELECT emailVerified, SMS FROM userAuth WHERE (userID) = (?)",
-    [userID],
-    (err, result) => {
-      if (err) {
-        res.send(err);
-      } else {
-        res.send({
-          userName: userName,
-          emailVerified: result[0].emailVerified,
-          phoneVerified: result[0].SMS,
-          totalTrades: totalTrades,
-          feedbackScore: feedbackScore,
-          registeredDate: registeredDate,
-          country: country,
-        })
-      }
-    }
-    );
-});
 
 app.post("/FeedbackComments", (req, res) => {
 
@@ -2377,6 +2271,30 @@ app.post("/TradeHistory", (req, res) => {
   )
 });
 
+app.post("/GetFeedbackPage", (req, res) => {
+
+  const userID = req.body.userID;
+  var sql= "SELECT userName FROM users WHERE (userID) = (?);SELECT COUNT (*) AS total FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?);SELECT AVG (feedbackScore) AS feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?);SELECT Country AS country FROM userInformation WHERE (userID) = (?);SELECT registeredDate AS registeredDate FROM users WHERE (userID) = (?);SELECT emailVerified, SMS FROM userAuth WHERE (userID) = (?)"
+
+  db.query(sql, [userID, userID, userID, userID, userID, userID, userID, userID, userID, userID], function(error, results, fields) {
+    if (error) {
+      console.log(err);
+      throw error;
+    }
+    console.log('SMS' , results[5].SMS)
+    res.send({
+      userName: results[0],
+      totalTrades: results[1],
+      feedbackScore: results[2],
+      country: results[3],
+      registeredDate: results[4],
+      verified: results[5],
+    })
+  })
+});
+
+
+
 server.listen(3002, () => {
   console.log("SERVER RUNNING");
 });
@@ -2384,3 +2302,5 @@ server.listen(3002, () => {
 app.listen(3001, () => {
   console.log("running on port 3001");
 });
+
+
