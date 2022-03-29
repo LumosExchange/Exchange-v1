@@ -2255,7 +2255,6 @@ app.post("/GetFeedbackPage", (req, res) => {
         res.send(err);
       } else {
         userName = result[0].userName;
-
       }
     }
   );
@@ -2268,7 +2267,7 @@ app.post("/GetFeedbackPage", (req, res) => {
     (err, result) => {
       if (err) {
         res.send(err);
-      }else {
+      } else {
         totalTrades = result[0].total;
         console.log('TotalTrades: ', result[0].total);
       }
@@ -2276,33 +2275,34 @@ app.post("/GetFeedbackPage", (req, res) => {
   );
 
 
-  //feedbackScore
-
+  // feedbackScore
   db.query(
     "SELECT AVG (feedbackScore) AS feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?)",
     [userID, userID],
     (err, result) => {
       if (err) {
         res.send(err);
-      }else {
+      } else {
        feedbackScore = result[0].feedback;
        console.log('Feedback : ', result[0].feedback);
       }
     }
   );
-//LOCATION
+
+  // location
   db.query(
     "SELECT Country AS country FROM userInformation WHERE (userID) = (?) ",
     [userID],
     (err, result) => {
       if (err) {
         res.send(err);
-      }else {
+      } else {
        country = result[0].country;
        console.log('Registered Country : ', result[0].country);
       }
     }
   );
+  
     //date registered
 
   db.query(
@@ -2311,7 +2311,7 @@ app.post("/GetFeedbackPage", (req, res) => {
     (err, result) => {
       if (err) {
         res.send(err);
-      }else {
+      } else {
        registeredDate = result[0].registeredDate;
        console.log('Registered Date : ', result[0].registeredDate);
       }

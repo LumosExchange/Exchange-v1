@@ -62,6 +62,7 @@ const Feedback = () => {
 	const [emailVerified, setEmailVerified] = useState("");
 	const [phoneVerified, setPhoneVerified] = useState("");
 	const [feedbackComments, setFeedbackComments] = useState([]);
+	const [userName, setUserName] = useState("");
 
 	// get userID from the url to profile links
 	const userID = window.location.pathname.match(/\d+/)[0];
@@ -77,7 +78,7 @@ const Feedback = () => {
 			setCountry(response.data.country);
 			setEmailVerified(response.data.emailVerified);
 			setPhoneVerified(response.data.phoneVerified);
-			console.log('Trade Info: ', response);
+			setUserName(response.data.userName);
 		})
 	};
 
@@ -85,6 +86,7 @@ const Feedback = () => {
 		Axios.post("http://localhost:3001/FeedbackComments", {
 			userID: userID
 		}).then((response) => {
+			console.log(response, 'response from feedbackcomment')
 			//Will need to map this 
 			if (response.data.length > 0){
 				setFeedbackComments(response.data);
@@ -107,7 +109,7 @@ const Feedback = () => {
 				<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
 					<div className="row">
 						<div className="col-12 mb-3">
-							<Heading size="30px" bold>userName</Heading>
+							<Heading size="30px" bold>{userName}</Heading>
 						</div>
 						<div className="row d-flex justify-content-between">
 							<div className="col-12 col-md-6">
@@ -150,9 +152,11 @@ const Feedback = () => {
 													</Paragraph>
 												</td>
 												<td>
-													<Paragraph size="18px" className="d-inline">
-														{registeredDate.replace('T', ' at ').replace('.000Z', ' ')}
-													</Paragraph>
+													{registeredDate && (
+														<Paragraph size="18px" className="d-inline">
+															{registeredDate.replace('T', ' at ').replace('.000Z', ' ')}
+														</Paragraph>
+													)}
 												</td>
 											</tr>
 											<tr>
@@ -162,9 +166,11 @@ const Feedback = () => {
 													</Paragraph>
 												</td>
 												<td>
-													<Paragraph size="18px" className="d-inline">
-														{country}
-													</Paragraph>
+													{country && (
+														<Paragraph size="18px" className="d-inline">
+															{country}
+														</Paragraph>
+													)}
 												</td>
 											</tr>
 										</thead>
@@ -230,13 +236,13 @@ const Feedback = () => {
 									{feedbackComments.length === 0 && (
 										<Paragraph size="18px">No Feedback Comments to show.</Paragraph>
 									)}
-									{feedbackComments && feedbackComments.map((fb) => (
+									{feedbackComments.length > 0 && feedbackComments.map((fb) => (
 										<Striped className="d-flex px-4 py-3 mb-2 flex-column">
 											<Paragraph size="14px" className="mb-1">
-												{fb.timestamp}
+												{fb.date}
 											</Paragraph>
 											<div className="d-flex">
-												{convertScoreToIcon(fb.rating)}
+												{convertScoreToIcon(fb.feedbackSCore)}
 												<Paragraph size="20px" className="mb-0">
 													{fb.comment}
 												</Paragraph>
