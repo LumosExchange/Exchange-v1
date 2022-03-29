@@ -2064,7 +2064,7 @@ let EscrowTime = " ";
         res.send(err);
       } else {
         db.query(
-          "INSERT INTO feedback (saleID, sellerUserID, EscrowReleaseTime, Comments, date, buyerUserID, feedbackScore) VALUES (?,?,?,?,?,?,?)",
+          "INSERT INTO feedback (saleID, sellerUserID, EscrowReleaseTime, comment, date, buyerUserID, feedbackScore) VALUES (?,?,?,?,?,?,?)",
           [
             liveTradeID,
             sellerID,
@@ -2252,6 +2252,7 @@ app.post("/GetFeedbackPage", (req, res) => {
     [userID],
     (err, result) => {
       if (err) {
+        console.log(err);
         res.send(err);
       } else {
         userName = result[0].userName;
@@ -2346,18 +2347,15 @@ app.post("/FeedbackComments", (req, res) => {
   const userID = req.body.userID;
 
   db.query(
-    "SELECT feedbackScore, date, Comments FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?)",
+    "SELECT feedbackScore, date, comment FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?)",
     [userID, userID],
     (err, result) => {
       if (err) {
         res.send(err);
       }else {
         console.log(result);
-       res.send({
-         rating: result.feedbackScore,
-         comment: result.Comment,
-         timestamp: result.date
-       });
+        res.send(result);
+
       }
     }
   );
