@@ -20,7 +20,7 @@ const Striped = styled.div(({ theme }) => css`
 `);
 
 const convertVerifiedToIcon = (status) => {
-	if (status === true){
+	if (status === 1){
 		return <VerifiedIcon className="material-icons true">check_circle</VerifiedIcon>
 	} else {
 		return <VerifiedIcon className="material-icons false">cancel</VerifiedIcon>
@@ -57,7 +57,7 @@ const Feedback = () => {
 	const [historyExpanded, expandHistory] = useState(false);
 	const [totalTrades, setTotalTrades] =  useState("");
 	const [feedbackScore, setFeedbackScore] = useState("");
-	const [registeredDate, setRegisteredDdate] = useState("");
+	const [registeredDate, setRegisteredDate] = useState("");
 	const [country, setCountry] = useState("");
 	const [emailVerified, setEmailVerified] = useState("");
 	const [phoneVerified, setPhoneVerified] = useState("");
@@ -66,20 +66,19 @@ const Feedback = () => {
 	// get userID from the url to profile links
 	const userID = window.location.pathname.match(/\d+/)[0];
 
-
 	const tradeInfo = () => {
 		Axios.post("http://localhost:3001/GetFeedbackPage", {
 			userID: userID
 		}).then((response) => {
+			console.log(response, 'response from getfeedback');
 			setTotalTrades(response.data.totalTrades);
 			setFeedbackScore(response.data.feedbackScore);
-			setRegisteredDdate(response.data.registeredDate);
+			setRegisteredDate(response.data.registeredDate);
 			setCountry(response.data.country);
 			setEmailVerified(response.data.emailVerified);
 			setPhoneVerified(response.data.phoneVerified);
 			console.log('Trade Info: ', response);
 		})
-
 	};
 
 	const feedback = () => {
@@ -87,12 +86,15 @@ const Feedback = () => {
 			userID: userID
 		}).then((response) => {
 			//Will need to map this 
-			setFeedbackComments(response.data);
-			console.log(response);
-		
+			if (response.data.length > 0){
+				setFeedbackComments(response.data);
+			} else {
+				setFeedbackComments([]);
+			}
 		})
-
 	}
+
+	console.log(feedbackComments, 'feedback comments');
 
 	useEffect(() => {
 		tradeInfo();
@@ -105,7 +107,7 @@ const Feedback = () => {
 				<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
 					<div className="row">
 						<div className="col-12 mb-3">
-							<Heading size="24px">userName</Heading>
+							<Heading size="30px" bold>userName</Heading>
 						</div>
 						<div className="row d-flex justify-content-between">
 							<div className="col-12 col-md-6">
@@ -149,7 +151,7 @@ const Feedback = () => {
 												</td>
 												<td>
 													<Paragraph size="18px" className="d-inline">
-														{registeredDate}
+														{registeredDate.replace('T', ' at ').replace('.000Z', ' ')}
 													</Paragraph>
 												</td>
 											</tr>
@@ -186,7 +188,7 @@ const Feedback = () => {
 												</td>
 												<td>
 													<Paragraph size="18px" className="d-inline">
-														{convertVerifiedToIcon(true)}
+														{convertVerifiedToIcon(emailVerified)}
 													</Paragraph>
 												</td>
 											</tr>
@@ -198,7 +200,7 @@ const Feedback = () => {
 												</td>
 												<td>
 													<Paragraph size="18px" className="d-inline">
-														{convertVerifiedToIcon(true)}
+														{convertVerifiedToIcon(phoneVerified)}
 													</Paragraph>
 												</td>
 											</tr>
@@ -225,7 +227,10 @@ const Feedback = () => {
 											Feedback
 										</Paragraph>
 									</div>
-									{fakeFeedbackComments.map((fb) => (
+									{feedbackComments.length === 0 && (
+										<Paragraph size="18px">No Feedback Comments to show.</Paragraph>
+									)}
+									{feedbackComments && feedbackComments.map((fb) => (
 										<Striped className="d-flex px-4 py-3 mb-2 flex-column">
 											<Paragraph size="14px" className="mb-1">
 												{fb.timestamp}

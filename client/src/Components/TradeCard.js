@@ -10,6 +10,7 @@ import { LoadingState } from "./Profile";
 import { convertCurrencyToSymbol } from "../Helpers";
 import FlagUK from '../Images/flag-icons/gb.png';
 import { Link } from "react-router-dom";
+import { InvisibleButton } from "./Buttons";
 
 export const CardDivider = styled.hr(({ theme }) => css`
     :not([size]){
@@ -30,7 +31,7 @@ const convertCountryToFlag = (country) => {
     }
 }
 
-const ProfileLink = styled(Link)(({ theme }) => css`
+const ProfileLink = styled(InvisibleButton)(({ theme }) => css`
     text-decoration: none;
 
     p:hover {
@@ -45,14 +46,20 @@ const ProfileLink = styled(Link)(({ theme }) => css`
 const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) => {
     const navigate = useNavigate();
     const userID = val.userID;
+    const userName = val.userName;
 
     return (
         <Card className="p-3 mb-3" color="grey">
             <div className="row">
                 <div className="col-12 col-xl-3 d-flex justify-content-center flex-column mb-0">
                     <ProfileLink
-                        to={`/profile/user/${userID}`}
                         className="d-flex align-items-center"
+                        onClick={ () => navigate(`/profile/user/${userID}`, {
+                            state: {
+                                userID,
+                                userName,
+                            }
+                        })}
                     >
                         <Paragraph size="24px" bold color="primary_cta" className="mb-0">
                             {val.userName}
