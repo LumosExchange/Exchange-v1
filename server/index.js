@@ -2243,6 +2243,22 @@ app.post("/GetFeedbackPage", (req, res) => {
   let feedbackScore = 0;
   let registeredDate = "";
   let country = "";
+  let userName = "";
+
+  //gteusername
+
+  db.query(
+    "SELECT userName FROM users WHERE (userID) = (?)",
+    [userID],
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        userName = result[0].userName;
+
+      }
+    }
+  );
 
   
  //get totaltrades
@@ -2312,6 +2328,7 @@ app.post("/GetFeedbackPage", (req, res) => {
         res.send(err);
       } else {
         res.send({
+          userName: userName,
           emailVerified: result[0].emailVerified,
           phoneVerified: result[0].SMS,
           totalTrades: totalTrades,
