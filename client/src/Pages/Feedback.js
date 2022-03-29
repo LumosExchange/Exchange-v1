@@ -72,13 +72,13 @@ const Feedback = () => {
 			userID: userID
 		}).then((response) => {
 			console.log(response, 'response from getfeedback');
-			setTotalTrades(response.data.totalTrades);
-			setFeedbackScore(response.data.feedbackScore);
-			setRegisteredDate(response.data.registeredDate);
-			setCountry(response.data.country);
-			setEmailVerified(response.data.emailVerified);
-			setPhoneVerified(response.data.phoneVerified);
-			setUserName(response.data.userName);
+			setTotalTrades(response.data.totalTrades[0].total);
+			setFeedbackScore(response.data.feedbackScore[0].feedback);
+			setRegisteredDate(response.data.registeredDate[0].registeredDate);
+			setCountry(response.data.country[0].country);
+			setEmailVerified(response.data.verified[0].emailVerified);
+			setPhoneVerified(response.data.verified[0].phoneVerified);
+			setUserName(response.data.userName[0].userName);
 		})
 	};
 
