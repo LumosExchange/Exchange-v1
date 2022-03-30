@@ -64,7 +64,6 @@ const Feedback = () => {
 			userID: userID
 		}).then((response) => {
 			try {
-				console.log(response, 'response from getfeedback');
 				setTotalTrades(response.data.totalTrades[0].total);
 				setFeedbackScore(response.data.feedbackScore[0].feedback);
 				setRegisteredDate(response.data.registeredDate[0].registeredDate);
@@ -82,8 +81,6 @@ const Feedback = () => {
 		Axios.post("http://localhost:3001/FeedbackComments", {
 			userID: userID
 		}).then((response) => {
-			console.log('feedback response: ', response);
-			//Will need to map this 
 			if (response.data.length > 0){
 				setFeedbackComments(response.data);
 			} else {
@@ -91,8 +88,6 @@ const Feedback = () => {
 			}
 		})
 	}
-
-	console.log(feedbackComments, 'feedback comments');
 
 	useEffect(() => {
 		tradeInfo();

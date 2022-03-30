@@ -69,6 +69,11 @@ const YellowIcon = styled.i(({ theme }) => css`
 	color: ${theme.colors.primary_cta};
 `);
 
+const MissingIcon = styled.i(({ theme }) => css`
+	font-size: 120px;
+	color: ${theme.colors.primary_cta};
+`);
+
 const Offer = ({ solGbp, solUsd, currency}) => {
 	const [offerAmount, setOfferAmount] = useState("");
 	const [offerAmountInSol, setOfferAmountInSol] = useState("");
@@ -76,28 +81,23 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 	const [offerMessage, setOfferMessage] = useState("");
 	const [conversionMode, setConversionMode] = useState("FIATtoSOL");
 	const [paymentMethod, setPaymentMethod] = useState("Please Select");
-
 	const [registeredDate, setRegisteredDate] = useState("");
 	const [feedbackScore, setFeedbackScore] = useState("");
 	const [escrowReleaseTime, setEscrowReleaseTime] = useState("");
-
 	const [listingPrice, setListingPrice] = useState(0.00);
-
 	const [userWallets, setUserWallets] =  useState([]);
 	const [wallet, setWallet] = useState("Please Select");
-	const [userID, setUserID] = useState(0);
+	const [data, setData] = useState([]);
 
 	const { state } = useLocation();
-	const { val } = state;
-
 	const navigate = useNavigate();
 	
 	const getListingPrice = () => {
-		if (val.aboveOrBelow === "above") {
-			const listingPrice = (solGbp / 100) * (100 + val.percentChange);
+		if (data.aboveOrBelow === "above") {
+			const listingPrice = (solGbp / 100) * (100 + data.percentChange);
 			setListingPrice(listingPrice.toFixed(2));
 		} else {
-			const listingPrice = (solGbp / 100) * (100 - val.percentChange);
+			const listingPrice = (solGbp / 100) * (100 - data.percentChange);
 			setListingPrice(listingPrice.toFixed(2));
 		}
 	};
@@ -127,8 +127,9 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 
 	const getSellerInfo = () => {
 		Axios.post("http://localhost:3001/GetSellerInfo", {
-			sellerID: val.userID,
+			sellerID: data.userID,
 		}).then((response) => {
+			console.log(response, '----debug')
 			setRegisteredDate(response.data.registeredDate);
 			setFeedbackScore(response.data.feedbackScore);
 			setEscrowReleaseTime(response.data.escrowReleaseTime);
@@ -150,10 +151,10 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 	};
 
 	const openTrade = () => {
-		console.log(val.saleID);
+		console.log(data.saleID);
 		Axios.post("http://localhost:3001/OpenTrade", {
-			saleID: val.saleID,
-			sellerID: val.userID,
+			saleID: data.saleID,
+			sellerID: data.userID,
 			paymentMethod: paymentMethod,
 			userSolPrice: solGbp,
 			amountOfSol: offerAmountInSol,
@@ -173,15 +174,38 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 	};
 
 	useEffect(() => {
-		getListingPrice();
-		getSellerInfo();
-		getUserWallets();
-	}, []);
+		if (data && data.length > 0){
+			getListingPrice();
+			getUserWallets();
+		}
 
-	const filteredPaymentMethods = ["Please Select", val.paymentMethod1, val.paymentMethod2];
+		if (!registeredDate && data.userID){
+			getSellerInfo();
+		}
+
+		if (state && state !== null){
+			setData(state.val);
+		}
+
+	}, [data, state, getListingPrice, getSellerInfo, registeredDate]);
+
+	console.log(data, 'data in stata');
+
+	const filteredPaymentMethods = ["Please Select", data.paymentMethod1, data.paymentMethod2];
 	const formattedCurrency = convertCurrencyToSymbol(currency);
 
 	return (
+		data.length === 0 ? (
+			<PageBody className="d-flex justify-content-center flex-column">
+				<div className="container text-center">
+					<MissingIcon className="material-icons mb-3">manage_search</MissingIcon>
+					<Paragraph size="20px">
+						Trade info missing!
+					</Paragraph>
+					<Paragraph size="20px">Please navigate from a valid trade card</Paragraph>
+				</div>
+			</PageBody>
+		) : (
 		<PageBody>
 			<div className="container">
 				<div className="row pt-5">
@@ -195,13 +219,13 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 					</div>
 					<div className="col-12 mb-5 pb-5">
 						<Heading size="26px" className="mb-4">
-							Buy SOL from {val.userName} with {val.paymentMethod1}{" "}
-							{val.paymentMethod2 && `or ${val.paymentMethod2}`}.
+							Buy SOL from {data.userName} with {data.paymentMethod1}{" "}
+							{data.paymentMethod2 && `or ${data.paymentMethod2}`}.
 						</Heading>
-						<TradeCard val={val} withoutButton solGbp={solGbp} currency={currency} listingPrice={listingPrice}>
+						<TradeCard val={data} withoutButton solGbp={solGbp} currency={currency} listingPrice={listingPrice}>
 							<div className="col-3 text-end">
 								<Paragraph className="mb-0">
-									{val.amountForSale} for sale
+									{data.amountForSale} for sale
 								</Paragraph>
 							</div>
 						</TradeCard>
@@ -363,7 +387,7 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 							<div className="d-flex mb-2">
 								<YellowIcon className="material-icons me-1">person</YellowIcon>
 								<Paragraph color="primary_cta" size="20px" bold className="mb-0">
-									{val.userName}
+									{data.userName}
 								</Paragraph>
 							</div>
 							<Paragraph>
@@ -371,7 +395,7 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 								{"%"}
 							</Paragraph>
 							<Paragraph>Registered: {new Date(registeredDate).toLocaleDateString()}</Paragraph>
-							<Paragraph>Total Trades: {val.tradeHistory}</Paragraph>
+							<Paragraph>Total Trades: {data.tradeHistory}</Paragraph>
 							<Paragraph>
 								Median Escrow Time: {(escrowReleaseTime / 60).toFixed(2)}
 								{" Mins"}
@@ -382,13 +406,14 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 							<Card className="p-3 mb-4">Paypal, Wise supported. Quick response!</Card>
 							<Paragraph bold>Payment Methods</Paragraph>
 							<Paragraph>
-								{val.paymentMethod1}, {val.paymentMethod2}
+								{data.paymentMethod1}, {data.paymentMethod2}
 							</Paragraph>
 						</div>
 					</div>
 				</div>
 			</div>
 		</PageBody>
+		)
 	);
 };
 
