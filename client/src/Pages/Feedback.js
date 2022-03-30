@@ -63,17 +63,14 @@ const Feedback = () => {
 		Axios.post("http://localhost:3001/GetFeedbackPage", {
 			userID: userID
 		}).then((response) => {
-			try {
-				setTotalTrades(response.data.totalTrades[0].total);
-				setFeedbackScore(response.data.feedbackScore[0].feedback);
-				setRegisteredDate(response.data.registeredDate[0].registeredDate);
-				setCountry(response.data.country[0].country);
-				setEmailVerified(response.data.verified[0].emailVerified);
-				setPhoneVerified(response.data.verified[0].SMS);
-				setUserName(response.data.userName[0].userName);
-			} catch(e) {
-				setErrorMessage(response);
-			}
+			console.log(response, 'response from getfeedback');
+			setTotalTrades(response.data.totalTrades[0].total);
+			setFeedbackScore(response.data.feedbackScore[0].feedback);
+			setRegisteredDate(response.data.registeredDate[0].registeredDate);
+			setCountry(response.data.country[0].country);
+			setEmailVerified(response.data.verified[0].emailVerified);
+			setPhoneVerified(response.data.verified[0].SMS);
+			setUserName(response.data.userName[0].userName);
 		})
 	};
 

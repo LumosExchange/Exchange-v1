@@ -549,9 +549,9 @@ app.post("/VonageSMSVerify", (req, res) => {
         return;
       } else {
         if (result && result.status == "0") {
-          res.send({ message: "SMS Verified! " });
+          res.send({ result: result.status, message: "SMS Verified! "});
         } else {
-          //handle the error wrong pin
+          res.send({ result: result.status, message: result.error_text });
         }
       }
     }
@@ -2281,7 +2281,7 @@ app.post("/GetFeedbackPage", (req, res) => {
       console.log(err);
       throw error;
     }
-    console.log('SMS' , results[5].SMS)
+  
     res.send({
       userName: results[0],
       totalTrades: results[1],

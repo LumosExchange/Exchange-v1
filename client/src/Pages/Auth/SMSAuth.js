@@ -102,6 +102,8 @@ function SMSAuth() {
     }).then((response) => {
       //Handle the requestId as needed on the verify function
       console.log('response: ', response);
+      
+      
     })
   }
 
