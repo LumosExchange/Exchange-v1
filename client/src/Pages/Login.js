@@ -18,9 +18,12 @@ const FormBackground = styled.div(({ theme }) => css`
     max-width: 550px;
 `);
 
+const IconHelper = styled.i(({ theme, color }) => css`
+  color: ${theme.colors[color]};
+`);
+
 const Login = () => {
   const [userLog, setUserLog] = useState("");
-
   const [passwordLog, setPasswordLog] = useState("");
   const [loginStatus, setLoginStatus] = useState(false);
   const [loginError, setLoginError] = useState("");
@@ -37,6 +40,7 @@ const Login = () => {
       console.log(response, 'response');
       if (!response.data.auth) {
         setLoginStatus(false);
+        setLoginError(response.data.message);
       } else {
         setLoginStatus(true);
         //store JWT token in localstorage
@@ -46,6 +50,7 @@ const Login = () => {
         window.location.reload(false);
       }
     }).catch((err) => {
+      console.log(err, 'error from login')
         setLoginError(err.message);
     });
   };
@@ -107,7 +112,7 @@ const Login = () => {
               </div>
               <PrimaryButton
                 text="Log In"
-                className="m-auto mt-3"
+                className="m-auto mt-3 w-100"
                 onClick={login}
                 type="logIn"
                 form="nameform"
@@ -115,9 +120,12 @@ const Login = () => {
                 hasIcon
               />
               {loginError.length > 0 && (
-                  <Paragraph bold color="invalid" size="22px" className="mt-3 mb-0">
-                    {loginError}, Please try again.
-                  </Paragraph>
+                <div className="d-flex justify-content-center mt-4">
+                    <IconHelper className="material-icons me-2" color="invalid">error_outline</IconHelper>
+                    <Paragraph color="invalid" size="20px" className="mb-0">
+                      {loginError}, Please try again.
+                    </Paragraph>
+                  </div>
               )}
             </form>
           </div>
