@@ -130,9 +130,9 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 			sellerID: data.userID,
 		}).then((response) => {
 			console.log(response, '----debug')
-			setRegisteredDate(response.data.registeredDate);
-			setFeedbackScore(response.data.feedbackScore);
-			setEscrowReleaseTime(response.data.escrowReleaseTime);
+			setRegisteredDate(response.data.registeredDate[0].registeredDate);
+			setFeedbackScore(response.data.feedbackScore[0].feedbackScore);
+			setEscrowReleaseTime(response.data.escrowReleaseTime[0].escrowReleaseTime);
 		});
 	};
 

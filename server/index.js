@@ -549,9 +549,9 @@ app.post("/VonageSMSVerify", (req, res) => {
         return;
       } else {
         if (result && result.status == "0") {
-          res.send({ message: "SMS Verified! " });
+          res.send({ result: result.status, message: "SMS Verified! "});
         } else {
-          //handle the error wrong pin
+          res.send({ result: result.status, message: result.error_text });
         }
       }
     }
@@ -1845,41 +1845,21 @@ app.post("/DeleteMyLisiting", (req, res) => {
 
 //Functionality to get information baout the seller
 app.post("/GetSellerInfo", (req, res) => {
+
   const sellerID = req.body.sellerID;
-  let registeredDate = " ";
-  let feedbackScore = " ";
-  let escrowReleaseTime = " ";
+  var sql = "SELECT registeredDate FROM users WHERE (userID) = (?);SELECT AVG(feedbackScore) as feedbackScore from feedback WHERE (sellerUserID) = (?);SELECT AVG(EscrowReleaseTime) as escrowReleaseTime from feedback WHERE (sellerUserID) = (?)"
 
-  db.query(
-    "SELECT registeredDate FROM users WHERE (userID) = (?)",
-    [sellerID],
-    (err, result) => {
-      registeredDate = result[0].registeredDate;
+  db.query(sql, [sellerID, sellerID, sellerID], function(error, results, fields) {
+    if(error) {
+      throw error;
     }
-  );
-
-  db.query(
-    "SELECT AVG(feedbackScore) as feedbackScore from feedback WHERE (sellerUserID) = (?)",
-    [sellerID],
-    (err, results) => {
-      feedbackScore = results[0].feedbackScore;
-    }
-  );
-
-  db.query(
-    "SELECT AVG(EscrowReleaseTime) as escrowReleaseTime from feedback WHERE (sellerUserID) = (?)",
-    [sellerID],
-    (err, resultss) => {
-      escrowReleaseTime = resultss[0].escrowReleaseTime;
-
-      res.send({
-        sellerID: sellerID,
-        registeredDate: registeredDate,
-        feedbackScore: feedbackScore,
-        escrowReleaseTime: escrowReleaseTime,
-      });
-    }
-  );
+    res.send({
+      sellerID: sellerID,
+      registeredDate: results[0],
+      feedbackScore: results[1],
+      escrowReleaseTime: results[2]
+    })
+  });
 });
 
 app.post("/FindUserPaymentMethods", (req, res) => {
@@ -2281,7 +2261,7 @@ app.post("/GetFeedbackPage", (req, res) => {
       console.log(err);
       throw error;
     }
-    console.log('SMS' , results[5].SMS)
+  
     res.send({
       userName: results[0],
       totalTrades: results[1],

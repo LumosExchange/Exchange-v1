@@ -12,6 +12,7 @@ import SolanaIcon from '../Images/icon-solana.svg';
 import DropdownIcon from '../Images/icon-dropdown.svg';
 import StyledTable from "../Components/Tables";
 import * as solanaWeb3 from '@solana/web3.js';
+import { SystemProgram, Account, Transaction } from '@solana/web3.js'
 
 
 
@@ -73,20 +74,44 @@ const FakeTableData = [
 const MyWallet = () => {
   const [walletExpanded, expandWallet] = useState(false);
   const [rewardsExpanded, expandRewards] = useState(false);
+  const [walletKey, setWalletKey] = useState();
 
-  const getProvider = () => {
-    if ("solana" in window) {
-      const provider = window.solana;
-      if (provider.isPhantom) {
-        console.log("Is Phantom installed?  ", provider.isPhantom);
-        return provider;
-      }
-    } else {
-      // window.open("https://www.phantom.app/", "_blank");
-    }
-  };
+ 
 
-  console.log(solanaWeb3);
+  function isPhantomInstalled() {
+	const phantomInstalled = window.solana && window.solana.isPhantom;
+	return phantomInstalled;
+  }
+  
+  // Connect phantom wallet automatically
+ function connectPhantomWallet() {
+	window.solana.connect();
+	window.solana.on("connect", () => console.log("Phantom wallet connected!"));
+	console.log('SOl address: ',window.solana.publicKey.toString());
+	const walletPublicKey = window.solana.publickey;
+	
+  }
+  
+  // Connect phantom wallet only if the wallet has been connected before
+ function eagerlyConnectPhantomWallet() {
+	window.solana.connect({ onlyIfTrusted: true });
+  }
+  
+  // Disconnect from phantom wallet
+  function disconnectPhantomWallet() {
+	window.solana.disconnect();
+	window.solana.on("disconnect", () =>
+	  console.log("Phantom wallet disconnected!")
+	);
+  }
+  
+  // Returns the public key of the connected phantom wallet as a string
+ function phantomWalletPublicKey() {
+	 console.log('SOl address: ',window.solana.publicKey.toString());
+	return window.solana.publicKey.toString();
+  }
+  
+
 
   return (
 		<PageBody className="d-flex align-items-center">
@@ -98,7 +123,8 @@ const MyWallet = () => {
 							<Paragraph size="18px" bold>
 								Manage your credits, and grab a chance to earn with our reward pool.
 							</Paragraph>
-							<PrimaryButton className="w-100 mt-3" text="Connect Wallet" onClick={getProvider()} />
+							<PrimaryButton className="w-100 mt-3" text="Connect Wallet" onClick={connectPhantomWallet()
+							} />
 
 							
 						</div>
