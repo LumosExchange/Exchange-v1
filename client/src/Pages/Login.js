@@ -18,7 +18,7 @@ const FormBackground = styled.div(({ theme }) => css`
     max-width: 550px;
 `);
 
-const IconHelper = styled.i(({ theme, color }) => css`
+export const IconHelper = styled.i(({ theme, color }) => css`
   color: ${theme.colors[color]};
 `);
 

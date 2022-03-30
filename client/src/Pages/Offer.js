@@ -174,8 +174,10 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 	};
 
 	useEffect(() => {
+		getListingPrice();
+		getUserWallets();
+
 		if (data && data.length > 0){
-			getListingPrice();
 			getUserWallets();
 		}
 
@@ -193,6 +195,9 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 
 	const filteredPaymentMethods = ["Please Select", data.paymentMethod1, data.paymentMethod2];
 	const formattedCurrency = convertCurrencyToSymbol(currency);
+
+	console.log(solGbp, ' sol price');
+	console.log(listingPrice, 'listing price');
 
 	return (
 		data.length === 0 ? (
@@ -346,7 +351,6 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 								>
 									<option value="Please Select">Please Select</option>
 									{userWallets.map((option) => (
-					
 										<option value={option.address}>{option.address}</option>
 									))}
 								</StyledDropdown>

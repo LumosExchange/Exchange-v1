@@ -236,60 +236,74 @@ const TradeHistory = () => {
 	return (
 		<PageBody className="d-flex align-items-start flex-column">
 			<div className="container">
-				<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
-				{(isLoadingSellTrades || isLoadingBuyTrades) && <LoadingState />}
-					<InvisibleButton
-						onClick={ () => expandActiveBuyTrades((prev) => !prev)}
-						className="d-flex align-items-center pt-2"
-					>
-						<ToggleIcon toggled={activeBuyTradesExpanded} alt="Dropdown" className="small me-3" />
-						<Heading size="24px" className="mb-0">{liveTradesBuyer.length} Active Buy Trades</Heading>
-					</InvisibleButton>
-					<MaxHeightBarrier>
-						<Collapse orientation="horizontal" in={activeBuyTradesExpanded}>
-							{liveTradesBuyer.map((tradeInfo) => (
-								<React.Fragment>
-								<ActiveTradeCard tradeInfo={tradeInfo} type="buying" />
-								</React.Fragment>
-							))}
-							{messageForPurchases && <Paragraph size="20px" className="ms-2">{messageForPurchases}</Paragraph>}
-						</Collapse>
-					</MaxHeightBarrier>
+				{liveTradesBuyer.length === 0 && liveTradesSeller.length === 0  && tradeHistory.length === 0  && (
+					<div className="h-100">Nothing here</div>
+				)}
+				<div className="d-flex justify-content-center">
+					{(isLoadingSellTrades || isLoadingBuyTrades) && <LoadingState />}
 				</div>
-				<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
-					<InvisibleButton
-						onClick={ () => expandActiveSellTrades((prev) => !prev)}
-						className="d-flex align-items-center pt-2"
-					>
-						<ToggleIcon toggled={activeSellTradesExpanded} alt="Dropdown" className="small me-3" />
-						<Heading size="24px" className="mb-0">{liveTradesSeller.length} Active Sell Trades</Heading>
-					</InvisibleButton>
-					<MaxHeightBarrier>
-						<Collapse orientation="horizontal" in={activeSellTradesExpanded}>
-							{liveTradesSeller.map((tradeInfo) => (
-								<ActiveTradeCard tradeInfo={tradeInfo} type="selling" />
-							))}
-							{messageForSales && <Paragraph size="20px" className="ms-2">{messageForSales}</Paragraph>}
-						</Collapse>
-					</MaxHeightBarrier>
+				<div className="d-flex justify-content-center">
+					{(isLoadingSellTrades || isLoadingBuyTrades) && <LoadingState />}
 				</div>
-				<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
-					<InvisibleButton
-						onClick={ () => expandHistory((prev) => !prev)}
-						className="d-flex align-items-center pt-2"
-					>
-						<ToggleIcon toggled={historyExpanded} alt="Dropdown" className="small me-3" />
-						<Heading size="24px" className="mb-0">{tradeHistory.length} Completed Trades</Heading>
-					</InvisibleButton>
-					<MaxHeightBarrier>
-						<Collapse orientation="horizontal" in={historyExpanded}>
-							{tradeHistory.map((trades) => (
-								<ActiveTradeCard tradeInfo={trades} noButtons noMessage />
-							))}
-							{messageForHistory && <Paragraph size="20px" className="ms-2">{messageForHistory}</Paragraph>}
-						</Collapse>
-					</MaxHeightBarrier>
-				</div>
+				{liveTradesBuyer.length > 0 && (
+					<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
+						<InvisibleButton
+							onClick={ () => expandActiveBuyTrades((prev) => !prev)}
+							className="d-flex align-items-center pt-2"
+						>
+							<ToggleIcon toggled={activeBuyTradesExpanded} alt="Dropdown" className="small me-3" />
+							<Heading size="24px" className="mb-0">{liveTradesBuyer.length} Active Buy Trades</Heading>
+						</InvisibleButton>
+						<MaxHeightBarrier>
+							<Collapse orientation="horizontal" in={activeBuyTradesExpanded}>
+								{liveTradesBuyer.map((tradeInfo) => (
+									<React.Fragment>
+									<ActiveTradeCard tradeInfo={tradeInfo} type="buying" />
+									</React.Fragment>
+								))}
+								{messageForPurchases && <Paragraph size="20px" className="ms-2">{messageForPurchases}</Paragraph>}
+							</Collapse>
+						</MaxHeightBarrier>
+					</div>
+				)}
+				{liveTradesSeller.length > 0 && (
+					<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
+						<InvisibleButton
+							onClick={ () => expandActiveSellTrades((prev) => !prev)}
+							className="d-flex align-items-center pt-2"
+						>
+							<ToggleIcon toggled={activeSellTradesExpanded} alt="Dropdown" className="small me-3" />
+							<Heading size="24px" className="mb-0">{liveTradesSeller.length} Active Sell Trades</Heading>
+						</InvisibleButton>
+						<MaxHeightBarrier>
+							<Collapse orientation="horizontal" in={activeSellTradesExpanded}>
+								{liveTradesSeller.map((tradeInfo) => (
+									<ActiveTradeCard tradeInfo={tradeInfo} type="selling" />
+								))}
+								{messageForSales && <Paragraph size="20px" className="ms-2">{messageForSales}</Paragraph>}
+							</Collapse>
+						</MaxHeightBarrier>
+					</div>
+				)}
+				{tradeHistory.length > 0 && (
+					<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
+						<InvisibleButton
+							onClick={ () => expandHistory((prev) => !prev)}
+							className="d-flex align-items-center pt-2"
+						>
+							<ToggleIcon toggled={historyExpanded} alt="Dropdown" className="small me-3" />
+							<Heading size="24px" className="mb-0">{tradeHistory.length} Completed Trades</Heading>
+						</InvisibleButton>
+						<MaxHeightBarrier>
+							<Collapse orientation="horizontal" in={historyExpanded}>
+								{tradeHistory.map((trades) => (
+									<ActiveTradeCard tradeInfo={trades} noButtons noMessage />
+								))}
+								{messageForHistory && <Paragraph size="20px" className="ms-2">{messageForHistory}</Paragraph>}
+							</Collapse>
+						</MaxHeightBarrier>
+					</div>
+				)}
 			</div>
 		</PageBody>
 	);
