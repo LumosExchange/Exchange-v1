@@ -223,6 +223,7 @@ const Sell = () => {
   const [preferredPayment, setPreferredPayment] = useState("");
   const [secondaryPayment, setSecondaryPayment] = useState("");
   const [newPaymentMethods, setNewPaymentMethods] = useState([]);
+  const [accountLimit, setAccountLimit] = useState(0);
 
   const navigate = useNavigate();
 
@@ -250,43 +251,32 @@ const Sell = () => {
     );
   };
 
-<<<<<<< HEAD
+
+  const checkEligibility = () => {
+	Axios.post("http://localhost:3001/CheckSaleEligibility", {	
+	}).then((response) => {
+		setAccountLimit(response.data.solLimit - response.data.amountSolSold)
+	});
+  }
+
 	const addSale = () => {
-
-		Axios.post("http://localhost:3001/CheckSaleEligibility", {	
-		}).then((response) => {
-			
-		});
-
-	  Axios.post("http://localhost:3001/sell", {
-		  amountForSale: amountForSaleReg,
-		  aboveOrBelow: aboveOrBelowReg,
-		  change: changeReg,
-		  payment1: preferredPayment,
-		  payment2: secondaryPayment
+		Axios.post("http://localhost:3001/sell", {
+			amountForSale: amountForSaleReg,
+			aboveOrBelow: aboveOrBelowReg,
+			change: changeReg,
+			payment1: preferredPayment,
+			payment2: secondaryPayment
 		})
-  	}
+	}
 	  //Get account level and 
-=======
-  const addSale = () => {
-    Axios.post("http://localhost:3001/sell", {
-      amountForSale: amountForSaleReg,
-      aboveOrBelow: aboveOrBelowReg,
-      change: changeReg,
-      payment1: preferredPayment,
-      payment2: secondaryPayment,
-    });
-  };
->>>>>>> d2c369987d5fb93c884a98b0bc896e75cadf15f5
 
   const switchMode = () => {
     navigate("/Buy");
   };
 
-  const accountLimit = 25;
-
   useEffect(() => {
     updatePayments();
+	checkEligibility();
   }, []);
 
   const filteredNewPaymentMethods = newPaymentMethods.filter(
