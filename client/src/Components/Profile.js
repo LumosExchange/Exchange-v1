@@ -167,13 +167,14 @@ const StyledRadio = styled.input(({ theme }) => css`
 	display: none;
 `);
 
-const StyledLinkTo = styled(Link)(({ theme }) => css`
+export const StyledLinkTo = styled(Link)(({ theme }) => css`
     color: ${theme.colors.primary_cta};
     text-decoration: none;
     font-size: 18px;
 
     &:hover {
         color: ${theme.colors.primary_link_hover};
+        text-decoration: underline;
     }
 `);
 

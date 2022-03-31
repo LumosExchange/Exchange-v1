@@ -15,6 +15,7 @@ import styled, { css } from 'styled-components';
 import { useNavigate } from "react-router";
 import { CardDivider } from "../Components/TradeCard";
 import { LoadingState } from "../Components/Profile";
+import PrimaryButton from "../Components/Buttons";
 
 const Reference = styled(Paragraph)`text-transform: uppercase;`;
 const TitledIcon = styled.i`cursor: help;`;
@@ -54,6 +55,11 @@ const ActionButton = styled(InvisibleButton)(({ theme, color, textColor }) => cs
 			transform: initial;
 		}
 	}
+`);
+
+const MissingIcon = styled.i(({ theme }) => css`
+	font-size: 80px;
+	color: ${theme.colors.primary_cta};
 `);
 
 const ActiveTradeCard = ({ tradeInfo, type, noButtons, noMessage }) => {
@@ -180,6 +186,8 @@ const TradeHistory = () => {
 	const [isLoadingTradeHistory, setIsLoadingTradeHistory] = useState(true);
 	const [tradeHistory, setTradeHistory] = useState([]);
 
+	const navigate = useNavigate();
+
 	const getLiveTradesBuyer = () => {
 		Axios.post("http://localhost:3001/GetLiveTradesBuyer").then((response) => {
 			if (response.data.message){
@@ -234,10 +242,14 @@ const TradeHistory = () => {
 	console.log(tradeHistory, 'trade history');
 
 	return (
-		<PageBody className="d-flex align-items-start flex-column">
-			<div className="container">
+		<PageBody className="d-flex justify-content-center flex-column">
+			<div className="container text-center">
 				{liveTradesBuyer.length === 0 && liveTradesSeller.length === 0  && tradeHistory.length === 0  && (
-					<div className="h-100">Nothing here</div>
+					<div className="d-flex align-items-center justify-content-center flex-column">
+						<MissingIcon className="material-icons mb-3">manage_search</MissingIcon>
+						<Heading bold size="24px" className="mb-4">No Trades Found</Heading>
+						<PrimaryButton text="Start Trading" onClick={ () => navigate('/Buy') } />
+					</div>
 				)}
 				<div className="d-flex justify-content-center">
 					{(isLoadingSellTrades || isLoadingBuyTrades) && <LoadingState />}

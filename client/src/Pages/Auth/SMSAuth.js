@@ -37,6 +37,7 @@ function SMSAuth() {
 	const [passwordVerified, setPasswordVerified] = useState(false);
 	const [currentStep, setCurrentStep] = useState(1);
 	const [errors, setErrors] = useState("");
+	const [successMessage, setSuccessMessage] = useState("");
 
 	//send email
 	const getUserEmail = () => {
@@ -107,8 +108,9 @@ function SMSAuth() {
 		}).then((response) => {
 			//Handle the requestId as needed on the verify function
 			console.log("response: ", response);
-			if (response.data.result === 0) {
+			if (response.data.result === "0") {
 				setCurrentStep(5);
+				setSuccessMessage(response.data.message);
 			} else {
 				setErrors(response.data.message);
 			}
