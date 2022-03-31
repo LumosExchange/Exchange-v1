@@ -4,7 +4,7 @@ import Axios from "axios";
 import { PageBody, TextArea } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
-import PrimaryButton, { SecondaryButton } from "../Components/Buttons";
+import PrimaryButton, { InvisibleButton, SecondaryButton } from "../Components/Buttons";
 import { FormInput, StyledLabel, FormCheckbox } from "../Components/FormInputs";
 import { useNavigate, useLocation } from "react-router-dom";
 import io from "socket.io-client";
@@ -134,6 +134,7 @@ const Selling = ({ userName }) => {
 			  setCurrentStep("transfer");
 			} else {
 			  //handle error here some sort of popup / message to say error please try again
+
 			}
 		  });
 	  };

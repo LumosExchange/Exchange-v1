@@ -5,10 +5,11 @@ import { PageBody, StyledDropdown } from "../Components/FormInputs";
 import Card from "../Components/Card";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
-import GradientButton from "../Components/GradientButton";
 import PrimaryButton from "../Components/Buttons";
 import { FormInput, StyledLabel } from "../Components/FormInputs";
 import { useNavigate } from "react-router-dom";
+import { StyledLinkTo } from "../Components/Profile";
+import { IconHelper } from './Login';
 
 const CRYPTO_KIN = 'KIN';
 const CRYPTO_SOL = 'SOL';
@@ -140,9 +141,11 @@ const Sell = () => {
 		navigate("/Buy");
 	}
 
-  useEffect(() => {
-	  updatePayments();
-  }, []);
+	const accountLimit = 25;
+
+	useEffect(() => {
+		updatePayments();
+	}, []);
 
   const filteredNewPaymentMethods = newPaymentMethods.filter(method => method !== preferredPayment);
 
@@ -310,8 +313,18 @@ const Sell = () => {
 										onClick={addSale}
 										className="w-100"
 										size="lg"
+										disabled={amountForSaleReg > accountLimit}
 									/>
 								</div>
+								{amountForSaleReg > accountLimit && (
+									<div className="col-12 mt-3 d-flex">
+										<IconHelper className="material-icons me-2" color="invalid">error_outline</IconHelper>
+										<Paragraph className="mb-0" size="20px" color="invalid">
+											Amount of SOL for sale is higher than your account limit allows. Please
+											<StyledLinkTo to="/Profile/AccountUpgrade" className="ms-2">Upgrade your account</StyledLinkTo>
+										</Paragraph>
+									</div>
+								)}
 							</div>
 						</Card>
 					</div>
