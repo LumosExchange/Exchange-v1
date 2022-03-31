@@ -2005,8 +2005,6 @@ const feedbackMessage = req.body.feedbackMessage;
 const feedbackScore = req.body.formattedFeedBack;
 const sellerID = req.body.sellerID;
 const buyerID = req.body.buyerID;
-const saleID = req.body.saleID;
-const solAmount = req.body.solAmount;
 var date = new Date().toISOString().slice(0, 19).replace("T", " ");
 
 let EscrowTime = " ";
@@ -2342,7 +2340,7 @@ app.post("/CheckSaleEligibility", (req, res) => {
           userID: userID,
           accountLevel: "Standard",
           solLimit: 1,
-          amountSolSold: results[1][0].amountOfSol,
+          amountSolSold: results[1][0].amountOfSol || 0,
         });
         break;
         case "Bronze":
@@ -2350,7 +2348,7 @@ app.post("/CheckSaleEligibility", (req, res) => {
             userID: userID,
             accountLevel: "Bronze",
             solLimit: 5,
-            amountSolSold: results[1][0].amountOfSol,
+            amountSolSold: results[1][0].amountOfSol || 0,
           });
           break;
           case "Silver":
@@ -2358,7 +2356,7 @@ app.post("/CheckSaleEligibility", (req, res) => {
               userID: userID,
               accountLevel: "Silver",
               solLimit: 10,
-              amountSolSold: results[1][0].amountOfSol,
+              amountSolSold: results[1][0].amountOfSol || 0,
             });
             break;
             case "Gold":
@@ -2366,7 +2364,7 @@ app.post("/CheckSaleEligibility", (req, res) => {
                 userID: userID,
                 accountLevel: "Gold",
                 solLimit: 25,
-                amountSolSold: results[1][0].amountOfSol,
+                amountSolSold: results[1][0].amountOfSol || 0,
               });
               break;
  
