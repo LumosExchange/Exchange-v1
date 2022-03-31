@@ -127,6 +127,12 @@ const Sell = () => {
 	}
 
 	const addSale = () => {
+
+		Axios.post("http://localhost:3001/CheckSaleEligibility", {	
+		}).then((response) => {
+			
+		});
+
 	  Axios.post("http://localhost:3001/sell", {
 		  amountForSale: amountForSaleReg,
 		  aboveOrBelow: aboveOrBelowReg,
@@ -135,6 +141,7 @@ const Sell = () => {
 		  payment2: secondaryPayment
 		})
   	}
+	  //Get account level and 
 
 	const switchMode = () => {
 		navigate("/Buy");
