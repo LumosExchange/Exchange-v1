@@ -189,7 +189,7 @@ const Offer = ({ solGbp, solUsd, currency}) => {
 			setData(state.val);
 		}
 
-	}, [data, state, getListingPrice, getSellerInfo, registeredDate]);
+	}, [data, state, registeredDate]);
 
 	console.log(data, 'data in stata');
 

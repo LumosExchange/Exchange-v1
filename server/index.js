@@ -506,12 +506,12 @@ app.post("/VonageSMSRequest", (req, res) => {
     (err, result) => {
       if (err) {
         //if error let the user know
-        res.status(500).send(err.error_text);
+        res.status(500);
+        res.send(err, result);
         console.log("error: ", err);
-        return;
       }
       const requestId = result.request_id;
-      console.log("result", result);
+      console.log("---- result", result);
 
       //Store user phone number in db
       db.query(
@@ -2189,32 +2189,55 @@ app.post("/GetWallets", (req, res) => {
       if (err) {
         res.send(err);
       } else {
-        res.send([
-         {walletID: 1,
-          address: result[0].sol1,
-         },
-        {
-          walletID: 2,
-          address: result[0].sol2
-        },
-        {
-          walletID: 3,
-          address: result[0].sol3
-        },
-        {
-          walletID: 4,
-          address: result[0].sol4
-        },
-        {
-          walletID: 5,
-          address: result[0].sol5
+        if (result[0] !== undefined){
+          res.send([
+            {walletID: 1,
+             address: result[0].sol1,
+            },
+           {
+             walletID: 2,
+             address: result[0].sol2,
+           },
+           {
+             walletID: 3,
+             address: result[0].sol3,
+           },
+           {
+             walletID: 4,
+             address: result[0].sol4,
+           },
+           {
+             walletID: 5,
+             address: result[0].sol5,
+           }
+         ])
+        } else {
+          res.send([
+            {walletID: 1,
+             address: "",
+            },
+           {
+             walletID: 2,
+             address: "",
+           },
+           {
+             walletID: 3,
+             address: "",
+           },
+           {
+             walletID: 4,
+             address: "",
+           },
+           {
+             walletID: 5,
+             address: "",
+           }
+         ])
         }
-      ])
      }
     }
   )
 });
-
 
 app.post("/FeedbackComments", (req, res) => {
 
@@ -2252,7 +2275,6 @@ app.post("/TradeHistory", (req, res) => {
 });
 
 app.post("/GetFeedbackPage", (req, res) => {
-
   const userID = req.body.userID;
   var sql= "SELECT userName FROM users WHERE (userID) = (?);SELECT COUNT (*) AS total FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?);SELECT AVG (feedbackScore) AS feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?);SELECT Country AS country FROM userInformation WHERE (userID) = (?);SELECT registeredDate AS registeredDate FROM users WHERE (userID) = (?);SELECT emailVerified, SMS FROM userAuth WHERE (userID) = (?)"
 
