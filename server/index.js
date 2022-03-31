@@ -2005,6 +2005,8 @@ const feedbackMessage = req.body.feedbackMessage;
 const feedbackScore = req.body.formattedFeedBack;
 const sellerID = req.body.sellerID;
 const buyerID = req.body.buyerID;
+const saleID = req.body.saleID;
+const solAmount = req.body.solAmount;
 var date = new Date().toISOString().slice(0, 19).replace("T", " ");
 
 let EscrowTime = " ";
@@ -2031,6 +2033,28 @@ let EscrowTime = " ";
         res.send(err);
       } else {
       }
+    }
+  );
+
+  //Remove sol from listing total
+
+  db.query(
+    "SELECT amountForSale FROM sale WHERE saleID =? ",
+    [saleID],
+    (err, results) => {
+      let newTotal = (results[0].amountForSale - solAmount);
+      console.log('Amount for sale: ', results[0].amountForSale);
+      console.log('new total: ',newTotal);
+      db.query(
+        "UPDATE sale SET amountForSale =? WHERE saleID =?",
+        [newTotal, saleID],
+        (err, results) => {
+          if(err) {
+            console.log(err);
+          }
+          console.log(results);
+        }
+      )
     }
   );
 

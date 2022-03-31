@@ -52,6 +52,7 @@ const Selling = ({ userName }) => {
 	const [feedBack, setFeedback] = useState("");
 	const [walletAddress, setWalletAddress] = useState("");
 	const [confirmation, setConfirmation] = useState(false);
+	const [saleID, setSaleID] = useState("");
 
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
@@ -66,6 +67,7 @@ const Selling = ({ userName }) => {
 		  },
 		}).then((response) => {
 			setReference(response.data[0].Reference);
+			setSaleID(response.data[0].saleID);
 			setRoom(response.data[0].Reference);
 			socket.emit("join_room", response.data[0].Reference);
 			setSolAmount(response.data[0].amountOfSol);

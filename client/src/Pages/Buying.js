@@ -55,6 +55,7 @@ const Buying = ({ userName }) => {
 	const [feedBack, setFeedback] = useState("");
 	const [walletAddress, setWalletAddress] = useState("");
 	const [confirmation, setConfirmation] = useState(false);
+	const [saleID, setSaleID] = useState("");
 
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
@@ -71,6 +72,7 @@ const Buying = ({ userName }) => {
 			.then((response) => {
 				//Can map all details needed here from the response get seller ID and payment method from response
 				setReference(response.data[0].Reference);
+				setSaleID(response.data[0].saleID);
 
 				setRoom(response.data[0].Reference);
 				setSolAmount(response.data[0].amountOfSol);
@@ -174,10 +176,12 @@ const Buying = ({ userName }) => {
 		axios
 			.post("http://localhost:3001/CompleteTrade", {
 				liveTradeID,
+				saleID,
 				feedbackMessage,
 				formattedFeedBack,
 				sellerID,
 				buyerID,
+				solAmount,
 			})
 			.then((response) => {});
 	};
