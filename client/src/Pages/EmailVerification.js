@@ -22,8 +22,6 @@ const EmailVerification = () => {
   async function VerifyEmailAuth(event) {
     event.preventDefault();
 
-    console.log("user passcode", Twofa);
-    console.log("email: ", state.email);
     Axios.post("http://localhost:3001/VerifyEmail2FA", {
       email: state.email,
       passcode: Twofa,
@@ -40,9 +38,8 @@ const EmailVerification = () => {
       } else {
         //show popup with error
         <Alert variant="filled" severity="error">
-          Incorrect Code pelase try again!
+          Incorrect Code please try again!
         </Alert>;
-
         verified = false;
       }
     });
