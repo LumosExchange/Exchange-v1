@@ -2043,16 +2043,16 @@ let EscrowTime = " ";
     [saleID],
     (err, results) => {
       let newTotal = (results[0].amountForSale - solAmount);
-      console.log('Amount for sale: ', results[0].amountForSale);
-      console.log('new total: ',newTotal);
+
       db.query(
         "UPDATE sale SET amountForSale =? WHERE saleID =?",
         [newTotal, saleID],
         (err, results) => {
           if(err) {
-            console.log(err);
+            throw err;
+
           }
-          console.log(results);
+
         }
       )
     }
@@ -2318,6 +2318,65 @@ app.post("/GetFeedbackPage", (req, res) => {
     })
   })
 });
+
+app.post("/CheckSaleEligibility", (req, res) => {
+
+  const userID = req.session.user[0].userID;
+
+  //Get current user account level 
+  var sql = "SELECT accountLevel as accountLevel FROM accountLevel WHERE (userID) = (?);SELECT SUM(amountOfSol) as amountOfSol FROM TradeHistory WHERE (sellerID) = (?) "
+
+  db.query(sql, [userID, userID], function(error, results, fields) {
+    if (error) {
+      console.log(error);
+    }
+    console.log('Amount for sale: ',results[1]);
+    console.log('Amount for sale: ',results[1][0].amountOfSol);
+ 
+
+   
+
+    switch (results[0][0].accountLevel){
+      case "Standard": 
+        res.send({
+          userID: userID,
+          accountLevel: "Standard",
+          solLimit: 1,
+          amountSolSold: results[1][0].amountOfSol,
+        });
+        break;
+        case "Bronze":
+          res.send({
+            userID: userID,
+            accountLevel: "Bronze",
+            solLimit: 5,
+            amountSolSold: results[1][0].amountOfSol,
+          });
+          break;
+          case "Silver":
+            res.send({
+              userID: userID,
+              accountLevel: "Silver",
+              solLimit: 10,
+              amountSolSold: results[1][0].amountOfSol,
+            });
+            break;
+            case "Gold":
+              res.send({
+                userID: userID,
+                accountLevel: "Gold",
+                solLimit: 25,
+                amountSolSold: results[1][0].amountOfSol,
+              });
+              break;
+ 
+    }
+
+  })
+
+  //Check the account level and return maximum amount of sol the user can sell
+
+})
 
 
 
