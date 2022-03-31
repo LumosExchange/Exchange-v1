@@ -432,14 +432,17 @@ app.get("/getUserID", (req, res) => {
 
 //update user settings
 app.post("/updateUserSettings", (req, res) => {
-  const theme = req.body.theme;
   const timezone = req.body.timezone;
   const currency = req.body.currency;
   const user = req.session.user[0].userID;
 
+  console.log(timezone, 'selected timezone');
+  console.log(currency, 'selected currency');
+  console.log(user, 'selected user');
+
   db.query(
-    "UPDATE userSettings SET currency = ?, timezone = ?, theme = ? WHERE userID = ?",
-    [currency, timezone, theme, user],
+    "UPDATE userSettings SET currency = ?, timezone = ? WHERE userID = ?",
+    [currency, timezone, user],
     (err, result) => {
       res.send(result);
       console.log(err);
@@ -1830,7 +1833,7 @@ app.post("/UpdateMyListings", (req, res) => {
   );
 });
 
-app.post("/DeleteMyLisiting", (req, res) => {
+app.post("/DeleteMyListing", (req, res) => {
   const saleID = req.body.saleID;
   db.query("DELETE FROM sale Where saleID = ?", [saleID], (err, result) => {
     if (err) {

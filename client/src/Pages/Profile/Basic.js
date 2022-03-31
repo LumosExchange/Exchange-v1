@@ -89,7 +89,6 @@ const Basic = () => {
       currency: selectedCurrency,
     }).then((response) => {
       //handle errors
-      console.log(response, "response");
       setIsLoading(false);
       window.location.reload(false);
     });
@@ -144,8 +143,6 @@ const Basic = () => {
                 onChange={(e) => selectCurrency(e.currentTarget.value)}
               >
                 <option value="GBP">British Pounds (GBP)</option>
-                <option value="AUS">Australian Dollars (AUS)</option>
-                <option value="EURO">European Euros (EURO)</option>
               </StyledDropdown>
             </div>
           </div>
