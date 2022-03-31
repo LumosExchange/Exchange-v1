@@ -137,7 +137,7 @@ const MyListings = ({ solGbp, currency }) => {
 	const navigate = useNavigate();
 
   	return (
-		<PageBody className="d-flex align-items-center position-relative">
+		<PageBody className={`d-flex position-relative ${userListings.length === 0 ? 'align-items-center' : 'align-items-start'}`}>
 			<div className="container d-flex justify-content-center py-5 flex-column">
 			{isLoading && <LoadingState />}
 			{userListings.length === 0 && (

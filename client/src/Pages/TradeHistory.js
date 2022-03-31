@@ -242,7 +242,7 @@ const TradeHistory = () => {
 	console.log(tradeHistory, 'trade history');
 
 	return (
-		<PageBody className="d-flex justify-content-center flex-column">
+		<PageBody className={`d-flex flex-column ${(liveTradesBuyer.length === 0 && liveTradesSeller.length === 0  && tradeHistory.length === 0) ? 'justify-content-center' : 'justify-content-start'}`}>
 			<div className="container text-center">
 				{liveTradesBuyer.length === 0 && liveTradesSeller.length === 0  && tradeHistory.length === 0  && (
 					<div className="d-flex align-items-center justify-content-center flex-column">

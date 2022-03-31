@@ -83,14 +83,12 @@ const Register = () => {
 			setSecret(data1);
 			console.log('2fa is : ', secret );
 		}));	
-			navigate("/EmailVerification", {
-				state: {
-					id: 1,
-					email: emailReg,
-				
-				}
-		
-			});
+		navigate("/EmailVerification", {
+			state: {
+				id: 1,
+				email: emailReg,
+			}
+		});
 	}
 
 	return (
