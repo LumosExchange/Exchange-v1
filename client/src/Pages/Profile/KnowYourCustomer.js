@@ -23,7 +23,7 @@ const KnowYourCustomer = () => {
   const [legalNameReg, setLegalNameReg] = useState("");
   const [birthDayReg, setBirthDayReg] = useState("");
   const [birthMonthReg, setBirthMonthReg] = useState("");
-  const [birthYearReg, setBirthYearReg] = useState("");
+  const [birthYeareg, setbirthYeareg] = useState("");
   const [displayNameReg, setDisplayNameReg] = useState("");
   const [streetAdressReg, setStreetAdressReg] = useState("");
   const [cityTownReg, setCityTownReg] = useState("");
@@ -32,12 +32,18 @@ const KnowYourCustomer = () => {
   const [countryReg, setCountryReg] = useState("");
   const [documentReg, setDocumentReg] = useState("");
 
+  const getUserInfo = () => {
+    Axios.get("http://localhost:3001/getUserInfo").then((response) => {
+      console.log(response);
+    });
+  }
+
   const userInfo = () => {
     Axios.post("http://localhost:3001/userInfo", {
       LegalName: legalNameReg,
       BirthDay: birthDayReg,
       BirthMonth: birthMonthReg,
-      BirthYear: birthYearReg,
+      BirthYear: birthYeareg,
       DisplayName: displayNameReg,
       StreetAdress: streetAdressReg,
       CityTown: cityTownReg,
@@ -118,7 +124,7 @@ const KnowYourCustomer = () => {
                   </Heading>
                   <StyledDropdown
                     className="w-100"
-                    onChange={(e) => setBirthYearReg(e.currentTarget.value)}
+                    onChange={(e) => setbirthYeareg(e.currentTarget.value)}
                   >
                     {birthYearOptions(currentYear, currentYear - 90, -1).map(
                       (option) => (

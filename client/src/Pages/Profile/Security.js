@@ -61,7 +61,7 @@ const Security = () => {
         <ProfileTabs selected="Security" />
         <ContentTab>
           <div className="d-flex p-4 row">
-            <div className="col-12 col-lg-6 d-flex flex-column">
+            <div className="col-12 col-lg-6 flex-column d-none">
               <Heading size="20px" bold>
                 Email Settings
               </Heading>

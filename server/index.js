@@ -721,21 +721,21 @@ app.post("/VerifyEmail2FA", (req, res) => {
 //UpgradeSilver
 app.post("/UpgradeSilver", (req, res) => {
   const user = req.session.user[0].userID;
-  const BirthDayy = req.body.BirthDayy;
-  const BirthMonthh = req.body.BirthMonthh;
-  const BirthYearr = req.body.BirthYearr;
+  const birthDay = req.body.birthDay;
+  const birthMonth = req.body.birthMonth;
+  const birthYear = req.body.birthYear;
   const CountryOfResidence = req.body.CountryOfResidence;
   const Phone = req.body.Phone;
   const Tax = req.body.Tax;
   const date = new Date();
 
   db.query(
-    "INSERT INTO UpgradeTiers SET userID = ?,BirthDayy = ?, BirthMonthh = ?, BirthYearr = ?, PhoneNumber = ?, TaxCode = ?, CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?",
+    "INSERT INTO UpgradeTiers SET userID = ?,birthDay = ?, birthMonth = ?, birthYear = ?, PhoneNumber = ?, TaxCode = ?, CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?",
     [
       user,
-      BirthDayy,
-      BirthMonthh,
-      BirthYearr,
+      birthDay,
+      birthMonth,
+      birthYear,
       Phone,
       Tax,
       CountryOfResidence,

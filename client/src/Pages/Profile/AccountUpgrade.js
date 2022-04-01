@@ -72,9 +72,9 @@ const AccountUpgrade = () => {
 
   const upgradeSilver = () => {
     Axios.post("http://localhost:3001/upgradeSilver", {
-      BirthDayy: birthDayReg,
-      BirthMonthh: birthMonthReg,
-      BirthYearr: birthYearReg,
+      birthDay: birthDayReg,
+      birthMonth: birthMonthReg,
+      birthYear: birthYearReg,
       Phone: phone,
       Tax: tax,
       CountryOfResidence: countryOfResidence,
