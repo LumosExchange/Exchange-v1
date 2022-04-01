@@ -151,7 +151,10 @@ app.post("/register", (req, res) => {
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) {
       console.log(err);
-    }
+      res.send({err});
+    } else {
+
+    
     db.query(
       "INSERT INTO users (firstName, lastName, email, password, nationality, userName, registeredDate) VALUES (?,?,?,?,?,?,?)",
       [firstName, lastName, email, hash, nationality, userName, date],
@@ -185,10 +188,18 @@ app.post("/register", (req, res) => {
       [0, 0, 0, 0, 0],
       (err, result) => {
         console.log(err);
-      }
-  
+      },
     );
+    res.send({
+      registered: true,
+    });
+    }
   });
+
+ 
+  
+  
+
 });
 
 //KYC TAB
@@ -644,9 +655,14 @@ app.post("/SendEmailVerification", (req, res) => {
     [req.body.email, text],
 
     (err, result) => {
+      
+      res.send({
+        emailSent: true
+      })
       console.log(err);
     }
   );
+ 
 });
 
 app.post("/VerifyEmail2FA", (req, res) => {
@@ -656,7 +672,7 @@ app.post("/VerifyEmail2FA", (req, res) => {
   const userCode = req.body.passcode;
 
   console.log("usercode: ", req.body.passcode);
-  console.log("email is: ", req.body.email);
+
   let checkCode;
   let auth = false;
 
@@ -680,7 +696,10 @@ app.post("/VerifyEmail2FA", (req, res) => {
     db.query(
       "DELETE * FROM TempAuth WHERE (email) = (?)",
       [email],
-      (err, result) => {}
+      (err, result) => {
+        console.log(err);
+        console.log(result);
+      }
     );
   } else {
     auth = false;
@@ -2008,6 +2027,8 @@ const feedbackMessage = req.body.feedbackMessage;
 const feedbackScore = req.body.formattedFeedBack;
 const sellerID = req.body.sellerID;
 const buyerID = req.body.buyerID;
+const saleID = req.body.saleID;
+const solAmount = req.body.solAmount;
 var date = new Date().toISOString().slice(0, 19).replace("T", " ");
 
 let EscrowTime = " ";
@@ -2333,10 +2354,10 @@ app.post("/CheckSaleEligibility", (req, res) => {
     }
     console.log('Amount for sale: ',results[1]);
     console.log('Amount for sale: ',results[1][0].amountOfSol);
+    if (results[1][0] === null) {
+     
+    }
  
-
-   
-
     switch (results[0][0].accountLevel){
       case "Standard": 
         res.send({
