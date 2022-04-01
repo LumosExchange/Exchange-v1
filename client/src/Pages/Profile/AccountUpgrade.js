@@ -132,7 +132,6 @@ const AccountUpgrade = () => {
 			getAccountTier();
 			if (accountTier !== "") {
 				setExpanded(accountTier);
-
 				if (accountTier === "Standard") {
 					setCurrentStep(0);
 				}
@@ -161,218 +160,225 @@ const AccountUpgrade = () => {
 						<div className="d-flex col-12 col-md-6 mb-3 flex-column">
 							{currentStep === 0 && (
 								<React.Fragment>
-									<div className="row">
-										<div className="col-12 mb-4">
-											<Heading size="20px" bold>
-												Legal Name
-											</Heading>
-											<FormInput
-												id="legalName"
-												className="w-100"
-												type="text"
-												placeholder="Legal Name"
-												onChange={(e) => {
-													setLegalName(e.target.value);
-												}}
-											/>
+									<form>
+										<div className="row">
+											<div className="col-12 mb-4">
+												<Heading size="20px" bold>
+													Legal Name
+												</Heading>
+												<FormInput
+													id="legalName"
+													className="w-100"
+													type="text"
+													placeholder="Legal Name"
+													onChange={(e) => {
+														setLegalName(e.target.value);
+													}}
+												/>
+											</div>
+											<div className="col-12 mb-4">
+												<Heading size="20px" bold>
+													Street Address
+												</Heading>
+												<FormInput
+													id="streetaddress"
+													className="w-100"
+													type="text"
+													placeholder="Street Address"
+													onChange={(e) => {
+														setStreetAddress(e.target.value);
+													}}
+												/>
+											</div>
+											<div className="col-12 mb-4">
+												<Heading size="20px" bold>
+													City/Town
+												</Heading>
+												<FormInput
+													id="citytown"
+													className="w-100"
+													type="text"
+													placeholder="City/Town"
+													onChange={(e) => {
+														setCity(e.target.value);
+													}}
+												/>
+											</div>
+											<div className="col-12 mb-4">
+												<Heading size="20px" bold>
+													State (if applicable)
+												</Heading>
+												<FormInput
+													id="citystate"
+													className="w-100"
+													type="text"
+													placeholder="State"
+													onChange={(e) => {
+														setCityState(e.target.value);
+													}}
+												/>
+											</div>
+											<div className="col-12 mb-4">
+												<Heading size="20px" bold>
+													Postcode
+												</Heading>
+												<FormInput
+													id="postcode"
+													className="w-100"
+													type="text"
+													placeholder="Postcode"
+													onChange={(e) => {
+														setPostCode(e.target.value);
+													}}
+												/>
+											</div>
+											<div className="col-12 mb-4">
+												<Heading size="20px" bold>
+													Country
+												</Heading>
+												<StyledDropdown
+													className="w-100"
+													onChange={(e) => setCountry(e.currentTarget.value)}
+												>
+													{countryOptions.map((option) => (
+														<option value={option}>{option}</option>
+													))}
+												</StyledDropdown>
+											</div>
+											<div className="col-12">
+												<Heading size="20px" bold>
+													Upload Document
+												</Heading>
+												<FormInput
+													id="document"
+													className="mb-3 w-100"
+													type="file"
+													name="image"
+													placeholder="Postcode"
+													onChange={(e) => {
+														setDocument(e.target.value);
+													}}
+												/>
+											</div>
+											<div className="col-12 mb-3 ">
+												<PrimaryButton
+													type="submit"
+													className="w-100 mt-3"
+													onClick={(event) => {
+														event.preventDefault();
+														upgradeBronze();
+													}}
+													text="Upgrade To Bronze"
+													hasIcon
+												/>
+											</div>
 										</div>
-										<div className="col-12 mb-4">
-											<Heading size="20px" bold>
-												Street Address
-											</Heading>
-											<FormInput
-												id="streetaddress"
-												className="w-100"
-												type="text"
-												placeholder="Street Address"
-												onChange={(e) => {
-													setStreetAddress(e.target.value);
-												}}
-											/>
-										</div>
-										<div className="col-12 mb-4">
-											<Heading size="20px" bold>
-												City/Town
-											</Heading>
-											<FormInput
-												id="citytown"
-												className="w-100"
-												type="text"
-												placeholder="City/Town"
-												onChange={(e) => {
-													setCity(e.target.value);
-												}}
-											/>
-										</div>
-										<div className="col-12 mb-4">
-											<Heading size="20px" bold>
-												State (if applicable)
-											</Heading>
-											<FormInput
-												id="citystate"
-												className="w-100"
-												type="text"
-												placeholder="State"
-												onChange={(e) => {
-													setCityState(e.target.value);
-												}}
-											/>
-										</div>
-										<div className="col-12 mb-4">
-											<Heading size="20px" bold>
-												Postcode
-											</Heading>
-											<FormInput
-												id="postcode"
-												className="w-100"
-												type="text"
-												placeholder="Postcode"
-												onChange={(e) => {
-													setPostCode(e.target.value);
-												}}
-											/>
-										</div>
-										<div className="col-12 mb-4">
-											<Heading size="20px" bold>
-												Country
-											</Heading>
-											<StyledDropdown
-												className="w-100"
-												onChange={(e) => setCountry(e.currentTarget.value)}
-											>
-												{countryOptions.map((option) => (
-													<option value={option}>{option}</option>
-												))}
-											</StyledDropdown>
-										</div>
-										<div className="col-12">
-											<Heading size="20px" bold>
-												Upload Document
-											</Heading>
-											<FormInput
-												id="document"
-												className="mb-3 w-100"
-												type="file"
-												placeholder="Postcode"
-												onChange={(e) => {
-													setDocument(e.target.value);
-												}}
-											/>
-										</div>
-										<div className="col-12 mb-3 ">
-											<PrimaryButton
-												type="submit"
-												className="w-100 mt-3"
-												onClick={(event) => {
-													event.preventDefault();
-													upgradeBronze();
-												}}
-												text="Upgrade To Bronze"
-												hasIcon
-											/>
-										</div>
-									</div>
+									</form>
 								</React.Fragment>
 							)}
 							{currentStep === 1 && (
 								<React.Fragment>
-									<Heading size="20px" bold>
-										Date Of Birth
-									</Heading>
-									<div className="row mb-3">
-										<div className="col-4">
-											<Heading size="20px" bold>
-												Day
-											</Heading>
-											<StyledDropdown
-												className="w-100"
-												onChange={(e) => setBirthDay(e.currentTarget.value)}
-											>
-												{birthDayOptions.map((option) => (
-													<option value={option}>{option}</option>
-												))}
-											</StyledDropdown>
+									<form>
+										<Heading size="20px" bold>
+											Date Of Birth
+										</Heading>
+										<div className="row mb-3">
+											<div className="col-4">
+												<Heading size="20px" bold>
+													Day
+												</Heading>
+												<StyledDropdown
+													className="w-100"
+													onChange={(e) => setBirthDay(e.currentTarget.value)}
+												>
+													{birthDayOptions.map((option) => (
+														<option value={option}>{option}</option>
+													))}
+												</StyledDropdown>
+											</div>
+											<div className="col-4">
+												<Heading size="20px" bold>
+													Month
+												</Heading>
+												<StyledDropdown
+													className="w-100"
+													onChange={(e) => setBirthMonth(e.currentTarget.value)}
+												>
+													{birthMonthOptions.map((option) => (
+														<option value={option}>{option}</option>
+													))}
+												</StyledDropdown>
+											</div>
+											<div className="col-4">
+												<Heading size="20px" bold>
+													Year
+												</Heading>
+												<StyledDropdown
+													className="w-100"
+													onChange={(e) => setBirthYear(e.currentTarget.value)}
+												>
+													<option value="---">---</option>
+													{birthYearOptions(currentYear, currentYear - 90, -1).map(
+														(option) => (
+															<option value={option}>{option}</option>
+														)
+													)}
+												</StyledDropdown>
+											</div>
 										</div>
-										<div className="col-4">
-											<Heading size="20px" bold>
-												Month
-											</Heading>
-											<StyledDropdown
-												className="w-100"
-												onChange={(e) => setBirthMonth(e.currentTarget.value)}
-											>
-												{birthMonthOptions.map((option) => (
-													<option value={option}>{option}</option>
-												))}
-											</StyledDropdown>
-										</div>
-										<div className="col-4">
-											<Heading size="20px" bold>
-												Year
-											</Heading>
-											<StyledDropdown
-												className="w-100"
-												onChange={(e) => setBirthYear(e.currentTarget.value)}
-											>
-												<option value="---">---</option>
-												{birthYearOptions(currentYear, currentYear - 90, -1).map((option) => (
-													<option value={option}>{option}</option>
-												))}
-											</StyledDropdown>
-										</div>
-									</div>
-									<Heading size="20px" bold>
-										Phone
-									</Heading>
-									<FormInput
-										id="Phone"
-										className="mb-3 w-100"
-										type="number"
-										placeholder="Phone"
-										onChange={(e) => {
-											setPhoneReg(e.target.value);
-										}}
-									/>
-									<Heading size="20px" bold>
-										Taxes
-									</Heading>
-									<FormInput
-										id="Tax"
-										className="mb-3 w-100"
-										type="file"
-										placeholder="Taxes (Optional)"
-										onChange={(e) => {
-											setTaxReg(e.target.value);
-										}}
-									/>
-									<Heading size="20px" bold>
-										Country Of Residence
-									</Heading>
-									<StyledDropdown
-										className="w-100"
-										onChange={(e) => setCountryOfResidenceReg(e.currentTarget.value)}
-									>
-										{countryOptions.map((option) => (
-											<option value={option}>{option}</option>
-										))}
-									</StyledDropdown>
-									<PrimaryButton
-										type="submit"
-										className="w-100 mt-3"
-										onClick={upgradeSilver}
-										text="Upgrade To Silver"
-										disabled={
-											birthDay === "---" ||
-											birthMonth === "---" ||
-											birthYear === "---" ||
-											countryOfResidence === "Please Select" ||
-											phone.length === 0
-										}
-										hasIcon
-									/>
-									<Heading size="20px" bold>
-										{confirmationMessage}
-									</Heading>
+										<Heading size="20px" bold>
+											Phone
+										</Heading>
+										<FormInput
+											id="Phone"
+											className="mb-3 w-100"
+											type="number"
+											placeholder="Phone"
+											onChange={(e) => {
+												setPhoneReg(e.target.value);
+											}}
+										/>
+										<Heading size="20px" bold>
+											Taxes
+										</Heading>
+										<FormInput
+											id="Tax"
+											className="mb-3 w-100"
+											type="file"
+											placeholder="Taxes (Optional)"
+											onChange={(e) => {
+												setTaxReg(e.target.value);
+											}}
+										/>
+										<Heading size="20px" bold>
+											Country Of Residence
+										</Heading>
+										<StyledDropdown
+											className="w-100"
+											onChange={(e) => setCountryOfResidenceReg(e.currentTarget.value)}
+										>
+											{countryOptions.map((option) => (
+												<option value={option}>{option}</option>
+											))}
+										</StyledDropdown>
+										<PrimaryButton
+											type="submit"
+											className="w-100 mt-3"
+											onClick={upgradeSilver}
+											text="Upgrade To Silver"
+											disabled={
+												birthDay === "---" ||
+												birthMonth === "---" ||
+												birthYear === "---" ||
+												countryOfResidence === "Please Select" ||
+												phone.length === 0
+											}
+											hasIcon
+										/>
+										<Heading size="20px" bold>
+											{confirmationMessage}
+										</Heading>
+									</form>
 								</React.Fragment>
 							)}
 							{currentStep === 2 && (
@@ -450,7 +456,6 @@ const AccountUpgrade = () => {
 												setAdditionalIncomeReg(e.target.value);
 											}}
 										/>
-
 										<PrimaryButton
 											type="submit"
 											className="w-100 mt-2"
