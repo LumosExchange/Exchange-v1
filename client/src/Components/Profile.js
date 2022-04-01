@@ -28,6 +28,7 @@ export const ProfileInitials = styled.div(({ theme }) => css`
 	color: ${theme.colors.base_bg};
 	font-size: 30px;
 	font-family: "THICCCBOI-BOLD";
+    text-transform: uppercase;
 `);
   
 export const ProfileTab = styled.button(({ theme }) => css`
@@ -217,9 +218,6 @@ export const ProfileTabs = ({ selected }) => (
 		</ProfileTabLink>
 		<ProfileTabLink href="/Profile/Security" className={selected === "Security" && "selected"}>
 			Security
-		</ProfileTabLink>
-		<ProfileTabLink href="/Profile/KYC" className={selected === "KYC" && "selected"}>
-			KYC
 		</ProfileTabLink>
 		<ProfileTabLink href="/Profile/PaymentMethods" className={`wide ${selected === "PaymentMethods" && "selected"}`}>Payment Methods</ProfileTabLink>
 		<ProfileTabLink href="/Profile/AccountUpgrade" className={`wide ${selected === "AccountUpgrade" && "selected"}`}>Account Upgrade</ProfileTabLink>

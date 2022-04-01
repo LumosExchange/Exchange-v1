@@ -724,9 +724,9 @@ app.post("/UpgradeSilver", (req, res) => {
   const birthDay = req.body.birthDay;
   const birthMonth = req.body.birthMonth;
   const birthYear = req.body.birthYear;
-  const CountryOfResidence = req.body.CountryOfResidence;
-  const Phone = req.body.Phone;
-  const Tax = req.body.Tax;
+  const countryOfResidence = req.body.countryOfResidence;
+  const phone = req.body.phone;
+  const tax = req.body.tax;
   const date = new Date();
 
   db.query(
@@ -736,10 +736,10 @@ app.post("/UpgradeSilver", (req, res) => {
       birthDay,
       birthMonth,
       birthYear,
-      Phone,
-      Tax,
-      CountryOfResidence,
-      Tax,
+      phone,
+      tax,
+      countryOfResidence,
+      tax,
       date,
       user,
     ],
@@ -2255,28 +2255,6 @@ app.post("/GetWallets", (req, res) => {
            {
              walletID: 5,
              address: result[0].sol5,
-           }
-         ])
-        } else {
-          res.send([
-            {walletID: 1,
-             address: "",
-            },
-           {
-             walletID: 2,
-             address: "",
-           },
-           {
-             walletID: 3,
-             address: "",
-           },
-           {
-             walletID: 4,
-             address: "",
-           },
-           {
-             walletID: 5,
-             address: "",
            }
          ])
         }

@@ -23,7 +23,7 @@ const KnowYourCustomer = () => {
   const [legalNameReg, setLegalNameReg] = useState("");
   const [birthDayReg, setBirthDayReg] = useState("");
   const [birthMonthReg, setBirthMonthReg] = useState("");
-  const [birthYeareg, setbirthYeareg] = useState("");
+  const [birthYeaReg, setbirthYeaReg] = useState("");
   const [displayNameReg, setDisplayNameReg] = useState("");
   const [streetAdressReg, setStreetAdressReg] = useState("");
   const [cityTownReg, setCityTownReg] = useState("");
@@ -43,7 +43,7 @@ const KnowYourCustomer = () => {
       LegalName: legalNameReg,
       BirthDay: birthDayReg,
       BirthMonth: birthMonthReg,
-      BirthYear: birthYeareg,
+      BirthYear: birthYeaReg,
       DisplayName: displayNameReg,
       StreetAdress: streetAdressReg,
       CityTown: cityTownReg,
@@ -124,7 +124,7 @@ const KnowYourCustomer = () => {
                   </Heading>
                   <StyledDropdown
                     className="w-100"
-                    onChange={(e) => setbirthYeareg(e.currentTarget.value)}
+                    onChange={(e) => setbirthYeaReg(e.currentTarget.value)}
                   >
                     {birthYearOptions(currentYear, currentYear - 90, -1).map(
                       (option) => (
