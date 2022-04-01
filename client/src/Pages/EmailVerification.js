@@ -7,6 +7,7 @@ import Heading from "../Components/Heading";
 import Card from "../Components/Card";
 import Axios from "axios";
 import { useNavigate } from "react-router";
+import Paragraph from "../Components/Paragraph";
 
 
 const EmailVerification = () => {
@@ -54,24 +55,26 @@ const EmailVerification = () => {
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">
       <Card radius="20px" className="p-5 d-flex flex-column" style={{ maxWidth: '600px' }}>
-        <Heading className="pb-4 text-center">
-          Please enter your email 2FA code below
+        <Heading className="pb-4 text-center" bold>
+          2FA Code sent to {state.email}
         </Heading>
+        <Paragraph size="20px" className="text-center">Please check your email and enter the code below.</Paragraph>
         <form>
           <div className="w-100 row">
-            <div className="col-12 col-md-8">
+            <div className="col-12 p-0 mb-3">
                 <FormInput
                   type="text"
                   id="Code"
                   name="code"
                   placeholder="Enter 2FA Code"
+                  maxLength="6"
                   onChange={(e) => {
                     setTwofaCode(e.target.value);
                   }}
                   className="w-100"
                 />
                 </div>
-                <div className="col-12 col-md-4 p-0">
+                <div className="col-12 p-0">
                   <PrimaryButton
                     text="Submit"
                     type="submit"
