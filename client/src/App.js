@@ -122,6 +122,7 @@ const App = () => {
 						<Route path="/Register" element={<Register />} />
 						<Route path="*" element={<ErrorPage />} />
 						<Route path="/Prices" element={<Prices />} />
+						<Route path="/EmailVerification" element={<EmailVerification />} />
 
 						{/* Protected Routes */}
 						<Route path="/" element={<ProtectedRoutes />}>
@@ -141,7 +142,6 @@ const App = () => {
 							<Route path="/ConnectWallet" element={<ConnectWallet />} />
 							<Route path="/ChangePassword" element={<ChangePassword />} />
 							<Route path="/MyWallet" element={<MyWallet />} />
-							<Route path="/EmailVerification" element={<EmailVerification />} />
 							<Route path="/AirDrops" element={<AirDrops />} />
 							<Route path="/GoogleAuth" element={<GoogleAuth />} />
 							<Route path="/SMSAuth" element={<SMSAuth />} />
