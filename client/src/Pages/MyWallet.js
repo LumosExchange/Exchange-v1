@@ -87,8 +87,9 @@ const MyWallet = () => {
  function connectPhantomWallet() {
 	window.solana.connect();
 	window.solana.on("connect", () => console.log("Phantom wallet connected!"));
-	console.log('SOl address: ',window.solana.publicKey.toString());
+	
 	const walletPublicKey = window.solana.publickey;
+	console.log(walletPublicKey);
 	
   }
   
