@@ -364,7 +364,10 @@ const AccountUpgrade = () => {
 										<PrimaryButton
 											type="submit"
 											className="w-100 mt-3"
-											onClick={upgradeSilver}
+											onClick={(event) => {
+												event.preventDefault();
+												upgradeSilver();
+											}}
 											text="Upgrade To Silver"
 											disabled={
 												birthDay === "---" ||
@@ -459,7 +462,10 @@ const AccountUpgrade = () => {
 										<PrimaryButton
 											type="submit"
 											className="w-100 mt-2"
-											onClick={upgradeGold}
+											onClick={(event) => {
+												event.preventDefault();
+												upgradeGold();
+											}}
 											text="Upgrade To Gold"
 											hasIcon
 											disabled={
