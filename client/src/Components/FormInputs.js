@@ -118,7 +118,7 @@ export const FormInput = ({
 	customIcon,
 	autocomplete,
 }) => (
-	<div className={`d-flex ${hasIcon && className}`}>
+	<div className={`d-flex ${hasIcon && className ? className : ''}`}>
 		{hasIcon && (
 			<IconArea className="d-flex align-items-center">
 				{!customIcon && <i className="material-icons">{icon}</i>}
@@ -127,7 +127,7 @@ export const FormInput = ({
 		)}
 		{rounded ? (
 			<RoundedInput
-				className={!hasIcon && className}
+				className={!hasIcon && className ? className : ''}
 				form={form}
 				hasIcon={hasIcon}
 				id={id}
@@ -150,7 +150,7 @@ export const FormInput = ({
 			/>
 		) : (
 			<StyledInput
-				className={!hasIcon && className}
+				className={!hasIcon && className ? className : ''}
 				form={form}
 				hasIcon={hasIcon}
 				id={id}
@@ -179,12 +179,15 @@ FormInput.propTypes = {
 	color: PropTypes.string,
 	textColor: PropTypes.string,
 	rounded: PropTypes.bool,
+	hasIcon: PropTypes.bool,
 };
 
 FormInput.defaultProps = {
 	color: "grey",
 	textColor: "text-primary",
 	rounded: false,
+	hasIcon: false,
+	className: "",
 };
 
 const StyledCheckbox = styled.input(
