@@ -1,4 +1,4 @@
-import React, { useState, Alert } from "react";
+import React, { useState, Alert, useEffect } from "react";
 import { useLocation } from "react-router";
 import { PageBody } from "../Components/FormInputs";
 import PrimaryButton from "../Components/Buttons";
@@ -44,6 +44,12 @@ const EmailVerification = () => {
       }
     });
   }
+
+  useEffect(() => {
+    if (state === null){
+      navigate('/Login');
+    }
+  }, []);
 
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">

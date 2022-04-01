@@ -1,4 +1,4 @@
-import React, { useState, Alert } from "react";
+import React, { useState, Alert, useEffect } from "react";
 import styled, { css } from "styled-components";
 import "../App.css";
 import Axios from "axios";
@@ -104,6 +104,7 @@ const Register = () => {
           firstName: firstNameReg,
           lastName: lastNameReg,
         }).then((response) => {
+          console.log(response, 'response from send email')
           if (response.data.emailSent === true) {
             //Navigate to emailVerification
             navigate("/EmailVerification", {
@@ -112,6 +113,8 @@ const Register = () => {
                 email: emailReg,
               },
               });
+          } else {
+            console.log("---pickles");
           }
 		});
       } else {
@@ -186,6 +189,7 @@ const Register = () => {
               type="text"
               form="register"
               placeholder="User Name"
+              autocomplete="off"
               maxLength={30}
               className={`
 								mb-3 w-100
@@ -242,6 +246,7 @@ const Register = () => {
               type="text"
               form="register"
               placeholder="email"
+              autocomplete="off"
               onChange={(e) => {
                 setEmailReg(e.target.value);
               }}
@@ -260,6 +265,7 @@ const Register = () => {
               type="password"
               form="register"
               placeholder="password"
+              autocomplete="off"
               onChange={(e) => {
                 setPasswordReg(e.target.value);
               }}
@@ -277,6 +283,7 @@ const Register = () => {
               className="mb-3 w-100"
               type="text"
               form="register"
+              autocomplete="off"
               placeholder="Nationality"
               onChange={(e) => {
                 setNationalityReg(e.target.value);
@@ -342,8 +349,9 @@ const Register = () => {
               type="submit"
               className="m-auto"
               onClick={(event) => {
-				event.preventDefault();
-				  register();}}
+				        event.preventDefault();
+				        register();
+              }}
               text="Create An Account"
               hasIcon
               disabled={
