@@ -6,142 +6,158 @@ import PrimaryButton from "../../Components/Buttons";
 import Heading from "../../Components/Heading";
 import { ContentTab, ProfileTabs } from "../../Components/Profile";
 import {
-  countryOptions,
-  birthDayOptions,
-  birthMonthOptions,
-  birthYearOptions,
-  currentYear,
+	countryOptions,
+	birthDayOptions,
+	birthMonthOptions,
+	birthYearOptions,
+	currentYear,
 } from "../../Constants/Index";
-import { InlineInput, StyledDropdown, StyledLabel } from "../../Components/FormInputs";
-import { useNavigate } from "react-router";
+import { StyledDropdown, StyledLabel } from "../../Components/FormInputs";
 import Paragraph from "../../Components/Paragraph";
-import { useDropzone } from "react-dropzone";
 import "react-dropzone-uploader/dist/styles.css";
-import Dropzone from "react-dropzone-uploader";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import { IconHelper } from '../Login';
+import { IconHelper } from "../Login";
 import { Nationalities } from "../../Constants/Index";
 
-const StyledAccordion = styled(Accordion)(
-  ({ theme }) => css`
-    background-color: ${theme.colors.panel_bg} !important;
+const StyledAccordion = styled(Accordion)(({ theme }) => css`
+	background-color: ${theme.colors.panel_bg} !important;
 
-		&.expanded {
-			border: 2px solid ${theme.colors.primary_cta};
-			border-radius: 6px;
-		}
+	&.expanded {
+		border: 2px solid ${theme.colors.primary_cta};
+		border-radius: 6px;
+	}
 
-		i {
-			font-size: 30px;
-		}
-	`
-);
+	i {
+		font-size: 30px;
+	}
+`);
 
 const reloadPage = () => {
-  window.location.reload(true);
+	window.location.reload(true);
 };
 
 const AccountUpgrade = () => {
-  // step 0 upgrade bronze
-  const [name, setLegalName] = useState("");
-  const [streetAddress, setStreetAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [cityState, setCityState] = useState("");
-  const [postCode, setPostCode] = useState("");
-  const [country, setCountry] = useState("");
-  const [document, setDocument] = useState("");
-  const [nationality, setNationality] = useState("");
+	// step 0 upgrade bronze
+	const [name, setName] = useState("");
+	const [streetAddress, setStreetAddress] = useState("");
+	const [city, setCity] = useState("");
+	const [cityState, setCityState] = useState("");
+	const [postCode, setPostCode] = useState("");
+	const [country, setCountry] = useState("");
+	const [document, setDocument] = useState("");
+	const [nationality, setNationality] = useState("");
 
-  //step 1 upgrade silver
-  const [birthDay, setBirthDay] = useState("");
-  const [birthMonth, setBirthMonth] = useState("");
-  const [birthYear, setBirthYear] = useState("");
-  const [phone, setPhoneReg] = useState("");
-  const [tax, setTaxReg] = useState("");
-  const [countryOfResidence, setCountryOfResidenceReg] = useState("");
+	//step 1 upgrade silver
+	const [birthDay, setBirthDay] = useState("");
+	const [birthMonth, setBirthMonth] = useState("");
+	const [birthYear, setBirthYear] = useState("");
+	const [phone, setPhoneReg] = useState("");
+	const [tax, setTaxReg] = useState("");
+	const [countryOfResidence, setCountryOfResidenceReg] = useState("");
 
-  //step 3 upgrade gold
-  const [employerName, setEmployerNameReg] = useState("");
-  const [employerAddress, setEmployerAddressReg] = useState("");
-  const [occupation, setOccupationReg] = useState("");
-  const [proofEmployment, setProofEmploymentReg] = useState("");
-  const [income, setIncomeReg] = useState("");
-  const [additionalIncome, setAdditionalIncomeReg] = useState("");
+	//step 3 upgrade gold
+	const [employerName, setEmployerNameReg] = useState("");
+	const [employerAddress, setEmployerAddressReg] = useState("");
+	const [occupation, setOccupationReg] = useState("");
+	const [proofEmployment, setProofEmploymentReg] = useState("");
+	const [income, setIncomeReg] = useState("");
+	const [additionalIncome, setAdditionalIncomeReg] = useState("");
 
-  //Create function to get current tier
-  const [accountTier, setAccountTier] = useState("");
-  const [currentStep, setCurrentStep] = useState(null);
-  const [confirmationMessage, setConfirmationMessage] = useState("");
-  const [expanded, setExpanded] = useState(null);
+	//Create function to get current tier
+	const [accountTier, setAccountTier] = useState("");
+	const [currentStep, setCurrentStep] = useState(null);
+	const [confirmationMessage, setConfirmationMessage] = useState("");
+	const [expanded, setExpanded] = useState(null);
 
-  const [file, setFile] = useState("");
+	const [file, setFile] = useState("");
 
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+	const handleChange = (panel) => (event, isExpanded) => {
+		setExpanded(isExpanded ? panel : false);
+	};
 
-  const getAccountTier = () => {
-    Axios.get("http://localhost:3001/getUserAccountLevel").then((response) => {
-      setAccountTier(response.data[0]?.accountLevel);
-    });
-  };
+	const getAccountTier = () => {
+		Axios.get("http://localhost:3001/getUserAccountLevel").then((response) => {
+			setAccountTier(response.data[0]?.accountLevel);
+		});
+	};
 
-  const upgradeBronze = () => {
-  const data = new FormData();
-	data.append("name", name);
-  data.append("file", file);
-	data.append("streetAddress", streetAddress);
-	data.append("city", city);
-	data.append("cityState", cityState);
-	data.append("postCode", postCode);
-	data.append("country", country);
+	const upgradeBronze = () => {
+		const data = new FormData();
+		data.append("name", name);
+		data.append("file", file);
+		data.append("streetAddress", streetAddress);
+		data.append("city", city);
+		data.append("cityState", cityState);
+		data.append("postCode", postCode);
+		data.append("country", country);
 
+		console.log(data);
+		Axios.post("https://httpbin.org/anything", data)
+			.then((res) => console.log(res))
+			.catch((err) => console.log(err));
 
-    console.log(data);
-    Axios.post("https://httpbin.org/anything", data)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+		Axios.post("http://localhost:3001/upgradeBronze", data, {}).then((response) => {
+			//handle message retunred from endpoint
+			setConfirmationMessage(response.data.message);
+			//Go to next step
+			setCurrentStep(1);
+			reloadPage();
+		});
+	};
 
-    Axios.post("http://localhost:3001/upgradeBronze", data,{}).then((response) => {
-      //handle message retunred from endpoint
-      setConfirmationMessage(response.data.message);
-      //Go to next step
-      setCurrentStep(1);
-      reloadPage();
-    })
-  };
+	const upgradeSilver = () => {
+		Axios.post("http://localhost:3001/upgradeSilver", {
+			birthDay,
+			birthMonth,
+			birthYear,
+			phone,
+			tax,
+			countryOfResidence,
+		}).then((response) => {
+			//handle message retunred from endpoint
+			setConfirmationMessage(response.data.message);
+			//Go to next step
+			setCurrentStep(2);
+			reloadPage();
+		});
+	};
 
-  const upgradeSilver = () => {
-    Axios.post("http://localhost:3001/upgradeSilver", {
-      birthDay,
-      birthMonth,
-      birthYear,
-      phone,
-      tax,
-      countryOfResidence,
-    }).then((response) => {
-      //handle message retunred from endpoint
-      setConfirmationMessage(response.data.message);
-      //Go to next step
-      setCurrentStep(2);
-      reloadPage();
-    });
-  };
+	const upgradeGold = () => {
+		Axios.post("http://localhost:3001/upgradeGold", {
+			EmployerName: employerName,
+			EmployerAddress: employerAddress,
+			Occupation: occupation,
+			Income: income,
+		}).then((response) => {
+			setConfirmationMessage(response.data.message);
+			setCurrentStep(3);
+			reloadPage();
+		});
+	};
 
-  const upgradeGold = () => {
-    Axios.post("http://localhost:3001/upgradeGold", {
-      EmployerName: employerName,
-      EmployerAddress: employerAddress,
-      Occupation: occupation,
-      Income: income,
-    }).then((response) => {
-      setConfirmationMessage(response.data.message);
-      setCurrentStep(3);
-      reloadPage();
-    });
-  };
+	useEffect(
+		function getTier() {
+			getAccountTier();
+			if (accountTier !== "") {
+				setExpanded(accountTier);
+				if (accountTier === "Standard") {
+					setCurrentStep(0);
+				}
+				if (accountTier === "Bronze") {
+					setCurrentStep(1);
+				}
+				if (accountTier === "Silver") {
+					setCurrentStep(2);
+				}
+				if (accountTier === "Gold") {
+					setCurrentStep(3);
+				}
+			}
+		},
+		[accountTier]
+	);
 
   useEffect(
     function getTier() {
