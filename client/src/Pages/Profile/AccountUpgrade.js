@@ -108,13 +108,14 @@ const AccountUpgrade = () => {
 	};
 
 	const upgradeSilver = () => {
-		Axios.post("http://localhost:3001/upgradeSilver", {
-			birthDay,
-			birthMonth,
-			birthYear,
-			phone,
-			tax,
-			countryOfResidence,
+
+    const dataSilver = new FormData();
+    dataSilver.append("birthDay", birthDay);
+    dataSilver.append("birthMonth", birthMonth);
+    dataSilver.append("birthYear", birthYear);
+    dataSilver.append("phone", phone);
+    dataSilver.append("countryOfResidence", countryOfResidence);
+		Axios.post("http://localhost:3001/upgradeSilver", dataSilver,{
 		}).then((response) => {
 			//handle message retunred from endpoint
 			setConfirmationMessage(response.data.message);
@@ -204,7 +205,7 @@ const AccountUpgrade = () => {
                           type="text"
                           placeholder="Legal Name"
                           onChange={(e) => {
-                            setLegalName(e.target.value);
+                            setName(e.target.value);
                           }}
                         />
                       </div>
@@ -382,8 +383,11 @@ const AccountUpgrade = () => {
                       id="Tax"
                       className="mb-3 w-100"
                       type="file"
+                      accept=".jpg"
                       placeholder="Taxes (Optional)"
                       onChange={(e) => {
+                        const file = e.target.files[0];
+                        setFile(file);
                         setTaxReg(e.target.value);
                       }}
                     />

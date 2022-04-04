@@ -743,11 +743,6 @@ app.post("/UpgradeBronze", upload.single("file"), function(req, res, next){
             console.log(error);
             throw error;
           }
-     
-          console.log(results[0]);
-          console.log(results[1]);
-          console.log(results[2]);
-          
         });
         res.send({
           message: "Account upgraded to Bronze"
@@ -764,7 +759,7 @@ app.post("/UpgradeSilver", (req, res) => {
   const CountryOfResidence = req.body.CountryOfResidence;
   const Phone = req.body.Phone;
   const Tax = req.body.Tax;
-  const date = new Date();
+  const date = new Date().toISOString().slice(0, 19).replace("T", "_")
 
   db.query(
     "UPDATE upgradeTiers SET birthDay = ?, birthMonth = ?, birthYear = ?, PhoneNumber = ?, TaxCode = ?, CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?",
