@@ -20,11 +20,24 @@ const { addAbortSignal } = require("stream");
 const { Server } = require("socket.io");
 const http = require("http");
 const { send } = require("process");
+const multer = require("multer");
+const fs = require("fs");
+
+const { promisify} = require("util");
+
+const pipeline = promisify(require("stream").pipeline);
+
 
 require("dotenv").config();
 
 const server = http.createServer(app);
 
+//Needed for storing images for KYC 
+
+const upload = multer();
+
+
+//Setting up socket for chatroom
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
@@ -169,8 +182,8 @@ app.post("/register", (req, res) => {
       }
     );
     db.query(
-      "INSERT INTO accountLevel (accountLevel, dateUpgraded) VALUES (?,?)",
-      [accountLevel, date],
+      "INSERT INTO accountLevel (accountLevel, dateUpgraded, KYCName, KYC_Verified) VALUES (?,?,?,?)",
+      [accountLevel, date, "0", false],
       (err, result) => {
         console.log(err);
       }
@@ -201,40 +214,16 @@ app.post("/register", (req, res) => {
 
 });
 
-//KYC TAB
-app.post("/userInfo", (req, res) => {
-  const LegalName = req.body.LegalName;
-  const BirthDay = req.body.BirthDay;
-  const BirthMonth = req.body.BirthMonth;
-  const BirthYear = req.body.BirthYear;
-  const DisplayName = req.body.DisplayName;
-  const StreetAdress = req.body.StreetAdress;
-  const CityTown = req.body.CityTown;
-  const CityState = req.body.CityState;
-  const PostCode = req.body.PostCode;
-  const Country = req.body.Country;
-  const Document = req.body.Document;
 
-  db.query(
-    "INSERT INTO  userInfo (legalName, birthDay, birthMonth, birthYear, displayName, streetAdress, cityTown, cityState, postCode, country, document) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-    [
-      LegalName,
-      BirthDay,
-      BirthMonth,
-      BirthYear,
-      DisplayName,
-      StreetAdress,
-      CityTown,
-      CityState,
-      PostCode,
-      Country,
-      Document,
-    ],
-    (err, result) => {
-      console.log(err);
-    }
-  );
-});
+app.post("/getUserInfo", (req, res) => {
+  const id = req.session.user[0].userID;
+  db.query("SELECT * FROM userInfo WHERE",
+  [],
+  (err, result) => {
+
+  })
+
+})
 
 //Login functionality
 //check logged in state
@@ -717,28 +706,76 @@ app.post("/VerifyEmail2FA", (req, res) => {
   //once verified delete 2fa from db
 });
 
+app.post("/UpgradeBronze", upload.single("file"), async function(req, res, next){
+ // console.log(req.file);
+  const user = req.session.user[0].userID;
+  const Name = req.body.name;
+  const address = req.body.streetAddress;
+  const city = req.body.city;
+  const cityState = req.body.cityState;
+  const postCode = req.body.postCode;
+  const country = req.body.country;
+  
+  const date = new Date().toISOString().slice(0, 19).replace("T", "_");
+  const KYCName = date + "_" + Name;
+  
+//Handle the image and check image type
+  const {
+    file,
+    body: { name }
+  } = req;
+  
+  const fileName = req.body.name + "_" + date + "_" + file.detectedFileExtension;
+  console.log(fileName)
+
+  if (file.detectedFileExtension != ".jpg") next(new Error("Invalid file type"));
+  
+    //Post to directory
+     await pipeline(req.file.stream, fs.createWriteStream(`${__dirname}/../client/public/images/${fileName}`));
+     
+     //Now update sql upgradeTiers & account level
+
+     var sql="Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=?, KYCName =?, KYC_Verified=? WHERE userID =?;"
+
+     db.query(sql,[user, Name, address, city, cityState, postCode, country, "Bronze", date, KYCName, false, user], function(error, results, fields){
+       if (error) {
+         console.log(error);
+         throw error;
+       }
+  
+       console.log(results[0]);
+       console.log(results[1]);
+       res.send({
+         message: "Account upgraded to Bronze"
+       });
+      
+     });
+    ;
+   
+});
+
 //UpgradeSilver
 app.post("/UpgradeSilver", (req, res) => {
   const user = req.session.user[0].userID;
   const birthDay = req.body.birthDay;
   const birthMonth = req.body.birthMonth;
   const birthYear = req.body.birthYear;
-  const countryOfResidence = req.body.countryOfResidence;
-  const phone = req.body.phone;
-  const tax = req.body.tax;
+  const CountryOfResidence = req.body.CountryOfResidence;
+  const Phone = req.body.Phone;
+  const Tax = req.body.Tax;
   const date = new Date();
 
   db.query(
-    "INSERT INTO UpgradeTiers SET userID = ?,birthDay = ?, birthMonth = ?, birthYear = ?, PhoneNumber = ?, TaxCode = ?, CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?",
+    "UPDATE upgradeTiers SET birthDay = ?, birthMonth = ?, birthYear = ?, PhoneNumber = ?, TaxCode = ?, CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?",
     [
       user,
       birthDay,
       birthMonth,
       birthYear,
-      phone,
-      tax,
-      countryOfResidence,
-      tax,
+      Phone,
+      Tax,
+      CountryOfResidence,
+      Tax,
       date,
       user,
     ],
@@ -2254,6 +2291,28 @@ app.post("/GetWallets", (req, res) => {
            {
              walletID: 5,
              address: result[0].sol5,
+           }
+         ])
+        } else {
+          res.send([
+            {walletID: 1,
+             address: "",
+            },
+           {
+             walletID: 2,
+             address: "",
+           },
+           {
+             walletID: 3,
+             address: "",
+           },
+           {
+             walletID: 4,
+             address: "",
+           },
+           {
+             walletID: 5,
+             address: "",
            }
          ])
         }
