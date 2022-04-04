@@ -115,6 +115,7 @@ const AccountUpgrade = () => {
     dataSilver.append("birthYear", birthYear);
     dataSilver.append("phone", phone);
     dataSilver.append("countryOfResidence", countryOfResidence);
+    
 		Axios.post("http://localhost:3001/upgradeSilver", dataSilver,{
 		}).then((response) => {
 			//handle message retunred from endpoint

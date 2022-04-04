@@ -732,7 +732,7 @@ app.post("/UpgradeBronze", upload.single("file"), function(req, res, next){
   } 
     
        //Post to directory
-     pipeline(file.stream, fs.createWriteStream(`${__dirname}/../client/public/images/${fileName}`));
+     pipeline(file.stream, fs.createWriteStream(`${__dirname}/../client/public/images/KYC/${fileName}`));
      
         //Now update sql upgradeTiers & account level
    
@@ -751,7 +751,8 @@ app.post("/UpgradeBronze", upload.single("file"), function(req, res, next){
 });
 
 //UpgradeSilver
-app.post("/UpgradeSilver", (req, res) => {
+app.post("/UpgradeSilver", upload.single("file"), function(req, res, next){
+
   const user = req.session.user[0].userID;
   const birthDay = req.body.birthDay;
   const birthMonth = req.body.birthMonth;
@@ -759,45 +760,37 @@ app.post("/UpgradeSilver", (req, res) => {
   const CountryOfResidence = req.body.CountryOfResidence;
   const Phone = req.body.Phone;
   const Tax = req.body.Tax;
-  const date = new Date().toISOString().slice(0, 19).replace("T", "_")
+  const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
-  db.query(
-    "UPDATE upgradeTiers SET birthDay = ?, birthMonth = ?, birthYear = ?, PhoneNumber = ?, TaxCode = ?, CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?",
-    [
-      user,
-      birthDay,
-      birthMonth,
-      birthYear,
-      Phone,
-      Tax,
-      CountryOfResidence,
-      Tax,
-      date,
-      user,
-    ],
-    (err, result) => {
-      if (err) {
-        res.send(err);
-      } else {
-        res.send({
-          message: "Succesfully Upgraded to silver account",
-        });
-      }
-    }
-  );
-  // upgarde account level to silver in accountLevel
-  db.query(
-    "UPDATE accountLevel SET accountLevel = ?, dateUpgraded = ? WHERE userID =?",
-    ["Silver", date, user],
-    (err, result) => {
-      if (err) {
-        res.send(err);
-      } else {
-      }
-    }
-  );
-});
+  const fullName = req.session[0].firstname + " " + res.session[0].lastName;
 
+  const {
+    file,
+    body: { name }
+  } = req;
+
+  const fileName = ( fullName + "_"+ file.detectedFileExtension);
+
+  if(file.detectedFileExtension != ".jpg") {
+    next(new Error("Invalid file type"));
+   } 
+
+   pipeline(file.stream, fs.createWriteStream(`${__dirname}/../client/public/images/KYC/${fileName}`));
+  
+  var sql = "UPDATE upgradeTiers SET birthDay = ?, birthMonth = ?, birthYear = ?, PhoneNumber = ?, TaxCode = ?, CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?;UPDATE accountLevel SET accountLevel=?, dateUpgraded=?, WHERE userID =?;"
+
+    db.query(sql,[birthDay, birthMonth, birthYear, Phone, Tax, CountryOfResidence, date, user, "Silver", date, user], function (error,results,fields) {
+      if (error) {
+        console.log(error);
+        throw error;
+      }
+      res.send({
+        message: "Account upgraded to Silver"
+      });
+    })
+  });
+
+ 
 //UpgradeGold
 app.post("/UpgradeGold", (req, res) => {
   const user = req.session.user[0].userID;
@@ -807,7 +800,7 @@ app.post("/UpgradeGold", (req, res) => {
   const Income = req.body.Income;
   // const addIncome = req.body.AdditionalIncome;
   // const proofEmployment = req.body.ProofEmployment;
-  const date = new Date();
+  const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
   db.query(
     "UPDATE upgradeTiers SET EmployerName = ?, EmployerAddress = ?, Occupation = ?, ProofOfEmployment = ?, Income = ?, AdditionalIncome =?, DateSubmitted = ? WHERE userID = ?",
