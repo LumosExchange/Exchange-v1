@@ -13,6 +13,8 @@ import Paragraph from "../Components/Paragraph";
 const EmailVerification = () => {
   const [Twofa, setTwofaCode] = useState("");
   const [userEmail, setUserEmail] = useState([]);
+  const [errors, setErrors] = useState("");
+
   const navigate = useNavigate();
 
   let verified = false;
@@ -27,20 +29,12 @@ const EmailVerification = () => {
       email: state.email,
       passcode: Twofa,
     }).then((response) => {
+      console.log(response, '----response')
       if (response.data === true) {
-        //Show popup with confirmation
-
-        <Alert variant="filled" severity="success">
-          Succesfull you will now be redirected to login!
-        </Alert>;
-
         verified = true;
         navigate("/Login");
       } else {
-        //show popup with error
-        <Alert variant="filled" severity="error">
-          Incorrect Code please try again!
-        </Alert>;
+        setErrors(response.data.message);
         verified = false;
       }
     });
@@ -82,6 +76,11 @@ const EmailVerification = () => {
                     className="w-100 h-100"
                   />
                 </div>
+                {errors && (
+                  <div className="col-12 p-0">
+                    <Paragraph size="20px" color="invalid">{errors}</Paragraph>
+                  </div>
+                )}
             </div>
           </form>
       </Card>

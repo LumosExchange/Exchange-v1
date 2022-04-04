@@ -138,7 +138,6 @@ app.post("/register", (req, res) => {
   const lastName = req.body.lastName;
   const email = req.body.email;
   const password = req.body.password;
-  const nationality = req.body.nationality;
   const userName = req.body.userName;
   const date = new Date();
 
@@ -156,8 +155,8 @@ app.post("/register", (req, res) => {
 
     
     db.query(
-      "INSERT INTO users (firstName, lastName, email, password, nationality, userName, registeredDate) VALUES (?,?,?,?,?,?,?)",
-      [firstName, lastName, email, hash, nationality, userName, date],
+      "INSERT INTO users (firstName, lastName, email, password, userName, registeredDate) VALUES (?,?,?,?,?,?,?)",
+      [firstName, lastName, email, hash, userName, date],
       (err, result) => {
         console.log(err);
       }
@@ -690,7 +689,7 @@ app.post("/VerifyEmail2FA", (req, res) => {
   let newuserCode = toString(userCode);
   //convert both to string before checking
 
-  if (newcheckCode == newuserCode) {
+  if (newcheckCode === newuserCode) {
     auth = true;
     //if true delete from temp db
     db.query(

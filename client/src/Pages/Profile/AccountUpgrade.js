@@ -12,7 +12,7 @@ import {
 	birthYearOptions,
 	currentYear,
 } from "../../Constants/Index";
-import { InlineInput, StyledDropdown } from "../../Components/FormInputs";
+import { InlineInput, StyledDropdown, StyledLabel } from "../../Components/FormInputs";
 import { useNavigate } from "react-router";
 import Paragraph from "../../Components/Paragraph";
 import { useDropzone } from "react-dropzone";
@@ -21,6 +21,8 @@ import Dropzone from "react-dropzone-uploader";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
+import { IconHelper } from '../Login';
+import { Nationalities } from "../../Constants/Index";
 
 const StyledAccordion = styled(Accordion)(
 	({ theme }) => css`
@@ -29,6 +31,10 @@ const StyledAccordion = styled(Accordion)(
 		&.expanded {
 			border: 2px solid ${theme.colors.primary_cta};
 			border-radius: 6px;
+		}
+
+		i {
+			font-size: 30px;
 		}
 	`
 );
@@ -46,6 +52,7 @@ const AccountUpgrade = () => {
 	const [postCode, setPostCode] = useState("");
 	const [country, setCountry] = useState("");
 	const [document, setDocument] = useState("");
+	const [nationality, setNationality] = useState("");
 
 	//step 1 upgrade silver
 	const [birthDay, setBirthDay] = useState("");
@@ -163,11 +170,17 @@ const AccountUpgrade = () => {
 									<form>
 										<div className="row">
 											<div className="col-12 mb-4">
-												<Heading size="20px" bold>
+												<StyledLabel
+													htmlFor="legalName"
+													padding="0 0 5px 0"
+													bold
+													fontSize="20px"
+												>
 													Legal Name
-												</Heading>
+												</StyledLabel>
 												<FormInput
 													id="legalName"
+													name="legalName"
 													className="w-100"
 													type="text"
 													placeholder="Legal Name"
@@ -177,11 +190,17 @@ const AccountUpgrade = () => {
 												/>
 											</div>
 											<div className="col-12 mb-4">
-												<Heading size="20px" bold>
+												<StyledLabel
+													htmlFor="streetaddress"
+													padding="0 0 5px 0"
+													bold
+													fontSize="20px"
+												>
 													Street Address
-												</Heading>
+												</StyledLabel>
 												<FormInput
 													id="streetaddress"
+													name="streetaddress"
 													className="w-100"
 													type="text"
 													placeholder="Street Address"
@@ -191,11 +210,17 @@ const AccountUpgrade = () => {
 												/>
 											</div>
 											<div className="col-12 mb-4">
-												<Heading size="20px" bold>
+												<StyledLabel
+													htmlFor="citytown"
+													padding="0 0 5px 0"
+													bold
+													fontSize="20px"
+												>
 													City/Town
-												</Heading>
+												</StyledLabel>
 												<FormInput
 													id="citytown"
+													name="citytown"
 													className="w-100"
 													type="text"
 													placeholder="City/Town"
@@ -205,11 +230,17 @@ const AccountUpgrade = () => {
 												/>
 											</div>
 											<div className="col-12 mb-4">
-												<Heading size="20px" bold>
+												<StyledLabel
+													htmlFor="citystate"
+													padding="0 0 5px 0"
+													bold
+													fontSize="20px"
+												>
 													State (if applicable)
-												</Heading>
+												</StyledLabel>
 												<FormInput
 													id="citystate"
+													name="citystate"
 													className="w-100"
 													type="text"
 													placeholder="State"
@@ -219,11 +250,17 @@ const AccountUpgrade = () => {
 												/>
 											</div>
 											<div className="col-12 mb-4">
-												<Heading size="20px" bold>
+												<StyledLabel
+													htmlFor="postcode"
+													padding="0 0 5px 0"
+													bold
+													fontSize="20px"
+												>
 													Postcode
-												</Heading>
+												</StyledLabel>
 												<FormInput
 													id="postcode"
+													name="postcode"
 													className="w-100"
 													type="text"
 													placeholder="Postcode"
@@ -233,10 +270,17 @@ const AccountUpgrade = () => {
 												/>
 											</div>
 											<div className="col-12 mb-4">
-												<Heading size="20px" bold>
+												<StyledLabel
+													htmlFor="country"
+													padding="0 0 5px 0"
+													bold
+													fontSize="20px"
+												>
 													Country
-												</Heading>
+												</StyledLabel>
 												<StyledDropdown
+													id="country"
+													name="country"
 													className="w-100"
 													onChange={(e) => setCountry(e.currentTarget.value)}
 												>
@@ -245,15 +289,46 @@ const AccountUpgrade = () => {
 													))}
 												</StyledDropdown>
 											</div>
+											<div className="col-12 mb-4">
+												<StyledLabel
+													htmlFor="nationality"
+													padding="0 0 5px 0"
+													bold
+													fontSize="20px"
+												>
+													Nationality
+												</StyledLabel>
+												<StyledDropdown
+													id="nationality"
+													name="nationality"
+													className="w-100"
+													type="text"
+													form="register"
+													autocomplete="off"
+													placeholder="Nationality"
+													onChange={(e) => {
+														setNationality(e.target.value);
+													}}
+												>
+												{Nationalities.map((data) => (
+													<option value={data}>{data}</option>
+												))}
+												</StyledDropdown>
+											</div>
 											<div className="col-12">
-												<Heading size="20px" bold>
+												<StyledLabel
+													htmlFor="document"
+													padding="0 0 5px 0"
+													bold
+													fontSize="20px"
+												>
 													Upload Document
-												</Heading>
+												</StyledLabel>
 												<FormInput
 													id="document"
+													name="document"
 													className="mb-3 w-100"
 													type="file"
-													name="image"
 													placeholder="Postcode"
 													onChange={(e) => {
 														setDocument(e.target.value);
@@ -270,6 +345,14 @@ const AccountUpgrade = () => {
 													}}
 													text="Upgrade To Bronze"
 													hasIcon
+													disabled={
+														legalName.length === 0 ||
+														streetAddress.length === 0 ||
+														city.length === 0 ||
+														postCode.length === 0 ||
+														country !== "Please Select" ||
+														nationality !== "Please Select"
+													}
 												/>
 											</div>
 										</div>
@@ -284,11 +367,18 @@ const AccountUpgrade = () => {
 										</Heading>
 										<div className="row mb-3">
 											<div className="col-4">
-												<Heading size="20px" bold>
+												<StyledLabel
+													htmlFor="birthDay"
+													padding="0 0 5px 0"
+													bold
+													fontSize="20px"
+												>
 													Day
-												</Heading>
+												</StyledLabel>
 												<StyledDropdown
 													className="w-100"
+													id="birthDay"
+													name="birthDay"
 													onChange={(e) => setBirthDay(e.currentTarget.value)}
 												>
 													{birthDayOptions.map((option) => (
@@ -297,11 +387,18 @@ const AccountUpgrade = () => {
 												</StyledDropdown>
 											</div>
 											<div className="col-4">
-												<Heading size="20px" bold>
+												<StyledLabel
+													htmlFor="birthMonth"
+													padding="0 0 5px 0"
+													bold
+													fontSize="20px"
+												>
 													Month
-												</Heading>
+												</StyledLabel>
 												<StyledDropdown
 													className="w-100"
+													id="birthMonth"
+													name="birthMonth"
 													onChange={(e) => setBirthMonth(e.currentTarget.value)}
 												>
 													{birthMonthOptions.map((option) => (
@@ -310,11 +407,18 @@ const AccountUpgrade = () => {
 												</StyledDropdown>
 											</div>
 											<div className="col-4">
-												<Heading size="20px" bold>
+												<StyledLabel
+													htmlFor="birthYear"
+													padding="0 0 5px 0"
+													bold
+													fontSize="20px"
+												>
 													Year
-												</Heading>
+												</StyledLabel>
 												<StyledDropdown
 													className="w-100"
+													id="birthYear"
+													name="birthYear"
 													onChange={(e) => setBirthYear(e.currentTarget.value)}
 												>
 													<option value="---">---</option>
@@ -326,11 +430,17 @@ const AccountUpgrade = () => {
 												</StyledDropdown>
 											</div>
 										</div>
-										<Heading size="20px" bold>
-											Phone
-										</Heading>
+										<StyledLabel
+											htmlFor="phone"
+											padding="0 0 5px 0"
+											bold
+											fontSize="20px"
+										>
+											Phone Number
+										</StyledLabel>
 										<FormInput
-											id="Phone"
+											id="phone"
+											name="phone"
 											className="mb-3 w-100"
 											type="number"
 											placeholder="Phone"
@@ -338,11 +448,17 @@ const AccountUpgrade = () => {
 												setPhoneReg(e.target.value);
 											}}
 										/>
-										<Heading size="20px" bold>
+										<StyledLabel
+											htmlFor="taxes"
+											padding="0 0 5px 0"
+											bold
+											fontSize="20px"
+										>
 											Taxes
-										</Heading>
+										</StyledLabel>
 										<FormInput
-											id="Tax"
+											id="taxes"
+											name="taxes"
 											className="mb-3 w-100"
 											type="file"
 											placeholder="Taxes (Optional)"
@@ -350,17 +466,6 @@ const AccountUpgrade = () => {
 												setTaxReg(e.target.value);
 											}}
 										/>
-										<Heading size="20px" bold>
-											Country Of Residence
-										</Heading>
-										<StyledDropdown
-											className="w-100"
-											onChange={(e) => setCountryOfResidenceReg(e.currentTarget.value)}
-										>
-											{countryOptions.map((option) => (
-												<option value={option}>{option}</option>
-											))}
-										</StyledDropdown>
 										<PrimaryButton
 											type="submit"
 											className="w-100 mt-3"
@@ -373,7 +478,6 @@ const AccountUpgrade = () => {
 												birthDay === "---" ||
 												birthMonth === "---" ||
 												birthYear === "---" ||
-												countryOfResidence === "Please Select" ||
 												phone.length === 0
 											}
 											hasIcon
@@ -387,9 +491,14 @@ const AccountUpgrade = () => {
 							{currentStep === 2 && (
 								<React.Fragment>
 									<form>
-										<Heading size="20px" bold>
+										<StyledLabel
+											htmlFor="EmployerName"
+											padding="0 0 5px 0"
+											bold
+											fontSize="20px"
+										>
 											Employers Name
-										</Heading>
+										</StyledLabel>
 										<FormInput
 											id="EmployerName"
 											className="mb-3 w-100"
@@ -399,9 +508,14 @@ const AccountUpgrade = () => {
 												setEmployerNameReg(e.target.value);
 											}}
 										/>
-										<Heading size="20px" bold>
+										<StyledLabel
+											htmlFor="EmployerAddress"
+											padding="0 0 5px 0"
+											bold
+											fontSize="20px"
+										>
 											Employer Address
-										</Heading>
+										</StyledLabel>
 										<FormInput
 											id="EmployerAddress"
 											className="mb-3 w-100"
@@ -411,11 +525,17 @@ const AccountUpgrade = () => {
 												setEmployerAddressReg(e.target.value);
 											}}
 										/>
-										<Heading size="20px" bold>
+										<StyledLabel
+											htmlFor="occupation"
+											padding="0 0 5px 0"
+											bold
+											fontSize="20px"
+										>
 											Occupation
-										</Heading>
+										</StyledLabel>
 										<FormInput
-											id="Occupation"
+											id="occupation"
+											name="occupation"
 											className="mb-3 w-100"
 											type="Occupation"
 											placeholder="Occupation "
@@ -423,9 +543,14 @@ const AccountUpgrade = () => {
 												setOccupationReg(e.target.value);
 											}}
 										/>
-										<Heading size="20px" bold>
+										<StyledLabel
+											htmlFor="ProofEmployment"
+											padding="0 0 5px 0"
+											bold
+											fontSize="20px"
+										>
 											Proof of Employment
-										</Heading>
+										</StyledLabel>
 										<FormInput
 											id="ProofEmployment"
 											className="mb-3 w-100"
@@ -435,23 +560,35 @@ const AccountUpgrade = () => {
 												setProofEmploymentReg(e.target.value);
 											}}
 										/>
-										<Heading size="20px" bold>
-											Income
-										</Heading>
+										<StyledLabel
+											htmlFor="income"
+											padding="0 0 5px 0"
+											bold
+											fontSize="20px"
+										>
+											Yearly Income
+										</StyledLabel>
 										<FormInput
-											id="Income"
+											id="income"
+											name="income"
 											className="mb-3 w-100"
 											type="number"
-											placeholder="Income"
+											placeholder="£"
 											onChange={(e) => {
 												setIncomeReg(e.target.value);
 											}}
 										/>
-										<Heading size="20px" bold>
+										<StyledLabel
+											htmlFor="additionalIncome"
+											padding="0 0 5px 0"
+											bold
+											fontSize="20px"
+										>
 											Additional Income
-										</Heading>
+										</StyledLabel>
 										<FormInput
-											id="AdditionalIncome"
+											id="additionalIncome"
+											name="additionalIncome"
 											className="mb-3 w-100"
 											type="number"
 											placeholder="Additional Income(Optional) "
@@ -489,9 +626,12 @@ const AccountUpgrade = () => {
 								className={accountTier === "Standard" && "expanded"}
 							>
 								<AccordionSummary aria-controls="panel1bh-content" id="panel1bh-header">
+									<div className="d-flex justify-content-between w-100">
 									<Paragraph size="20px" bold className="mb-0">
 										Standard User Tier
 									</Paragraph>
+									{accountTier === "Standard" && <IconHelper color="primary_cta" className="material-icons">stars</IconHelper>}
+									</div>
 								</AccordionSummary>
 								<AccordionDetails className="d-flex">
 									<Paragraph bold className="me-2 mb-0" size="18px">

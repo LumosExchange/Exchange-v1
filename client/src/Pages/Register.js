@@ -71,7 +71,6 @@ const Register = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [passwordConfirm, setPasswordConfirm] = useState("");
-	const [nationality, setNationality] = useState("");
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [userName, setUserName] = useState("");
@@ -87,7 +86,6 @@ const Register = () => {
 			lastName,
 			email,
 			password,
-			nationality,
 			userName,
 		}).then((response) => {
 			if (response.data.registered === true) {
@@ -127,7 +125,7 @@ const Register = () => {
 					<Heading size="24px" className="mb-5 text-center">
 						Enter your details to create an account.
 					</Heading>
-					<form name="register">
+					<form name="register" autoComplete="off">
 						<StyledLabel htmlFor="firstName" padding="0 0 5px 0" bold fontSize="20px">
 							First Name
 						</StyledLabel>
@@ -166,6 +164,7 @@ const Register = () => {
 							form="register"
 							placeholder="User Name"
 							autocomplete="off"
+							autoComplete="off"
 							maxLength={30}
 							className={`
 								mb-3 w-100
@@ -319,7 +318,6 @@ const Register = () => {
 								userName.length < 4 ||
 								email.length === 0 ||
 								password.length === 0 ||
-								nationality === "Please Select" ||
 								!passwordNoted ||
 								!termsAgreed ||
 								(userName.length > 0 && userName.length < 4) ||

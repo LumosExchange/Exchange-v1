@@ -117,6 +117,7 @@ export const FormInput = ({
 	onInput,
 	customIcon,
 	autocomplete,
+	autoComplete,
 }) => (
 	<div className={`d-flex ${hasIcon && className ? className : ''}`}>
 		{hasIcon && (
@@ -147,6 +148,7 @@ export const FormInput = ({
 				onInput={onInput}
 				onKeyUp={onKeyUp}
 				autocomplete={autocomplete}
+				autoComplete={autoComplete}
 			/>
 		) : (
 			<StyledInput
@@ -170,6 +172,7 @@ export const FormInput = ({
 				onInput={onInput}
 				onKeyUp={onKeyUp}
 				autocomplete={autocomplete}
+				autoComplete={autoComplete}
 			/>
 		)}
 	</div>
