@@ -12,7 +12,7 @@ import {
   birthYearOptions,
   currentYear,
 } from "../../Constants/Index";
-import { InlineInput, StyledDropdown } from "../../Components/FormInputs";
+import { InlineInput, StyledDropdown, StyledLabel } from "../../Components/FormInputs";
 import { useNavigate } from "react-router";
 import Paragraph from "../../Components/Paragraph";
 import { useDropzone } from "react-dropzone";
@@ -21,16 +21,22 @@ import Dropzone from "react-dropzone-uploader";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
+import { IconHelper } from '../Login';
+import { Nationalities } from "../../Constants/Index";
 
 const StyledAccordion = styled(Accordion)(
   ({ theme }) => css`
     background-color: ${theme.colors.panel_bg} !important;
 
-    &.expanded {
-      border: 2px solid ${theme.colors.primary_cta};
-      border-radius: 6px;
-    }
-  `
+		&.expanded {
+			border: 2px solid ${theme.colors.primary_cta};
+			border-radius: 6px;
+		}
+
+		i {
+			font-size: 30px;
+		}
+	`
 );
 
 const reloadPage = () => {
@@ -46,6 +52,7 @@ const AccountUpgrade = () => {
   const [postCode, setPostCode] = useState("");
   const [country, setCountry] = useState("");
   const [document, setDocument] = useState("");
+  const [nationality, setNationality] = useState("");
 
   //step 1 upgrade silver
   const [birthDay, setBirthDay] = useState("");
