@@ -89,9 +89,9 @@ const AccountUpgrade = () => {
   };
 
   const upgradeBronze = () => {
-    const data = new FormData();
+  const data = new FormData();
 	data.append("name", name);
-    data.append("file", file);
+  data.append("file", file);
 	data.append("streetAddress", streetAddress);
 	data.append("city", city);
 	data.append("cityState", cityState);
@@ -269,7 +269,7 @@ const AccountUpgrade = () => {
                           id="file"
                           className="mb-3 w-100"
                           type="file"
-						  accept=".jpg"
+						            accept=".jpg"
                           name="image"
                           placeholder="FILE"
                           onChange={(e) => {

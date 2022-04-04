@@ -22,9 +22,7 @@ const http = require("http");
 const { send } = require("process");
 const multer = require("multer");
 const fs = require("fs");
-
-const { promisify} = require("util");
-
+const {promisify} = require("util");
 const pipeline = promisify(require("stream").pipeline);
 
 
@@ -706,8 +704,7 @@ app.post("/VerifyEmail2FA", (req, res) => {
   //once verified delete 2fa from db
 });
 
-app.post("/UpgradeBronze", upload.single("file"), async function(req, res, next){
- // console.log(req.file);
+app.post("/UpgradeBronze", upload.single("file"), function(req, res, next){
   const user = req.session.user[0].userID;
   const Name = req.body.name;
   const address = req.body.streetAddress;
@@ -716,7 +713,7 @@ app.post("/UpgradeBronze", upload.single("file"), async function(req, res, next)
   const postCode = req.body.postCode;
   const country = req.body.country;
   
-  const date = new Date().toISOString().slice(0, 19).replace("T", "_");
+  const date = new Date().toISOString().slice(0, 19).replace("T", "_")
   const KYCName = date + "_" + Name;
   
 //Handle the image and check image type
@@ -725,33 +722,37 @@ app.post("/UpgradeBronze", upload.single("file"), async function(req, res, next)
     body: { name }
   } = req;
   
-  const fileName = req.body.name + "_" + date + "_" + file.detectedFileExtension;
-  console.log(fileName)
 
-  if (file.detectedFileExtension != ".jpg") next(new Error("Invalid file type"));
-  
-    //Post to directory
-     await pipeline(req.file.stream, fs.createWriteStream(`${__dirname}/../client/public/images/${fileName}`));
+  const fileName = (req.body.name + "_"+ file.detectedFileExtension);
+
+  console.log(fileName);
+
+  if(file.detectedFileExtension != ".jpg") {
+   next(new Error("Invalid file type"));
+  } 
+    
+       //Post to directory
+     pipeline(file.stream, fs.createWriteStream(`${__dirname}/../client/public/images/${fileName}`));
      
-     //Now update sql upgradeTiers & account level
-
-     var sql="Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=?, KYCName =?, KYC_Verified=? WHERE userID =?;"
-
-     db.query(sql,[user, Name, address, city, cityState, postCode, country, "Bronze", date, KYCName, false, user], function(error, results, fields){
-       if (error) {
-         console.log(error);
-         throw error;
-       }
-  
-       console.log(results[0]);
-       console.log(results[1]);
-       res.send({
-         message: "Account upgraded to Bronze"
-       });
-      
-     });
-    ;
+        //Now update sql upgradeTiers & account level
    
+        var sql="Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=?, KYCName =?, KYC_Verified=? WHERE userID =?;INSERT INTO KYC set userID =?, documentAddress =?, date=?;"
+   
+        db.query(sql,[user, Name, address, city, cityState, postCode, country, "Bronze", date, KYCName, "false", user, user, fileName, date], function(error, results, fields){
+          if (error) {
+            console.log(error);
+            throw error;
+          }
+     
+          console.log(results[0]);
+          console.log(results[1]);
+          console.log(results[2]);
+          
+        });
+        res.send({
+          message: "Account upgraded to Bronze"
+        });
+  
 });
 
 //UpgradeSilver
