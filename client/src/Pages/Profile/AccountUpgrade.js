@@ -101,9 +101,9 @@ const AccountUpgrade = () => {
 		data.append("country", country);
 
 		console.log(data);
-		Axios.post("https://httpbin.org/anything", data)
-			.then((res) => console.log(res))
-			.catch((err) => console.log(err));
+	//	Axios.post("https://httpbin.org/anything", data)
+//			.then((res) => console.log(res))
+	//		.catch((err) => console.log(err));
 
 		Axios.post("http://localhost:3001/upgradeBronze", data, {}).then((response) => {
 			//handle message retunred from endpoint
@@ -117,11 +117,13 @@ const AccountUpgrade = () => {
 	const upgradeSilver = () => {
 
     const dataSilver = new FormData();
+    dataSilver.append("name", name);
+		dataSilver.append("file", file);
     dataSilver.append("birthDay", birthDay);
     dataSilver.append("birthMonth", birthMonth);
     dataSilver.append("birthYear", birthYear);
     dataSilver.append("phone", phone);
-    dataSilver.append("countryOfResidence", countryOfResidence);
+
     
 		Axios.post("http://localhost:3001/upgradeSilver", dataSilver,{
 		}).then((response) => {
@@ -136,6 +138,8 @@ const AccountUpgrade = () => {
 	const upgradeGold = () => {
 
     const dataGold = new FormData();
+    dataGold.append("name", name);
+		dataGold.append("file", file);
     dataGold.append("EmployerName", employerName);
     dataGold.append("EmployerAddress", employerAddress);
     dataGold.append("Occupation", occupation);
@@ -455,12 +459,15 @@ const AccountUpgrade = () => {
 											Taxes
 										</StyledLabel>
 										<FormInput
-											id="taxes"
+											id="file"
 											name="taxes"
+                      accept=".jpg"
 											className="mb-3 w-100"
 											type="file"
 											placeholder="Taxes (Optional)"
 											onChange={(e) => {
+                        const file = e.target.files[0];
+                        setFile(file);
 												setTaxReg(e.target.value);
 											}}
 										/>
