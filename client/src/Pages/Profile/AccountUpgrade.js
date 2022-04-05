@@ -182,8 +182,8 @@ const AccountUpgrade = () => {
 			<div className="container pt-5">
 				<ProfileTabs selected="AccountUpgrade" />
 				<ContentTab className="text-white">
-					<div className="d-flex p-4 row">
-						<div className="d-flex col-12 col-md-6 mb-3 flex-column">
+					<div className="d-flex p-4 row flex-column-reverse flex-lg-row">
+						<div className="d-flex col-12 col-lg-6 mb-3 flex-column mt-5 mt-lg-0">
 							{currentStep === 0 && (
 								<React.Fragment>
 									<form>
@@ -448,15 +448,16 @@ const AccountUpgrade = () => {
 										<FormInput
 											id="file"
 											name="taxes"
-                      accept=".jpg"
+                      						accept=".jpg"
 											className="mb-3 w-100"
 											type="file"
 											placeholder="Taxes (Optional)"
 											onChange={(e) => {
-                        const file = e.target.files[0];
-                        setFile(file);
-												setTaxReg(e.target.value);
-											}}
+												const file = e.target.files[0];
+												setFile(file);
+													setTaxReg(e.target.value);
+												}
+											}
 										/>
 										<PrimaryButton
 											type="submit"
@@ -569,7 +570,7 @@ const AccountUpgrade = () => {
 						</div>
 						<div
 							className={`d-flex ${
-								accountTier === "Gold" ? "col-12" : "col-12 col-md-6"
+								accountTier === "Gold" ? "col-12" : "col-12 col-lg-6"
 							} mb-3 flex-column justify-content-center`}
 						>
 							<StyledAccordion

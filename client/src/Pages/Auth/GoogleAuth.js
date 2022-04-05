@@ -214,7 +214,7 @@ function GoogleAuth() {
                 <React.Fragment>
                   <CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
                     <i className="material-icons me-2">mark_email_read</i>
-                    <Paragraph bold size="20px" className="mb-0">
+                    <Paragraph bold size="20px" className="mb-0 text-center">
                       Code Sent to {userEmail}.
                     </Paragraph>
                   </CodeSentMessage>
