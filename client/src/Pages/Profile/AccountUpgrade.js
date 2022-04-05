@@ -101,9 +101,9 @@ const AccountUpgrade = () => {
 		data.append("country", country);
 
 		console.log(data);
-		Axios.post("https://httpbin.org/anything", data)
-			.then((res) => console.log(res))
-			.catch((err) => console.log(err));
+	//	Axios.post("https://httpbin.org/anything", data)
+//			.then((res) => console.log(res))
+	//		.catch((err) => console.log(err));
 
 		Axios.post("http://localhost:3001/upgradeBronze", data, {}).then((response) => {
 			//handle message retunred from endpoint

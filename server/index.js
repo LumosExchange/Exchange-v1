@@ -697,7 +697,6 @@ app.post("/UpgradeBronze", upload.single("file"), function (req, res, next) {
   const country = req.body.country;
 
   const date = new Date().toISOString().slice(0, 19).replace("T", "_");
-  const KYCName = date + "_" + Name;
 
   //Handle the image and check image type
   const {
@@ -736,7 +735,7 @@ app.post("/UpgradeBronze", upload.single("file"), function (req, res, next) {
       country,
       "Bronze",
       date,
-      KYCName,
+      fileName,
       "false",
       user,
       user,
@@ -821,14 +820,16 @@ app.post("/UpgradeGold", upload.single("file"), function (req, res, next) {
   const fullName = req.session.user[0].firstName + " " + req.session.user[0].lastName;
   const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
-  var sql = "UPDATE upgradeTiers SET EmployerName = ?, EmployerAddress = ?, Occupation = ?, ProofOfEmployment = ?, Income = ?, AdditionalIncome =?, DateSubmitted = ? WHERE userID = ?;UPDATE accountLevel SET accountLevel = ?, dateUpgraded = ? WHERE userID =?";
+  var sql = "UPDATE upgradeTiers SET EmployerName = ?, EmployerAddress = ?, Occupation = ?, Income = ?, DateSubmitted = ? WHERE userID = ?;UPDATE accountLevel SET accountLevel = ?, dateUpgraded = ? WHERE userID =?";
 
-  const fileName = fullName + file.detectedFileExtension;
+
 
   const {
     file,
     body: { name },
   } = req;
+
+  const fileName = fullName + file.detectedFileExtension;
 
   if(file.detectedFileExtension != ".jpg") {
     next(new Error("Invalid File Type"));
