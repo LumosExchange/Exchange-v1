@@ -636,55 +636,37 @@ app.post("/SendEmailVerification", (req, res) => {
 
 app.post("/VerifyEmail2FA", (req, res) => {
   const email = req.body.email;
-  const yes = "Yes";
-
   const userCode = req.body.passcode;
 
-  console.log("usercode: ", req.body.passcode);
-
-  let checkCode;
-  let auth = false;
-
   db.query(
-    "SELECT Secret FROM TempAuth WHERE (email) = (?)",
+    "SELECT Secret AS Secret FROM TempAuth WHERE (email) = (?)",
     [email],
     (err, result) => {
-      //changed this
-      checkCode = result;
-      console.log("Checkcode from db: ", checkCode);
-      console.log("Passcode from  user: ", userCode);
-    }
-  );
-  let newcheckCode = toString(checkCode);
-  let newuserCode = toString(userCode);
-  //convert both to string before checking
-
-  if (newcheckCode === newuserCode) {
-    auth = true;
-    //if true delete from temp db
-    db.query(
-      "DELETE FROM TempAuth WHERE (email) = (?)",
-      [email],
-      (err, result) => {
-        console.log(err);
-        console.log(result);
+      if (result[0].Secret === userCode) {
+        db.query(
+          "DELETE FROM TempAuth WHERE (email) = (?)",
+          [email],
+          (err, result) => {
+            console.log(result);
+            res.send({
+              auth: true
+            });
+            db.query(
+              "UPDATE userAuth SET emailVerified = ? WHERE Email = ?",
+              [1, email],
+              (err, result) => {
+                console.log(err);
+              }
+            );
+          }
+        );
+      } else {
+        res.send({
+          auth: false
+        });
       }
-    );
-  } else {
-    auth = false;
-  }
-  //Add user to userAuth Table
-  db.query(
-    "UPDATE userAuth SET emailVerified = ? WHERE Email = ?",
-    [1, email],
-    (err, result) => {
-      console.log(err);
     }
   );
-  console.log("auth: ", auth);
-  res.send(auth);
-
-  //once verified delete 2fa from db
 });
 
 app.post("/UpgradeBronze", upload.single("file"), function (req, res, next) {
@@ -756,17 +738,16 @@ app.post("/UpgradeBronze", upload.single("file"), function (req, res, next) {
 
 //UpgradeSilver
 app.post("/UpgradeSilver", upload.single("file"), function (req, res, next) {
-
   const user = req.session.user[0].userID;
   const birthDay = req.body.birthDay;
   const birthMonth = req.body.birthMonth;
   const birthYear = req.body.birthYear;
 
-
   const Tax = req.body.Tax;
   const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
-  const fullName = req.session.user[0].firstName + " " + req.session.user[0].lastName;
+  const fullName =
+    req.session.user[0].firstName + " " + req.session.user[0].lastName;
 
   const {
     file,
@@ -784,19 +765,12 @@ app.post("/UpgradeSilver", upload.single("file"), function (req, res, next) {
     fs.createWriteStream(`${__dirname}/../client/public/images/Tax/${fileName}`)
   );
 
-  var sql ="UPDATE upgradeTiers SET birthDay = ?, birthMonth = ?, birthYear = ?  WHERE userID =?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;";
+  var sql =
+    "UPDATE upgradeTiers SET birthDay = ?, birthMonth = ?, birthYear = ?  WHERE userID =?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;";
 
   db.query(
     sql,
-    [
-      birthDay,
-      birthMonth,
-      birthYear,
-      user,
-      "Silver",
-      date,
-      user,
-    ],
+    [birthDay, birthMonth, birthYear, user, "Silver", date, user],
     function (error, results, fields) {
       if (error) {
         console.log(error);
@@ -816,10 +790,12 @@ app.post("/UpgradeGold", upload.single("file"), function (req, res, next) {
   const EmployerAddress = req.body.EmployerAddress;
   const Occupation = req.body.Occupation;
   const Income = req.body.Income;
-  const fullName = req.session.user[0].firstName + " " + req.session.user[0].lastName;
+  const fullName =
+    req.session.user[0].firstName + " " + req.session.user[0].lastName;
   const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
-  var sql = "UPDATE upgradeTiers SET EmployerName = ?, EmployerAddress = ?, Occupation = ?, Income = ?, DateSubmitted = ? WHERE userID = ?;UPDATE accountLevel SET accountLevel = ?, dateUpgraded = ? WHERE userID =?";
+  var sql =
+    "UPDATE upgradeTiers SET EmployerName = ?, EmployerAddress = ?, Occupation = ?, Income = ?, DateSubmitted = ? WHERE userID = ?;UPDATE accountLevel SET accountLevel = ?, dateUpgraded = ? WHERE userID =?";
 
   const {
     file,
@@ -828,25 +804,40 @@ app.post("/UpgradeGold", upload.single("file"), function (req, res, next) {
 
   const fileName = fullName + file.detectedFileExtension;
 
-  if(file.detectedFileExtension != ".jpg") {
+  if (file.detectedFileExtension != ".jpg") {
     next(new Error("Invalid File Type"));
   }
 
   pipeline(
     file.stream,
-    fs.createWriteStream(`${__dirname}/../client/public/images/Employment/${fileName}`)
+    fs.createWriteStream(
+      `${__dirname}/../client/public/images/Employment/${fileName}`
+    )
   );
-  db.query(sql, [EmployerName, EmployerAddress,Occupation, Income, date, user, "Gold", date, user], function (error, results, fields) {
-    if (error) {
-      console.log(error);
-      throw error;
+  db.query(
+    sql,
+    [
+      EmployerName,
+      EmployerAddress,
+      Occupation,
+      Income,
+      date,
+      user,
+      "Gold",
+      date,
+      user,
+    ],
+    function (error, results, fields) {
+      if (error) {
+        console.log(error);
+        throw error;
+      }
+      res.send({
+        message: "Account upgraded to Gold",
+      });
     }
-    res.send({
-      message: "Account upgraded to Gold",
-    });
-  })
+  );
 });
-
 
 //this email verification will be built for chnaging 2fa options
 app.post("/2FAEmailVerificationSend", (req, res) => {
@@ -938,37 +929,30 @@ app.post("/2FAEmailVerificationSend", (req, res) => {
 app.post("/EmailVerification2FA", (req, res) => {
   const email = req.session.user[0].email;
   const userCode = req.body.passcode;
-  let checkCodee;
-  let auth = false;
 
   db.query(
-    "SELECT Secret FROM TempAuth WHERE (email) = (?)",
+    "SELECT Secret AS Secret FROM TempAuth WHERE (email) = (?)",
     [email],
     (err, result) => {
-      //chnaged this
-      checkCodee = result;
-      console.log("DB 2FA code: ", checkCodee);
-      console.log("userInput Code: ", userCode);
+      if (result[0].Secret === userCode) {
+        //delete temp secret from db and return auth as true
+        db.query(
+          "DELETE FROM TempAuth WHERE email = ?",
+          [email],
+          (err, result) => {
+            console.log(result);
+            res.send({
+              auth: true,
+            });
+          }
+        );
+      } else {
+        res.send({
+          auth: false,
+        });
+      }
     }
   );
-
-  let newcheckCode = toString(checkCodee);
-  let newuserCode = toString(userCode);
-
-  if (newcheckCode == newuserCode) {
-    db.query("DELETE FROM TempAuth WHERE email = ?", [email], (err, result) => {
-      console.log("Email Validation Success and temp secret deleted");
-    });
-    res.send({
-      auth: true,
-    });
-
-    //if true delete from temp db
-  } else {
-    res.send({
-      auth: false,
-    });
-  }
 });
 
 //used for user to chnage password verification
