@@ -162,14 +162,14 @@ function SMSAuth() {
 										}}
 										className="w-100 mb-3"
 									/>
-									<StyledLabel htmlFor="oldPass" fontSize="20px" padding="0" bold>
+									<StyledLabel htmlFor="pass" fontSize="20px" padding="0" bold>
 										Enter password
 									</StyledLabel>
 									<FormInput
 										type="password"
-										id="Pass"
-										name="Pass"
-										placeholder="Enter password"
+										id="pass"
+										name="pass"
+										placeholder="Enter current password"
 										onChange={(e) => {
 											setUserPass(e.target.value);
 										}}

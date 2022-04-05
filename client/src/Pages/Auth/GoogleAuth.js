@@ -11,6 +11,7 @@ import Heading from "../../Components/Heading";
 import Paragraph from "../../Components/Paragraph";
 import GoogleAuthLogo from "../../Images/icon-google.png";
 import VerifyBG from "../../Images/verifybg.svg";
+import { IconHelper } from "../Login";
 
 const GrabAttention = keyframes`
   0% { transform: scale(1); }
@@ -75,8 +76,8 @@ function GoogleAuth() {
   const [verified, setVerifed] = useState(false);
   const [toggled, setToggled] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  const [emailVerified, setEmailVerified] = useState(false);
-  const [passwordVerified, setPasswordVerified] = useState(false);
+  const [emailVerified, setEmailVerified] = useState("");
+  const [passwordVerified, setPasswordVerified] = useState("");
 
   //Get User Email
   const getUserEmail = () => {
@@ -97,6 +98,7 @@ function GoogleAuth() {
     Axios.post("http://localhost:3001/EmailVerification2FA", {
       passcode: userEmailVerification,
     }).then((response) => {
+      console.log(response, '***** response');
       console.log('response email', response.data.auth);
       if (response.data.auth === true) {
         setEmailVerified(true);
@@ -175,6 +177,11 @@ function GoogleAuth() {
     } else {
     }
   };
+
+  const navigate = useNavigate();
+
+  console.log(emailVerified, 'is email verified');
+  console.log(passwordVerified, 'is pass verified');
 
   useEffect(() => {
     getUserEmail(userEmail);
@@ -265,9 +272,19 @@ function GoogleAuth() {
                         emailVerification();
                         passwordVerification();
                         ShowGoogleAuthQR();
-                        setCurrentStep(3);
                       }}
                     />
+                    {(passwordVerified === false || emailVerified === false) && (
+                      <div className="d-flex mt-4">
+                        <IconHelper color="invalid" className="material-icons me-2">error_outline</IconHelper>
+                        <Paragraph color="invalid" size="20px" className="mb-0">
+                          Error:{" "}
+                          {!passwordVerified && 'Incorrect Password'}
+                          {!passwordVerified && !emailVerified && ' and '}
+                          {!emailVerified && 'Incorrect Verification Code'}
+                        </Paragraph>
+                      </div>
+                    )}
                   </div>
                 </React.Fragment>
               )}
@@ -319,12 +336,21 @@ function GoogleAuth() {
                     </div>
                   </div>
                 )}
-                {currentStep === 4 && (
+                {passwordVerified && emailVerified && (
                   <CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
                     <i className="material-icons me-2">check_circle</i>
                     <Paragraph bold size="20px" className="mb-0">
                       Google Auth Successfully added
                     </Paragraph>
+                    <PrimaryButton
+                        type="text"
+                        text="OK"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          navigate('/Profile/Security')
+                        }}
+                        className="w-100 h-100 mt-3"
+                      />
                   </CodeSentMessage>
                 )}
               </React.Fragment>
