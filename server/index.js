@@ -638,49 +638,35 @@ app.post("/VerifyEmail2FA", (req, res) => {
   const email = req.body.email;
   const userCode = req.body.passcode;
 
-  console.log("usercode: ", req.body.passcode);
-
-  let checkCode;
-  let auth = false;
-
   db.query(
     "SELECT Secret AS Secret FROM TempAuth WHERE (email) = (?)",
     [email],
     (err, result) => {
-      //changed this
-      checkCode = result;
-    }
-  );
-  let newcheckCode = toString(checkCode);
-  let newuserCode = toString(userCode);
-  //convert both to string before checking
-
-  if (newcheckCode === newuserCode) {
-    auth = true;
-    //if true delete from temp db
-    db.query(
-      "DELETE FROM TempAuth WHERE (email) = (?)",
-      [email],
-      (err, result) => {
-        console.log(err);
-        console.log(result);
+      if (result[0].Secret === userCode) {
+        db.query(
+          "DELETE FROM TempAuth WHERE (email) = (?)",
+          [email],
+          (err, result) => {
+            console.log(result);
+            res.send({
+              auth: true
+            });
+            db.query(
+              "UPDATE userAuth SET emailVerified = ? WHERE Email = ?",
+              [1, email],
+              (err, result) => {
+                console.log(err);
+              }
+            );
+          }
+        );
+      } else {
+        res.send({
+          auth: false
+        });
       }
-    );
-  } else {
-    auth = false;
-  }
-  //Add user to userAuth Table
-  db.query(
-    "UPDATE userAuth SET emailVerified = ? WHERE Email = ?",
-    [1, email],
-    (err, result) => {
-      console.log(err);
     }
   );
-  console.log("auth: ", auth);
-  res.send(auth);
-
-  //once verified delete 2fa from db
 });
 
 app.post("/UpgradeBronze", upload.single("file"), function (req, res, next) {
@@ -943,8 +929,6 @@ app.post("/2FAEmailVerificationSend", (req, res) => {
 app.post("/EmailVerification2FA", (req, res) => {
   const email = req.session.user[0].email;
   const userCode = req.body.passcode;
-  let checkCodee;
-  let auth = false;
 
   db.query(
     "SELECT Secret AS Secret FROM TempAuth WHERE (email) = (?)",
