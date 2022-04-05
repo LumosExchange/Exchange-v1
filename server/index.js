@@ -766,7 +766,7 @@ app.post("/UpgradeSilver", upload.single("file"), function (req, res, next) {
   const Tax = req.body.Tax;
   const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
-  const fullName = req.session[0].firstName + " " + res.session[0].lastName;
+  const fullName = req.session.user[0].firstname + " " + res.session.user[0].lastName;
 
   const {
     file,
@@ -820,7 +820,7 @@ app.post("/UpgradeGold", upload.single("file"), function (req, res, next) {
   const EmployerAddress = req.body.EmployerAddress;
   const Occupation = req.body.Occupation;
   const Income = req.body.Income;
-  const fullName = req.session[0].firstName + " " + req.session[0].lastName;
+  const fullName = req.session[0].firstname + " " + req.session[0].lastName;
   const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
   var sql = "UPDATE upgradeTiers SET EmployerName = ?, EmployerAddress = ?, Occupation = ?, ProofOfEmployment = ?, Income = ?, AdditionalIncome =?, DateSubmitted = ? WHERE userID = ?;UPDATE accountLevel SET accountLevel = ?, dateUpgraded = ? WHERE userID =?";
