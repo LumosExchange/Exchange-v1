@@ -757,16 +757,17 @@ app.post("/UpgradeBronze", upload.single("file"), function (req, res, next) {
 
 //UpgradeSilver
 app.post("/UpgradeSilver", upload.single("file"), function (req, res, next) {
+
   const user = req.session.user[0].userID;
   const birthDay = req.body.birthDay;
   const birthMonth = req.body.birthMonth;
   const birthYear = req.body.birthYear;
-  const CountryOfResidence = req.body.CountryOfResidence;
-  const Phone = req.body.Phone;
+
+  const phone = req.body.phone;
   const Tax = req.body.Tax;
   const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
-  const fullName = req.session.user[0].firstname + " " + res.session.user[0].lastName;
+  const fullName = req.session.user[0].firstName + " " + req.session.user[0].lastName;
 
   const {
     file,
@@ -784,8 +785,7 @@ app.post("/UpgradeSilver", upload.single("file"), function (req, res, next) {
     fs.createWriteStream(`${__dirname}/../client/public/images/Tax/${fileName}`)
   );
 
-  var sql =
-    "UPDATE upgradeTiers SET birthDay = ?, birthMonth = ?, birthYear = ?, PhoneNumber = ?,  CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?;UPDATE accountLevel SET accountLevel=?, dateUpgraded=?, WHERE userID =?;";
+  var sql ="UPDATE upgradeTiers SET birthDay = ?, birthMonth = ?, birthYear = ?, PhoneNumber = ? WHERE userID =?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;";
 
   db.query(
     sql,
@@ -793,9 +793,7 @@ app.post("/UpgradeSilver", upload.single("file"), function (req, res, next) {
       birthDay,
       birthMonth,
       birthYear,
-      Phone,
-      CountryOfResidence,
-      date,
+      phone,
       user,
       "Silver",
       date,
@@ -820,7 +818,7 @@ app.post("/UpgradeGold", upload.single("file"), function (req, res, next) {
   const EmployerAddress = req.body.EmployerAddress;
   const Occupation = req.body.Occupation;
   const Income = req.body.Income;
-  const fullName = req.session[0].firstname + " " + req.session[0].lastName;
+  const fullName = req.session.user[0].firstName + " " + req.session.user[0].lastName;
   const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
   var sql = "UPDATE upgradeTiers SET EmployerName = ?, EmployerAddress = ?, Occupation = ?, ProofOfEmployment = ?, Income = ?, AdditionalIncome =?, DateSubmitted = ? WHERE userID = ?;UPDATE accountLevel SET accountLevel = ?, dateUpgraded = ? WHERE userID =?";
@@ -851,34 +849,6 @@ app.post("/UpgradeGold", upload.single("file"), function (req, res, next) {
   })
 });
 
-//UpgradeTeam
-app.post("/UpgradeTeam", (req, res) => {
-  const user = req.session.user[0].userID;
-  const RegistrationCountry = req.body.RegistrationCountry;
-  const RegistrationNumber = req.body.RegistrationNumber;
-  const CompanySourceOfIncome = req.body.CompanySourceOfIncome;
-  const DirectorName = req.body.DirectorName;
-  const DirectorAddress = req.body.DirectorAddress;
-  const DirectorOwnership = req.body.DirectorOwnership;
-  const AdditionalDirector = req.body.AdditionalDirector;
-
-  db.query(
-    "INSERT INTO UpgradeTeam (userID, RegistrationCountry, RegistrationNumber, CompanySourceOfIncome, DirectorName, DirectorAddress, DirectorOwnership,AdditionalDirector) VALUES (?,?,?,?,?,?,?,?)",
-    [
-      user,
-      RegistrationCountry,
-      RegistrationNumber,
-      CompanySourceOfIncome,
-      DirectorName,
-      DirectorAddress,
-      DirectorOwnership,
-      AdditionalDirector,
-    ],
-    (err, result) => {
-      console.log(err);
-    }
-  );
-});
 
 //this email verification will be built for chnaging 2fa options
 app.post("/2FAEmailVerificationSend", (req, res) => {
