@@ -624,12 +624,10 @@ app.post("/SendEmailVerification", (req, res) => {
   db.query(
     "INSERT INTO TempAuth (Email, Secret) VALUES (?,?)",
     [req.body.email, text],
-
     (err, result) => {
       res.send({
         emailSent: true,
       });
-      console.log(err);
     }
   );
 });
@@ -642,15 +640,15 @@ app.post("/VerifyEmail2FA", (req, res) => {
     "SELECT Secret AS Secret FROM TempAuth WHERE (email) = (?)",
     [email],
     (err, result) => {
-      if (result[0].Secret === userCode) {
+      if (result[0].Secret.toString() === userCode.toString()) {
+        res.send({
+          auth: true
+        });
         db.query(
           "DELETE FROM TempAuth WHERE (email) = (?)",
           [email],
           (err, result) => {
             console.log(result);
-            res.send({
-              auth: true
-            });
             db.query(
               "UPDATE userAuth SET emailVerified = ? WHERE Email = ?",
               [1, email],
@@ -920,7 +918,7 @@ app.post("/2FAEmailVerificationSend", (req, res) => {
     [req.session.user[0].email, text],
 
     (err, result) => {
-      console.log(err);
+
     }
   );
 });
@@ -934,16 +932,16 @@ app.post("/EmailVerification2FA", (req, res) => {
     "SELECT Secret AS Secret FROM TempAuth WHERE (email) = (?)",
     [email],
     (err, result) => {
-      if (result[0].Secret === userCode) {
+      if (result[0].Secret.toString() === userCode.toString()) {
+        res.send({
+          auth: true,
+        });
         //delete temp secret from db and return auth as true
         db.query(
           "DELETE FROM TempAuth WHERE email = ?",
           [email],
           (err, result) => {
             console.log(result);
-            res.send({
-              auth: true,
-            });
           }
         );
       } else {
