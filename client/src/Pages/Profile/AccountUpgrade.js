@@ -22,11 +22,14 @@ import { IconHelper } from "../Login";
 import { Nationalities } from "../../Constants/Index";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => css`
-	background-color: ${theme.colors.panel_bg} !important;
+	background-color: ${theme.colors.accordion} !important;
+	box-shadow: none !important;
 
 	&.expanded {
 		border: 2px solid ${theme.colors.primary_cta};
+		background: ${theme.colors.panel_bg} !important;
 		border-radius: 6px;
+		box-shadow: none;
 	}
 
 	i {
