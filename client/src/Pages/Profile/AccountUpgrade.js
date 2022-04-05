@@ -127,11 +127,16 @@ const AccountUpgrade = () => {
 	};
 
 	const upgradeGold = () => {
-		Axios.post("http://localhost:3001/upgradeGold", {
-			EmployerName: employerName,
-			EmployerAddress: employerAddress,
-			Occupation: occupation,
-			Income: income,
+
+    const dataGold = newFormData();
+    dataGold.append("EmployerName", employerName);
+    dataGold.append("EmployerAddress", employerAddress);
+    dataGold.append("Occupation", occupation);
+    dataGold.append("Income", income);
+
+
+		Axios.post("http://localhost:3001/upgradeGold", dataGold, {
+
 		}).then((response) => {
 			setConfirmationMessage(response.data.message);
 			setCurrentStep(3);
@@ -160,28 +165,6 @@ const AccountUpgrade = () => {
 		},
 		[accountTier]
 	);
-
-  useEffect(
-    function getTier() {
-      getAccountTier();
-      if (accountTier !== "") {
-        setExpanded(accountTier);
-        if (accountTier === "Standard") {
-          setCurrentStep(0);
-        }
-        if (accountTier === "Bronze") {
-          setCurrentStep(1);
-        }
-        if (accountTier === "Silver") {
-          setCurrentStep(2);
-        }
-        if (accountTier === "Gold") {
-          setCurrentStep(3);
-        }
-      }
-    },
-    [accountTier]
-  );
 
   console.log(accountTier, "account tier");
 
@@ -476,6 +459,8 @@ const AccountUpgrade = () => {
                       type="file"
                       placeholder="Proof Of Employment "
                       onChange={(e) => {
+                        const file = e.target.files[0];
+                        setFile(file);
                         setProofEmploymentReg(e.target.value);
                       }}
                     />
@@ -489,18 +474,6 @@ const AccountUpgrade = () => {
                       placeholder="Income"
                       onChange={(e) => {
                         setIncomeReg(e.target.value);
-                      }}
-                    />
-                    <Heading size="20px" bold>
-                      Additional Income
-                    </Heading>
-                    <FormInput
-                      id="AdditionalIncome"
-                      className="mb-3 w-100"
-                      type="number"
-                      placeholder="Additional Income(Optional) "
-                      onChange={(e) => {
-                        setAdditionalIncomeReg(e.target.value);
                       }}
                     />
                     <PrimaryButton

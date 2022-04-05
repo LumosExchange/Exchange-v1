@@ -22,18 +22,16 @@ const http = require("http");
 const { send } = require("process");
 const multer = require("multer");
 const fs = require("fs");
-const {promisify} = require("util");
+const { promisify } = require("util");
 const pipeline = promisify(require("stream").pipeline);
-
 
 require("dotenv").config();
 
 const server = http.createServer(app);
 
-//Needed for storing images for KYC 
+//Needed for storing images for KYC
 
 const upload = multer();
-
 
 //Setting up socket for chatroom
 const io = new Server(server, {
@@ -81,14 +79,14 @@ app.use(function (req, res, next) {
   // Request headers you wish to allow
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type",
+    "X-Requested-With,content-type"
   );
   // Set to true if you need the website to include cookies in the requests sent
   // to the API (e.g. in case you use sessions)
   res.setHeader("Access-Control-Allow-Credentials", true);
   "Access-Control-Allow-Origin",
-  // Pass to next layer of middleware
-  next();
+    // Pass to next layer of middleware
+    next();
 });
 
 app.use(
@@ -104,7 +102,7 @@ app.use(
       methods: ["GET", "POST"],
       credentials: true,
       optionSuccessStatus: 200,
-    },
+    }
   )
 );
 
@@ -161,67 +159,54 @@ app.post("/register", (req, res) => {
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) {
       console.log(err);
-      res.send({err});
+      res.send({ err });
     } else {
-
-    
-    db.query(
-      "INSERT INTO users (firstName, lastName, email, password, userName, registeredDate) VALUES (?,?,?,?,?,?,?)",
-      [firstName, lastName, email, hash, userName, date],
-      (err, result) => {
-        console.log(err);
-      }
-    );
-    db.query(
-      "INSERT INTO userSettings (theme, timezone, currency) VALUES (?,?,?)",
-      [theme, timezone, currency],
-      (err, result) => {
-        console.log(err);
-      }
-    );
-    db.query(
-      "INSERT INTO accountLevel (accountLevel, dateUpgraded, KYCName, KYC_Verified) VALUES (?,?,?,?)",
-      [accountLevel, date, "0", false],
-      (err, result) => {
-        console.log(err);
-      }
-    );
-    db.query(
-      "INSERT INTO userAuth (Email, emailVerified, SMS, google, googleSecret, Authy, phoneNumber) VALUES (?,?,?,?,?,?,?)",
-      [email, 0, 0, 0, 0, 0, "0"],
-      (err, result) => {
-        console.log(err);
-      }
-    );
-    db.query(
-      "INSERT INTO userPaymentAccounts (EUBank, UKBank, InterBank, Paypal, Skrill) VALUES (?,?,?,?,?)",
-      [0, 0, 0, 0, 0],
-      (err, result) => {
-        console.log(err);
-      },
-    );
-    res.send({
-      registered: true,
-    });
+      db.query(
+        "INSERT INTO users (firstName, lastName, email, password, userName, registeredDate) VALUES (?,?,?,?,?,?,?)",
+        [firstName, lastName, email, hash, userName, date],
+        (err, result) => {
+          console.log(err);
+        }
+      );
+      db.query(
+        "INSERT INTO userSettings (theme, timezone, currency) VALUES (?,?,?)",
+        [theme, timezone, currency],
+        (err, result) => {
+          console.log(err);
+        }
+      );
+      db.query(
+        "INSERT INTO accountLevel (accountLevel, dateUpgraded, KYCName, KYC_Verified) VALUES (?,?,?,?)",
+        [accountLevel, date, "0", false],
+        (err, result) => {
+          console.log(err);
+        }
+      );
+      db.query(
+        "INSERT INTO userAuth (Email, emailVerified, SMS, google, googleSecret, Authy, phoneNumber) VALUES (?,?,?,?,?,?,?)",
+        [email, 0, 0, 0, 0, 0, "0"],
+        (err, result) => {
+          console.log(err);
+        }
+      );
+      db.query(
+        "INSERT INTO userPaymentAccounts (EUBank, UKBank, InterBank, Paypal, Skrill) VALUES (?,?,?,?,?)",
+        [0, 0, 0, 0, 0],
+        (err, result) => {
+          console.log(err);
+        }
+      );
+      res.send({
+        registered: true,
+      });
     }
   });
-
- 
-  
-  
-
 });
-
 
 app.post("/getUserInfo", (req, res) => {
   const id = req.session.user[0].userID;
-  db.query("SELECT * FROM userInfo WHERE",
-  [],
-  (err, result) => {
-
-  })
-
-})
+  db.query("SELECT * FROM userInfo WHERE", [], (err, result) => {});
+});
 
 //Login functionality
 //check logged in state
@@ -233,10 +218,10 @@ app.get("/login", (req, res) => {
   }
 });
 
-app.post('/logout', (req, res) => {
+app.post("/logout", (req, res) => {
   req.session.destroy();
   req.session = null;
-  res.send('User logged out');
+  res.send("User logged out");
 });
 
 //create JWT aauth
@@ -422,7 +407,7 @@ app.get("/getUserAccountLevel", (req, res) => {
 });
 
 app.get("/getUserID", (req, res) => {
-  console.log(req.session.user?.userID, ' getuserid');
+  console.log(req.session.user?.userID, " getuserid");
   id = req.session.user[0].userID;
   res.send(id);
 });
@@ -433,9 +418,9 @@ app.post("/updateUserSettings", (req, res) => {
   const currency = req.body.currency;
   const user = req.session.user[0].userID;
 
-  console.log(timezone, 'selected timezone');
-  console.log(currency, 'selected currency');
-  console.log(user, 'selected user');
+  console.log(timezone, "selected timezone");
+  console.log(currency, "selected currency");
+  console.log(user, "selected user");
 
   db.query(
     "UPDATE userSettings SET currency = ?, timezone = ? WHERE userID = ?",
@@ -549,7 +534,7 @@ app.post("/VonageSMSVerify", (req, res) => {
         return;
       } else {
         if (result && result.status == "0") {
-          res.send({ result: result.status, message: "SMS Verified! "});
+          res.send({ result: result.status, message: "SMS Verified! " });
         } else {
           res.send({ result: result.status, message: result.error_text });
         }
@@ -641,14 +626,12 @@ app.post("/SendEmailVerification", (req, res) => {
     [req.body.email, text],
 
     (err, result) => {
-      
       res.send({
-        emailSent: true
-      })
+        emailSent: true,
+      });
       console.log(err);
     }
   );
- 
 });
 
 app.post("/VerifyEmail2FA", (req, res) => {
@@ -704,7 +687,7 @@ app.post("/VerifyEmail2FA", (req, res) => {
   //once verified delete 2fa from db
 });
 
-app.post("/UpgradeBronze", upload.single("file"), function(req, res, next){
+app.post("/UpgradeBronze", upload.single("file"), function (req, res, next) {
   const user = req.session.user[0].userID;
   const Name = req.body.name;
   const address = req.body.streetAddress;
@@ -712,47 +695,68 @@ app.post("/UpgradeBronze", upload.single("file"), function(req, res, next){
   const cityState = req.body.cityState;
   const postCode = req.body.postCode;
   const country = req.body.country;
-  
-  const date = new Date().toISOString().slice(0, 19).replace("T", "_")
+
+  const date = new Date().toISOString().slice(0, 19).replace("T", "_");
   const KYCName = date + "_" + Name;
-  
-//Handle the image and check image type
+
+  //Handle the image and check image type
   const {
     file,
-    body: { name }
+    body: { name },
   } = req;
-  
 
-  const fileName = (req.body.name + "_"+ file.detectedFileExtension);
+  const fileName = req.body.name + "_" + file.detectedFileExtension;
 
   console.log(fileName);
 
-  if(file.detectedFileExtension != ".jpg") {
-   next(new Error("Invalid file type"));
-  } 
-    
-       //Post to directory
-     pipeline(file.stream, fs.createWriteStream(`${__dirname}/../client/public/images/KYC/${fileName}`));
-     
-        //Now update sql upgradeTiers & account level
-   
-        var sql="Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=?, KYCName =?, KYC_Verified=? WHERE userID =?;INSERT INTO KYC set userID =?, documentAddress =?, date=?;"
-   
-        db.query(sql,[user, Name, address, city, cityState, postCode, country, "Bronze", date, KYCName, "false", user, user, fileName, date], function(error, results, fields){
-          if (error) {
-            console.log(error);
-            throw error;
-          }
-        });
-        res.send({
-          message: "Account upgraded to Bronze"
-        });
-  
+  if (file.detectedFileExtension != ".jpg") {
+    next(new Error("Invalid file type"));
+  }
+
+  //Post to directory
+  pipeline(
+    file.stream,
+    fs.createWriteStream(`${__dirname}/../client/public/images/KYC/${fileName}`)
+  );
+
+  //Now update sql upgradeTiers & account level
+
+  var sql =
+    "Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=?, KYCName =?, KYC_Verified=? WHERE userID =?;INSERT INTO KYC set userID =?, documentAddress =?, date=?;";
+
+  db.query(
+    sql,
+    [
+      user,
+      Name,
+      address,
+      city,
+      cityState,
+      postCode,
+      country,
+      "Bronze",
+      date,
+      KYCName,
+      "false",
+      user,
+      user,
+      fileName,
+      date,
+    ],
+    function (error, results, fields) {
+      if (error) {
+        console.log(error);
+        throw error;
+      }
+    }
+  );
+  res.send({
+    message: "Account upgraded to Bronze",
+  });
 });
 
 //UpgradeSilver
-app.post("/UpgradeSilver", upload.single("file"), function(req, res, next){
-
+app.post("/UpgradeSilver", upload.single("file"), function (req, res, next) {
   const user = req.session.user[0].userID;
   const birthDay = req.body.birthDay;
   const birthMonth = req.body.birthMonth;
@@ -762,81 +766,89 @@ app.post("/UpgradeSilver", upload.single("file"), function(req, res, next){
   const Tax = req.body.Tax;
   const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
-  const fullName = req.session[0].firstname + " " + res.session[0].lastName;
+  const fullName = req.session[0].firstName + " " + res.session[0].lastName;
 
   const {
     file,
-    body: { name }
+    body: { name },
   } = req;
 
-  const fileName = ( fullName + "_"+ file.detectedFileExtension);
+  const fileName = fullName + "_" + file.detectedFileExtension;
 
-  if(file.detectedFileExtension != ".jpg") {
+  if (file.detectedFileExtension != ".jpg") {
     next(new Error("Invalid file type"));
-   } 
+  }
 
-   pipeline(file.stream, fs.createWriteStream(`${__dirname}/../client/public/images/KYC/${fileName}`));
-  
-  var sql = "UPDATE upgradeTiers SET birthDay = ?, birthMonth = ?, birthYear = ?, PhoneNumber = ?, TaxCode = ?, CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?;UPDATE accountLevel SET accountLevel=?, dateUpgraded=?, WHERE userID =?;"
+  pipeline(
+    file.stream,
+    fs.createWriteStream(`${__dirname}/../client/public/images/Tax/${fileName}`)
+  );
 
-    db.query(sql,[birthDay, birthMonth, birthYear, Phone, Tax, CountryOfResidence, date, user, "Silver", date, user], function (error,results,fields) {
+  var sql =
+    "UPDATE upgradeTiers SET birthDay = ?, birthMonth = ?, birthYear = ?, PhoneNumber = ?,  CountryOfResidence = ?, DateSubmitted =? WHERE userID = ?;UPDATE accountLevel SET accountLevel=?, dateUpgraded=?, WHERE userID =?;";
+
+  db.query(
+    sql,
+    [
+      birthDay,
+      birthMonth,
+      birthYear,
+      Phone,
+      CountryOfResidence,
+      date,
+      user,
+      "Silver",
+      date,
+      user,
+    ],
+    function (error, results, fields) {
       if (error) {
         console.log(error);
         throw error;
       }
       res.send({
-        message: "Account upgraded to Silver"
+        message: "Account upgraded to Silver",
       });
-    })
-  });
+    }
+  );
+});
 
- 
 //UpgradeGold
-app.post("/UpgradeGold", (req, res) => {
+app.post("/UpgradeGold", upload.single("file"), function (req, res, next) {
   const user = req.session.user[0].userID;
   const EmployerName = req.body.EmployerName;
   const EmployerAddress = req.body.EmployerAddress;
   const Occupation = req.body.Occupation;
   const Income = req.body.Income;
-  // const addIncome = req.body.AdditionalIncome;
-  // const proofEmployment = req.body.ProofEmployment;
+  const fullName = req.session[0].firstName + " " + req.session[0].lastName;
   const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
-  db.query(
-    "UPDATE upgradeTiers SET EmployerName = ?, EmployerAddress = ?, Occupation = ?, ProofOfEmployment = ?, Income = ?, AdditionalIncome =?, DateSubmitted = ? WHERE userID = ?",
-    [
-      EmployerName,
-      EmployerAddress,
-      Occupation,
-      // proofEmployment,
-      Income,
-      // addIncome,
-      date,
-      user,
-    ],
-    (err, result) => {
-      if (err) {
-        res.send(err);
-        console.log(err, "errors from upgrade");
-      } else {
-        res.send({
-          message: "Account tier now Gold",
-        });
-      }
-    }
-  );
-  //Update account level to gold
+  var sql = "UPDATE upgradeTiers SET EmployerName = ?, EmployerAddress = ?, Occupation = ?, ProofOfEmployment = ?, Income = ?, AdditionalIncome =?, DateSubmitted = ? WHERE userID = ?;UPDATE accountLevel SET accountLevel = ?, dateUpgraded = ? WHERE userID =?";
 
-  db.query(
-    "UPDATE accountLevel SET accountLevel = ?, dateUpgraded = ? WHERE userID =?",
-    ["Gold", date, user],
-    (err, result) => {
-      if (err) {
-        res.send(err);
-      } else {
-      }
-    }
+  const fileName = fullName + file.detectedFileExtension;
+
+  const {
+    file,
+    body: { name },
+  } = req;
+
+  if(file.detectedFileExtension != ".jpg") {
+    next(new Error("Invalid File Type"));
+  }
+
+  pipeline(
+    file.stream,
+    fs.createWriteStream(`${__dirname}/../client/public/images/Employment/${fileName}`)
   );
+  db.query(sql, [EmployerName, EmployerAddress,Occupation, Income, date, user, "Gold", date, user], function (error, results, fields) {
+    if (error) {
+      console.log(error);
+      throw error;
+    }
+    res.send({
+      message: "Account upgraded to Gold",
+    });
+  })
 });
 
 //UpgradeTeam
@@ -1892,21 +1904,25 @@ app.post("/DeleteMyListing", (req, res) => {
 
 //Functionality to get information baout the seller
 app.post("/GetSellerInfo", (req, res) => {
-
   const sellerID = req.body.sellerID;
-  var sql = "SELECT registeredDate FROM users WHERE (userID) = (?);SELECT AVG(feedbackScore) as feedbackScore from feedback WHERE (sellerUserID) = (?);SELECT AVG(EscrowReleaseTime) as escrowReleaseTime from feedback WHERE (sellerUserID) = (?)"
+  var sql =
+    "SELECT registeredDate FROM users WHERE (userID) = (?);SELECT AVG(feedbackScore) as feedbackScore from feedback WHERE (sellerUserID) = (?);SELECT AVG(EscrowReleaseTime) as escrowReleaseTime from feedback WHERE (sellerUserID) = (?)";
 
-  db.query(sql, [sellerID, sellerID, sellerID], function(error, results, fields) {
-    if(error) {
-      throw error;
+  db.query(
+    sql,
+    [sellerID, sellerID, sellerID],
+    function (error, results, fields) {
+      if (error) {
+        throw error;
+      }
+      res.send({
+        sellerID: sellerID,
+        registeredDate: results[0],
+        feedbackScore: results[1],
+        escrowReleaseTime: results[2],
+      });
     }
-    res.send({
-      sellerID: sellerID,
-      registeredDate: results[0],
-      feedbackScore: results[1],
-      escrowReleaseTime: results[2]
-    })
-  });
+  );
 });
 
 app.post("/FindUserPaymentMethods", (req, res) => {
@@ -2046,18 +2062,16 @@ app.get("/GetTradeFeedbackInfo", (req, res) => {
 });
 
 app.post("/CompleteTrade", (req, res) => {
+  const liveTradeID = req.body.liveTradeID;
+  const feedbackMessage = req.body.feedbackMessage;
+  const feedbackScore = req.body.formattedFeedBack;
+  const sellerID = req.body.sellerID;
+  const buyerID = req.body.buyerID;
+  const saleID = req.body.saleID;
+  const solAmount = req.body.solAmount;
+  var date = new Date().toISOString().slice(0, 19).replace("T", " ");
 
-const liveTradeID = req.body.liveTradeID;
-const feedbackMessage = req.body.feedbackMessage;
-const feedbackScore = req.body.formattedFeedBack;
-const sellerID = req.body.sellerID;
-const buyerID = req.body.buyerID;
-const saleID = req.body.saleID;
-const solAmount = req.body.solAmount;
-var date = new Date().toISOString().slice(0, 19).replace("T", " ");
-
-let EscrowTime = " ";
-
+  let EscrowTime = " ";
 
   //Update the escrow release time
   db.query(
@@ -2089,19 +2103,17 @@ let EscrowTime = " ";
     "SELECT amountForSale FROM sale WHERE saleID =? ",
     [saleID],
     (err, results) => {
-      let newTotal = (results[0].amountForSale - solAmount);
+      let newTotal = results[0].amountForSale - solAmount;
 
       db.query(
         "UPDATE sale SET amountForSale =? WHERE saleID =?",
         [newTotal, saleID],
         (err, results) => {
-          if(err) {
+          if (err) {
             throw err;
-
           }
-
         }
-      )
+      );
     }
   );
 
@@ -2152,14 +2164,11 @@ let EscrowTime = " ";
   );
 });
 
-
-//ADD WALLET 
+//ADD WALLET
 app.post("/AddWallet", (req, res) => {
   const userID = req.session.user[0].userID;
   const walletID = req.body.walletID;
   const walletAddress = req.body.walletAddress;
-
-  
 
   //check if user has a wallet if not insert else update
 
@@ -2167,30 +2176,27 @@ app.post("/AddWallet", (req, res) => {
     "SELECT * FROM SolAddress WHERE (userID) = (?)",
     [userID],
     (err, result) => {
-    
       if (result.length <= 0) {
-
         //Insert
         db.query(
-          "INSERT INTO SolAddress (userID, sol"+walletID+") VALUES (?,?)",
+          "INSERT INTO SolAddress (userID, sol" + walletID + ") VALUES (?,?)",
           [userID, walletAddress],
           (err, result) => {
             if (err) {
               console.log(err);
-              res.send(err);      
+              res.send(err);
             } else {
-              console.log(result);     
+              console.log(result);
               res.send({
-                message: "Succesfully added wallet"
-              })
+                message: "Succesfully added wallet",
+              });
             }
-          });
-      
+          }
+        );
       } else {
-
         //Update
         db.query(
-          "UPDATE SolAddress SET sol"+walletID+" =? WHERE userID =?",
+          "UPDATE SolAddress SET sol" + walletID + " =? WHERE userID =?",
           [walletAddress, userID],
           (err, result) => {
             if (err) {
@@ -2199,12 +2205,14 @@ app.post("/AddWallet", (req, res) => {
             } else {
               console.log(result);
               res.send({
-                message: "Wallet address succesfully Added!"
-              })
+                message: "Wallet address succesfully Added!",
+              });
             }
-          });
+          }
+        );
       }
-    })
+    }
+  );
 });
 
 //EDIT WALLET
@@ -2214,19 +2222,18 @@ app.post("/EditWallet", (req, res) => {
   const walletAddress = req.body.walletAddress;
 
   db.query(
-    "UPDATE SolAddress SET sol"+walletID+" =? WHERE userID =?",
+    "UPDATE SolAddress SET sol" + walletID + " =? WHERE userID =?",
     [walletAddress, userID],
     (err, result) => {
       if (err) {
         res.send(err);
       } else {
         res.send({
-          message: "Wallet address succefully updated!"
-        })
+          message: "Wallet address succefully updated!",
+        });
       }
     }
-  )
-  
+  );
 });
 
 //DELETE WALLET
@@ -2236,18 +2243,18 @@ app.post("/DeleteWallet", (req, res) => {
   const walletAddress = req.body.walletAddress;
 
   db.query(
-    "UPDATE SolAddress SET sol"+walletID+" =? WHERE userID = ?",
+    "UPDATE SolAddress SET sol" + walletID + " =? WHERE userID = ?",
     [0, userID],
     (err, result) => {
       if (err) {
         res.send(err);
       } else {
         res.send({
-          message: "Wallet succesfully deleted"
-        })
+          message: "Wallet succesfully deleted",
+        });
       }
     }
-  )
+  );
 });
 
 app.post("/GetWallets", (req, res) => {
@@ -2260,58 +2267,53 @@ app.post("/GetWallets", (req, res) => {
       if (err) {
         res.send(err);
       } else {
-        if (result[0] !== undefined){
+        if (result[0] !== undefined) {
           res.send([
-            {walletID: 1,
-             address: result[0].sol1,
+            { walletID: 1, address: result[0].sol1 },
+            {
+              walletID: 2,
+              address: result[0].sol2,
             },
-           {
-             walletID: 2,
-             address: result[0].sol2,
-           },
-           {
-             walletID: 3,
-             address: result[0].sol3,
-           },
-           {
-             walletID: 4,
-             address: result[0].sol4,
-           },
-           {
-             walletID: 5,
-             address: result[0].sol5,
-           }
-         ])
+            {
+              walletID: 3,
+              address: result[0].sol3,
+            },
+            {
+              walletID: 4,
+              address: result[0].sol4,
+            },
+            {
+              walletID: 5,
+              address: result[0].sol5,
+            },
+          ]);
         } else {
           res.send([
-            {walletID: 1,
-             address: "",
+            { walletID: 1, address: "" },
+            {
+              walletID: 2,
+              address: "",
             },
-           {
-             walletID: 2,
-             address: "",
-           },
-           {
-             walletID: 3,
-             address: "",
-           },
-           {
-             walletID: 4,
-             address: "",
-           },
-           {
-             walletID: 5,
-             address: "",
-           }
-         ])
+            {
+              walletID: 3,
+              address: "",
+            },
+            {
+              walletID: 4,
+              address: "",
+            },
+            {
+              walletID: 5,
+              address: "",
+            },
+          ]);
         }
-     }
+      }
     }
-  )
+  );
 });
 
 app.post("/FeedbackComments", (req, res) => {
-
   const userID = req.body.userID;
 
   db.query(
@@ -2320,10 +2322,9 @@ app.post("/FeedbackComments", (req, res) => {
     (err, result) => {
       if (err) {
         res.send(err);
-      }else {
+      } else {
         console.log(result);
         res.send(result);
-
       }
     }
   );
@@ -2342,49 +2343,64 @@ app.post("/TradeHistory", (req, res) => {
         res.send(result);
       }
     }
-  )
+  );
 });
 
 app.post("/GetFeedbackPage", (req, res) => {
   const userID = req.body.userID;
-  var sql= "SELECT userName FROM users WHERE (userID) = (?);SELECT COUNT (*) AS total FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?);SELECT AVG (feedbackScore) AS feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?);SELECT Country AS country FROM userInformation WHERE (userID) = (?);SELECT registeredDate AS registeredDate FROM users WHERE (userID) = (?);SELECT emailVerified, SMS FROM userAuth WHERE (userID) = (?)"
+  var sql =
+    "SELECT userName FROM users WHERE (userID) = (?);SELECT COUNT (*) AS total FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?);SELECT AVG (feedbackScore) AS feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?);SELECT Country AS country FROM userInformation WHERE (userID) = (?);SELECT registeredDate AS registeredDate FROM users WHERE (userID) = (?);SELECT emailVerified, SMS FROM userAuth WHERE (userID) = (?)";
 
-  db.query(sql, [userID, userID, userID, userID, userID, userID, userID, userID, userID, userID], function(error, results, fields) {
-    if (error) {
-      console.log(err);
-      throw error;
+  db.query(
+    sql,
+    [
+      userID,
+      userID,
+      userID,
+      userID,
+      userID,
+      userID,
+      userID,
+      userID,
+      userID,
+      userID,
+    ],
+    function (error, results, fields) {
+      if (error) {
+        console.log(err);
+        throw error;
+      }
+
+      res.send({
+        userName: results[0],
+        totalTrades: results[1],
+        feedbackScore: results[2],
+        country: results[3],
+        registeredDate: results[4],
+        verified: results[5],
+      });
     }
-  
-    res.send({
-      userName: results[0],
-      totalTrades: results[1],
-      feedbackScore: results[2],
-      country: results[3],
-      registeredDate: results[4],
-      verified: results[5],
-    })
-  })
+  );
 });
 
 app.post("/CheckSaleEligibility", (req, res) => {
-
   const userID = req.session.user[0].userID;
 
-  //Get current user account level 
-  var sql = "SELECT accountLevel as accountLevel FROM accountLevel WHERE (userID) = (?);SELECT SUM(amountOfSol) as amountOfSol FROM TradeHistory WHERE (sellerID) = (?) "
+  //Get current user account level
+  var sql =
+    "SELECT accountLevel as accountLevel FROM accountLevel WHERE (userID) = (?);SELECT SUM(amountOfSol) as amountOfSol FROM TradeHistory WHERE (sellerID) = (?) ";
 
-  db.query(sql, [userID, userID], function(error, results, fields) {
+  db.query(sql, [userID, userID], function (error, results, fields) {
     if (error) {
       console.log(error);
     }
-    console.log('Amount for sale: ',results[1]);
-    console.log('Amount for sale: ',results[1][0].amountOfSol);
+    console.log("Amount for sale: ", results[1]);
+    console.log("Amount for sale: ", results[1][0].amountOfSol);
     if (results[1][0] === null) {
-     
     }
- 
-    switch (results[0][0].accountLevel){
-      case "Standard": 
+
+    switch (results[0][0].accountLevel) {
+      case "Standard":
         res.send({
           userID: userID,
           accountLevel: "Standard",
@@ -2392,40 +2408,35 @@ app.post("/CheckSaleEligibility", (req, res) => {
           amountSolSold: results[1][0].amountOfSol || 0,
         });
         break;
-        case "Bronze":
-          res.send({
-            userID: userID,
-            accountLevel: "Bronze",
-            solLimit: 5,
-            amountSolSold: results[1][0].amountOfSol || 0,
-          });
-          break;
-          case "Silver":
-            res.send({
-              userID: userID,
-              accountLevel: "Silver",
-              solLimit: 10,
-              amountSolSold: results[1][0].amountOfSol || 0,
-            });
-            break;
-            case "Gold":
-              res.send({
-                userID: userID,
-                accountLevel: "Gold",
-                solLimit: 25,
-                amountSolSold: results[1][0].amountOfSol || 0,
-              });
-              break;
- 
+      case "Bronze":
+        res.send({
+          userID: userID,
+          accountLevel: "Bronze",
+          solLimit: 5,
+          amountSolSold: results[1][0].amountOfSol || 0,
+        });
+        break;
+      case "Silver":
+        res.send({
+          userID: userID,
+          accountLevel: "Silver",
+          solLimit: 10,
+          amountSolSold: results[1][0].amountOfSol || 0,
+        });
+        break;
+      case "Gold":
+        res.send({
+          userID: userID,
+          accountLevel: "Gold",
+          solLimit: 25,
+          amountSolSold: results[1][0].amountOfSol || 0,
+        });
+        break;
     }
-
-  })
+  });
 
   //Check the account level and return maximum amount of sol the user can sell
-
-})
-
-
+});
 
 server.listen(3002, () => {
   console.log("SERVER RUNNING");
@@ -2434,5 +2445,3 @@ server.listen(3002, () => {
 app.listen(3001, () => {
   console.log("running on port 3001");
 });
-
-
