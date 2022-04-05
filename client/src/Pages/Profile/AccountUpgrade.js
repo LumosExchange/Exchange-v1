@@ -122,7 +122,7 @@ const AccountUpgrade = () => {
     dataSilver.append("birthDay", birthDay);
     dataSilver.append("birthMonth", birthMonth);
     dataSilver.append("birthYear", birthYear);
-    dataSilver.append("phone", phone);
+  
 
     
 		Axios.post("http://localhost:3001/upgradeSilver", dataSilver,{
@@ -442,19 +442,6 @@ const AccountUpgrade = () => {
 												</StyledDropdown>
 											</div>
 										</div>
-										<StyledLabel htmlFor="phone" padding="0 0 5px 0" bold fontSize="20px">
-											Phone Number
-										</StyledLabel>
-										<FormInput
-											id="phone"
-											name="phone"
-											className="mb-3 w-100"
-											type="number"
-											placeholder="Phone"
-											onChange={(e) => {
-												setPhoneReg(e.target.value);
-											}}
-										/>
 										<StyledLabel htmlFor="taxes" padding="0 0 5px 0" bold fontSize="20px">
 											Taxes
 										</StyledLabel>

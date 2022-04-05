@@ -455,8 +455,8 @@ app.get("/VerifyGoogle2FASetup", (req, res) => {
 
   console.log("user is verfiedd: " + verified);
   db.query(
-    "UPDATE userAuth SET googleSecret = ? WHERE userID = ?",
-    [secret, user],
+    "UPDATE userAuth SET googleSecret = ?, google = ?  WHERE userID = ?",
+    [secret, 1, user],
     (err, result) => {
       console.log(err);
     }
@@ -762,7 +762,7 @@ app.post("/UpgradeSilver", upload.single("file"), function (req, res, next) {
   const birthMonth = req.body.birthMonth;
   const birthYear = req.body.birthYear;
 
-  const phone = req.body.phone;
+
   const Tax = req.body.Tax;
   const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
@@ -784,7 +784,7 @@ app.post("/UpgradeSilver", upload.single("file"), function (req, res, next) {
     fs.createWriteStream(`${__dirname}/../client/public/images/Tax/${fileName}`)
   );
 
-  var sql ="UPDATE upgradeTiers SET birthDay = ?, birthMonth = ?, birthYear = ?, PhoneNumber = ? WHERE userID =?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;";
+  var sql ="UPDATE upgradeTiers SET birthDay = ?, birthMonth = ?, birthYear = ?  WHERE userID =?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;";
 
   db.query(
     sql,
@@ -792,7 +792,6 @@ app.post("/UpgradeSilver", upload.single("file"), function (req, res, next) {
       birthDay,
       birthMonth,
       birthYear,
-      phone,
       user,
       "Silver",
       date,
@@ -821,8 +820,6 @@ app.post("/UpgradeGold", upload.single("file"), function (req, res, next) {
   const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
   var sql = "UPDATE upgradeTiers SET EmployerName = ?, EmployerAddress = ?, Occupation = ?, Income = ?, DateSubmitted = ? WHERE userID = ?;UPDATE accountLevel SET accountLevel = ?, dateUpgraded = ? WHERE userID =?";
-
-
 
   const {
     file,
