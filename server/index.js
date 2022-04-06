@@ -491,16 +491,20 @@ app.post("/VonageSMSRequest", (req, res) => {
     (err, result) => {
       if (err) {
         //if error let the user know
-        res.status(500);
-        res.send(err, result);
+        res.send({
+          error: error_text
+        });
+
         console.log("error: ", err);
       }
       const requestId = result.request_id;
+
       console.log("---- result", result);
-
-
       //send back request ID as need for the verify step
-      res.send({ requestId });
+      res.send({
+         requestId: requestId,
+         message: "SMS sent"
+         });
     }
   );
 });
