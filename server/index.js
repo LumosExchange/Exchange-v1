@@ -493,7 +493,7 @@ app.post("/VonageSMSRequest", (req, res) => {
         //if error let the user know
         res.send({
           status: result.status,
-          error: error_text
+          error: result.error_text,
         });
         console.log("error: ", err);
       } else {
