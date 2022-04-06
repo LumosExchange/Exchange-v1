@@ -6,20 +6,20 @@ import {
   web3,
 } from '@project-serum/anchor'
 import {
-  Connection,
-  clusterApiUrl,
   PublicKey
 } from '@solana/web3.js'
 
+
 import idl from '../../package.json'
 
-
+const {Keypair, Transaction, SystemProgram, LAMPORTS_PER_SOL} = require("@solana/web3.js");
+const {sendAndConfirmTransaction, clusterApiUrl, Connection} = require("@solana/web3.js");
 
 const opts = {
   preflightCommitment: "recent",
 };
 
-const { SystemProgram } = web3
+
 const programID = new PublicKey("GAECQos3deHaqzB1EDvPJcqaGVvG9xqDuFYU239KAsXV")
 
 function WalletTesting() {
@@ -38,28 +38,30 @@ function WalletTesting() {
   async function sendTransaction() {    
     const wallet = window.solana
     const network = clusterApiUrl("devnet")
-    const connection = new Connection(network, opts.preflightCommitment);
+    let keypair = Keypair.generate();
+const transaction = new Transaction();
 
-    const provider = new Provider(
-      connection, wallet, opts.preflightCommitment,
-    )
-    
-    const program = new Program(idl, programID, provider);
-
-    const localAccount = web3.Keypair.generate();
-
-    await program.rpc.initialize(new BN(1234), {
-      accounts: {
-        myAccount: localAccount.publicKey,
-        user: provider.wallet.publicKey,
-        systemProgram: SystemProgram.programId,
-      },
-      signers: [localAccount],
+ transaction.add(
+    SystemProgram.transfer({
+      fromPubkey: window.solana.publicKey,
+      toPubkey: keypair.publicKey,
+      lamports: LAMPORTS_PER_SOL
     })
-    
-    const acc = await program.account.myAccount.fetch(localAccount.publicKey)
-    console.log('acc: ', acc)
+  );
+
+
+  let anotherKeypair = Keypair.generate();
+let connection = new Connection(clusterApiUrl('devnet'));
+  sendAndConfirmTransaction(
+    connection,
+    transaction,
+    [keypair, anotherKeypair]
+  );
   }
+
+
+
+
 
   async function read() {
     try {
@@ -69,7 +71,9 @@ function WalletTesting() {
 
       const provider = new Provider(
         connection, wallet, { commitment: "processed" },
+
       )
+      console.log('provider: ', provider);
       
     } catch (err) {
       console.log('error: ', err)

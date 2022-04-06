@@ -498,15 +498,7 @@ app.post("/VonageSMSRequest", (req, res) => {
       const requestId = result.request_id;
       console.log("---- result", result);
 
-      //Store user phone number in db
-      db.query(
-        "UPDATE userAuth SET phoneNumber = ?, SMS = ? WHERE userID = ?",
-        [req.body.number, 1, user],
-        (err, result) => {
-          console.log(err);
-          console.log("Phone number added to db");
-        }
-      );
+
       //send back request ID as need for the verify step
       res.send({ requestId });
     }
@@ -533,7 +525,16 @@ app.post("/VonageSMSVerify", (req, res) => {
         console.log("error:", err);
         return;
       } else {
-        if (result && result.status == "0") {
+        if ( result.status == "0") {
+                //Store user phone number in db
+      db.query(
+        "UPDATE userAuth SET phoneNumber = ?, SMS = ? WHERE userID = ?",
+        [req.body.number, 1, user],
+        (err, result) => {
+          console.log(err);
+          console.log("Phone number added to db");
+        }
+      );
           res.send({ result: result.status, message: "SMS Verified! " });
         } else {
           res.send({ result: result.status, message: result.error_text });
