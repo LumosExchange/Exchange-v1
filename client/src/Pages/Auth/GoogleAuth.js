@@ -73,11 +73,11 @@ function GoogleAuth() {
   const [userPass, setUserPass] = useState("");
   const [secret, setSecret] = useState([]);
   const [Twofa, setTwofaCode] = useState("");
-  const [verified, setVerifed] = useState(false);
   const [toggled, setToggled] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  const [emailVerified, setEmailVerified] = useState("");
-  const [passwordVerified, setPasswordVerified] = useState("");
+  const [verified, setVerified] = useState("");
+  const [googleVerified, setGoogleVerified] = useState("");
+
 
   //Get User Email
   const getUserEmail = () => {
@@ -102,10 +102,9 @@ function GoogleAuth() {
       console.log(response, '***** response');
       console.log('response email', response.data.auth);
       if (response.data.auth === true) {
-        setPasswordVerified(true);
-        setEmailVerified(true);
+        setVerified(true);
       } else {
-        setEmailVerified(false);
+        setVerified(false);
       }
     });
   };
@@ -142,10 +141,8 @@ function GoogleAuth() {
       emailVerified,
 
     );
-    if (emailVerified === true && passwordVerified === true) {
+    if (verified === true ) {
       //check google auth code
-
-
       Axios.get("http://localhost:3001/VerifyGoogle2FASetup", {
         params: {
           passcode: Twofa,
@@ -155,12 +152,11 @@ function GoogleAuth() {
         //Check response for validation if no response
       }).then((response) => {
         if (response.data === true) {
-          setVerifed(true);
+          setGoogleVerified(true);
 
         } else {
           console.log("Result", response.data);
-          setVerifed(false);
-
+          setGoogleVerified(false);
           //handle anything else here
         }
       });
@@ -326,7 +322,7 @@ function GoogleAuth() {
                     </div>
                   </div>
                 )}
-                {currentStep ===4 && passwordVerified && emailVerified && (
+                {currentStep ===4 && verified && googleVerified && (
                   <CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
                     <i className="material-icons me-2">check_circle</i>
                     <Paragraph bold size="20px" className="mb-0">

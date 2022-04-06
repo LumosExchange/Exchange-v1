@@ -934,8 +934,6 @@ app.post("/Email&PassVerification2FA", (req, res) => {
   var sql = "SELECT Secret AS Secret FROM TempAuth WHERE (email) = (?);"
 
   db.query(sql,[email,userName], function(err, result, fields) {
-
-
     //Check Secret
     if(result[0].Secret.toString() === userCode.toString()) {
 
