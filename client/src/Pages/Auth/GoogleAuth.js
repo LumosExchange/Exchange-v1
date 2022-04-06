@@ -109,6 +109,11 @@ function GoogleAuth() {
     });
   };
 
+  const verifyCode = () => {
+      setCurrentStep(3);
+      ShowGoogleAuthQR();
+  }
+
   //generate secret
   useEffect(() => {
     async function getSecret() {
@@ -120,6 +125,7 @@ function GoogleAuth() {
     if (secret.length === 0) {
       getSecret();
     }
+
   }, [secret]);
 
   //display qr
@@ -151,6 +157,7 @@ function GoogleAuth() {
 
         //Check response for validation if no response
       }).then((response) => {
+        console.log(response.data, 'result /*-/*-/*-/')
         if (response.data === true) {
           setGoogleVerified(true);
 
@@ -256,8 +263,7 @@ function GoogleAuth() {
                       onClick={(event) => {
                         event.preventDefault();
                         emailVerification();
-                     
-                        ShowGoogleAuthQR();
+                        passwordVerification();
                       }}
                     />
                     {(passwordVerified === false || emailVerified === false) && (
@@ -322,13 +328,15 @@ function GoogleAuth() {
                     </div>
                   </div>
                 )}
-                {currentStep ===4 && verified && googleVerified && (
+                {currentStep === 4 && (
+                  <React.Fragment>
                   <CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
                     <i className="material-icons me-2">check_circle</i>
                     <Paragraph bold size="20px" className="mb-0">
                       Google Auth Successfully added
                     </Paragraph>
-                    <PrimaryButton
+                  </CodeSentMessage>
+                  <PrimaryButton
                         type="text"
                         text="OK"
                         onClick={(event) => {
@@ -337,7 +345,7 @@ function GoogleAuth() {
                         }}
                         className="w-100 h-100 mt-3"
                       />
-                  </CodeSentMessage>
+                  </React.Fragment>
                 )}
               </React.Fragment>
             </form>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import { PageBody, FormInput } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
@@ -74,45 +74,81 @@ const FakeTableData = [
 const MyWallet = () => {
   const [walletExpanded, expandWallet] = useState(false);
   const [rewardsExpanded, expandRewards] = useState(false);
-  const [walletKey, setWalletKey] = useState();
-
+  const [walletKey, setWalletKey] = useState("");
+	const [phantomInstalled, setIsPhantomInstalled] = useState(false);
  
-
-  function isPhantomInstalled() {
+  const isPhantomInstalled = () => {
 	const phantomInstalled = window.solana && window.solana.isPhantom;
-	return phantomInstalled;
+
+	if (phantomInstalled){
+		setIsPhantomInstalled(true);
+	} else {
+		setIsPhantomInstalled(false);
+		console.log("Phantom not installed");
+	}
+  }
+
+   const checkPhantomStatus = async () => {
+    try {
+      const wallet = window.solana;
+		if (wallet){
+			console.log(wallet.isPhantom, 'is phantom installed?');
+			eagerlyConnectPhantomWallet();
+			setIsPhantomInstalled(true);
+		}
+    } catch (err) {
+      console.log('error: ', err);
+	  setIsPhantomInstalled(false);
+    }
+  }
+
+  const getWallet = async () => {
+    try {
+		console.log('getwallet triggered');
+      const wallet = typeof window !== 'undefined' && window.solana;
+      await wallet.connect()
+    } catch (err) {
+      console.log('err: ', err)
+    }
+  }
+
+    // Returns the public key of the connected phantom wallet as a string
+  const connectPhantomWallet = () => {
+	window.solana.connect();
+	window.solana.on("connect", () => console.log("Phantom wallet connected!"));
+	const walletPublicKey = window.solana.publicKey._bn.words.toString();
+	console.log(walletPublicKey, 'public wallet key');
   }
   
-  // Connect phantom wallet automatically
- function connectPhantomWallet() {
+  {/* Connect phantom wallet automatically
+ const connectPhantomWallet = () => {
 	window.solana.connect();
 	window.solana.on("connect", () => console.log("Phantom wallet connected!"));
 	
 	const walletPublicKey = window.solana.publickey;
 	console.log(walletPublicKey);
-	
-  }
+  } */}
   
   // Connect phantom wallet only if the wallet has been connected before
- function eagerlyConnectPhantomWallet() {
+ const eagerlyConnectPhantomWallet = () => {
 	window.solana.connect({ onlyIfTrusted: true });
   }
   
   // Disconnect from phantom wallet
-  function disconnectPhantomWallet() {
+  const disconnectPhantomWallet = () => {
 	window.solana.disconnect();
 	window.solana.on("disconnect", () =>
 	  console.log("Phantom wallet disconnected!")
 	);
   }
   
-  // Returns the public key of the connected phantom wallet as a string
- function phantomWalletPublicKey() {
-	 console.log('SOl address: ',window.solana.publicKey.toString());
-	return window.solana.publicKey.toString();
-  }
-  
+  useEffect(() => {
+	checkPhantomStatus();
 
+	if (phantomInstalled){
+		getWallet();
+	}
+}, []);
 
   return (
 		<PageBody className="d-flex align-items-center">
@@ -124,8 +160,8 @@ const MyWallet = () => {
 							<Paragraph size="18px" bold>
 								Manage your credits, and grab a chance to earn with our reward pool.
 							</Paragraph>
-							<PrimaryButton className="w-100 mt-3" text="Connect Wallet" onClick={connectPhantomWallet()
-							} />
+							<PrimaryButton className="w-100 mt-3" text="Connect Wallet" onClick={() => connectPhantomWallet()} disabled={!phantomInstalled} />
+							<PrimaryButton className="w-100 mt-3" text="Disconnect Wallet" onClick={() => disconnectPhantomWallet()} disabled={!phantomInstalled} />
 
 							
 						</div>
