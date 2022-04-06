@@ -43,9 +43,14 @@ function SMSAuth() {
 	//send email
 	const sendVerification = () => {
 		Axios.post("http://localhost:3001/2FAEmailVerificationSend", {}).then((response) => {
-			setUserEmail(response.data.email);
-			setIsCodeSent(true);
-			setCurrentStep(2);
+			if (response.data.email) {
+				setUserEmail(response.data.email);
+				setIsCodeSent(true);
+				setCurrentStep(2);
+			} else {
+				setIsCodeSent(false);
+				setErrors(response.data.message);
+			}
 		});
 	};
 
@@ -71,12 +76,12 @@ function SMSAuth() {
 			number: phoneNumber,
 		}).then((response) => {
 			console.log(response, 'response from sms send');
-			if (response.data !== {}){
+			if (response.data.status === 0){
 				setRequestId(response.data.requestId);
 				console.log("request id: ", response.data.requestId);
 				setCurrentStep(4);
 			} else {
-				setErrors("Error");
+				setErrors(response.data.message);
 			}
 		});
 	};
@@ -195,6 +200,14 @@ function SMSAuth() {
 												}}
 												className="w-100 mb-3"
 											/>
+										{errors && (
+											<div className="col-12 mt-3 p-0">
+												<div className="d-flex">
+													<IconHelper className="material-icons me-2 mt-1" color="invalid">error_outline</IconHelper>
+													<Paragraph color="invalid" size="20px">{errors}</Paragraph>
+												</div>
+											</div>
+										)}
 										</div>
 										<div className="col-12">
 											<PrimaryButton
