@@ -267,9 +267,9 @@ const TradeHistory = () => {
 					</InvisibleButton>
 					<MaxHeightBarrier>
 						<Collapse orientation="horizontal" in={activeBuyTradesExpanded}>
-							{liveTradesBuyer.map((tradeInfo) => (
+							{liveTradesBuyer.map((tradeInfo, index) => (
 								<React.Fragment>
-								<ActiveTradeCard tradeInfo={tradeInfo} type="buying" />
+									<ActiveTradeCard tradeInfo={tradeInfo} type="buying" key={index} />
 								</React.Fragment>
 							))}
 							{messageForPurchases && <Paragraph size="20px" className="ms-2">{messageForPurchases}</Paragraph>}
@@ -286,8 +286,8 @@ const TradeHistory = () => {
 					</InvisibleButton>
 					<MaxHeightBarrier>
 						<Collapse orientation="horizontal" in={activeSellTradesExpanded}>
-							{liveTradesSeller.map((tradeInfo) => (
-								<ActiveTradeCard tradeInfo={tradeInfo} type="selling" />
+							{liveTradesSeller.map((tradeInfo, index) => (
+								<ActiveTradeCard tradeInfo={tradeInfo} type="selling" key={index} />
 							))}
 							{messageForSales && <Paragraph size="20px" className="ms-2">{messageForSales}</Paragraph>}
 						</Collapse>
@@ -304,8 +304,8 @@ const TradeHistory = () => {
 						</InvisibleButton>
 						<MaxHeightBarrier>
 							<Collapse orientation="horizontal" in={historyExpanded}>
-								{tradeHistory.map((trades) => (
-									<ActiveTradeCard tradeInfo={trades} noButtons noMessage />
+								{tradeHistory.map((trades, index) => (
+									<ActiveTradeCard tradeInfo={trades} noButtons noMessage key={index} />
 								))}
 								{messageForHistory && <Paragraph size="20px" className="ms-2">{messageForHistory}</Paragraph>}
 							</Collapse>
