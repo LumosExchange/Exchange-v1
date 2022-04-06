@@ -79,22 +79,16 @@ function GoogleAuth() {
   const [googleVerified, setGoogleVerified] = useState("");
   const [errors, setErrors] = useState("");
 
-
-  //Get User Email
-  const getUserEmail = () => {
-    Axios.get("http://localhost:3001/getUserEmail", {}).then((response) => {
-      setUserEmail(response.data);
+  //send email verification
+  const sendVerification = () => {
+    Axios.post("http://localhost:3001/2FAEmailVerificationSend", {}).then((response) => {
+      setUserEmail(response.data.email);
+      setIsCodeSent(true);
+      setCurrentStep(2);
     });
   };
 
-  //send email verification
-  const sendVerification = () => {
-    Axios.post("http://localhost:3001/2FAEmailVerificationSend", {});
-    setIsCodeSent(true);
-    setCurrentStep(2);
-  };
-
-  //Check email verification
+  //Check email && password verification
   const emailVerification = () => {
     Axios.post("http://localhost:3001/Email&PassVerification2FA", {
       passcode: userEmailVerification,
@@ -167,9 +161,6 @@ function GoogleAuth() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    getUserEmail(userEmail);
-  }, [userEmail]);
 
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 flex-column">
