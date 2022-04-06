@@ -77,6 +77,7 @@ function GoogleAuth() {
   const [currentStep, setCurrentStep] = useState(1);
   const [verified, setVerified] = useState("");
   const [googleVerified, setGoogleVerified] = useState("");
+  const [errors, setErrors] = useState("");
 
 
   //Get User Email
@@ -103,16 +104,14 @@ function GoogleAuth() {
       console.log('response email', response.data.auth);
       if (response.data.auth === true) {
         setVerified(true);
+        setCurrentStep(3);
+        ShowGoogleAuthQR();
       } else {
         setVerified(false);
+        setErrors(response.data.message);
       }
     });
   };
-
-  const verifyCode = () => {
-      setCurrentStep(3);
-      ShowGoogleAuthQR();
-  }
 
   //generate secret
   useEffect(() => {
@@ -142,11 +141,6 @@ function GoogleAuth() {
     //Check email verification, password verification
     setCurrentStep(4);
 
-    console.log(
-      "email verified: ",
-      emailVerified,
-
-    );
     if (verified === true ) {
       //check google auth code
       Axios.get("http://localhost:3001/VerifyGoogle2FASetup", {
@@ -172,9 +166,6 @@ function GoogleAuth() {
   };
 
   const navigate = useNavigate();
-
-  console.log(emailVerified, 'is email verified');
-  console.log(passwordVerified, 'is pass verified');
 
   useEffect(() => {
     getUserEmail(userEmail);
@@ -263,17 +254,13 @@ function GoogleAuth() {
                       onClick={(event) => {
                         event.preventDefault();
                         emailVerification();
-                        passwordVerification();
                       }}
                     />
-                    {(passwordVerified === false || emailVerified === false) && (
+                    {errors && (
                       <div className="d-flex mt-4">
                         <IconHelper color="invalid" className="material-icons me-2">error_outline</IconHelper>
                         <Paragraph color="invalid" size="20px" className="mb-0">
-                          Error:{" "}
-                          {!passwordVerified && 'Incorrect Password'}
-                          {!passwordVerified && !emailVerified && ' and '}
-                          {!emailVerified && 'Incorrect Verification Code'}
+                          {errors}
                         </Paragraph>
                       </div>
                     )}
@@ -303,7 +290,7 @@ function GoogleAuth() {
                 </div>
                 {currentStep === 3 && (
                   <div className="w-100 row mt-4">
-                    <div className="col-12 col-md-8">
+                    <div className="col-12">
                       <FormInput
                         type="text"
                         id="Code"
@@ -315,7 +302,7 @@ function GoogleAuth() {
                         className="w-100"
                       />
                     </div>
-                    <div className="col-12 col-md-4 p-0">
+                    <div className="col-12 mt-3">
                       <PrimaryButton
                         type="submit"
                         text="Submit"

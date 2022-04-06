@@ -155,7 +155,6 @@ export const LoadingState = () => (
 const TwoFACard = styled.span(({ theme, selected }) => css`
 	background: ${theme.colors.card_bg};
 	border-radius: 10px;
-	cursor: pointer;
     border: 2px solid ${selected ? theme.colors.valid : '#c4c4c4'};
 
     .material-icons {
