@@ -95,28 +95,17 @@ function GoogleAuth() {
 
   //Check email verification
   const emailVerification = () => {
-    Axios.post("http://localhost:3001/EmailVerification2FA", {
+    Axios.post("http://localhost:3001/Email&PassVerification2FA", {
       passcode: userEmailVerification,
+      oldPassword: userPass,
     }).then((response) => {
       console.log(response, '***** response');
       console.log('response email', response.data.auth);
       if (response.data.auth === true) {
+        setPasswordVerified(true);
         setEmailVerified(true);
       } else {
         setEmailVerified(false);
-      }
-    });
-  };
-  //check password verification
-  const passwordVerification = () => {
-    Axios.post("http://localhost:3001/checkChangePass", {
-      oldPassword: userPass,
-    }).then((response) => {
-      console.log('response pass', response.data.auth);
-      if (response.data.auth === true) {
-        setPasswordVerified(true);
-      } else {
-        setPasswordVerified(false);
       }
     });
   };
@@ -146,15 +135,16 @@ function GoogleAuth() {
 
   const checkRequirements = () => {
     //Check email verification, password verification
+    setCurrentStep(4);
 
     console.log(
       "email verified: ",
       emailVerified,
-      "passwordVerified: ",
-      passwordVerified
+
     );
     if (emailVerified === true && passwordVerified === true) {
       //check google auth code
+
 
       Axios.get("http://localhost:3001/VerifyGoogle2FASetup", {
         params: {
@@ -166,7 +156,7 @@ function GoogleAuth() {
       }).then((response) => {
         if (response.data === true) {
           setVerifed(true);
-          setCurrentStep(4);
+
         } else {
           console.log("Result", response.data);
           setVerifed(false);
@@ -270,7 +260,7 @@ function GoogleAuth() {
                       onClick={(event) => {
                         event.preventDefault();
                         emailVerification();
-                        passwordVerification();
+                     
                         ShowGoogleAuthQR();
                       }}
                     />
@@ -336,7 +326,7 @@ function GoogleAuth() {
                     </div>
                   </div>
                 )}
-                {passwordVerified && emailVerified && (
+                {currentStep ===4 && passwordVerified && emailVerified && (
                   <CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
                     <i className="material-icons me-2">check_circle</i>
                     <Paragraph bold size="20px" className="mb-0">
