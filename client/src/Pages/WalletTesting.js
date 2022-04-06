@@ -24,7 +24,7 @@ const programID = new PublicKey("GAECQos3deHaqzB1EDvPJcqaGVvG9xqDuFYU239KAsXV")
 
 function WalletTesting() {
   useEffect(() => {
-    window.solana.on("connect", () => {
+    window.solana && window.solana.on("connect", () => {
       console.log('updated...')
       console.log('public key: ', window.solana.publicKey.toString());
     })
@@ -32,6 +32,8 @@ function WalletTesting() {
       window.solana.disconnect();
     }
   }, [])
+
+  useEffect(() => {}, []);
 
   async function sendTransaction() {    
     const wallet = window.solana
@@ -81,6 +83,7 @@ function WalletTesting() {
       console.log('err: ', err)
     }
   }
+
   return (
     <div className="App">
       <header className="App-header">
