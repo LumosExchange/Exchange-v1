@@ -81,7 +81,7 @@ function SMSAuth() {
 				console.log("request id: ", response.data.requestId);
 				setCurrentStep(4);
 			} else {
-				setErrors(response.data.message);
+				setErrors(response.data.errorMessage);
 			}
 		});
 	};
