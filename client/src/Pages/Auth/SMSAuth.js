@@ -57,8 +57,10 @@ function SMSAuth() {
 		}).then((response) => {
 			if (response.data.auth === true) {
 				setVerified(true);
+				setCurrentStep(3);
 			} else {
 				setVerified(false);
+				setErrors(response.data.message);
 			}
 		});
 	};
@@ -158,7 +160,6 @@ function SMSAuth() {
 										onClick={(event) => {
 											event.preventDefault();
 											emailVerification();
-											setCurrentStep(3);
 										}}
 										className="w-100 h-100 mt-3"
 										disabled={
@@ -167,9 +168,17 @@ function SMSAuth() {
 											userPass.length === 0
 										}
 									/>
+									{errors && (
+										<div className="col-12 mt-3 p-0">
+											<div className="d-flex">
+												<IconHelper className="material-icons me-2 mt-1" color="invalid">error_outline</IconHelper>
+												<Paragraph color="invalid" size="20px" className="mb-0">{errors}</Paragraph>
+											</div>
+										</div>
+									)}
 								</React.Fragment>
 							)}
-							<div className="row mt-4">
+							<div className="row">
 								{currentStep === 3 && (
 									<React.Fragment>
 										<div className="col-12">
