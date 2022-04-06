@@ -489,11 +489,11 @@ app.post("/VonageSMSRequest", (req, res) => {
       code_length: "6",
     },
     (err, result) => {
-      if (err) {
+      if (result.status > 0) {
         //if error let the user know
         res.send({
           status: result.status,
-          error: result.error_text,
+          errorMessage: result.error_text,
         });
         console.log("error: ", err);
       } else {
