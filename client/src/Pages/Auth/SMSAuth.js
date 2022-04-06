@@ -38,44 +38,27 @@ function SMSAuth() {
 	const [currentStep, setCurrentStep] = useState(1);
 	const [errors, setErrors] = useState("");
 	const [successMessage, setSuccessMessage] = useState("");
+	const [verified, setVerified] = useState("");
 
 	//send email
-	const getUserEmail = () => {
-		// get user email
-		Axios.get("http://localhost:3001/getUserEmail", {}).then((response) => {
-			setUserEmail(response.data);
-		});
-	};
-
 	const sendVerification = () => {
-		Axios.post("http://localhost:3001/2FAEmailVerificationSend", {});
-		setIsCodeSent(true);
-		setCurrentStep(2);
-	};
-
-	//get email verification code and password and check if both true
-	//Check email verification
-	const emailVerification = () => {
-		Axios.post("http://localhost:3001/EmailVerification2FA", {
-			passcode: userEmailVerification,
-		}).then((response) => {
-			if (response.data.auth === true) {
-				setEmailVerified(true);
-			} else {
-				setEmailVerified(false);
-			}
+		Axios.post("http://localhost:3001/2FAEmailVerificationSend", {}).then((response) => {
+			setUserEmail(response.data.email);
+			setIsCodeSent(true);
+			setCurrentStep(2);
 		});
 	};
 
-	//check password verification
-	const passwordVerification = () => {
-		Axios.post("http://localhost:3001/checkChangePass", {
+	//Check email && password verification
+	const emailVerification = () => {
+		Axios.post("http://localhost:3001/Email&PassVerification2FA", {
+			passcode: userEmailVerification,
 			oldPassword: userPass,
 		}).then((response) => {
 			if (response.data.auth === true) {
-				setPasswordVerified(true);
+				setVerified(true);
 			} else {
-				setPasswordVerified(false);
+				setVerified(false);
 			}
 		});
 	};
@@ -116,12 +99,6 @@ function SMSAuth() {
 			}
 		});
 	};
-
-	useEffect(() => {
-		getUserEmail(userEmail);
-	}, [userEmail]);
-
-	console.log("user email is:", userEmail);
 
 	return (
 		<PageBody className="d-flex align-items-center justify-content-center py-5 flex-column">
@@ -181,7 +158,6 @@ function SMSAuth() {
 										onClick={(event) => {
 											event.preventDefault();
 											emailVerification();
-											passwordVerification();
 											setCurrentStep(3);
 										}}
 										className="w-100 h-100 mt-3"

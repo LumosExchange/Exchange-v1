@@ -16,7 +16,6 @@ import Buy from "./Pages/Buy";
 import Sell from "./Pages/Sell";
 import Axios from "axios";
 import Footer from "./Components/Footer";
-import TwoFactorAuth from "./Pages/Auth/TwoFactorAuth";
 import ConnectWallet from "./Pages/ConnectWallet";
 import ChangePassword from "./Pages/ChangePassword";
 import MyWallet from "./Pages/MyWallet";
@@ -138,7 +137,6 @@ const App = () => {
 							<Route path="/Offer" element={<Offer solGbp={solGbp} solUsd={solUsd} currency={currency} />} />
 							<Route path="/TradeHistory" element={<TradeHistory />} />
 							<Route path="/profile/user/:id" element={<Feedback />} />
-							<Route path="/TwoFactorAuth" element={<TwoFactorAuth />} />
 							<Route path="/ConnectWallet" element={<ConnectWallet />} />
 							<Route path="/ChangePassword" element={<ChangePassword />} />
 							<Route path="/MyWallet" element={<MyWallet />} />

@@ -918,7 +918,9 @@ app.post("/2FAEmailVerificationSend", (req, res) => {
     [req.session.user[0].email, text],
 
     (err, result) => {
-
+      res.send({
+        email: req.session.user[0].email
+      })
     }
   );
 });
