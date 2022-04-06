@@ -363,8 +363,8 @@ const PaymentMethods = () => {
             <Paragraph size="20px">No Payment methods added</Paragraph>
           </div>
         )}
-        {filteredUserPayments.map((data) => (
-          <PaymentMethodCard className="p-4 mb-3 d-flex align-items-center row position-relative">
+        {filteredUserPayments.map((data, index) => (
+          <PaymentMethodCard className="p-4 mb-3 d-flex align-items-center row position-relative" key={index}>
             <div className="col-12 d-flex col-lg-10">
               {convertMethodToIcon(data.data.type)}
               <Heading size="20px" className="mb-0 ms-2">
