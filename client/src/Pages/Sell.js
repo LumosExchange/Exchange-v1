@@ -438,7 +438,7 @@ const Sell = () => {
                     required
                   >
                     {newPaymentMethods.map((data) => (
-                      <option value={data}>{data}</option>
+                      <option value={data} key={data}>{data}</option>
                     ))}
                   </StyledDropdown>
                 </div>
@@ -462,7 +462,7 @@ const Sell = () => {
                     required
                   >
                     {filteredNewPaymentMethods.map((data) => (
-                      <option value={data}>{data}</option>
+                      <option value={data} key={data}>{data}</option>
                     ))}
                   </StyledDropdown>
                 </div>
