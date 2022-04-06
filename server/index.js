@@ -924,72 +924,56 @@ app.post("/2FAEmailVerificationSend", (req, res) => {
 });
 
 //this email verification will be built for chnaging 2fa options
-app.post("/EmailVerification2FA", (req, res) => {
+app.post("/Email&PassVerification2FA", (req, res) => {
   const email = req.session.user[0].email;
   const userCode = req.body.passcode;
-
-  db.query(
-    "SELECT Secret AS Secret FROM TempAuth WHERE (email) = (?)",
-    [email],
-    (err, result) => {
-      if (result[0].Secret.toString() === userCode.toString()) {
-        res.send({
-          auth: true,
-        });
-        //delete temp secret from db and return auth as true
-        db.query(
-          "DELETE FROM TempAuth WHERE email = ?",
-          [email],
-          (err, result) => {
-            console.log(result);
-          }
-        );
-      } else {
-        res.send({
-          auth: false,
-        });
-      }
-    }
-  );
-});
-
-//used for user to chnage password verification
-app.post("/checkChangePass", (req, res) => {
   const userName = req.session.user[0].userName;
-  const password = req.body.oldPassword;
-  let auth = false;
+  const userInputPassword = req.body.oldPassword;
+  const userPass = req.session.user[0].password;
 
-  console.log("userPassword: ", password);
-  db.query(
-    "SELECT * FROM users WHERE userName = ?",
-    [userName],
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      }
-      if (result.length > 0) {
-        bcrypt.compare(password, result[0].password, (err, response) => {
-          //if password match return auth as true
-          if (response) {
-            res.send({
-              auth: true,
-            });
-          } else {
-            res.send({
-              auth: false,
-              message: "Incorrect Password please try again",
-            });
-          }
-        });
+  var sql = "SELECT Secret AS Secret FROM TempAuth WHERE (email) = (?);"
+
+  db.query(sql,[email,userName], function(err, result, fields) {
+    //Check Secret
+    if(result[0].Secret.toString() === userCode.toString()) {
+
+      //Check hashed passwords
+       bcrypt.compare(userInputPassword, userPass, function(err, result) {
+         if (err) {
+           //handle error
+           res.send({
+             error: err
+           })
+         } if (result){
+           //succesfull and delete temp db secret
+           res.send({
+             auth: true
+           });
+           db.query(
+            "DELETE FROM TempAuth WHERE email = ?",
+            [email],
+            (err, result) => {
+              console.log(result);
+            }
+          );
+         } else {
+           //Password dont maatch
+           res.send({
+             auth: false,
+             message: "Passwords do not match!"
+           }); 
+         }
+       })
       } else {
+         //Secret dosent match 
         res.send({
           auth: false,
-          message: "no user exists",
-        });
+          message: "Code does not match!"
+        });     
       }
-    }
-  );
+  });
 });
+
 
 //update user password
 app.post("/updateUserPass", (req, res) => {
