@@ -148,8 +148,8 @@ const MyListings = ({ solGbp, currency }) => {
 				</div>
 			)}
 			<div className="col-12 col-lg-6 col-xl-9">
-				{userListings.map((val) => (
-					<TradeCard val={val} withoutButton solGbp={solGbp} currency={currency}>
+				{userListings.map((val, index) => (
+					<TradeCard val={val} withoutButton solGbp={solGbp} currency={currency} key={index}>
 						<div className="col-3 d-flex align-items-end justify-content-end">
 							<CardActionButton onClick={ () => openEditModal(val) } title="Edit">
 								<i className="material-icons edit">edit</i>
