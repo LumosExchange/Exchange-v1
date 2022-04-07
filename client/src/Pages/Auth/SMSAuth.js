@@ -76,7 +76,7 @@ function SMSAuth() {
 			number: phoneNumber,
 		}).then((response) => {
 			console.log(response, 'response from sms send');
-			if (response.data.status === 0){
+			if (response.data.status === "0"){
 				setRequestId(response.data.requestId);
 				console.log("request id: ", response.data.requestId);
 				setCurrentStep(4);
@@ -95,6 +95,7 @@ function SMSAuth() {
 			//send code and request ID
 			userCode: userSMSCode,
 			requestId: requestId,
+			number: phoneNumber,
 		}).then((response) => {
 			//Handle the requestId as needed on the verify function
 			console.log("response: ", response);
@@ -106,6 +107,8 @@ function SMSAuth() {
 			}
 		});
 	};
+
+	const navigate = useNavigate();
 
 	return (
 		<PageBody className="d-flex align-items-center justify-content-center py-5 flex-column">
@@ -200,14 +203,6 @@ function SMSAuth() {
 												}}
 												className="w-100 mb-3"
 											/>
-										{errors && (
-											<div className="col-12 mt-3 p-0">
-												<div className="d-flex">
-													<IconHelper className="material-icons me-2 mt-1" color="invalid">error_outline</IconHelper>
-													<Paragraph color="invalid" size="20px">{errors}</Paragraph>
-												</div>
-											</div>
-										)}
 										</div>
 										<div className="col-12">
 											<PrimaryButton
@@ -221,11 +216,22 @@ function SMSAuth() {
 												disabled={phoneNumber.length < 1}
 											/>
 										</div>
+										{errors && (
+											<div className="col-12 mt-3 p-0">
+												<div className="d-flex">
+													<IconHelper className="material-icons me-2 mt-1" color="invalid">error_outline</IconHelper>
+													<Paragraph color="invalid" size="20px">{errors}</Paragraph>
+												</div>
+											</div>
+										)}
 									</React.Fragment>
 								)}
 								{currentStep === 4 && (
 									<React.Fragment>
 										<div className="col-12 p-0">
+											<StyledLabel htmlFor="userNumber" fontSize="20px" padding="0" bold>
+												Enter Verification Code
+											</StyledLabel>
 											<FormInput
 												type="text"
 												id="userNumber"
@@ -251,20 +257,31 @@ function SMSAuth() {
 										{errors && (
 											<div className="col-12 mt-3 p-0">
 												<div className="d-flex">
-													<IconHelper className="material-icons me-2 mt-1" color="invalid">error_outline</IconHelper>
-													<Paragraph color="invalid" size="20px">{errors}</Paragraph>
+													<IconHelper className="material-icons me-2" color="invalid">error_outline</IconHelper>
+													<Paragraph color="invalid" size="20px" className="mb-0">{errors}</Paragraph>
 												</div>
 											</div>
 										)}
 									</React.Fragment>
 								)}
 								{currentStep === 5 && (
-									<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
-										<i className="material-icons me-2">check_circle</i>
-										<Paragraph bold size="20px" className="mb-0">
-											SMS Auth Successfully added
-										</Paragraph>
-									</CodeSentMessage>
+									<React.Fragment>
+										<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+											<i className="material-icons me-2">check_circle</i>
+											<Paragraph bold size="20px" className="mb-0">
+												SMS Auth Successfully added
+											</Paragraph>
+										</CodeSentMessage>
+										<PrimaryButton
+											type="text"
+											text="OK"
+											onClick={(event) => {
+												event.preventDefault();
+												navigate('/Profile/Security')
+											}}
+											className="w-100 h-100 mt-3"
+										/>
+									</React.Fragment>
 								)}
 							</div>
 						</form>

@@ -117,7 +117,7 @@ const App = () => {
 					<Navbar loginStatus={loginStatus} userName={userName} />
 					<Routes>
 						{/* Unprotected Routes */}
-						<Route path="/" element={<Home />} />
+						<Route path="/" element={<Home theme={theme} />} />
 						<Route path="/Login" element={<Login />} />
 						<Route path="/Register" element={<Register />} />
 						<Route path="*" element={<ErrorPage />} />
