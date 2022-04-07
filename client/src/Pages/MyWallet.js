@@ -12,7 +12,8 @@ import SolanaIcon from '../Images/icon-solana.svg';
 import DropdownIcon from '../Images/icon-dropdown.svg';
 import StyledTable from "../Components/Tables";
 import * as solanaWeb3 from '@solana/web3.js';
-import { SystemProgram, Account, Transaction } from '@solana/web3.js'
+const {Keypair, Transaction, SystemProgram, LAMPORTS_PER_SOL} = require("@solana/web3.js");
+const {sendAndConfirmTransaction, clusterApiUrl, Connection} = require("@solana/web3.js");
 
 
 
@@ -76,6 +77,8 @@ const MyWallet = () => {
   const [rewardsExpanded, expandRewards] = useState(false);
   const [walletKey, setWalletKey] = useState("");
 	const [phantomInstalled, setIsPhantomInstalled] = useState(false);
+
+	const [pubKey, setPubKey] = useState("");
  
   const isPhantomInstalled = () => {
 	const phantomInstalled = window.solana && window.solana.isPhantom;
@@ -106,7 +109,8 @@ const MyWallet = () => {
     try {
 		console.log('getwallet triggered');
       const wallet = typeof window !== 'undefined' && window.solana;
-      await wallet.connect()
+      await wallet.connect();
+	  
     } catch (err) {
       console.log('err: ', err)
     }
@@ -116,8 +120,34 @@ const MyWallet = () => {
   const connectPhantomWallet = () => {
 	window.solana.connect();
 	window.solana.on("connect", () => console.log("Phantom wallet connected!"));
-	const walletPublicKey = window.solana.publicKey._bn.words.toString();
-	console.log(walletPublicKey, 'public wallet key');
+	setPubKey(window.solana.publicKey.toString());
+
+	
+  }
+
+  const createTransaction = () => {
+	
+	let toKeypair = Keypair.generate();
+	let transaction = new Transaction();
+	
+	transaction.add(
+	  SystemProgram.transfer({
+		fromPubkey: window.solana.publicKey,
+		toPubkey: new solanaWeb3.PublicKey("6ftMNVRAFAc1Wb372xg3Kq6zZ8rhr6b7DGyuhgSELwZ2"),
+		lamports: LAMPORTS_PER_SOL
+	  })
+	);
+
+	
+
+let keypair = Keypair.generate();
+let connection = new Connection(clusterApiUrl('testnet'));
+
+sendAndConfirmTransaction(
+  connection,
+  transaction,
+  [pubKey]
+);
   }
   
   {/* Connect phantom wallet automatically
@@ -162,6 +192,7 @@ const MyWallet = () => {
 							</Paragraph>
 							<PrimaryButton className="w-100 mt-3" text="Connect Wallet" onClick={() => connectPhantomWallet()} disabled={!phantomInstalled} />
 							<PrimaryButton className="w-100 mt-3" text="Disconnect Wallet" onClick={() => disconnectPhantomWallet()} disabled={!phantomInstalled} />
+							<PrimaryButton className="w-100 mt-3" text="Test Trnsaction" onClick={() =>createTransaction()} disabled={!phantomInstalled} />
 
 							
 						</div>
@@ -195,7 +226,7 @@ const MyWallet = () => {
 								</div>
 								<Heading size="36px" bold>11,000 SOL</Heading>
 								<Paragraph size="18px" className="mb-0 text-break">
-									383196VqKiMLqS74qZtA4U1DEzEQgpH6P3
+									{pubKey}
 								</Paragraph>
 							</div>
 							<div className="col-3 col-lg-2 d-flex justify-content-end">
