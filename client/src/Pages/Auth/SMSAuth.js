@@ -108,6 +108,8 @@ function SMSAuth() {
 		});
 	};
 
+	const navigate = useNavigate();
+
 	return (
 		<PageBody className="d-flex align-items-center justify-content-center py-5 flex-column">
 			<div className="container col-12 col-md-8 col-xl-5 col-xxl-4">
@@ -263,12 +265,23 @@ function SMSAuth() {
 									</React.Fragment>
 								)}
 								{currentStep === 5 && (
-									<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
-										<i className="material-icons me-2">check_circle</i>
-										<Paragraph bold size="20px" className="mb-0">
-											SMS Auth Successfully added
-										</Paragraph>
-									</CodeSentMessage>
+									<React.Fragment>
+										<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+											<i className="material-icons me-2">check_circle</i>
+											<Paragraph bold size="20px" className="mb-0">
+												SMS Auth Successfully added
+											</Paragraph>
+										</CodeSentMessage>
+										<PrimaryButton
+											type="text"
+											text="OK"
+											onClick={(event) => {
+												event.preventDefault();
+												navigate('/Profile/Security')
+											}}
+											className="w-100 h-100 mt-3"
+										/>
+									</React.Fragment>
 								)}
 							</div>
 						</form>

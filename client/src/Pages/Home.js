@@ -7,9 +7,10 @@ import { SecondaryButton, LinkButton } from "../Components/Buttons";
 import Paragraph from "../Components/Paragraph";
 
 // Images
-import ShowCaseMobile from '../Images/showcase-mobile.svg';
 import ShowCaseDark from '../Images/showcase_dark.png';
 import ShowCaseLight from '../Images/showcase_light.png';
+import ShowCaseDarkMobile from '../Images/showcase_dark_mobile.png';
+import ShowCaseLightMobile from '../Images/showcase_light_mobile.png';
 import IconSolana from '../Images/icon-circle-solana.svg';
 import IconLumosRewards from '../Images/icon-circle-lumos.svg';
 import IconKin from '../Images/icon-circle-kin.svg';
@@ -25,11 +26,16 @@ import { useNavigate } from "react-router";
 
 const ShowcaseBase = styled.div(({ theme, currentTheme }) => css`
     min-height: 600px;
+    background: ${currentTheme === "dark" ? `url(${ShowCaseDarkMobile})` : `url(${ShowCaseLightMobile})`};
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
 
     @media screen and (min-width: ${theme.breakpoints.lg}){
         background: ${currentTheme === "dark" ? `url(${ShowCaseDark})` : `url(${ShowCaseLight})`};
         background-size: contain;
         background-repeat: no-repeat;
+        background-position: center center;
     }
 `);
 
@@ -61,7 +67,7 @@ const GradientHeading = styled(Heading)(({ theme }) => css`
 
 const Showcase = ({ theme }) => (
     <ShowcaseBase
-        className="position-relative mb-5 w-100 d-flex justify-content-center"
+        className="position-relative mb-5 w-100"
         currentTheme={theme} 
     />
 );
