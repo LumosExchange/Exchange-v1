@@ -31,8 +31,9 @@ export const AirDropTable = styled.table(({ theme }) => css`
         font-family: 'THICCCBOI-BOLD';
     }
     
-    thead th, td, tr {
+    thead th, td, tr, th {
         padding: 19px;
+        border: 0;
     }
 
     span {
