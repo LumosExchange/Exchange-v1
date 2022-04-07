@@ -226,6 +226,9 @@ function SMSAuth() {
 								{currentStep === 4 && (
 									<React.Fragment>
 										<div className="col-12 p-0">
+											<StyledLabel htmlFor="userNumber" fontSize="20px" padding="0" bold>
+												Enter Verification Code
+											</StyledLabel>
 											<FormInput
 												type="text"
 												id="userNumber"
@@ -251,7 +254,7 @@ function SMSAuth() {
 										{errors && (
 											<div className="col-12 mt-3 p-0">
 												<div className="d-flex">
-													<IconHelper className="material-icons me-2 mt-1" color="invalid">error_outline</IconHelper>
+													<IconHelper className="material-icons me-2" color="invalid">error_outline</IconHelper>
 													<Paragraph color="invalid" size="20px" className="mb-0">{errors}</Paragraph>
 												</div>
 											</div>
