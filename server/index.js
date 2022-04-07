@@ -995,8 +995,12 @@ app.post("/updateUserPass", (req, res) => {
       "UPDATE users SET password = ? WHERE userID = ?",
       [hash, user],
       (err, result) => {
-        console.log(err);
-        console.log("Password Updated");
+        if (err) {
+          res.send({
+            updated: false,
+            message: err,
+          })
+        }
         res.send({
           updated: true,
           message: "Succesfully updated password.",
