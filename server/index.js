@@ -510,6 +510,7 @@ app.post("/VonageSMSRequest", (req, res) => {
 
 app.post("/VonageSMSVerify", (req, res) => {
   //user needs to send request id and code for authetication
+  const user = req.session.user[0].userID;
 
   if (!req.body.requestId || !req.body.userCode) {
     res.status(400).send("You must supply a code");

@@ -95,6 +95,7 @@ function SMSAuth() {
 			//send code and request ID
 			userCode: userSMSCode,
 			requestId: requestId,
+			number: phoneNumber,
 		}).then((response) => {
 			//Handle the requestId as needed on the verify function
 			console.log("response: ", response);
