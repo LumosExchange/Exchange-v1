@@ -9,6 +9,8 @@ import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
 import VerifyBG from '../Images/verifybg.svg';
 import ErrorBG from '../Images/errorbg.svg';
+import { IconHelper } from "./Login";
+import { useNavigate } from "react-router";
 
 const GrabAttention = keyframes`
   0% { transform: scale(1); }
@@ -69,6 +71,7 @@ function ChangePassword() {
       if (response.data.auth === true) {
 		setVerified(true);
 		setCurrentStep(3);
+		setErrors("");
       } else {
 		setVerified(false);
 		setErrors(response.data.message);
@@ -85,11 +88,14 @@ function ChangePassword() {
       }).then((response) => {
         //handle response here
         if(response.data.updated === true) {
-          //Handle true response here
+          setCurrentStep(4);
         } else {
+			setErrors(response.data.message);
         }
       });  
   };
+
+  const navigate = useNavigate();
 
 
   return (
@@ -165,7 +171,6 @@ function ChangePassword() {
 								onClick={(event) => {
 									event.preventDefault();
 									emailVerification();
-									setCurrentStep(3)
 								}}
 								className="w-100 h-100 mt-3"
 							/>
@@ -212,7 +217,6 @@ function ChangePassword() {
 							//FIX THIS TOMORROW
 							onClick={(event) => {
 								event.preventDefault();
-								emailVerification();
 								checkRequirements();
 							}}
 							className="w-100 h-100 mt-3"
@@ -222,12 +226,31 @@ function ChangePassword() {
 					</React.Fragment>
 				)}
 				{currentStep === 4 && (
-					<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
-						<i className="material-icons me-2">check_circle</i>
-						<Paragraph bold size="20px" className="mb-0">
-							Password changed successfully!
-						</Paragraph>
-					</CodeSentMessage>
+					<React.Fragment>
+						<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+							<i className="material-icons me-2">check_circle</i>
+							<Paragraph bold size="20px" className="mb-0">
+								Password changed successfully!
+							</Paragraph>
+						</CodeSentMessage>
+						<PrimaryButton
+							type="text"
+							text="OK"
+							onClick={(event) => {
+								event.preventDefault();
+								navigate('/Profile/Security')
+							}}
+							className="w-100 h-100 mt-3"
+						/>
+					</React.Fragment>
+				)}
+				{errors && (
+					<div className="d-flex mt-4">
+					<IconHelper color="invalid" className="material-icons me-2">error_outline</IconHelper>
+					<Paragraph color="invalid" size="20px" className="mb-0">
+						{errors}
+					</Paragraph>
+					</div>
 				)}
             </form>
           </div>
