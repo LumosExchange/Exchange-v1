@@ -39,92 +39,58 @@ function ChangePassword() {
   const [newPassword, setNewPassword] = useState("");
   const [checkNewPass, setCheckNewPass] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
-  
-  let updateCompleted = false;
-
-  let emailVerified = false;
-  let passwordVerified = false;
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const [errors, setErrors] = useState("");
+  const [verified, setVerified] = useState("");
 
-  const getUserEmail = () => {
-	// get user email
-		Axios.get("http://localhost:3001/getUserEmail", {}).then((response) => {
-			setUserEmail(response.data);
-		});
-	}
 
-  //send email verification
+
+  //send email 
   const sendVerification = () => {
-	  	setCurrentStep(2);
-    	Axios.post("http://localhost:3001/2FAEmailVerificationSend", {});
-    setIsCodeSent(true);
+	Axios.post("http://localhost:3001/2FAEmailVerificationSend", {}).then((response) => {
+		if (response.data.email) {
+			setUserEmail(response.data.email);
+			setIsCodeSent(true);
+			setCurrentStep(2);
+		} else {
+			setIsCodeSent(false);
+			setErrors(response.data.message);
+		}
+	});
   };
 
-  //check email verification
+  //check email & pass verification
   const emailVerification = () => {
-    Axios.post("http://localhost:3001/EmailVerification2FA", {
+    Axios.post("http://localhost:3001/Email&PassVerification2FA", {
       passcode: userVerification,
+	  oldPassword: oldPassword,
     }).then((response) => {
-      if (!response.data.auth) {
-        console.log("Auth1: ", response.data.auth);
-        emailVerified = false;
+      if (response.data.auth === true) {
+		setVerified(true);
+		setCurrentStep(3);
       } else {
-        console.log("Auth2: ", response.data.auth);
-        emailVerified = true;
+		setVerified(false);
+		setErrors(response.data.message);
       }
-      console.log("email verification : ", emailVerified);
     });
   };
 
-  //check old password is match for old password
-  const checkOldPass = () => {
-    Axios.post("http://localhost:3001/checkChangePass", {
-      oldPassword: oldPassword,
-    }).then((response) => {
-      if (!response.data.auth) {
-        passwordVerified = false;
-      } else {
-        passwordVerified = true;
-      }
-      console.log("password verification : ", passwordVerified);
-    });
-  };
+
 
   //if both above are true then update user password
   const checkRequirements = () => {
-    //check both passwords are equal
-    if (
-      newPassword === checkNewPass ||
-      (emailVerified === true && passwordVerified === true)
-    ) {
-      console.log("we get here");
       Axios.post("http://localhost:3001/updateUserPass", {
         password: newPassword,
       }).then((response) => {
         //handle response here
-        if(!response.data.updated) {
-          updateCompleted = false;
+        if(response.data.updated === true) {
+          //Handle true response here
         } else {
-          updateCompleted = true;
-		  setCurrentStep(4);
         }
-      });
-    } else {
-    }
+      });  
   };
 
-  useEffect(() => {
-	getUserEmail(userEmail);
-  }, [userEmail]);
-
-  console.log('user email is:', userEmail)
-
-  // TODO - pass user input for email verifasction to setUserVerification
-  //      - pass old password to setOldPassword
-  //      - pass new password to setNewPass
-  //      - pass new password repeat to setCheckNewPass
-  //      - pass repsonse to updateCompleted 
 
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 flex-column">
@@ -198,7 +164,6 @@ function ChangePassword() {
 								type="check"
 								onClick={(event) => {
 									event.preventDefault();
-									checkOldPass();
 									emailVerification();
 									setCurrentStep(3)
 								}}
