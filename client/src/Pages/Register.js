@@ -203,7 +203,7 @@ const Register = () => {
             {userName.length > 0 && userName.length < 4 && (
               <div className="d-flex">
                 <StyledIcon className="material-icons me-1" color="invalid">
-                  cancel
+                  error_outline
                 </StyledIcon>
                 <Paragraph size="18px" color="invalid">
                   Username too short
@@ -213,7 +213,7 @@ const Register = () => {
             {userName.includes(" ") && (
               <div className="d-flex">
                 <StyledIcon className="material-icons me-1" color="invalid">
-                  cancel
+                  error_outline
                 </StyledIcon>
                 <Paragraph size="18px" color="invalid">
                   Contains a space
@@ -223,7 +223,7 @@ const Register = () => {
             {userName.match(/[^A-Za-z 0-9]/g) && (
               <div className="d-flex">
                 <StyledIcon className="material-icons me-1" color="invalid">
-                  cancel
+                  error_outline
                 </StyledIcon>
                 <Paragraph size="18px" color="invalid">
                   Contains a special character
@@ -283,7 +283,7 @@ const Register = () => {
             {password.length > 0 && password.length < 8 && (
               <div className="d-flex">
                 <StyledIcon className="material-icons me-1" color="invalid">
-                  cancel
+                  error_outline
                 </StyledIcon>
                 <Paragraph size="18px" color="invalid">
                   Password too short (Minimum 8 Charachters)
@@ -293,7 +293,7 @@ const Register = () => {
             {password.includes(" ") && (
               <div className="d-flex">
                 <StyledIcon className="material-icons me-1" color="invalid">
-                  cancel
+                  error_outline
                 </StyledIcon>
                 <Paragraph size="18px" color="invalid">
                   Password should not contain space
