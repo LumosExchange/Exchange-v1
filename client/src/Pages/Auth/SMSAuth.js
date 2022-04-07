@@ -76,7 +76,7 @@ function SMSAuth() {
 			number: phoneNumber,
 		}).then((response) => {
 			console.log(response, 'response from sms send');
-			if (response.data.status === 0){
+			if (response.data.status === "0"){
 				setRequestId(response.data.requestId);
 				console.log("request id: ", response.data.requestId);
 				setCurrentStep(4);
@@ -200,14 +200,6 @@ function SMSAuth() {
 												}}
 												className="w-100 mb-3"
 											/>
-										{errors && (
-											<div className="col-12 mt-3 p-0">
-												<div className="d-flex">
-													<IconHelper className="material-icons me-2 mt-1" color="invalid">error_outline</IconHelper>
-													<Paragraph color="invalid" size="20px">{errors}</Paragraph>
-												</div>
-											</div>
-										)}
 										</div>
 										<div className="col-12">
 											<PrimaryButton
@@ -221,6 +213,14 @@ function SMSAuth() {
 												disabled={phoneNumber.length < 1}
 											/>
 										</div>
+										{errors && (
+											<div className="col-12 mt-3 p-0">
+												<div className="d-flex">
+													<IconHelper className="material-icons me-2 mt-1" color="invalid">error_outline</IconHelper>
+													<Paragraph color="invalid" size="20px">{errors}</Paragraph>
+												</div>
+											</div>
+										)}
 									</React.Fragment>
 								)}
 								{currentStep === 4 && (
@@ -252,7 +252,7 @@ function SMSAuth() {
 											<div className="col-12 mt-3 p-0">
 												<div className="d-flex">
 													<IconHelper className="material-icons me-2 mt-1" color="invalid">error_outline</IconHelper>
-													<Paragraph color="invalid" size="20px">{errors}</Paragraph>
+													<Paragraph color="invalid" size="20px" className="mb-0">{errors}</Paragraph>
 												</div>
 											</div>
 										)}
