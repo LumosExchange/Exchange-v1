@@ -212,15 +212,14 @@ function ChangePassword() {
 						/>
 						<div className="col-12 p-0">
 							<PrimaryButton
-							text="Change Password"
-							type="check"
-							//FIX THIS TOMORROW
-							onClick={(event) => {
-								event.preventDefault();
-								checkRequirements();
-							}}
-							className="w-100 h-100 mt-3"
-							disabled={ !isCodeSent }
+								text="Change Password"
+								type="check"
+								onClick={(event) => {
+									event.preventDefault();
+									checkRequirements();
+								}}
+								className="w-100 h-100 mt-3"
+								disabled={ !isCodeSent }
 							/>
 						</div>
 					</React.Fragment>
@@ -246,10 +245,10 @@ function ChangePassword() {
 				)}
 				{errors && (
 					<div className="d-flex mt-4">
-					<IconHelper color="invalid" className="material-icons me-2">error_outline</IconHelper>
-					<Paragraph color="invalid" size="20px" className="mb-0">
-						{errors}
-					</Paragraph>
+						<IconHelper color="invalid" className="material-icons me-2">error_outline</IconHelper>
+						<Paragraph color="invalid" size="20px" className="mb-0">
+							{errors}
+						</Paragraph>
 					</div>
 				)}
             </form>

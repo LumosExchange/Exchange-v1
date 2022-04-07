@@ -6,6 +6,7 @@ import Axios from "axios";
 import { InvisibleButton } from "./Buttons";
 import LumosLogo from "./LumosLogo";
 import Link from "./Link";
+import { IconHelper } from "../Pages/Login";
 
 // Images
 import Logo from "../Images/logo.svg";
@@ -67,6 +68,7 @@ const MobileProfileLink = styled.i(({ theme }) => css`
 
 const Navbar = ({ loginStatus, userName }) => {
 	const [showMobileMenu, setMenuOpen] = useState(false);
+	const [accountTier, setAccountTier] = useState("");
 
 	const navigate = useNavigate();
 
@@ -80,7 +82,15 @@ const Navbar = ({ loginStatus, userName }) => {
 		});
 	};
 
-	useEffect(() => {}, [loginStatus]);
+	const getAccountTier = () => {
+		Axios.get("http://localhost:3001/getUserAccountLevel").then((response) => {
+			setAccountTier(response.data[0]?.accountLevel);
+		});
+	};
+
+	useEffect(() => {
+		getAccountTier();
+	}, []);
 
 	return (
 		<Base className="d-flex justify-content-center">
@@ -111,7 +121,18 @@ const Navbar = ({ loginStatus, userName }) => {
 									className="d-flex align-items-center"
 									onClick={() => navigate("/Profile/Basic")}
 								>
-									<i className="material-icons me-1">person</i>
+									<IconHelper
+										className="material-icons me-1"
+										title={`Lumos ${accountTier} Account`}
+										color={
+											(accountTier === "Standard" && 'cta_primary') ||
+											(accountTier === "Bronze" && 'bronze') ||
+											(accountTier === "Silver" && 'silver') ||
+											(accountTier === "Gold" && 'gold')
+										}
+									>
+										{accountTier === 'Standard' ? 'person' : 'verified'}
+									</IconHelper>
 									<span>{userName}</span>
 								</NavActionButton>
 								<NavActionButton onClick={() => logOut()} className="d-flex">
