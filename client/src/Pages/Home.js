@@ -8,6 +8,8 @@ import Paragraph from "../Components/Paragraph";
 
 // Images
 import ShowCaseMobile from '../Images/showcase-mobile.svg';
+import ShowCaseDark from '../Images/showcase_dark.png';
+import ShowCaseLight from '../Images/showcase_light.png';
 import IconSolana from '../Images/icon-circle-solana.svg';
 import IconLumosRewards from '../Images/icon-circle-lumos.svg';
 import IconKin from '../Images/icon-circle-kin.svg';
@@ -21,19 +23,13 @@ import {
 import { useNavigate } from "react-router";
 
 
-const ShowcaseBase = styled.div(({ theme }) => css`
+const ShowcaseBase = styled.div(({ theme, currentTheme }) => css`
     min-height: 600px;
 
-    .tablet {
-        position: absolute;
-        z-index: 2;
-        left: 0px;
-        bottom: 0;
-    }
-    .laptop {
-        position: absolute;
-        z-index: 1;
-        left: 70px; 
+    @media screen and (min-width: ${theme.breakpoints.lg}){
+        background: ${currentTheme === "dark" ? `url(${ShowCaseDark})` : `url(${ShowCaseLight})`};
+        background-size: contain;
+        background-repeat: no-repeat;
     }
 `);
 
@@ -63,18 +59,19 @@ const GradientHeading = styled(Heading)(({ theme }) => css`
 	}
 `);
 
-const Showcase = () => (
-    <ShowcaseBase className="position-relative mb-5 w-100 d-flex justify-content-center">
-        <img className="img-fluid" src={ShowCaseMobile} alt="Showcase" />
-    </ShowcaseBase>
+const Showcase = ({ theme }) => (
+    <ShowcaseBase
+        className="position-relative mb-5 w-100 d-flex justify-content-center"
+        currentTheme={theme} 
+    />
 );
 
-const Home = () => {
+const Home = ({ theme }) => {
     const navigate = useNavigate();
     return (
     <PageBody className="container-fluid">
-        <div className="row pt-5 d-flex justify-content-center container m-auto">
-            <div className="col-12 col-lg-6 d-flex align-items-center justify-content-center">
+        <div className="row pt-5 d-flex justify-content-center container m-auto p-0">
+            <div className="col-12 col-lg-6 col-xxl-5 d-flex align-items-center justify-content-center">
                 <div className="my-5">
                     <Heading size="48px" bold className="mb-0">
                         Non-Custodial,<br />
@@ -102,8 +99,8 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <div className="col-11 col-lg-6">
-                <Showcase />
+            <div className="col-12 col-lg-6 col-xxl-7">
+                <Showcase theme={theme} />
             </div>
         </div>
         <div className="container">
