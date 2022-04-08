@@ -180,11 +180,18 @@ const Wallets = () => {
 		try {
 		window.solana.connect();
 		await window.solana.on("connect", () => console.log("Phantom wallet connected!"));
-		//setPubKey(window.solana.publicKey.toString());	
-		setWalletAddress(window.solana.publicKey.toString());
+			//setPubKey(window.solana.publicKey.toString());	
+			console.log(window.solana?.publicKey.toString(), 'public key');
+			setWalletAddress(window.solana?.publicKey.toString());
+			
+			console.log(walletAddress, 'wallet address');
+
+			if (walletAddress !== ""){
+				addWallet("phantom");
+			}
 		} catch {
+			console.log("error");
 		}
-		addWallet("phantom");
 	};
 
 	const connectSolflareWallet = async() => {
@@ -438,7 +445,7 @@ const Wallets = () => {
 						{modalMode === "web3" && (
 							<ModalBody>
 								<AddWalletButton
-								onClick={() => connectPhantomWallet()}
+								onClick={connectPhantomWallet}
 								
 									className="mb-2 w-100"
 								>
@@ -453,7 +460,7 @@ const Wallets = () => {
 									</div>
 								</AddWalletButton>
 								<AddWalletButton
-										onClick={null}
+										onClick={connectSlopeWallet}
 									className="mb-2 w-100"
 								>
 									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
@@ -467,7 +474,7 @@ const Wallets = () => {
 									</div>
 								</AddWalletButton>
 								<AddWalletButton
-									onClick={connectSolflareWallet()}
+									onClick={connectSolflareWallet}
 									className="mb-2 w-100"
 								>
 									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
