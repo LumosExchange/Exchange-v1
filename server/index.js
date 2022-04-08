@@ -2114,7 +2114,7 @@ app.post("/AddWallet", (req, res) => {
   const userID = req.session.user[0].userID;
   const walletID = req.body.walletID;
   const walletAddress = req.body.walletAddress;
-  const walletType = req.body
+  const walletType = req.body.type;
 
   //check if user has a wallet if not insert else update
 
@@ -2125,7 +2125,7 @@ app.post("/AddWallet", (req, res) => {
       if (result.length <= 0) {
         //Insert
         db.query(
-          "INSERT INTO SolAddress (userID, sol" + walletID + ", Type" + walletID +") VALUES (?,?)",
+          "INSERT INTO SolAddress (userID, sol" + walletID + ", Type" + walletID +") VALUES (?,?,?)",
           [userID, walletAddress , walletType],
           (err, result) => {
             if (err) {
