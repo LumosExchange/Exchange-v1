@@ -179,16 +179,9 @@ const Wallets = () => {
 	const connectPhantomWallet = async() => {
 		try {
 		window.solana.connect();
-		await window.solana.on("connect", () => console.log("Phantom wallet connected!"));
+		await window.solana.on("connect", () => addWallet("phantom", window.solana.publicKey.toString()));
 			//setPubKey(window.solana.publicKey.toString());	
-			console.log(window.solana?.publicKey.toString(), 'public key');
-			setWalletAddress(window.solana?.publicKey.toString());
-			
-			console.log(walletAddress, 'wallet address');
-
-			if (walletAddress !== ""){
-				addWallet("phantom");
-			}
+			console.log(window.solana.publicKey.toString(), 'public key');
 		} catch {
 			console.log("error");
 		}
@@ -197,22 +190,18 @@ const Wallets = () => {
 	const connectSolflareWallet = async() => {
 		try {
 			window.solflare.connect();
-			window.solflare.on("connect", () => console.log("Solflare wallet connected!"));
-			setWalletAddress(window.solflare.publicKey.toString());
+			window.solflare.on("connect", () => addWallet("solflare", window.solana.publicKey.toString()));
+			
 		} catch {
 		}
-		addWallet("solflare");
 	};
 
 	const connectSlopeWallet = async() => {
 		try {
 			window.slope.connect();
-			window.slope.on("Connect", () => console.log("Slope wallet connected!"));
-			setWalletAddress(window.slope.publicKey.toString());
+			window.slope.on("Connect", () => addWallet("slope", window.solana.publicKey.toString()));
 		} catch {
-
 		}
-		addWallet("slope");
 	}
 
 
@@ -253,7 +242,7 @@ const Wallets = () => {
 		reloadPayments();
 	}
 
-	const addWallet = (type) => {
+	const addWallet = (type, walletAddress) => {
 		console.log(type, 'type of wallet added');
 		Axios.post("http://localhost:3001/AddWallet", {
 			walletID: walletCount,
