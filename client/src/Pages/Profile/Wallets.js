@@ -153,12 +153,11 @@ const Wallets = () => {
 			if (provider.isPhantom) {
 				console.log("Is Phantom installed? ", provider.isPhantom);
 				return provider;
-			} if (provider.isSollet){
-				console.log("Is Sollet installed? ", provider.isSollet);
+			} if (provider.isSolflare){
+				console.log("Is Solflare installed? ", provider.isSolflare);
 				return provider;
-			}
-			if(provider.isExodus) {
-				console.log("Is Exodus installed? ", provider.isExodus);
+			} if (provider.isSlope) {
+				console.log("Is Slope installed? ", provider.isSlope);
 				return provider;
 			}
 			} else {
@@ -181,19 +180,33 @@ const Wallets = () => {
 		try {
 		window.solana.connect();
 		await window.solana.on("connect", () => console.log("Phantom wallet connected!"));
-		//setPubKey(window.solana.publicKey.toString());
-		
+		//setPubKey(window.solana.publicKey.toString());	
 		setWalletAddress(window.solana.publicKey.toString());
+		} catch {
+		}
+		addWallet("phantom");
+	};
 
-		console.log("Pub key: ", window.solana.publicKey.toString());
+	const connectSolflareWallet = async() => {
+		try {
+			window.solflare.connect();
+			window.solflare.on("connect", () => console.log("Solflare wallet connected!"));
+			setWalletAddress(window.solflare.publicKey.toString());
+		} catch {
+		}
+		addWallet("solflare");
+	};
 
+	const connectSlopeWallet = async() => {
+		try {
+			window.slope.connect();
+			window.slope.on("Connect", () => console.log("Slope wallet connected!"));
+			setWalletAddress(window.slope.publicKey.toString());
 		} catch {
 
 		}
-
-		addWallet("Web3");
-		
-	};
+		addWallet("slope");
+	}
 
 
 	const toggleAddWallet = () => {
@@ -292,7 +305,6 @@ const Wallets = () => {
 	};
 
 	const walletCount = wallets.length + 1;
-
 	const reloadPayments = () => {
 		window.location.reload(true);
 	};
@@ -455,7 +467,7 @@ const Wallets = () => {
 									</div>
 								</AddWalletButton>
 								<AddWalletButton
-									onClick={null}
+									onClick={connectSolflareWallet()}
 									className="mb-2 w-100"
 								>
 									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
