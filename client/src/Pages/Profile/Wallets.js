@@ -128,8 +128,16 @@ const Wallets = () => {
 			if (provider.isPhantom) {
 				console.log("Is Phantom installed? ", provider.isPhantom);
 				return provider;
+			} if (provider.isSollet){
+				console.log("Is Sollet installed? ", provider.isSollet);
+				return provider;
+			}
+			if(provider.isExodus) {
+				console.log("Is Exodus installed? ", provider.isExodus);
+				return provider;
 			}
 			} else {
+				//Please install a sol wallet 
 				window.open("https://www.phantom.app", "_blank");
 			}	
 	};
