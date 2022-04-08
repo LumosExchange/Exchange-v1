@@ -9,6 +9,7 @@ import Paragraph from "../../Components/Paragraph";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { CodeSentMessage } from "../ChangePassword";
 import Card from "../../Components/Card";
+import * as web3 from '@solana/web3.js';
 
 export const StyledModal = styled(Modal)(({ theme }) => css`
 	max-width: 700px;
@@ -116,6 +117,40 @@ const Wallets = () => {
 	const [errorMessage, setErrorMessage] = useState("");
 
 	const [isEditing, setIsEditing] = useState(false);
+	
+	const [pubKey, setPubKey] = useState("");
+
+
+	const getProvider = async () => {
+		if ("solana" in window) {
+			await window.solana.connect();
+			const provider = window.solana;
+			if (provider.isPhantom) {
+				console.log("Is Phantom installed? ", provider.isPhantom);
+				return provider;
+			}
+			} else {
+				window.open("https://www.phantom.app", "_blank");
+			}	
+	};
+
+	const getWallet = async () => {
+		try {
+		  const wallet = typeof window !== 'undefined' && window.solana;
+		  await wallet.connect();
+		  
+		} catch (err) {
+		  console.log('err: ', err)
+		}
+	};
+
+	const connectPhantomWallet = () => {
+		window.solana.connect();
+		window.solana.on("connect", () => console.log("Phantom wallet connected!"));
+		setPubKey(window.solana.publicKey.toString());
+
+	}
+
 
 	const toggleAddWallet = () => {
 		setAddWalletModal(!addWalletModal);
