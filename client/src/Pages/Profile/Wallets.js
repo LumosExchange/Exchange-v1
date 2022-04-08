@@ -177,12 +177,23 @@ const Wallets = () => {
 		}
 	};
 
-	const connectPhantomWallet = () => {
+	const connectPhantomWallet = async() => {
+		try {
 		window.solana.connect();
-		window.solana.on("connect", () => console.log("Phantom wallet connected!"));
-		setPubKey(window.solana.publicKey.toString());
+		await window.solana.on("connect", () => console.log("Phantom wallet connected!"));
+		//setPubKey(window.solana.publicKey.toString());
+		
+		setWalletAddress(window.solana.publicKey.toString());
 
-	}
+		console.log("Pub key: ", window.solana.publicKey.toString());
+
+		} catch {
+
+		}
+
+		addWallet("Web3");
+		
+	};
 
 
 	const toggleAddWallet = () => {
@@ -415,7 +426,8 @@ const Wallets = () => {
 						{modalMode === "web3" && (
 							<ModalBody>
 								<AddWalletButton
-									onClick={null}
+								onClick={() => connectPhantomWallet()}
+								
 									className="mb-2 w-100"
 								>
 									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
@@ -429,7 +441,7 @@ const Wallets = () => {
 									</div>
 								</AddWalletButton>
 								<AddWalletButton
-									onClick={null}
+										onClick={null}
 									className="mb-2 w-100"
 								>
 									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
