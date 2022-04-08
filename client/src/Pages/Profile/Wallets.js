@@ -10,7 +10,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { CodeSentMessage } from "../ChangePassword";
 import Card from "../../Components/Card";
 import PhantomIcon from '../../Images/phantom-icon-purple.svg';
-import ExodusIcon from '../../Images/exodus-icon.svg';
+import SlopeIcon from '../../Images/slope-finance-icon.png';
 import SolflareIcon from '../../Images/solflare-icon.svg';
 import * as web3 from '@solana/web3.js';
 
@@ -336,7 +336,7 @@ const Wallets = () => {
 											{
 												(wallet.type === 'local' && <i className="material-icons walletIcon">wallet</i>)
 												|| (wallet.type === 'phantom' && <img src={PhantomIcon} alt="Phantom" />)
-												|| (wallet.type === 'exodus' && <img src={ExodusIcon} alt="Exodus" />)
+												|| (wallet.type === 'slope' && <img src={SlopeIcon} alt="Slope" />)
 												|| (wallet.type === 'solflare' && <img src={SolflareIcon} alt="Solflare" />)
 											}
 											<Paragraph className="mb-0 d-flex align-items-center" size="18px">
@@ -458,9 +458,9 @@ const Wallets = () => {
 								>
 									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 									<div className="d-flex align-items-center">
-										<CustomWalletIcon src={ExodusIcon} alt="Phantom" />
+										<CustomWalletIcon src={SlopeIcon} alt="Slope Wallet" />
 										<Paragraph size="20px" className="mb-0">
-											Add Exodus Wallet
+											Slope Wallet
 										</Paragraph>
 									</div>
 									<i className="material-icons arrow">arrow_forward</i>
