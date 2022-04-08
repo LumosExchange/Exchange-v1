@@ -3,6 +3,7 @@ import CoinGecko from "coingecko-api";
 import { PageBody } from "../Components/FormInputs";
 import { AirDropTable } from "../Components/Tables";
 import Paragraph from "../Components/Paragraph";
+import { IconHelper } from './Login';
 const CoinGeckoClient = new CoinGecko();
 
 const numberWithCommas = (x) => {
@@ -29,10 +30,10 @@ const Prices = () => {
 			<div className="container-fluid" style={{ padding: "4% 10%" }}>
 				<AirDropTable className="w-100">
 					<thead>
-						<tr>
+						<tr className="border-0">
 							<th scope="col">
 								<Paragraph size="18px" className="mb-0" bold>
-									Rank
+									#
 								</Paragraph>
 							</th>
 							<th scope="col">
@@ -60,10 +61,11 @@ const Prices = () => {
 					<tbody>
 						{coins.map((e, i) => {
 							// console.log(e);
+							console.log(e, 'coin data');
 							return (
 								<tr key={e.id}>
 									<th scope="row">{i + 1}</th>
-									<th className="d-flex align-items-center">
+									<th className="d-inline-flex align-items-center prices">
 										<img src={e.image} alt="{e.name}" width="24" height="24" />
 										<Paragraph size="18px" className="mb-0 ms-2">
 											{e.name}
@@ -78,10 +80,23 @@ const Prices = () => {
 											£{e.current_price}
 										</Paragraph>
 									</td>
-									<td>
+									<td className="d-inline-flex">
+										<IconHelper
+											className="material-icons"
+											color={
+												e.price_change_percentage_24h.toString().includes("-")
+												? "invalid"
+												: "valid"
+											}
+										>
+											{e.price_change_percentage_24h.toString().includes("-")
+												? "keyboard_arrow_down"
+												: "keyboard_arrow_up"
+											}
+										</IconHelper>
 										<Paragraph
 											size="18px"
-											className="mb-0 ms-2"
+											className="mb-0"
 											color={
 												e.price_change_percentage_24h.toString().includes("-")
 													? "invalid"

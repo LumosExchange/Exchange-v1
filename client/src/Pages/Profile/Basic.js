@@ -114,7 +114,7 @@ const Basic = () => {
                   {userEmail}
                 </Paragraph>
                 <Paragraph size="20px" className="mb-0">
-                  UTC - London
+                  {userAccountLevel} Account
                 </Paragraph>
               </div>
             </div>

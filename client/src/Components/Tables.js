@@ -36,6 +36,10 @@ export const AirDropTable = styled.table(({ theme }) => css`
         border: 0;
     }
 
+    .prices {
+        padding: 25px;
+    }
+
     span {
         color: ${theme.colors.primary_cta};
     }
