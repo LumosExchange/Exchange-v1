@@ -999,7 +999,7 @@ app.post("/updateUserPass", (req, res) => {
           res.send({
             updated: false,
             message: err,
-          })
+          });
         }
         res.send({
           updated: true,
@@ -2114,6 +2114,7 @@ app.post("/AddWallet", (req, res) => {
   const userID = req.session.user[0].userID;
   const walletID = req.body.walletID;
   const walletAddress = req.body.walletAddress;
+  const walletType = req.body.type;
 
   //check if user has a wallet if not insert else update
 
@@ -2124,8 +2125,8 @@ app.post("/AddWallet", (req, res) => {
       if (result.length <= 0) {
         //Insert
         db.query(
-          "INSERT INTO SolAddress (userID, sol" + walletID + ") VALUES (?,?)",
-          [userID, walletAddress],
+          "INSERT INTO SolAddress (userID, sol" + walletID + ", Type" + walletID +") VALUES (?,?,?)",
+          [userID, walletAddress , walletType],
           (err, result) => {
             if (err) {
               console.log(err);
@@ -2141,8 +2142,8 @@ app.post("/AddWallet", (req, res) => {
       } else {
         //Update
         db.query(
-          "UPDATE SolAddress SET sol" + walletID + " =? WHERE userID =?",
-          [walletAddress, userID],
+          "UPDATE SolAddress SET sol" + walletID + " =?, Type" + walletID + "=? WHERE userID =?",
+          [walletAddress, walletType, userID],
           (err, result) => {
             if (err) {
               console.log(err);
@@ -2167,8 +2168,8 @@ app.post("/EditWallet", (req, res) => {
   const walletAddress = req.body.walletAddress;
 
   db.query(
-    "UPDATE SolAddress SET sol" + walletID + " =? WHERE userID =?",
-    [walletAddress, userID],
+    "UPDATE SolAddress SET sol" + walletID + " =?, Type" + walletID + "=? WHERE userID =?",
+    [walletAddress,walletType, userID],
     (err, result) => {
       if (err) {
         res.send(err);
@@ -2188,8 +2189,8 @@ app.post("/DeleteWallet", (req, res) => {
   const walletAddress = req.body.walletAddress;
 
   db.query(
-    "UPDATE SolAddress SET sol" + walletID + " =? WHERE userID = ?",
-    [0, userID],
+    "UPDATE SolAddress SET sol" + walletID + " =?, Type" + walletID + "=? WHERE userID =?",
+    [0, 0, userID],
     (err, result) => {
       if (err) {
         res.send(err);
@@ -2214,42 +2215,56 @@ app.post("/GetWallets", (req, res) => {
       } else {
         if (result[0] !== undefined) {
           res.send([
-            { walletID: 1, address: result[0].sol1 },
+            { walletID: 1,
+              address: result[0].sol1,
+              type: result[0].Type1,
+            },
             {
               walletID: 2,
               address: result[0].sol2,
+              type: result[0].Type2,
             },
             {
               walletID: 3,
               address: result[0].sol3,
+              type: result[0].Type3,
             },
             {
               walletID: 4,
               address: result[0].sol4,
+              type: result[0].Type4,
             },
             {
               walletID: 5,
               address: result[0].sol5,
+              type: result[0].Type5,
             },
           ]);
         } else {
           res.send([
-            { walletID: 1, address: "" },
+            { walletID: 1,
+               address: "",
+               type: "",
+              },
             {
               walletID: 2,
               address: "",
+              type: "",
             },
             {
               walletID: 3,
               address: "",
+              type: "",
             },
             {
               walletID: 4,
               address: "",
+              type: "",
             },
             {
               walletID: 5,
               address: "",
+              type: "",
             },
           ]);
         }
