@@ -331,9 +331,9 @@ const Wallets = () => {
 										<div className="d-flex">
 											{
 												(wallet.type === 'local' && <i className="material-icons walletIcon">wallet</i>)
-												|| (wallet.type === 'phantom' && <img src={PhantomIcon} alt="Phantom" />)
-												|| (wallet.type === 'slope' && <img src={SlopeIcon} alt="Slope" />)
-												|| (wallet.type === 'solflare' && <img src={SolflareIcon} alt="Solflare" />)
+												|| (wallet.type === 'phantom' && <CustomWalletIcon src={PhantomIcon} alt="Phantom" />)
+												|| (wallet.type === 'slope' && <CustomWalletIcon src={SlopeIcon} alt="Slope" />)
+												|| (wallet.type === 'solflare' && <CustomWalletIcon src={SolflareIcon} alt="Solflare" />)
 											}
 											<Paragraph className="mb-0 d-flex align-items-center" size="18px">
 												{wallet.address}
