@@ -336,6 +336,8 @@ const Wallets = () => {
 											{
 												(wallet.type === 'local' && <i className="material-icons walletIcon">wallet</i>)
 												|| (wallet.type === 'phantom' && <img src={PhantomIcon} alt="Phantom" />)
+												|| (wallet.type === 'exodus' && <img src={ExodusIcon} alt="Exodus" />)
+												|| (wallet.type === 'solflare' && <img src={SolflareIcon} alt="Solflare" />)
 											}
 											<Paragraph className="mb-0 d-flex align-items-center" size="18px">
 												{wallet.address}
