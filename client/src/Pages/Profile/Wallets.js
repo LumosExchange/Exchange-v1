@@ -9,6 +9,9 @@ import Paragraph from "../../Components/Paragraph";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { CodeSentMessage } from "../ChangePassword";
 import Card from "../../Components/Card";
+import PhantomIcon from '../../Images/phantom-icon-purple.svg';
+import ExodusIcon from '../../Images/exodus-icon.svg';
+import SolflareIcon from '../../Images/solflare-icon.svg';
 import * as web3 from '@solana/web3.js';
 
 export const StyledModal = styled(Modal)(({ theme }) => css`
@@ -32,17 +35,33 @@ export const StyledModal = styled(Modal)(({ theme }) => css`
 	}
 `);
 
-const WalletCard = styled(Card)(({ theme }) => css`
-	border-radius: 3px;
+const WalletCard = styled(Card)(
+	({ theme }) => css`
+		border-radius: 3px;
 
-	.remove {
-		color: ${theme.colors.invalid};
-	}
+		.remove {
+			color: ${theme.colors.invalid};
+		}
 
-	.edit {
-		color: ${theme.colors.primary_cta};
-	}
-`);
+		.edit {
+			color: ${theme.colors.primary_cta};
+		}
+
+		img {
+			&.walletIcon {
+				width: 35px;
+				padding-right: 10px;
+			}
+		}
+
+		i {
+			&.walletIcon {
+				font-size: 35px;
+				padding-right: 10px;
+			}
+		}
+	`
+);
 
 export const StyledCode = styled.code(({ theme }) => css`
 	font-size: 18px;
@@ -93,6 +112,12 @@ const AddWalletButton = styled(InvisibleButton)(({ theme }) => css`
 		}
 	}
 `);
+
+const CustomWalletIcon = styled.img`
+	width: 40px;
+	min-width: 40px;
+	margin-right: 10px;
+`;
 
 const Wallets = () => {
 	// Modal Controls
@@ -285,8 +310,11 @@ const Wallets = () => {
 								{wallets.map((wallet, index) => (
 									<WalletCard className="p-4 mb-3 d-flex justify-content-between w-100 align-items-center overflow-auto" key={index + 1}>
 										<div className="d-flex">
-											<i className="material-icons me-2">wallet</i>
-											<Paragraph className="mb-0" size="18px">
+											{
+												(wallet.type === 'local' && <i className="material-icons walletIcon">wallet</i>)
+												|| (wallet.type === 'phantom' && <img src={PhantomIcon} alt="Phantom" />)
+											}
+											<Paragraph className="mb-0 d-flex align-items-center" size="18px">
 												{wallet.address}
 											</Paragraph>
 										</div>
@@ -340,7 +368,7 @@ const Wallets = () => {
 									</div>
 								</AddWalletButton>
 								<AddWalletButton
-									onClick={() => setModalMode("phantom")}
+									onClick={() => setModalMode("web3")}
 									className="mb-2 w-100"
 								>
 									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
@@ -349,7 +377,7 @@ const Wallets = () => {
 											add
 										</i>
 										<Paragraph size="20px" className="mb-0">
-											Add Phantom Wallet
+											Add Web3 Wallet
 										</Paragraph>
 									</div>
 									<i className="material-icons arrow">arrow_forward</i>
@@ -382,9 +410,50 @@ const Wallets = () => {
 								/>
 							</ModalBody>
 						)}
-						{modalMode === "phantom" && (
+						{modalMode === "web3" && (
 							<ModalBody>
-								Phantom Connection code here
+								<AddWalletButton
+									onClick={null}
+									className="mb-2 w-100"
+								>
+									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
+									<div className="d-flex align-items-center">
+										<CustomWalletIcon src={PhantomIcon} alt="Phantom" />
+										<Paragraph size="20px" className="mb-0">
+											Add Phantom Wallet
+										</Paragraph>
+									</div>
+									<i className="material-icons arrow">arrow_forward</i>
+									</div>
+								</AddWalletButton>
+								<AddWalletButton
+									onClick={null}
+									className="mb-2 w-100"
+								>
+									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
+									<div className="d-flex align-items-center">
+										<CustomWalletIcon src={ExodusIcon} alt="Phantom" />
+										<Paragraph size="20px" className="mb-0">
+											Add Exodus Wallet
+										</Paragraph>
+									</div>
+									<i className="material-icons arrow">arrow_forward</i>
+									</div>
+								</AddWalletButton>
+								<AddWalletButton
+									onClick={null}
+									className="mb-2 w-100"
+								>
+									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
+									<div className="d-flex align-items-center">
+										<CustomWalletIcon src={SolflareIcon} alt="Phantom" />
+										<Paragraph size="20px" className="mb-0">
+											Add Solflare Wallet
+										</Paragraph>
+									</div>
+									<i className="material-icons arrow">arrow_forward</i>
+									</div>
+								</AddWalletButton>
 							</ModalBody>
 						)}
 						{modalMode === "confirmation" && (

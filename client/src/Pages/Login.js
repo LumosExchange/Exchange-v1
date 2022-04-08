@@ -89,17 +89,17 @@ const Login = () => {
                 onChange={(e) => {
                   setUserLog(e.target.value);
                 }}
-                placeholder="username or email"
+                placeholder="username"
                 required
                 type="text"
                 hasIcon
-                icon="lock"
+                icon="person"
               />
               <div className="my-3">
                 <FormInput
                   className="w-100"
                   hasIcon
-                  icon="person"
+                  icon="lock"
                   id="psw"
                   name="psw"
                   onChange={(e) => {
