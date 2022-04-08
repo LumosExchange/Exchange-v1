@@ -154,11 +154,12 @@ const Wallets = () => {
 		reloadPayments();
 	}
 
-	const addWallet = () => {
-		console.log(walletCount, 'wallet count in addwallet');
+	const addWallet = (type) => {
+		console.log(type, 'type of wallet added');
 		Axios.post("http://localhost:3001/AddWallet", {
 			walletID: walletCount,
 			walletAddress,
+			type,
 		}).then((response) => {
 			if (!response.data.code) {
 				setConfirmationMessage(response.data.message);
@@ -242,9 +243,9 @@ const Wallets = () => {
 									<WalletCard className="p-4 mb-3 d-flex justify-content-between w-100 align-items-center overflow-auto" key={index + 1}>
 										<div className="d-flex">
 											<i className="material-icons me-2">wallet</i>
-											<span className="mb-0" size="18px">
+											<Paragraph className="mb-0" size="18px">
 												{wallet.address}
-											</span>
+											</Paragraph>
 										</div>
 										<div className="d-flex">
 											<InvisibleButton onClick={() => toggleEditWallet(wallet)}>
@@ -333,7 +334,7 @@ const Wallets = () => {
 								<PrimaryButton
 									className="w-100 mt-3"
 									text="Add Wallet"
-									onClick={() => addWallet()}
+									onClick={() => addWallet("local")}
 									disabled={(walletAddress.length > 44) || (walletAddress.length < 32)}
 								/>
 							</ModalBody>
