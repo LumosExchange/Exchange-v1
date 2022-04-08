@@ -31,17 +31,6 @@ export const StyledModal = styled(Modal)(({ theme }) => css`
 	}
 `);
 
-const FakeWalletData = [
-	{
-		walletID: 1,
-		address: "GAECQos3deHaqzB1EDvPJcqaGVvG9xqDuFYU239KAsXV",
-	},
-	{
-		walletID: 2,
-		address: "GAECQos3deHaqzB1EDvPJcqaGVvG9xqDuFYU239KAsXV",
-	},
-];
-
 const WalletCard = styled(Card)(({ theme }) => css`
 	border-radius: 3px;
 
@@ -85,6 +74,24 @@ const InlineLabelValidation = ({ walletAddress, min, max }) => (
 		</Paragraph>
 	</ValidationBase>
 );
+
+const AddWalletButton = styled(InvisibleButton)(({ theme }) => css`
+	.inner {
+		background: ${theme.colors.panel_accent};
+
+		p,
+		i {
+			color: ${theme.colors.text_primary};
+		}
+
+		&:hover,
+		&:focus {
+			i.arrow {
+				color: ${theme.colors.primary_cta};
+			}
+		}
+	}
+`);
 
 const Wallets = () => {
 	// Modal Controls
@@ -261,9 +268,52 @@ const Wallets = () => {
 					{/* ------ Add Wallets ------ */}
 					<StyledModal centered isOpen={addWalletModal} toggle={toggleAddWallet}>
 						{modalMode !== "confirmation" && (
-							<ModalHeader className="d-flex align-items-center">Add Wallet Address</ModalHeader>
+							<ModalHeader>
+								{modalMode !== 'initial' && (
+									<InvisibleButton onClick={() => setModalMode('initial')} className="d-flex align-items-center">
+										<i className="material-icons">arrow_back</i>
+									</InvisibleButton>
+								)}
+								Add Wallet
+							</ModalHeader>
 						)}
 						{modalMode === "initial" && (
+							<ModalBody>
+								<AddWalletButton
+									onClick={() => setModalMode("local")}
+									className="mb-2 w-100"
+								>
+									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
+									<div className="d-flex">
+										<i className="material-icons me-2 d-flex align-items-center">
+											add
+										</i>
+										<Paragraph size="20px" className="mb-0">
+											Add Local Wallet
+										</Paragraph>
+									</div>
+									<i className="material-icons arrow">arrow_forward</i>
+									</div>
+								</AddWalletButton>
+								<AddWalletButton
+									onClick={() => setModalMode("phantom")}
+									className="mb-2 w-100"
+								>
+									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
+									<div className="d-flex">
+										<i className="material-icons me-2 d-flex align-items-center">
+											add
+										</i>
+										<Paragraph size="20px" className="mb-0">
+											Add Phantom Wallet
+										</Paragraph>
+									</div>
+									<i className="material-icons arrow">arrow_forward</i>
+									</div>
+								</AddWalletButton>
+							</ModalBody>
+						)}
+						{modalMode === "local" && (
 							<ModalBody>
 								<InlineLabelValidation walletAddress={walletAddress} />
 								<FormInput
@@ -286,6 +336,11 @@ const Wallets = () => {
 									onClick={() => addWallet()}
 									disabled={(walletAddress.length > 44) || (walletAddress.length < 32)}
 								/>
+							</ModalBody>
+						)}
+						{modalMode === "phantom" && (
+							<ModalBody>
+								Phantom Connection code here
 							</ModalBody>
 						)}
 						{modalMode === "confirmation" && (
