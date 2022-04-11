@@ -177,6 +177,9 @@ const AccountUpgrade = () => {
 		[accountTier]
 	);
 
+	console.log(nationality, 'nationality');
+	console.log(country, 'country');
+
   return (
 		<PageBody>
 			<div className="container pt-5">
@@ -362,8 +365,8 @@ const AccountUpgrade = () => {
 														streetAddress.length === 0 ||
 														city.length === 0 ||
 														postCode.length === 0 ||
-														country !== "Please Select" ||
-														nationality !== "Please Select"
+														country === "Please Select" ||
+														nationality === "Please Select"
 													}
 												/>
 											</div>
@@ -470,8 +473,7 @@ const AccountUpgrade = () => {
 											disabled={
 												birthDay === "---" ||
 												birthMonth === "---" ||
-												birthYear === "---" ||
-												phone.length === 0
+												birthYear === "---"
 											}
 											hasIcon
 										/>

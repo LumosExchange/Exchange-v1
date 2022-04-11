@@ -26,16 +26,11 @@ const Prices = () => {
 	}, []);
 
 	return (
-		<PageBody>
-			<div className="container-fluid" style={{ padding: "4% 10%" }}>
+		<PageBody style={{ margin: "50px 0 100px 0" }}>
+			<div className="container py-5">
 				<AirDropTable className="w-100">
 					<thead>
 						<tr className="border-0">
-							<th scope="col">
-								<Paragraph size="18px" className="mb-0" bold>
-									#
-								</Paragraph>
-							</th>
 							<th scope="col">
 								<Paragraph size="18px" className="mb-0" bold>
 									Coin / Ticker
@@ -51,7 +46,7 @@ const Prices = () => {
 									24hr change (%)
 								</Paragraph>
 							</th>
-							<th scope="col">
+							<th scope="col" className="text-end">
 								<Paragraph size="18px" className="mb-0" bold>
 									Market Cap
 								</Paragraph>
@@ -64,15 +59,14 @@ const Prices = () => {
 							console.log(e, 'coin data');
 							return (
 								<tr key={e.id}>
-									<th scope="row">{i + 1}</th>
 									<th className="d-inline-flex align-items-center prices">
-										<img src={e.image} alt="{e.name}" width="24" height="24" />
+										<img src={e.image} alt={e.name} width="24" height="24" />
 										<Paragraph size="18px" className="mb-0 ms-2">
 											{e.name}
 										</Paragraph>
-										<Paragraph size="18px" className="mb-0 ms-2 text-uppercase">
+										<Paragraph size="16px" className="mb-0 ms-2 text-uppercase" color="text_secondary">
 											{" "}
-											({e.symbol})
+											{e.symbol}
 										</Paragraph>
 									</th>
 									<td>
@@ -106,7 +100,7 @@ const Prices = () => {
 											{e.price_change_percentage_24h} %
 										</Paragraph>
 									</td>
-									<td>
+									<td className="text-end">
 										<Paragraph size="18px" className="mb-0">
 											£{numberWithCommas(e.market_cap)}
 										</Paragraph>

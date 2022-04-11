@@ -5,6 +5,7 @@ const Paragraph = styled.p(({ theme, color, size, bold }) => css`
 	font-family: ${bold ? 'THICCCBOI-BOLD' : 'THICCCBOI-REGULAR'};
 	font-size: ${size};
 	color: ${theme.colors[color]};
+	line-height: normal;
 `);
 
 Paragraph.propTypes = {

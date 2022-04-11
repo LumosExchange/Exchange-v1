@@ -41,6 +41,7 @@ export const darkTheme = {
       bluePurple: "#6F41E8",
       grey: "#3C3C3C",
       slate: "#94B3B5",
+      table_gradient: "linear-gradient(90deg, rgba(19,19,19,1) 0%, rgba(27,27,27,1) 50%, rgba(19,19,19,1) 100%);",
       shared: {
         yellow: "#FCE608",
         peach: "#FF7586",
@@ -95,7 +96,7 @@ export const lightTheme = {
     text_secondary: "#929292",
     card_bg: "#F4F4F4",
     btn: "#E5E5E5",
-    table_stripe: "#F0F0F0",
+    table_stripe: "#f5f5f5",
     table_head: "#6F86FF",
     panel_bg: "#FFF",
     panel_accent: "#F4F4F4",
@@ -111,6 +112,7 @@ export const lightTheme = {
       sage: "#6F86FF",
       mauve: "#6F86FF",
       blue: "#6F86FF",
+      table_gradient: "linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(248,248,248,1) 50%, rgba(255,255,255,1) 100%);",
       shared: {
         yellow: "#FCE608",
         peach: "#FF7586",

@@ -442,10 +442,10 @@ const Wallets = () => {
 									<div className="d-flex align-items-center">
 										<CustomWalletIcon src={PhantomIcon} alt="Phantom" />
 										<Paragraph size="20px" className="mb-0">
-											Add Phantom Wallet
+											Phantom Wallet
 										</Paragraph>
 									</div>
-									<i className="material-icons arrow">arrow_forward</i>
+									<i className="material-icons arrow">add</i>
 									</div>
 								</AddWalletButton>
 								<AddWalletButton
@@ -459,7 +459,7 @@ const Wallets = () => {
 											Slope Wallet
 										</Paragraph>
 									</div>
-									<i className="material-icons arrow">arrow_forward</i>
+									<i className="material-icons arrow">add</i>
 									</div>
 								</AddWalletButton>
 								<AddWalletButton
@@ -470,10 +470,10 @@ const Wallets = () => {
 									<div className="d-flex align-items-center">
 										<CustomWalletIcon src={SolflareIcon} alt="Phantom" />
 										<Paragraph size="20px" className="mb-0">
-											Add Solflare Wallet
+											Solflare Wallet
 										</Paragraph>
 									</div>
-									<i className="material-icons arrow">arrow_forward</i>
+									<i className="material-icons arrow">add</i>
 									</div>
 								</AddWalletButton>
 							</ModalBody>

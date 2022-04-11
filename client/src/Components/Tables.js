@@ -46,7 +46,7 @@ export const AirDropTable = styled.table(({ theme }) => css`
 
     tbody tr {
         &:nth-of-type(even){
-            background: ${theme.colors.table_stripe};
+            background: ${theme.colors.gradients.table_gradient};
         }
 
         .buttons { width: 140px };

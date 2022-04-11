@@ -114,7 +114,7 @@ const Navbar = ({ loginStatus, userName }) => {
 								<Link href="/MyWallet" className="me-4 me-xl-5">
 									Wallet
 								</Link>
-								<Link href="/AirDrops">Airdrops</Link>
+								<Link href="/Prices">Cryptos</Link>
 							</div>
 							<div className="align-items-center d-none d-lg-flex">
 								<NavActionButton
@@ -147,7 +147,7 @@ const Navbar = ({ loginStatus, userName }) => {
 								<Link href="/Offers" className="me-4 me-xl-5">
 									Offers
 								</Link>
-								<Link href="/Cryptos" className="me-4 me-xl-5">
+								<Link href="/Prices" className="me-4 me-xl-5">
 									Cryptos
 								</Link>
 								<Link href="/Trade" className="me-4 me-xl-5">
