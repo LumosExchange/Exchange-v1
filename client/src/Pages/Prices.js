@@ -9,7 +9,11 @@ import Card from '../Components/Card';
 const CoinGeckoClient = new CoinGecko();
 
 const numberWithCommas = (x) => {
-	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	if (x.toString().startsWith("0")){
+		return x;
+	} else {
+		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
 };
 
 const convertPriceChangeToColor = (price) => {
@@ -58,32 +62,23 @@ const Prices = () => {
 			<div className="container py-5 d-flex d-lg-none row mx-auto">
 				{coins.map((e, i) => (
 					<MobilePriceCard key={e.id} className="d-flex p-4 col-12 mb-3 align-items-center flex-wrap" border={convertPriceChangeToColor(e.price_change_percentage_24h)}>
-						<div className="d-flex align-items-center justify-content-between w-100">
+						<div className="d-flex justify-content-between w-100">
 							<div className="d-flex align-items-center">
 								<img src={e.image} alt={e.name} width="30" height="30" />
-								<Paragraph size="18px" className="mb-0 ms-3">
-									{e.name}
-								</Paragraph>
-								<Paragraph size="16px" className="mb-0 ms-2 text-uppercase" color="text_secondary">
-									{" "}
-									{e.symbol}
-								</Paragraph>
+								<div className="d-flex flex-column">
+									<Paragraph size="18px" className="mb-2 ms-3">
+										{e.name}
+									</Paragraph>
+									<Paragraph size="16px" className="mb-0 ms-3 text-uppercase" color="text_secondary">
+										{" "}
+										{e.symbol}
+									</Paragraph>
+								</div>
 							</div>
-							<Paragraph size="18px" className="mb-0">
-								£{e.current_price}
-							</Paragraph>
-						</div>
-						<div className="d-flex pt-3 justify-content-between w-100">
-							<Paragraph size="18px" className="mb-0">
-								{convertMarketCap(e.market_cap)} Total
-							</Paragraph>
-							<div className="d-flex align-items-center">
-								<IconHelper
-									className="material-icons"
-									color={convertPriceChangeToColor(e.price_change_percentage_24h)}
-								>
-									{convertPriceChangeToIcon(e.price_change_percentage_24h)}
-								</IconHelper>
+							<div className="d-flex flex-column">
+								<Paragraph size="18px" className="mb-2 text-end">
+									£{numberWithCommas(e.current_price)}
+								</Paragraph>
 								<Paragraph
 									size="18px"
 									className="mb-0"
