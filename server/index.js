@@ -162,7 +162,7 @@ app.post("/register", (req, res) => {
       res.send({ err });
     } else {
       db.query(
-        "INSERT INTO users (firstName, lastName, email, password, userName, registeredDate) VALUES (?,?,?,?,?,?,?)",
+        "INSERT INTO users (firstName, lastName, email, password, userName, registeredDate) VALUES (?,?,?,?,?,?)",
         [firstName, lastName, email, hash, userName, date],
         (err, result) => {
           console.log(err);
@@ -692,6 +692,7 @@ app.post("/UpgradeBronze", upload.single("file"), function (req, res, next) {
   const fileName = req.body.name + "_" + file.detectedFileExtension;
 
   console.log(fileName);
+
 
   if (file.detectedFileExtension != ".jpg") {
     next(new Error("Invalid file type"));
