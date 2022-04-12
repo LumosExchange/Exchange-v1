@@ -21,7 +21,7 @@ const convertPriceChangeToColor = (price) => {
 }
 
 const convertPriceChangeToIcon = (price) => {
-	return price.toString().includes("-") ? "keyboard_arrow_down" : "keyboard_arrow_up";
+	return price.toString().includes("-") ? "arrow_drop_down" : "arrow_drop_up";
 }
 
 const convertMarketCap = (market_cap) => {
@@ -38,7 +38,7 @@ const convertMarketCap = (market_cap) => {
 }
 
 const MobilePriceCard = styled(Card)(({ theme, border }) => css`
-	border-bottom: 3px solid ${theme.colors[border]};
+	border-bottom: 4px solid ${theme.colors[border]};
 `);
 
 const Prices = () => {
@@ -64,12 +64,12 @@ const Prices = () => {
 					<MobilePriceCard key={e.id} className="d-flex p-4 col-12 mb-3 align-items-center flex-wrap" border={convertPriceChangeToColor(e.price_change_percentage_24h)}>
 						<div className="d-flex justify-content-between w-100">
 							<div className="d-flex align-items-center">
-								<img src={e.image} alt={e.name} width="30" height="30" />
+								<img src={e.image} alt={e.name} width="48" height="48" />
 								<div className="d-flex flex-column">
 									<Paragraph size="18px" className="mb-2 ms-3">
 										{e.name}
 									</Paragraph>
-									<Paragraph size="16px" className="mb-0 ms-3 text-uppercase" color="text_secondary">
+									<Paragraph size="18px" className="mb-0 ms-3 text-uppercase" color="text_secondary">
 										{" "}
 										{e.symbol}
 									</Paragraph>
@@ -136,16 +136,10 @@ const Prices = () => {
 									</th>
 									<td>
 										<Paragraph size="18px" className="mb-0">
-											£{e.current_price}
+											£{numberWithCommas(e.current_price)}
 										</Paragraph>
 									</td>
-									<td className="d-inline-flex">
-										<IconHelper
-											className="material-icons"
-											color={convertPriceChangeToColor(e.price_change_percentage_24h)}
-										>
-											{convertPriceChangeToIcon(e.price_change_percentage_24h)}
-										</IconHelper>
+									<td className="d-inline-flex align-items-center">
 										<Paragraph
 											size="18px"
 											className="mb-0"
@@ -153,6 +147,12 @@ const Prices = () => {
 										>
 											{e.price_change_percentage_24h} %
 										</Paragraph>
+										<IconHelper
+											className="material-icons"
+											color={convertPriceChangeToColor(e.price_change_percentage_24h)}
+										>
+											{convertPriceChangeToIcon(e.price_change_percentage_24h)}
+										</IconHelper>
 									</td>
 									<td className="text-end">
 										<Paragraph size="18px" className="mb-0">
