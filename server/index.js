@@ -24,14 +24,21 @@ const multer = require("multer");
 const fs = require("fs");
 const { promisify } = require("util");
 const pipeline = promisify(require("stream").pipeline);
+const S3 = require('aws-sdk/clients/s3');
+
+
+//import s3 
+const { uploadFile } = require('./s3');
 
 require("dotenv").config();
 
 const server = http.createServer(app);
 
+
+
 //Needed for storing images for KYC
 
-const upload = multer();
+const upload = multer({ dest: "uploads/" });
 
 //Setting up socket for chatroom
 const io = new Server(server, {
@@ -162,7 +169,7 @@ app.post("/register", (req, res) => {
       res.send({ err });
     } else {
       db.query(
-        "INSERT INTO users (firstName, lastName, email, password, userName, registeredDate) VALUES (?,?,?,?,?,?,?)",
+        "INSERT INTO users (firstName, lastName, email, password, userName, registeredDate) VALUES (?,?,?,?,?,?)",
         [firstName, lastName, email, hash, userName, date],
         (err, result) => {
           console.log(err);
@@ -176,8 +183,8 @@ app.post("/register", (req, res) => {
         }
       );
       db.query(
-        "INSERT INTO accountLevel (accountLevel, dateUpgraded, KYCName, KYC_Verified) VALUES (?,?,?,?)",
-        [accountLevel, date, "0", false],
+        "INSERT INTO accountLevel (accountLevel, dateUpgraded) VALUES (?,?)",
+        [accountLevel, date,],
         (err, result) => {
           console.log(err);
         }
@@ -672,7 +679,9 @@ app.post("/VerifyEmail2FA", (req, res) => {
   );
 });
 
-app.post("/UpgradeBronze", upload.single("file"), function (req, res, next) {
+app.post("/UpgradeBronze", upload.single('file'), async (req, res) => {
+
+  const file = req.file;
   const user = req.session.user[0].userID;
   const Name = req.body.name;
   const address = req.body.streetAddress;
@@ -683,49 +692,20 @@ app.post("/UpgradeBronze", upload.single("file"), function (req, res, next) {
 
   const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
+  const result = await uploadFile(file);
+  console.log(result);
+
   //Handle the image and check image type
-  const {
-    file,
-    body: { name },
-  } = req;
-
-  const fileName = req.body.name + "_" + file.detectedFileExtension;
-
-  console.log(fileName);
-
-  if (file.detectedFileExtension != ".jpg") {
-    next(new Error("Invalid file type"));
-  }
-
-  //Post to directory
-  pipeline(
-    file.stream,
-    fs.createWriteStream(`${__dirname}/../client/public/images/KYC/${fileName}`)
-  );
 
   //Now update sql upgradeTiers & account level
 
   var sql =
-    "Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=?, KYCName =?, KYC_Verified=? WHERE userID =?;INSERT INTO KYC set userID =?, documentAddress =?, date=?;";
+    "Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;INSERT INTO KYC set userID =?, documentAddress =?, date=?;";
 
   db.query(
     sql,
     [
-      user,
-      Name,
-      address,
-      city,
-      cityState,
-      postCode,
-      country,
-      "Bronze",
-      date,
-      fileName,
-      "false",
-      user,
-      user,
-      fileName,
-      date,
+      user, Name, address, city, cityState, postCode, country, "Bronze", date, user, user, result.key, date,
     ],
     function (error, results, fields) {
       if (error) {
@@ -740,40 +720,31 @@ app.post("/UpgradeBronze", upload.single("file"), function (req, res, next) {
 });
 
 //UpgradeSilver
-app.post("/UpgradeSilver", upload.single("file"), function (req, res, next) {
+app.post("/UpgradeSilver", upload.single('file'), async (req, res) => {
+
+  const file = req.file;
+
+
   const user = req.session.user[0].userID;
   const birthDay = req.body.birthDay;
   const birthMonth = req.body.birthMonth;
   const birthYear = req.body.birthYear;
 
-  const Tax = req.body.Tax;
   const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
   const fullName =
     req.session.user[0].firstName + " " + req.session.user[0].lastName;
 
-  const {
-    file,
-    body: { name },
-  } = req;
+  const result = await uploadFile(file);
+  console.log(result);
 
-  const fileName = fullName + "_" + file.detectedFileExtension;
-
-  if (file.detectedFileExtension != ".jpg") {
-    next(new Error("Invalid file type"));
-  }
-
-  pipeline(
-    file.stream,
-    fs.createWriteStream(`${__dirname}/../client/public/images/Tax/${fileName}`)
-  );
 
   var sql =
-    "UPDATE upgradeTiers SET birthDay = ?, birthMonth = ?, birthYear = ?  WHERE userID =?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;";
+    "UPDATE upgradeTiers SET birthDay = ?, birthMonth = ?, birthYear = ?  WHERE userID =?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;Insert INTO TAX SET userID=?, taxDocName=?, dateSubmitted=?;";
 
   db.query(
     sql,
-    [birthDay, birthMonth, birthYear, user, "Silver", date, user],
+    [birthDay, birthMonth, birthYear, user, "Silver", date, user, user, result.key, date],
     function (error, results, fields) {
       if (error) {
         console.log(error);
@@ -787,7 +758,8 @@ app.post("/UpgradeSilver", upload.single("file"), function (req, res, next) {
 });
 
 //UpgradeGold
-app.post("/UpgradeGold", upload.single("file"), function (req, res, next) {
+app.post("/UpgradeGold", upload.single('file'), async(req, res) => {
+  const file = req.file;
   const user = req.session.user[0].userID;
   const EmployerName = req.body.EmployerName;
   const EmployerAddress = req.body.EmployerAddress;
@@ -797,26 +769,13 @@ app.post("/UpgradeGold", upload.single("file"), function (req, res, next) {
     req.session.user[0].firstName + " " + req.session.user[0].lastName;
   const date = new Date().toISOString().slice(0, 19).replace("T", "_");
 
+  const result = await uploadFile(file);
+  console.log(result);
+
   var sql =
-    "UPDATE upgradeTiers SET EmployerName = ?, EmployerAddress = ?, Occupation = ?, Income = ?, DateSubmitted = ? WHERE userID = ?;UPDATE accountLevel SET accountLevel = ?, dateUpgraded = ? WHERE userID =?";
+    "UPDATE upgradeTiers SET EmployerName = ?, EmployerAddress = ?, Occupation = ?, Income = ?, DateSubmitted = ? WHERE userID = ?;UPDATE accountLevel SET accountLevel = ?, dateUpgraded = ? WHERE userID =?;Insert INTO Employment SET userID=?, employmentDocName=?, dateSubmitted=?;";
 
-  const {
-    file,
-    body: { name },
-  } = req;
 
-  const fileName = fullName + file.detectedFileExtension;
-
-  if (file.detectedFileExtension != ".jpg") {
-    next(new Error("Invalid File Type"));
-  }
-
-  pipeline(
-    file.stream,
-    fs.createWriteStream(
-      `${__dirname}/../client/public/images/Employment/${fileName}`
-    )
-  );
   db.query(
     sql,
     [
@@ -829,6 +788,9 @@ app.post("/UpgradeGold", upload.single("file"), function (req, res, next) {
       "Gold",
       date,
       user,
+      user,
+      result.key,
+      date,
     ],
     function (error, results, fields) {
       if (error) {
