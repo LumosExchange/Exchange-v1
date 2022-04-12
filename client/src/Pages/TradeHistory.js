@@ -181,9 +181,6 @@ const TradeHistory = () => {
 	const [messageForPurchases, setMessageForPurchases] = useState('');
 	const [liveTradesBuyer, setLiveTradesBuyer] = useState([]);
 	const [liveTradesSeller, setLiveTradesSeller] = useState([]);
-	const [isLoadingBuyTrades, setIsLoadingBuyTrades] = useState(true);
-	const [isLoadingSellTrades, setIsLoadingSellTrades] = useState(true);
-	const [isLoadingTradeHistory, setIsLoadingTradeHistory] = useState(true);
 	const [tradeHistory, setTradeHistory] = useState([]);
 
 	const navigate = useNavigate();
@@ -192,10 +189,8 @@ const TradeHistory = () => {
 		Axios.post("http://localhost:3001/GetLiveTradesBuyer").then((response) => {
 			if (response.data.message){
 				setMessageForPurchases(response.data.message);
-				setIsLoadingBuyTrades(false);
 			} else {
 				setLiveTradesBuyer(response.data);
-				setIsLoadingBuyTrades(false);
 				expandActiveBuyTrades(true);
 			}
 		}
@@ -205,10 +200,8 @@ const TradeHistory = () => {
 		Axios.post("http://localhost:3001/GetLiveTradesSeller").then((response) => {
 			if (response.data.message){
 				setMessageForSales(response.data.message);
-				setIsLoadingSellTrades(false);
 			} else {
 				setLiveTradesSeller(response.data);
-				setIsLoadingSellTrades(false);
 				expandActiveSellTrades(true);
 			}
 		}
@@ -218,10 +211,8 @@ const TradeHistory = () => {
 		Axios.post("http://localhost:3001/TradeHistory").then((response) => {
 			if (response.data.message){
 				setMessageForHistory(response.data.message);
-				setIsLoadingTradeHistory(false);
 			} else {
 				setTradeHistory(response.data);
-				setIsLoadingTradeHistory(false);
 				expandHistory(true);
 			}
 		});
