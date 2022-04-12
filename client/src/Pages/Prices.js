@@ -16,6 +16,15 @@ const numberWithCommas = (x) => {
 	}
 };
 
+const addPlusSigns = (x) => {
+	const symbol = "+";
+	if (x.toString().startsWith("-")){
+		return x;
+	} else {
+		return symbol + x.toString();
+	}
+};
+
 const convertPriceChangeToColor = (price) => {
 	return price.toString().includes("-") ? "invalid" : "valid";
 }
@@ -60,7 +69,7 @@ const Prices = () => {
 		<PageBody style={{ padding: "50px 0 100px 0" }}>
 			{/*      Mobile View      */}
 			<div className="container py-5 d-flex d-lg-none row mx-auto">
-				{coins.map((e, i) => (
+				{coins.map((e) => (
 					<MobilePriceCard key={e.id} className="d-flex p-4 col-12 mb-3 align-items-center flex-wrap" border={convertPriceChangeToColor(e.price_change_percentage_24h)}>
 						<div className="d-flex justify-content-between w-100">
 							<div className="d-flex align-items-center">
@@ -84,7 +93,7 @@ const Prices = () => {
 									className="mb-0"
 									color={convertPriceChangeToColor(e.price_change_percentage_24h)}
 								>
-									{e.price_change_percentage_24h} %
+									{addPlusSigns(e.price_change_percentage_24h)} %
 								</Paragraph>
 							</div>
 						</div>
@@ -145,7 +154,7 @@ const Prices = () => {
 											className="mb-0"
 											color={convertPriceChangeToColor(e.price_change_percentage_24h)}
 										>
-											{e.price_change_percentage_24h} %
+											{addPlusSigns(e.price_change_percentage_24h)} %
 										</Paragraph>
 										<IconHelper
 											className="material-icons"

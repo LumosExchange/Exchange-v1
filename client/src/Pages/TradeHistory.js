@@ -181,9 +181,6 @@ const TradeHistory = () => {
 	const [messageForPurchases, setMessageForPurchases] = useState('');
 	const [liveTradesBuyer, setLiveTradesBuyer] = useState([]);
 	const [liveTradesSeller, setLiveTradesSeller] = useState([]);
-	const [isLoadingBuyTrades, setIsLoadingBuyTrades] = useState(true);
-	const [isLoadingSellTrades, setIsLoadingSellTrades] = useState(true);
-	const [isLoadingTradeHistory, setIsLoadingTradeHistory] = useState(true);
 	const [tradeHistory, setTradeHistory] = useState([]);
 
 	const navigate = useNavigate();
@@ -192,10 +189,8 @@ const TradeHistory = () => {
 		Axios.post("http://localhost:3001/GetLiveTradesBuyer").then((response) => {
 			if (response.data.message){
 				setMessageForPurchases(response.data.message);
-				setIsLoadingBuyTrades(false);
 			} else {
 				setLiveTradesBuyer(response.data);
-				setIsLoadingBuyTrades(false);
 				expandActiveBuyTrades(true);
 			}
 		}
@@ -205,10 +200,8 @@ const TradeHistory = () => {
 		Axios.post("http://localhost:3001/GetLiveTradesSeller").then((response) => {
 			if (response.data.message){
 				setMessageForSales(response.data.message);
-				setIsLoadingSellTrades(false);
 			} else {
 				setLiveTradesSeller(response.data);
-				setIsLoadingSellTrades(false);
 				expandActiveSellTrades(true);
 			}
 		}
@@ -218,10 +211,8 @@ const TradeHistory = () => {
 		Axios.post("http://localhost:3001/TradeHistory").then((response) => {
 			if (response.data.message){
 				setMessageForHistory(response.data.message);
-				setIsLoadingTradeHistory(false);
 			} else {
 				setTradeHistory(response.data);
-				setIsLoadingTradeHistory(false);
 				expandHistory(true);
 			}
 		});
@@ -239,8 +230,6 @@ const TradeHistory = () => {
 
 	}, [liveTradesBuyer, liveTradesSeller]);
 
-	console.log(tradeHistory, 'trade history');
-
 	return (
 		<PageBody className={`d-flex flex-column ${(liveTradesBuyer.length === 0 && liveTradesSeller.length === 0  && tradeHistory.length === 0) ? 'justify-content-center' : 'justify-content-start'}`}>
 			<div className="container text-center">
@@ -252,10 +241,7 @@ const TradeHistory = () => {
 					</div>
 				)}
 				<div className="d-flex justify-content-center">
-					{(isLoadingSellTrades || isLoadingBuyTrades) && <LoadingState />}
-				</div>
-				<div className="d-flex justify-content-center">
-					{(isLoadingSellTrades || isLoadingBuyTrades) && <LoadingState />}
+					{(liveTradesBuyer.length === 0 && liveTradesSeller.length === 0  && tradeHistory.length === 0) && <LoadingState />}
 				</div>
 				{liveTradesBuyer.length > 0 && (
 					<div className="d-flex justify-content-center pt-5 pb-3 flex-column">

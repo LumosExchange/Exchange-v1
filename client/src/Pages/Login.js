@@ -67,13 +67,19 @@ const Login = () => {
 
   //testing logged in
   useEffect(() => {
+
     Axios.get("http://localhost:3001/login").then((response) => {
       if (response.data.loggedIn === true) {
         setLoginStatus(true);
         console.log(response);
       }
     });
-  }, []);
+
+    if (loginStatus === true){
+      console.log('redirect');
+      navigate('/');
+    }
+  }, [loginStatus]);
 
   return (
     <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">
@@ -129,21 +135,6 @@ const Login = () => {
               )}
             </form>
           </div>
-          {loginStatus && <button>Check if authenticated</button>}
-          {/*
-          <Paragraph size="18px" className="text-center my-4">
-            Or continue with these Solana wallets
-          </Paragraph>
-          <div className="d-flex justify-content-center">
-            <ConnectWalletButton icon={PhantomIcon} onClick={null} />
-            <ConnectWalletButton
-              icon={SolflareIcon}
-              onClick={null}
-              className="mx-3"
-            />
-            <ConnectWalletButton icon={ExodusIcon} onClick={null} />
-          </div>
-          */}
         </div>
       </FormBackground>
       <Paragraph size="18px" className="mt-4">

@@ -180,8 +180,6 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 		getAllListings();
 	}, []);
 
-	console.log(allListings, 'all listings');
-
 	const filteredAllListings = allListings.filter(al => (al.userName !== userName));
 
   	return (

@@ -133,7 +133,7 @@ const App = () => {
 							<Route path="/Profile/UpgradeInfo" element={<UpgradeInfo />} />
 							<Route path="/Profile/Wallets" element={<Wallets />} />
 							<Route path="/UpgradeTeam" element={<UpgradeTeam />} />
-							<Route path="/Buy" element={<Buy solGbp={solGbp} solUsd={solUsd} currency={currency} />} />
+							<Route path="/Buy" element={<Buy solGbp={solGbp} solUsd={solUsd} currency={currency} userName={userName} />} />
 							<Route path="/Sell" element={<Sell />} />
 							<Route path="/Selling" element={<Selling userName={userName} />} />
 							<Route path="/Offer" element={<Offer solGbp={solGbp} solUsd={solUsd} currency={currency} />} />

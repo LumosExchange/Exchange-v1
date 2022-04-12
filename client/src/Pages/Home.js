@@ -14,6 +14,8 @@ import ShowCaseLightMobile from '../Images/showcase_light_mobile.png';
 import IconSolana from '../Images/icon-circle-solana.svg';
 import IconLumosRewards from '../Images/icon-circle-lumos.svg';
 import IconKin from '../Images/icon-circle-kin.svg';
+import MobileAccentShapeDark from "../Images/mobile-accent-shape-dark.svg";
+import MobileAccentShapeLight from "../Images/mobile-accent-shape-light.svg";
 import {
     HandShakeIcon,
     GlobeIcon,
@@ -30,6 +32,7 @@ const ShowcaseBase = styled.div(({ theme, currentTheme }) => css`
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
+    z-index: 1;
 
     @media screen and (min-width: ${theme.breakpoints.lg}){
         background: ${currentTheme === "dark" ? `url(${ShowCaseDark})` : `url(${ShowCaseLight})`};
@@ -72,11 +75,28 @@ const Showcase = ({ theme }) => (
     />
 );
 
+const AccentShape = styled.img(({ theme }) => css`
+    position: absolute;
+    display: block;
+    bottom: -20px;
+    left: -5%;
+    width: 105%;
+    z-index: 0;
+
+    @media screen and (min-width: ${theme.breakpoints.sm}){
+        bottom: 0px;
+    }
+
+    @media screen and (min-width: ${theme.breakpoints.lg}){
+        display: none;
+    }
+`);
+
 const Home = ({ theme }) => {
     const navigate = useNavigate();
     return (
-    <PageBody className="container-fluid">
-        <div className="row pt-5 d-flex justify-content-center container m-auto p-0">
+    <PageBody>
+        <div className="row pt-5 d-flex justify-content-center container m-auto p-0 position-relative">
             <div className="col-12 col-lg-6 col-xxl-5 d-flex align-items-center justify-content-center">
                 <div className="my-5">
                     <Heading size="48px" bold className="mb-0">
@@ -85,14 +105,15 @@ const Home = ({ theme }) => {
                     </Heading>
 					<GradientHeading size="48px" bold>For Solana</GradientHeading>
                     <div className="row mt-5 pt-5">
-                        <div className="col-12 col-md-6">
+                        <div className="col-12 col-sm-6">
                             <GradientButton
                                 text="Sign Up"
                                 className="w-100 mb-3"
                                 fontSize="20px"
+                                onClick={ () => navigate('/Register') }
                             />
                         </div>
-                        <div className="col-12 col-md-6">
+                        <div className="col-12 col-sm-6">
                             <SecondaryButton
                                 className="w-100"
                                 round
@@ -109,7 +130,8 @@ const Home = ({ theme }) => {
                 <Showcase theme={theme} />
             </div>
         </div>
-        <div className="container">
+        <AccentShape src={theme === "dark" ? MobileAccentShapeDark : MobileAccentShapeLight} alt="dasd" />
+        <div className="container mt-4">
             <div className="row justify-content-center mb-4">
                 <IconCard
                     title="Solana"
