@@ -110,7 +110,7 @@ const Home = ({ theme }) => {
                                 text="Sign Up"
                                 className="w-100 mb-3"
                                 fontSize="20px"
-                                onClick={ () => navigate('/Register')}
+                                onClick={ () => navigate('/Register') }
                             />
                         </div>
                         <div className="col-12 col-sm-6">
