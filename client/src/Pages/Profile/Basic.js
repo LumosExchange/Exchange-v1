@@ -105,7 +105,7 @@ const Basic = () => {
       <div className="container pt-5">
         <ProfileTabs selected="Basic" />
         <ContentTab className="position-relative">
-          {isLoading && <LoadingState />}
+          {userAccountLevel.length === 0 && <LoadingState />}
           <TopBanner className="d-flex p-4">
             <div className="col-12 d-flex">
               <ProfileInitials>{userInitials}</ProfileInitials>
