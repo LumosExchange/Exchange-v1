@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 import { FormInput, PageBody } from "../../Components/FormInputs";
 import PrimaryButton from "../../Components/Buttons";
 import Heading from "../../Components/Heading";
-import { ContentTab, ProfileTabs } from "../../Components/Profile";
+import { ContentTab, LoadingState, ProfileTabs } from "../../Components/Profile";
 import {
 	countryOptions,
 	birthDayOptions,
@@ -186,6 +186,7 @@ const AccountUpgrade = () => {
 				<ProfileTabs selected="AccountUpgrade" />
 				<ContentTab className="text-white">
 					<div className="d-flex p-4 row flex-column-reverse flex-lg-row">
+						{accountTier.length === 0 && <LoadingState />}
 						<div className="d-flex col-12 col-lg-6 mb-3 flex-column mt-5 mt-lg-0">
 							{currentStep === 0 && (
 								<React.Fragment>

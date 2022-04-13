@@ -9,6 +9,7 @@ import {
   ProfileTabLink,
   Tabs,
   ProfileTabs,
+  LoadingState,
 } from "../../Components/Profile";
 import { useNavigate } from "react-router";
 import { FormInput, PageBody, InlineInput } from "../../Components/FormInputs";
@@ -59,7 +60,8 @@ const Security = () => {
     <PageBody>
       <div className="container pt-5">
         <ProfileTabs selected="Security" />
-        <ContentTab>
+        <ContentTab className="position-relative">
+          {twoFaOptions.length === 0 && <LoadingState />}
           <div className="d-flex p-4 row">
             <div className="col-12 col-lg-6 flex-column d-none">
               <Heading size="20px" bold>

@@ -32,7 +32,7 @@ export const AirDropTable = styled.table(({ theme }) => css`
     }
     
     thead th, td, tr, th {
-        padding: 19px;
+        padding: 12px;
         border: 0;
     }
 

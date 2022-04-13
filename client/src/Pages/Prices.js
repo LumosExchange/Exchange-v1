@@ -6,6 +6,7 @@ import { AirDropTable } from "../Components/Tables";
 import Paragraph from "../Components/Paragraph";
 import { IconHelper } from './Login';
 import Card from '../Components/Card';
+import { LoadingState } from "../Components/Profile";
 const CoinGeckoClient = new CoinGecko();
 
 const numberWithCommas = (x) => {
@@ -52,23 +53,25 @@ const MobilePriceCard = styled(Card)(({ theme, border }) => css`
 
 const Prices = () => {
 	const [coins, setcoins] = useState([]);
+	const [isLoading, setIsLoading] = useState("");
 
 	useEffect(() => {
 		async function fetchData() {
-			// console.log(fetchURL);
-			console.log(CoinGecko, "coingecko");
+			setIsLoading(true);
 			const result = await CoinGeckoClient.coins.markets({ vs_currency: "gbp" });
-			// let data = await CoinGeckoClient.ping();
-			console.log(result.data[0]);
 			setcoins(result.data);
+			setIsLoading(false);
 		}
 		fetchData();
 	}, []);
+
+	console.log(coins.length, 'length of coins')
 
 	return (
 		<PageBody style={{ padding: "50px 0 100px 0" }}>
 			{/*      Mobile View      */}
 			<div className="container py-5 d-flex d-lg-none row mx-auto">
+				{isLoading && <LoadingState />}
 				{coins.map((e) => (
 					<MobilePriceCard key={e.id} className="d-flex p-4 col-12 mb-3 align-items-center flex-wrap" border={convertPriceChangeToColor(e.price_change_percentage_24h)}>
 						<div className="d-flex justify-content-between w-100">
@@ -128,49 +131,45 @@ const Prices = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{coins.map((e, i) => {
-							// console.log(e);
-							console.log(e, 'coin data');
-							return (
-								<tr key={e.id}>
-									<th className="d-inline-flex align-items-center prices">
-										<img src={e.image} alt={e.name} width="30" height="30" />
-										<Paragraph size="18px" className="mb-0 ms-3">
-											{e.name}
-										</Paragraph>
-										<Paragraph size="16px" className="mb-0 ms-2 text-uppercase" color="text_secondary">
-											{" "}
-											{e.symbol}
-										</Paragraph>
-									</th>
-									<td>
-										<Paragraph size="18px" className="mb-0">
-											£{numberWithCommas(e.current_price)}
-										</Paragraph>
-									</td>
-									<td className="d-inline-flex align-items-center">
-										<Paragraph
-											size="18px"
-											className="mb-0"
-											color={convertPriceChangeToColor(e.price_change_percentage_24h)}
-										>
-											{addPlusSigns(e.price_change_percentage_24h)} %
-										</Paragraph>
-										<IconHelper
-											className="material-icons"
-											color={convertPriceChangeToColor(e.price_change_percentage_24h)}
-										>
-											{convertPriceChangeToIcon(e.price_change_percentage_24h)}
-										</IconHelper>
-									</td>
-									<td className="text-end">
-										<Paragraph size="18px" className="mb-0">
-											{convertMarketCap(e.market_cap)}
-										</Paragraph>
-									</td>
-								</tr>
-							);
-						})}
+						{coins.map((e, i) => (
+							<tr key={e.id}>
+								<th className="d-inline-flex align-items-center prices">
+									<img src={e.image} alt={e.name} width="30" height="30" />
+									<Paragraph size="18px" className="mb-0 ms-3">
+										{e.name}
+									</Paragraph>
+									<Paragraph size="16px" className="mb-0 ms-2 text-uppercase" color="text_secondary">
+										{" "}
+										{e.symbol}
+									</Paragraph>
+								</th>
+								<td>
+									<Paragraph size="18px" className="mb-0">
+										£{numberWithCommas(e.current_price)}
+									</Paragraph>
+								</td>
+								<td className="d-inline-flex align-items-center">
+									<Paragraph
+										size="18px"
+										className="mb-0"
+										color={convertPriceChangeToColor(e.price_change_percentage_24h)}
+									>
+										{addPlusSigns(e.price_change_percentage_24h)} %
+									</Paragraph>
+									<IconHelper
+										className="material-icons"
+										color={convertPriceChangeToColor(e.price_change_percentage_24h)}
+									>
+										{convertPriceChangeToIcon(e.price_change_percentage_24h)}
+									</IconHelper>
+								</td>
+								<td className="text-end">
+									<Paragraph size="18px" className="mb-0">
+										{convertMarketCap(e.market_cap)}
+									</Paragraph>
+								</td>
+							</tr>
+						))}
 					</tbody>
 				</AirDropTable>
 			</div>
