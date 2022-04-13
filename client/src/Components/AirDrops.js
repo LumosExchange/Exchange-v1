@@ -69,7 +69,7 @@ export const AirdropData = [
 		'asset': 'LUMOS',
 		'ends': '30-01-22',
 		'filled': '350/500',
-		'participating': true,
+		'participating': false,
 		'project': 'KASGAMES',
         'filledPercentage': '70',
         'status': DROPTYPE_UPCOMING,

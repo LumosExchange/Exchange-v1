@@ -252,13 +252,13 @@ const AirDrops = () => {
                                                 </td>
                                                 <td className="buttons">
                                                     <GradientButton
-                                                        text={data.participating ? "Participating" : "Participate"}
+                                                        text={data.participating ? "Participated" : "Ended"}
                                                         padding="5px 10px"
                                                         fontSize="14px"
                                                         borderSize="2px"
                                                         className="w-100"
                                                         dark
-                                                        disabled={data.participating}
+                                                        disabled
                                                     />
                                                 </td>
                                             </tr>
@@ -289,7 +289,7 @@ const AirDrops = () => {
                                                 </td>
                                                 <td className="buttons">
                                                     <GradientButton
-                                                        text={data.participating ? "Participating" : "Participate"}
+                                                        text="Participated"
                                                         padding="5px 10px"
                                                         fontSize="14px"
                                                         borderSize="2px"
