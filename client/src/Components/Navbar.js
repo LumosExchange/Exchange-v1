@@ -239,7 +239,7 @@ const Navbar = ({ loginStatus, userName }) => {
 								<Link href="/Offers" className="mb-3">
 									Offers
 								</Link>
-								<Link href="/Cryptos" className="mb-3">
+								<Link href="/Prices" className="mb-3">
 									Cryptos
 								</Link>
 								<Link href="/Trade" className="mb-3">
