@@ -43,8 +43,9 @@ const upload = multer({ dest: "uploads/" });
 //Setting up socket for chatroom
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "http://3.8.159.233",
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
@@ -71,35 +72,17 @@ const saltRounds = 10;
 
 //needed to avoid cors errors
 app.use(function (req, res, next) {
-  // Website you wish to allow to connect
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "http://localhost:3000",
-    "https://api.coingecko.com",
-    "https://api.coingecko.com/api/v3/coins/markets"
-  );
-  // Request methods you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
-  // Request headers you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
-  );
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
-  res.setHeader("Access-Control-Allow-Credentials", true);
-  "Access-Control-Allow-Origin",
-    // Pass to next layer of middleware
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+  res.header('Content-type', 'application/javascript');
     next();
 });
 
 app.use(
   cors(
     {
-      origin: ["http:localhost:3000"],
+      origin: "http://3.8.159.233",
       methods: ["GET", "POST"],
       credentials: true,
       optionSuccessStatus: 200,
