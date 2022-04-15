@@ -182,38 +182,48 @@ const TradeHistory = () => {
 	const [liveTradesBuyer, setLiveTradesBuyer] = useState([]);
 	const [liveTradesSeller, setLiveTradesSeller] = useState([]);
 	const [tradeHistory, setTradeHistory] = useState([]);
+	const [isLoading, setIsLoading] = useState("");
 
 	const navigate = useNavigate();
 
 	const getLiveTradesBuyer = () => {
+		setIsLoading(true);
 		Axios.post("http://3.8.159.233:3001/GetLiveTradesBuyer").then((response) => {
 			if (response.data.message){
 				setMessageForPurchases(response.data.message);
+				setIsLoading(false);
 			} else {
 				setLiveTradesBuyer(response.data);
 				expandActiveBuyTrades(true);
+				setIsLoading(false);
 			}
 		}
 	)}
 
 	const getLiveTradesSeller = () => {
+		setIsLoading(true);
 		Axios.post("http://3.8.159.233:3001/GetLiveTradesSeller").then((response) => {
 			if (response.data.message){
 				setMessageForSales(response.data.message);
+				setIsLoading(false);
 			} else {
 				setLiveTradesSeller(response.data);
 				expandActiveSellTrades(true);
+				setIsLoading(false);
 			}
 		}
 	)}
 
 	const getTradeHistory = () => {
+		setIsLoading(true);
 		Axios.post("http://3.8.159.233:3001/TradeHistory").then((response) => {
 			if (response.data.message){
 				setMessageForHistory(response.data.message);
+				setIsLoading(false);
 			} else {
 				setTradeHistory(response.data);
 				expandHistory(true);
+				setIsLoading(false);
 			}
 		});
 	}
@@ -240,9 +250,7 @@ const TradeHistory = () => {
 						<PrimaryButton text="Start Trading" onClick={ () => navigate('/Buy') } />
 					</div>
 				)}
-				<div className="d-flex justify-content-center">
-					{(liveTradesBuyer.length === 0 && liveTradesSeller.length === 0  && tradeHistory.length === 0) && <LoadingState />}
-				</div>
+				{isLoading && <LoadingState />}
 				{liveTradesBuyer.length > 0 && (
 					<div className="d-flex justify-content-center pt-5 pb-3 flex-column">
 						<InvisibleButton
