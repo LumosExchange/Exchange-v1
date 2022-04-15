@@ -25,7 +25,7 @@ const EmailVerification = () => {
   async function VerifyEmailAuth(event) {
     event.preventDefault();
 
-    Axios.post("http://localhost:3001/VerifyEmail2FA", {
+    Axios.post("http://3.8.159.233:3001/VerifyEmail2FA", {
       email: state.email,
       passcode: Twofa,
     }).then((response) => {

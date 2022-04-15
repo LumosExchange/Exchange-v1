@@ -57,7 +57,7 @@ const App = () => {
 	// Set global params
 	const getCurrencyAndSolPrice = () => {
 		if (loginStatus === true){
-			Axios.get("http://localhost:3001/getUserSettings").then((response) => {
+			Axios.get("http://3.8.159.233:3001/getUserSettings").then((response) => {
 				if (response.data[0]?.currency === "GBP") {
 					setCurrency("GBP");
 					//Get GBP price of SOlana
@@ -86,7 +86,7 @@ const App = () => {
 	};
 
 	const getUserLoginStatus = () => {
-		Axios.get("http://localhost:3001/login").then((response) => {
+		Axios.get("http://3.8.159.233:3001/login").then((response) => {
 			if (response.data.loggedIn === true) {
 				setLoginStatus(true);
 			}
@@ -94,7 +94,7 @@ const App = () => {
 	};
 
 	const getUserName = () => {
-		Axios.get("http://localhost:3001/getUserNameNav").then((response) => {
+		Axios.get("http://3.8.159.233:3001/getUserNameNav").then((response) => {
 			setUserName(response.data);
 		});
 	};

@@ -60,7 +60,7 @@ const Feedback = () => {
 	const userID = window.location.pathname.match(/\d+/)[0];
 
 	const tradeInfo = () => {
-		Axios.post("http://localhost:3001/GetFeedbackPage", {
+		Axios.post("http://3.8.159.233:3001/GetFeedbackPage", {
 			userID: userID
 		}).then((response) => {
 			console.log(response, 'response from getfeedback');
@@ -75,7 +75,7 @@ const Feedback = () => {
 	};
 
 	const feedback = () => {
-		Axios.post("http://localhost:3001/FeedbackComments", {
+		Axios.post("http://3.8.159.233:3001/FeedbackComments", {
 			userID: userID
 		}).then((response) => {
 			if (response.data.length > 0){

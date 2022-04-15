@@ -60,7 +60,7 @@ const MyListings = ({ solGbp, currency }) => {
 	const [isLoading, setIsLoading] = useState(true);
 
 	const getUserListings = () => {
-		Axios.get("http://localhost:3001/getListings").then((response) => {
+		Axios.get("http://3.8.159.233:3001/getListings").then((response) => {
 			setUserListings(response.data);
 			setIsLoading(false);
 		});
@@ -85,7 +85,7 @@ const MyListings = ({ solGbp, currency }) => {
 	}
 
 	const editListing = () => {
-		Axios.post("http://localhost:3001/UpdateMyListings", {
+		Axios.post("http://3.8.159.233:3001/UpdateMyListings", {
 			amountForSale: volumeForSale,
 			aboveOrBelow,
 			percentChange: percentageDifference,
@@ -105,7 +105,7 @@ const MyListings = ({ solGbp, currency }) => {
 	};
 
 	const deleteListing = () => {
-		Axios.post("http://localhost:3001/DeleteMyListing", {
+		Axios.post("http://3.8.159.233:3001/DeleteMyListing", {
 			saleID,
 		  }).then((response) => {
 			  if (response.status === 200){

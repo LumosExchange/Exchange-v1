@@ -89,7 +89,7 @@ const Register = () => {
   const navigate = useNavigate();
 
   const register = () => {
-    Axios.post("http://localhost:3001/register", {
+    Axios.post("http://3.8.159.233:3001/register", {
       firstName,
       lastName,
       email,
@@ -98,7 +98,7 @@ const Register = () => {
     }).then((response) => {
       if (response.data.registered === true) {
         //Send email verification
-        Axios.post("http://localhost:3001/SendEmailVerification", {
+        Axios.post("http://3.8.159.233:3001/SendEmailVerification", {
           email,
           firstName,
           lastName,

@@ -64,7 +64,7 @@ const Buying = ({ userName }) => {
 	//Get trade ID then use that to populate other things
 	const getTradeDetails = () => {
 		axios
-			.get("http://localhost:3001/GetLiveTradeDetails", {
+			.get("http://3.8.159.233:3001/GetLiveTradeDetails", {
 				params: {
 					liveTradeID: liveTradeID,
 				},
@@ -87,7 +87,7 @@ const Buying = ({ userName }) => {
 				setWalletAddress(response.data[0].walletAddress);
 
 				axios
-					.get("http://localhost:3001/GetLiveTradePaymentInfo", {
+					.get("http://3.8.159.233:3001/GetLiveTradePaymentInfo", {
 						params: {
 							sellerID: response.data[0].sellerID,
 							paymentMethod: response.data[0].paymentMethod,
@@ -97,7 +97,7 @@ const Buying = ({ userName }) => {
 						setPaymentInfo(response2);
 
 						axios
-							.get("http://localhost:3001/getUserNameSeller", {
+							.get("http://3.8.159.233:3001/getUserNameSeller", {
 								params: {
 									sellerID: response.data[0].sellerID,
 								},
@@ -117,7 +117,7 @@ const Buying = ({ userName }) => {
 							});
 
 						axios
-							.get("http://localhost:3001/GetTradeFeedbackInfo", {
+							.get("http://3.8.159.233:3001/GetTradeFeedbackInfo", {
 								params: {
 									UserID: response.data[0].sellerID,
 								},
@@ -135,7 +135,7 @@ const Buying = ({ userName }) => {
 
 	const sentPayment = () => {
 		axios
-			.post("http://localhost:3001/updateLiveTradePayment", {
+			.post("http://3.8.159.233:3001/updateLiveTradePayment", {
 				liveTradeID,
 				userName,
 			})
@@ -174,7 +174,7 @@ const Buying = ({ userName }) => {
 		const formattedFeedBack = convertFeedbackToInteger(feedBack);
 		//get feedback and send to db
 		axios
-			.post("http://localhost:3001/CompleteTrade", {
+			.post("http://3.8.159.233:3001/CompleteTrade", {
 				liveTradeID,
 				saleID,
 				feedbackMessage,

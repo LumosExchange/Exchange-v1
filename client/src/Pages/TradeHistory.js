@@ -72,7 +72,7 @@ const ActiveTradeCard = ({ tradeInfo, type, noButtons, noMessage }) => {
 	const navigate = useNavigate();
 
 	const deleteLiveTrade = ({ liveTradeID }) => {
-		Axios.post("http://localhost:3001/DeleteLiveTrade", {
+		Axios.post("http://3.8.159.233:3001/DeleteLiveTrade", {
 			liveTradeID,
 		}).then((response) => {
 			setMessage(response.data.message);
@@ -186,7 +186,7 @@ const TradeHistory = () => {
 	const navigate = useNavigate();
 
 	const getLiveTradesBuyer = () => {
-		Axios.post("http://localhost:3001/GetLiveTradesBuyer").then((response) => {
+		Axios.post("http://3.8.159.233:3001/GetLiveTradesBuyer").then((response) => {
 			if (response.data.message){
 				setMessageForPurchases(response.data.message);
 			} else {
@@ -197,7 +197,7 @@ const TradeHistory = () => {
 	)}
 
 	const getLiveTradesSeller = () => {
-		Axios.post("http://localhost:3001/GetLiveTradesSeller").then((response) => {
+		Axios.post("http://3.8.159.233:3001/GetLiveTradesSeller").then((response) => {
 			if (response.data.message){
 				setMessageForSales(response.data.message);
 			} else {
@@ -208,7 +208,7 @@ const TradeHistory = () => {
 	)}
 
 	const getTradeHistory = () => {
-		Axios.post("http://localhost:3001/TradeHistory").then((response) => {
+		Axios.post("http://3.8.159.233:3001/TradeHistory").then((response) => {
 			if (response.data.message){
 				setMessageForHistory(response.data.message);
 			} else {

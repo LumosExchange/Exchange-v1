@@ -45,21 +45,21 @@ const AuthyAuth = () => {
 
     //Get User Email
 	const getUserEmail = () => {
-		Axios.get("http://localhost:3001/getUserEmail", {}).then((response) => {
+		Axios.get("http://3.8.159.233:3001/getUserEmail", {}).then((response) => {
 		  setUserEmail(response.data);
 		});
 	  };
 
 	//send email verification
 	const sendVerification = () => {
-		Axios.post("http://localhost:3001/2FAEmailVerificationSend", {});
+		Axios.post("http://3.8.159.233:3001/2FAEmailVerificationSend", {});
 		setIsCodeSent(true);
 		setCurrentStep(2);
 	};
 
 	//Check email verification
 	const emailVerification = () => {
-		Axios.post("http://localhost:3001/EmailVerification2FA", {
+		Axios.post("http://3.8.159.233:3001/EmailVerification2FA", {
 		passcode: userEmailVerification,
 		}).then((response) => {
 		console.log("response email", response.data.auth);
@@ -73,7 +73,7 @@ const AuthyAuth = () => {
 
 	//check password verification
 	const passwordVerification = () => {
-		Axios.post("http://localhost:3001/checkChangePass", {
+		Axios.post("http://3.8.159.233:3001/checkChangePass", {
 		oldPassword: userPass,
 		}).then((response) => {
 		console.log("response pass", response.data.auth);
@@ -107,7 +107,7 @@ const AuthyAuth = () => {
 		if (emailVerified === true && passwordVerified === true) {
 		  //check google auth code
 	
-		  Axios.get("http://localhost:3001/VerifyGoogle2FASetup", {
+		  Axios.get("http://3.8.159.233:3001/VerifyGoogle2FASetup", {
 			params: {
 			  passcode: Twofa,
 			  secret: secret.base32
@@ -133,7 +133,7 @@ const AuthyAuth = () => {
   useEffect(() => {
 	getUserEmail();
     async function getSecret() {
-      const response = await Axios.post("http://localhost:3001/getSecret");
+      const response = await Axios.post("http://3.8.159.233:3001/getSecret");
       console.log(response.data.base32, "response from getSecret2");
       setSecret(response.data);
     }

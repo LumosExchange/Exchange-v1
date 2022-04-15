@@ -33,10 +33,15 @@ const Login = () => {
   Axios.defaults.withCredentials = true;
 
   const login = () => {
-    Axios.post("http://localhost:3001/login", {
+    Axios.post("http://3.8.159.233:3001/login", {
+      header: {
+        "origin": 'http://3.8.159.233',
+        "cache-control": 'no-store, no-cache, must-revalidate',
+      },
       userName: userLog,
       password: passwordLog,
-    }).then((response) => {
+    })
+    .then((response) => {
       console.log(response, 'response');
       if (!response.data.auth) {
         setLoginStatus(false);
@@ -55,20 +60,14 @@ const Login = () => {
     });
   };
 
-  const userAuthenticated = () => {
-    Axios.get("http://localhost:3001/isUserAuth", {
-      header: {
-        "x-access-token": localStorage.getItem("token"),
-      },
-    }).then((response) => {
-      console.log(response);
-    });
-  };
-
   //testing logged in
   useEffect(() => {
 
-    Axios.get("http://localhost:3001/login").then((response) => {
+    Axios.get("http://3.8.159.233:3001/login", {
+      header: {
+        "origin": 'http://3.8.159.233',
+      },
+    }).then((response) => {
       if (response.data.loggedIn === true) {
         setLoginStatus(true);
         console.log(response);
@@ -125,7 +124,7 @@ const Login = () => {
                 value="logIn"
                 hasIcon
               />
-              {loginError.length > 0 && (
+              {loginError && loginError.length > 0 && (
                 <div className="d-flex justify-content-center mt-4">
                     <IconHelper className="material-icons me-2" color="invalid">error_outline</IconHelper>
                     <Paragraph color="invalid" size="20px" className="mb-0">

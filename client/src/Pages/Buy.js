@@ -135,7 +135,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 	`;
 
 	const getAllListings = () => {
-		Axios.get("http://localhost:3001/getAllListings").then((response) => {
+		Axios.get("http://3.8.159.233:3001/getAllListings").then((response) => {
 			console.log(response, 'response');
 			setAllListings(response.data);
 		});

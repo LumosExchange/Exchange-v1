@@ -85,7 +85,7 @@ const AccountUpgrade = () => {
 	};
 
 	const getAccountTier = () => {
-		Axios.get("http://localhost:3001/getUserAccountLevel").then((response) => {
+		Axios.get("http://3.8.159.233:3001/getUserAccountLevel").then((response) => {
 			setAccountTier(response.data[0]?.accountLevel);
 		});
 	};
@@ -105,7 +105,7 @@ const AccountUpgrade = () => {
 //			.then((res) => console.log(res))
 	//		.catch((err) => console.log(err));
 
-		Axios.post("http://localhost:3001/upgradeBronze", data, {}).then((response) => {
+		Axios.post("http://3.8.159.233:3001/upgradeBronze", data, {}).then((response) => {
 			//handle message retunred from endpoint
 			setConfirmationMessage(response.data.message);
 			//Go to next step
@@ -125,7 +125,7 @@ const AccountUpgrade = () => {
   
 
     
-		Axios.post("http://localhost:3001/upgradeSilver", dataSilver,{
+		Axios.post("http://3.8.159.233:3001/upgradeSilver", dataSilver,{
 		}).then((response) => {
 			//handle message retunred from endpoint
 			setConfirmationMessage(response.data.message);
@@ -146,7 +146,7 @@ const AccountUpgrade = () => {
     dataGold.append("Income", income);
 
 
-		Axios.post("http://localhost:3001/upgradeGold", dataGold, {
+		Axios.post("http://3.8.159.233:3001/upgradeGold", dataGold, {
 
 		}).then((response) => {
 			setConfirmationMessage(response.data.message);

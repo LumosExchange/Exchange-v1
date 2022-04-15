@@ -138,7 +138,7 @@ const Offer = ({ solGbp, solUsd, currency }) => {
   };
 
   const getSellerInfo = () => {
-    Axios.post("http://localhost:3001/GetSellerInfo", {
+    Axios.post("http://3.8.159.233:3001/GetSellerInfo", {
       sellerID: data.userID,
     }).then((response) => {
       console.log(response, "----debug");
@@ -151,7 +151,7 @@ const Offer = ({ solGbp, solUsd, currency }) => {
   };
 
   const getUserWallets = () => {
-    Axios.post("http://localhost:3001/GetWallets", {}).then((response) => {
+    Axios.post("http://3.8.159.233:3001/GetWallets", {}).then((response) => {
       console.log(response, "response from /GetWallets");
       if (!response.data.code) {
         const formattedWallets = response.data.filter(
@@ -167,7 +167,7 @@ const Offer = ({ solGbp, solUsd, currency }) => {
 
   const openTrade = () => {
     console.log(data.saleID);
-    Axios.post("http://localhost:3001/OpenTrade", {
+    Axios.post("http://3.8.159.233:3001/OpenTrade", {
       saleID: data.saleID,
       sellerID: data.userID,
       paymentMethod: paymentMethod,

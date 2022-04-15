@@ -61,7 +61,7 @@ const Selling = ({ userName }) => {
 	//Get trade ID then use that to populate other things
 	const getTradeDetails = () => {
 		axios
-		.get("http://localhost:3001/GetLiveTradeDetails", {
+		.get("http://3.8.159.233:3001/GetLiveTradeDetails", {
 		  params: {
 			liveTradeID: liveTradeID,
 		  },
@@ -83,7 +83,7 @@ const Selling = ({ userName }) => {
 
 			//Get buyer username 
 
-			axios.get("http://localhost:3001/getUserNameBuyer", { params: {
+			axios.get("http://3.8.159.233:3001/getUserNameBuyer", { params: {
 				buyerID: response.data[0].buyerID,
 			}}).then((response2) => {
 				setUserNameBuyer(response2.data[0].userName);
@@ -109,7 +109,7 @@ const Selling = ({ userName }) => {
 
 	const sentPayment = () => {
 		axios
-		  .post("http://localhost:3001/updateLiveTradePayment", {
+		  .post("http://3.8.159.233:3001/updateLiveTradePayment", {
 			liveTradeID,
 			userName,
 		  })

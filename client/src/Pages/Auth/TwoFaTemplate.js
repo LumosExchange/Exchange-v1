@@ -37,20 +37,20 @@ function TwoFaTemplate() {
   //send email
   const getUserEmail = () => {
     // get user email
-    Axios.get("http://localhost:3001/getUserEmail", {}).then((response) => {
+    Axios.get("http://3.8.159.233:3001/getUserEmail", {}).then((response) => {
       setUserEmail(response.data);
     });
   };
 
   const sendVerification = () => {
-    Axios.post("http://localhost:3001/2FAEmailVerificationSend", {});
+    Axios.post("http://3.8.159.233:3001/2FAEmailVerificationSend", {});
     setIsCodeSent(true);
   };
 
   //get email verification code and password and check if both true
   //Check email verification
   const emailVerification = () => {
-    Axios.post("http://localhost:3001/EmailVerification2FA", {
+    Axios.post("http://3.8.159.233:3001/EmailVerification2FA", {
       passcode: userEmailVerification,
     }).then((response) => {
       if (!response.data.auth) {
@@ -63,7 +63,7 @@ function TwoFaTemplate() {
   };
   //check password verification
   const passwordVerification = () => {
-    Axios.post("http://localhost:3001/checkChangePass", {
+    Axios.post("http://3.8.159.233:3001/checkChangePass", {
       oldPassword: userPass,
     }).then((response) => {
       if (!response.data.auth) {

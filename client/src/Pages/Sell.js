@@ -228,7 +228,7 @@ const Sell = () => {
   const navigate = useNavigate();
 
   const updatePayments = () => {
-    Axios.post("http://localhost:3001/FindUserPaymentMethods", {}).then(
+    Axios.post("http://3.8.159.233:3001/FindUserPaymentMethods", {}).then(
       (response) => {
         const methods = ["Please Select"];
         if (response.data[0].EUBank === 1) {
@@ -253,14 +253,14 @@ const Sell = () => {
 
 
   const checkEligibility = () => {
-	Axios.post("http://localhost:3001/CheckSaleEligibility", {	
+	Axios.post("http://3.8.159.233:3001/CheckSaleEligibility", {	
 	}).then((response) => {
 		setAccountLimit(response.data.solLimit - response.data.amountSolSold)
 	});
   }
 
 	const addSale = () => {
-		Axios.post("http://localhost:3001/sell", {
+		Axios.post("http://3.8.159.233:3001/sell", {
 			amountForSale: amountForSaleReg,
 			aboveOrBelow: aboveOrBelowReg,
 			change: changeReg,

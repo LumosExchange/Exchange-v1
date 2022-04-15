@@ -73,7 +73,7 @@ const Navbar = ({ loginStatus, userName }) => {
 	const navigate = useNavigate();
 
 	const logOut = () => {
-		Axios.post("http://localhost:3001/logout").then((response) => {
+		Axios.post("http://3.8.159.233:3001/logout").then((response) => {
 			if (response.status === 200){
 				localStorage.removeItem("token");
 				navigate("/Login");
@@ -83,7 +83,7 @@ const Navbar = ({ loginStatus, userName }) => {
 	};
 
 	const getAccountTier = () => {
-		Axios.get("http://localhost:3001/getUserAccountLevel").then((response) => {
+		Axios.get("http://3.8.159.233:3001/getUserAccountLevel").then((response) => {
 			setAccountTier(response.data[0]?.accountLevel);
 		});
 	};

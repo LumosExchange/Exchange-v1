@@ -42,7 +42,7 @@ function SMSAuth() {
 
 	//send email
 	const sendVerification = () => {
-		Axios.post("http://localhost:3001/2FAEmailVerificationSend", {}).then((response) => {
+		Axios.post("http://3.8.159.233:3001/2FAEmailVerificationSend", {}).then((response) => {
 			if (response.data.email) {
 				setUserEmail(response.data.email);
 				setIsCodeSent(true);
@@ -56,7 +56,7 @@ function SMSAuth() {
 
 	//Check email && password verification
 	const emailVerification = () => {
-		Axios.post("http://localhost:3001/Email&PassVerification2FA", {
+		Axios.post("http://3.8.159.233:3001/Email&PassVerification2FA", {
 			passcode: userEmailVerification,
 			oldPassword: userPass,
 		}).then((response) => {
@@ -72,7 +72,7 @@ function SMSAuth() {
 
 	//send user phonenumber to vonage api request
 	const SendSMS = () => {
-		Axios.post("http://localhost:3001/VonageSMSRequest", {
+		Axios.post("http://3.8.159.233:3001/VonageSMSRequest", {
 			number: phoneNumber,
 		}).then((response) => {
 			console.log(response, 'response from sms send');
@@ -91,7 +91,7 @@ function SMSAuth() {
 		event.preventDefault();
 		console.log('verify started');
 		//pass through code and request ID for the end point
-		Axios.post("http://localhost:3001/VonageSMSVerify", {
+		Axios.post("http://3.8.159.233:3001/VonageSMSVerify", {
 			//send code and request ID
 			userCode: userSMSCode,
 			requestId: requestId,

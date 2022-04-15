@@ -15,7 +15,7 @@ function UpgradeTeam() {
   const [additionalDirectorReg, setAdditionalDirectorReg] = useState("");
 
   const upgradeTeam = () => {
-    Axios.post("http://localhost:3001/upgradeTeam", {
+    Axios.post("http://3.8.159.233:3001/upgradeTeam", {
       RegistrationCountry: registrationCountryReg,
       RegistrationNumber: registrationNumberReg,
       CompanySourceOfIncome: companySourceOfIncomeReg,

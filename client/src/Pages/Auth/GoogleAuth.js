@@ -81,7 +81,7 @@ function GoogleAuth() {
 
   //send email verification
   const sendVerification = () => {
-    Axios.post("http://localhost:3001/2FAEmailVerificationSend", {}).then((response) => {
+    Axios.post("http://3.8.159.233:3001/2FAEmailVerificationSend", {}).then((response) => {
       setUserEmail(response.data.email);
       setIsCodeSent(true);
       setCurrentStep(2);
@@ -90,7 +90,7 @@ function GoogleAuth() {
 
   //Check email && password verification
   const emailVerification = () => {
-    Axios.post("http://localhost:3001/Email&PassVerification2FA", {
+    Axios.post("http://3.8.159.233:3001/Email&PassVerification2FA", {
       passcode: userEmailVerification,
       oldPassword: userPass,
     }).then((response) => {
@@ -110,7 +110,7 @@ function GoogleAuth() {
   //generate secret
   useEffect(() => {
     async function getSecret() {
-      const response = await Axios.post("http://localhost:3001/getSecret");
+      const response = await Axios.post("http://3.8.159.233:3001/getSecret");
       console.log(response.data.base32, "response from getSecret2");
       setSecret(response.data);
     }
@@ -137,7 +137,7 @@ function GoogleAuth() {
 
     if (verified === true ) {
       //check google auth code
-      Axios.get("http://localhost:3001/VerifyGoogle2FASetup", {
+      Axios.get("http://3.8.159.233:3001/VerifyGoogle2FASetup", {
         params: {
           passcode: Twofa,
           secret: secret.base32

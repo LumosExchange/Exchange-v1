@@ -24,7 +24,7 @@ const Security = () => {
 
   const getUserEmail = () => {
     // get user email
-    Axios.get("http://localhost:3001/getUserEmail", {}).then((response) => {
+    Axios.get("http://3.8.159.233:3001/getUserEmail", {}).then((response) => {
       if (response.data.length > 0) {
         setUserEmail(response.data);
       } else {
@@ -37,7 +37,7 @@ const Security = () => {
 
   const getUser2FAOptions = () => {
     // get user settings from usersettings db
-    Axios.post("http://localhost:3001/getUser2FAOptions", {}).then(
+    Axios.post("http://3.8.159.233:3001/getUser2FAOptions", {}).then(
       (response) => {
         console.log(response, "2fa options response");
         if (response.data.length > 0) {
