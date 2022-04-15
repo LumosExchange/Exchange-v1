@@ -378,7 +378,7 @@ app.get("/getUserNameBuyer", (req, res) => {
 
 //get username for navbar after user is logegd in
 app.get("/getUserNameNav", (req, res) => {
-  const name = req.session?.user[0].userName;
+  const name = req.session.user[0].userName;
   res.send(name);
 });
 
@@ -414,7 +414,6 @@ app.get("/getUserAccountLevel", (req, res) => {
 });
 
 app.get("/getUserID", (req, res) => {
-  console.log(req.session.user?.userID, " getuserid");
   id = req.session.user[0].userID;
   res.send(id);
 });
