@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <style>
+    <![CDATA[@keyframes animateGradRight{0%{stop-color: #EA5151}50%{stop-color: #EA5151}100%{stop-color: #EA5151}}@keyframes animateGradLeft{0%{stop-color: #EA5151}50%{stop-color: #FF3434}100%{stop-color: #EA5151}}]]>
+  </style>
+<defs>
+<linearGradient x1="0%" y1="50%" y2="50%" id="FooterGrad">
+    <stop style="animation:animateGradLeft 3s linear infinite" class="gradStopLeft" offset="0%"/>
+    <stop style="animation:animateGradRight 3s linear infinite" class="gradStopRight" offset="40%"/>
+</linearGradient>
+</defs>
+<path fill="url(#FooterGrad)" d="M0 0h4000v350H0z" fillRule="evenodd" />
+</svg>

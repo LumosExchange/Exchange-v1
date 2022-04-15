@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="90px" height="90px" viewBox="0 0 90 90" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Artboard Copy 2</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#8C57F5" offset="0%"></stop>
+            <stop stop-color="#7C3EF0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Artboard-Copy-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-3">
+            <circle id="Oval-Copy-3" fill="url(#linearGradient-1)" cx="45" cy="45" r="45"></circle>
+            <path d="M19,69 L19,20 L19,20 L36,20 C36,23.3333333 36,26.3333333 36,29 C36,33 39,37 43,37 C47,37 51,34 51,29 C51,27 51,25 51,23 C51,20.790861 52.790861,19 55,19 L69,19 C69.5522847,19 70,19.4477153 70,20 L70,33 C70,35.7614237 67.7614237,38 65,38 L59,38 C56.2385763,38 54,40.2385763 54,43 L54,47.3027439 C54,49.9430603 56.052934,52.1283084 58.6881086,52.2930068 L64.3742697,52.6483919 C67.5364792,52.84603 70,55.4683276 70,58.6367073 L70,68 C70,70.209139 68.209139,72 66,72 L56,72 C53.2385763,72 51,69.7614237 51,67 C51,65.3333333 51,63.6666667 51,62 C51,59 49,54 44,54 C39,54 36,57 36,62 C36,64.3333333 36,66.6666667 36,69 C36,70.6568542 34.6568542,72 33,72 L22,72 C20.3431458,72 19,70.6568542 19,69 Z" id="Path-6" fill="#FFFFFF"></path>
+        </g>
+    </g>
+</svg>
