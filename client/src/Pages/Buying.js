@@ -88,14 +88,15 @@ const Buying = ({ userName }) => {
 			//Get buyer username 
 
 			axios.get(`${AppUrl}/getUserNameSeller`, { params: {
-				buyerID: response.data[0].sellerID,
+				sellerID: response.data[0].sellerID,
 			}}).then((response2) => {
+				console.log(response2,' response from getUserNameSeller');
 				setUserNameSeller(response2.data[0].userName);
 				console.log('Buyer username : ', response2.data[0].userName);
 
 				const messageData = {
 					room: response.data[0].Reference,
-					author: response2.data[0].userName,
+					author: userName,
 					message: response.data[0].Message,
 					time:
 					  new Date(Date.now()).getHours() +
