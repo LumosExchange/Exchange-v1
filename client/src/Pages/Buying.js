@@ -65,74 +65,51 @@ const Buying = ({ userName }) => {
 	//Get trade ID then use that to populate other things
 	const getTradeDetails = () => {
 		axios
-			.get(`${AppUrl}/GetLiveTradeDetails`, {
-				params: {
-					liveTradeID: liveTradeID,
-				},
+		.get(`${AppUrl}/GetLiveTradeDetails`, {
+		  params: {
+			liveTradeID: liveTradeID,
+		  },
+		}).then((response) => {
+			setReference(response.data[0].Reference);
+			setSaleID(response.data[0].saleID);
+			setRoom(response.data[0].Reference);
+			socket.emit("join_room", response.data[0].Reference);
+			setSolAmount(response.data[0].amountOfSol);
+			setPaymentMethod(response.data[0].paymentMethod);
+			setBuyerID(response.data[0].buyerID);
+			setSellerID(response.data[0].sellerID);
+			setFiatAmount(response.data[0].fiatAmount);
+			setPaymentCurrency(response.data[0].paymentCurrency);
+			setPaymentRecieved(response.data[0].paymentRecieved);
+			setUserSolPrice(response.data[0].userSolPrice);
+			setFirstMessage(response.data[0].Message);
+			setWalletAddress(response.data[0].walletAddress);
+
+			//Get buyer username 
+
+			axios.get(`${AppUrl}/getUserNameSeller`, { params: {
+				buyerID: response.data[0].sellerID,
+			}}).then((response2) => {
+				setUserNameSeller(response2.data[0].userName);
+				console.log('Buyer username : ', response2.data[0].userName);
+
+				const messageData = {
+					room: response.data[0].Reference,
+					author: response2.data[0].userName,
+					message: response.data[0].Message,
+					time:
+					  new Date(Date.now()).getHours() +
+					  ":" +
+					  new Date(Date.now()).getMinutes(),
+				  };
+				  socket.emit("send_message", messageData);
+							setMessageList((list) => [...list, messageData]);
+							setCurrentMessage("");
+				
 			})
-			.then((response) => {
-				//Can map all details needed here from the response get seller ID and payment method from response
-				setReference(response.data[0].Reference);
-				setSaleID(response.data[0].saleID);
-				setRoom(response.data[0].Reference);
-				socket.emit("join_room", response.data[0].Reference);
-				setSolAmount(response.data[0].amountOfSol);
-				setPaymentMethod(response.data[0].paymentMethod);
-				setBuyerID(response.data[0].buyerID);
-				setSellerID(response.data[0].sellerID);
-				setFiatAmount(response.data[0].fiatAmount);
-				setPaymentCurrency(response.data[0].paymentCurrency);
-				setPaymentRecieved(response.data[0].paymentRecieved);
-				setUserSolPrice(response.data[0].userSolPrice);
-				setFirstMessage(response.data[0].Message);
-				setWalletAddress(response.data[0].walletAddress);
-
-				axios
-					.get(`${AppUrl}/GetLiveTradePaymentInfo`, {
-						params: {
-							sellerID: response.data[0].sellerID,
-							paymentMethod: response.data[0].paymentMethod,
-						},
-					})
-					.then((response2) => {
-						setPaymentInfo(response2);
-
-						axios
-							.get(`${AppUrl}/getUserNameSeller`, {
-								params: {
-									sellerID: response.data[0].sellerID,
-								},
-							})
-							.then((response3) => {
-								setUserNameSeller(response3.data[0].userName);
-
-								const messageData = {
-									room: response.data[0].Reference,
-									author: userName,
-									message: response.data[0].Message,
-									time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
-								};
-								socket.emit("send_message", messageData);
-								setMessageList((list) => [...list, messageData]);
-								setCurrentMessage("");
-							});
-
-						axios
-							.get(`${AppUrl}/GetTradeFeedbackInfo`, {
-								params: {
-									UserID: response.data[0].sellerID,
-								},
-							})
-							.then((response4) => {
-								setRegisteredDate(
-									response4.data.registeredDate.replace("T", " at ").replace(".000Z", " ")
-								);
-								setTotalTrades(response4.data.totalTrades);
-								setFeedbackScore(response4.feedbackScore);
-							});
-					});
-			});
-	};
+		
+		});
+	}
 
 	const sentPayment = () => {
 		axios
