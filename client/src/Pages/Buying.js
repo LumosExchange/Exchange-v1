@@ -74,8 +74,8 @@ const Buying = ({ userName }) => {
 				//Can map all details needed here from the response get seller ID and payment method from response
 				setReference(response.data[0].Reference);
 				setSaleID(response.data[0].saleID);
-
 				setRoom(response.data[0].Reference);
+				socket.emit("join_room", response.data[0].Reference);
 				setSolAmount(response.data[0].amountOfSol);
 				setPaymentMethod(response.data[0].paymentMethod);
 				setBuyerID(response.data[0].buyerID);
