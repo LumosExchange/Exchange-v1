@@ -13,6 +13,7 @@ import {
 } from "../../Components/Profile";
 import { useNavigate } from "react-router";
 import { FormInput, PageBody, InlineInput } from "../../Components/FormInputs";
+import { AppUrl } from "../../App";
 
 const Security = () => {
   const [selectedEmail, selectEmail] = useState("");
@@ -24,7 +25,7 @@ const Security = () => {
 
   const getUserEmail = () => {
     // get user email
-    Axios.get("http://3.8.159.233:3001/getUserEmail", {}).then((response) => {
+    Axios.get(`${AppUrl}/getUserEmail`, {}).then((response) => {
       if (response.data.length > 0) {
         setUserEmail(response.data);
       } else {
@@ -37,7 +38,7 @@ const Security = () => {
 
   const getUser2FAOptions = () => {
     // get user settings from usersettings db
-    Axios.post("http://3.8.159.233:3001/getUser2FAOptions", {}).then(
+    Axios.post(`${AppUrl}/getUser2FAOptions`, {}).then(
       (response) => {
         console.log(response, "2fa options response");
         if (response.data.length > 0) {

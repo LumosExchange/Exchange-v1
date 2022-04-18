@@ -11,6 +11,7 @@ import { FormInput, StyledLabel } from "../Components/FormInputs";
 import { useNavigate } from "react-router-dom";
 import TradeCard from "../Components/TradeCard";
 import { LoadingState } from "../Components/Profile";
+import { AppUrl } from "../App";
 
 const CRYPTO_KIN = 'KIN';
 const CRYPTO_SOL = 'SOL';
@@ -135,7 +136,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 	`;
 
 	const getAllListings = () => {
-		Axios.get("http://3.8.159.233:3001/getAllListings").then((response) => {
+		Axios.get(`${AppUrl}/getAllListings`).then((response) => {
 			console.log(response, 'response');
 			setAllListings(response.data);
 		});

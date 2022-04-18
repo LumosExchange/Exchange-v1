@@ -7,6 +7,7 @@ import { InvisibleButton } from "./Buttons";
 import LumosLogo from "./LumosLogo";
 import Link from "./Link";
 import { IconHelper } from "../Pages/Login";
+import { AppUrl } from "../App";
 
 // Images
 import Logo from "../Images/logo.svg";
@@ -73,7 +74,7 @@ const Navbar = ({ loginStatus, userName }) => {
 	const navigate = useNavigate();
 
 	const logOut = () => {
-		Axios.post("http://3.8.159.233:3001/logout").then((response) => {
+		Axios.post(`${AppUrl}/logout`).then((response) => {
 			if (response.status === 200){
 				localStorage.removeItem("token");
 				navigate("/Login");
@@ -83,7 +84,7 @@ const Navbar = ({ loginStatus, userName }) => {
 	};
 
 	const getAccountTier = () => {
-		Axios.get("http://3.8.159.233:3001/getUserAccountLevel").then((response) => {
+		Axios.get(`${AppUrl}/getUserAccountLevel`).then((response) => {
 			setAccountTier(response.data[0]?.accountLevel);
 		});
 	};

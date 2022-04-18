@@ -18,6 +18,7 @@ import {
   birthYearOptions,
   currentYear,
 } from "../../Constants/Index";
+import { AppUrl } from "../../App";
 
 const KnowYourCustomer = () => {
   const [legalNameReg, setLegalNameReg] = useState("");
@@ -33,13 +34,13 @@ const KnowYourCustomer = () => {
   const [documentReg, setDocumentReg] = useState("");
 
   const getUserInfo = () => {
-    Axios.get("http://3.8.159.233:3001/getUserInfo").then((response) => {
+    Axios.get(`${AppUrl}/getUserInfo`).then((response) => {
       console.log(response);
     });
   }
 
   const userInfo = () => {
-    Axios.post("http://3.8.159.233:3001/userInfo", {
+    Axios.post(`${AppUrl}/userInfo`, {
       LegalName: legalNameReg,
       BirthDay: birthDayReg,
       BirthMonth: birthMonthReg,

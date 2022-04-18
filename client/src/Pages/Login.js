@@ -11,6 +11,7 @@ import PhantomIcon from "../Images/phantom-icon-purple.svg";
 import SolflareIcon from "../Images/solflare-icon.svg";
 import ExodusIcon from "../Images/exodus-icon.svg";
 import Link, { AltLink } from "../Components/Link";
+import { AppUrl, AppUrlNoPort } from "../App";
 
 const FormBackground = styled.div(({ theme }) => css`
     background: ${theme.colors.card_bg};
@@ -33,9 +34,9 @@ const Login = () => {
   Axios.defaults.withCredentials = true;
 
   const login = () => {
-    Axios.post("http://3.8.159.233:3001/login", {
+    Axios.post(`${AppUrl}/login`, {
       header: {
-        "origin": 'http://3.8.159.233',
+        "origin": `${AppUrlNoPort}`,
         "cache-control": 'no-store, no-cache, must-revalidate',
       },
       userName: userLog,
@@ -63,9 +64,9 @@ const Login = () => {
   //testing logged in
   useEffect(() => {
 
-    Axios.get("http://3.8.159.233:3001/login", {
+    Axios.get(`${AppUrl}/login`, {
       header: {
-        "origin": 'http://3.8.159.233',
+        "origin": `${AppUrlNoPort}`,
       },
     }).then((response) => {
       if (response.data.loggedIn === true) {

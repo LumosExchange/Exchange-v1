@@ -27,6 +27,7 @@ import {
 import { Link } from "react-router-dom";
 import { StyledCode } from "./Profile/Wallets";
 import { Warning } from "./Register";
+import { AppUrl } from "../App";
 
 const socket = io.connect("http://localhost:3002");
 
@@ -64,7 +65,7 @@ const Buying = ({ userName }) => {
 	//Get trade ID then use that to populate other things
 	const getTradeDetails = () => {
 		axios
-			.get("http://3.8.159.233:3001/GetLiveTradeDetails", {
+			.get(`${AppUrl}/GetLiveTradeDetails`, {
 				params: {
 					liveTradeID: liveTradeID,
 				},
@@ -87,7 +88,7 @@ const Buying = ({ userName }) => {
 				setWalletAddress(response.data[0].walletAddress);
 
 				axios
-					.get("http://3.8.159.233:3001/GetLiveTradePaymentInfo", {
+					.get(`${AppUrl}/GetLiveTradePaymentInfo`, {
 						params: {
 							sellerID: response.data[0].sellerID,
 							paymentMethod: response.data[0].paymentMethod,
@@ -97,7 +98,7 @@ const Buying = ({ userName }) => {
 						setPaymentInfo(response2);
 
 						axios
-							.get("http://3.8.159.233:3001/getUserNameSeller", {
+							.get(`${AppUrl}/getUserNameSeller`, {
 								params: {
 									sellerID: response.data[0].sellerID,
 								},
@@ -117,7 +118,7 @@ const Buying = ({ userName }) => {
 							});
 
 						axios
-							.get("http://3.8.159.233:3001/GetTradeFeedbackInfo", {
+							.get(`${AppUrl}/GetTradeFeedbackInfo`, {
 								params: {
 									UserID: response.data[0].sellerID,
 								},
@@ -135,7 +136,7 @@ const Buying = ({ userName }) => {
 
 	const sentPayment = () => {
 		axios
-			.post("http://3.8.159.233:3001/updateLiveTradePayment", {
+			.post(`${AppUrl}/updateLiveTradePayment`, {
 				liveTradeID,
 				userName,
 			})
@@ -174,7 +175,7 @@ const Buying = ({ userName }) => {
 		const formattedFeedBack = convertFeedbackToInteger(feedBack);
 		//get feedback and send to db
 		axios
-			.post("http://3.8.159.233:3001/CompleteTrade", {
+			.post(`${AppUrl}/CompleteTrade`, {
 				liveTradeID,
 				saleID,
 				feedbackMessage,

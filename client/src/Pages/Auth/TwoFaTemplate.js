@@ -9,6 +9,7 @@ import PrimaryButton from "../../Components/Buttons";
 import Card from "../../Components/Card";
 import Heading from "../../Components/Heading";
 import Paragraph from "../../Components/Paragraph";
+import { AppUrl } from "../../App";
 
 const CodeSentMessage = styled.div(
   ({ theme }) => css`
@@ -37,20 +38,20 @@ function TwoFaTemplate() {
   //send email
   const getUserEmail = () => {
     // get user email
-    Axios.get("http://3.8.159.233:3001/getUserEmail", {}).then((response) => {
+    Axios.get(`${AppUrl}/getUserEmail`, {}).then((response) => {
       setUserEmail(response.data);
     });
   };
 
   const sendVerification = () => {
-    Axios.post("http://3.8.159.233:3001/2FAEmailVerificationSend", {});
+    Axios.post(`${AppUrl}/2FAEmailVerificationSend`, {});
     setIsCodeSent(true);
   };
 
   //get email verification code and password and check if both true
   //Check email verification
   const emailVerification = () => {
-    Axios.post("http://3.8.159.233:3001/EmailVerification2FA", {
+    Axios.post(`${AppUrl}/EmailVerification2FA`, {
       passcode: userEmailVerification,
     }).then((response) => {
       if (!response.data.auth) {
@@ -63,7 +64,7 @@ function TwoFaTemplate() {
   };
   //check password verification
   const passwordVerification = () => {
-    Axios.post("http://3.8.159.233:3001/checkChangePass", {
+    Axios.post(`${AppUrl}/checkChangePass`, {
       oldPassword: userPass,
     }).then((response) => {
       if (!response.data.auth) {

@@ -4,6 +4,7 @@ import Axios from "axios";
 import { FormInput, PageBody } from "../Components/FormInputs";
 import PrimaryButton from "../Components/Buttons";
 import Heading from "../Components/Heading";
+import { AppUrl } from "../App";
 
 function UpgradeTeam() {
   const [registrationCountryReg, setRegistrationCountryReg] = useState("");
@@ -15,7 +16,7 @@ function UpgradeTeam() {
   const [additionalDirectorReg, setAdditionalDirectorReg] = useState("");
 
   const upgradeTeam = () => {
-    Axios.post("http://3.8.159.233:3001/upgradeTeam", {
+    Axios.post(`${AppUrl}/upgradeTeam`, {
       RegistrationCountry: registrationCountryReg,
       RegistrationNumber: registrationNumberReg,
       CompanySourceOfIncome: companySourceOfIncomeReg,

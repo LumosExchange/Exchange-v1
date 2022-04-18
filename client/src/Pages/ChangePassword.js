@@ -11,6 +11,7 @@ import VerifyBG from '../Images/verifybg.svg';
 import ErrorBG from '../Images/errorbg.svg';
 import { IconHelper } from "./Login";
 import { useNavigate } from "react-router";
+import { AppUrl } from "../App";
 
 const GrabAttention = keyframes`
   0% { transform: scale(1); }
@@ -50,7 +51,7 @@ function ChangePassword() {
 
   //send email 
   const sendVerification = () => {
-	Axios.post("http://3.8.159.233:3001/2FAEmailVerificationSend", {}).then((response) => {
+	Axios.post(`${AppUrl}/2FAEmailVerificationSend`, {}).then((response) => {
 		if (response.data.email) {
 			setUserEmail(response.data.email);
 			setIsCodeSent(true);
@@ -64,7 +65,7 @@ function ChangePassword() {
 
   //check email & pass verification
   const emailVerification = () => {
-    Axios.post("http://3.8.159.233:3001/Email&PassVerification2FA", {
+    Axios.post(`${AppUrl}/Email&PassVerification2FA`, {
       passcode: userVerification,
 	  oldPassword: oldPassword,
     }).then((response) => {
@@ -83,7 +84,7 @@ function ChangePassword() {
 
   //if both above are true then update user password
   const checkRequirements = () => {
-      Axios.post("http://3.8.159.233:3001/updateUserPass", {
+      Axios.post(`${AppUrl}/updateUserPass`, {
         password: newPassword,
       }).then((response) => {
         //handle response here

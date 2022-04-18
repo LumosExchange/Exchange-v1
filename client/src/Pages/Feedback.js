@@ -6,6 +6,7 @@ import Heading from "../Components/Heading";
 import Card from "../Components/Card";
 import Paragraph from "../Components/Paragraph";
 import { useLocation } from 'react-router-dom';
+import { AppUrl } from "../App";
 
 const VerifiedIcon = styled.i(({ theme }) => css`
 	&.true { color: ${theme.colors.valid} };
@@ -60,7 +61,7 @@ const Feedback = () => {
 	const userID = window.location.pathname.match(/\d+/)[0];
 
 	const tradeInfo = () => {
-		Axios.post("http://3.8.159.233:3001/GetFeedbackPage", {
+		Axios.post(`${AppUrl}/GetFeedbackPage`, {
 			userID: userID
 		}).then((response) => {
 			console.log(response, 'response from getfeedback');
@@ -75,7 +76,7 @@ const Feedback = () => {
 	};
 
 	const feedback = () => {
-		Axios.post("http://3.8.159.233:3001/FeedbackComments", {
+		Axios.post(`${AppUrl}/FeedbackComments`, {
 			userID: userID
 		}).then((response) => {
 			if (response.data.length > 0){

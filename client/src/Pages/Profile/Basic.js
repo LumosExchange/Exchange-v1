@@ -14,6 +14,7 @@ import {
   TopBanner,
   ProfileTabs,
 } from "../../Components/Profile";
+import { AppUrl } from "../../App";
 
 const AccountTier = ({ tier, selectedTier, limit, title }) => (
   <AccountTierCard
@@ -57,7 +58,7 @@ const Basic = () => {
 
   const getUserEmail = () => {
     // get user email
-    Axios.get("http://3.8.159.233:3001/getUserEmail", {}).then((response) => {
+    Axios.get(`${AppUrl}/getUserEmail`, {}).then((response) => {
       setUserEmail(response.data);
       setUserInitials(response.data.substring(0, 2));
     });
@@ -65,7 +66,7 @@ const Basic = () => {
 
   const getUserSettings = () => {
     // get user settings from usersettings db
-    Axios.get("http://3.8.159.233:3001/getUserSettings", {}).then((response) => {
+    Axios.get(`${AppUrl}/getUserSettings`, {}).then((response) => {
       setUserSettings(response?.data);
       selectTimezone(response.data[0]?.timezone);
       selectCurrency(response.data[0]?.currency);
@@ -74,7 +75,7 @@ const Basic = () => {
 
   const getAccountLevel = () => {
     //get account level from db
-    Axios.get("http://3.8.159.233:3001/getUserAccountLevel", {}).then(
+    Axios.get(`${AppUrl}/getUserAccountLevel`, {}).then(
       (response) => {
         setUserAccountLevel(response.data[0]?.accountLevel);
       }
@@ -84,7 +85,7 @@ const Basic = () => {
   //create functionality to update user settings
   const updateUserSettings = () => {
     setIsLoading(true);
-    Axios.post("http://3.8.159.233:3001/updateUserSettings", {
+    Axios.post(`${AppUrl}/updateUserSettings`, {
       timezone: selectedTimezone,
       currency: selectedCurrency,
     }).then((response) => {

@@ -42,6 +42,9 @@ import ProtectedRoutes from "./Components/ProtectedRoutes";
 import Prices from './Pages/Prices';
 import WalletTesting from './Pages/WalletTesting';
 
+export const AppUrl = "http://3.8.159.233:3001";
+export const AppUrlNoPort = "http://3.8.159.233";
+
 const App = () => {
 	const [theme, toggleTheme] = useDarkMode();
 	const themeMode = theme === "light" ? lightTheme : darkTheme;
@@ -57,7 +60,7 @@ const App = () => {
 	// Set global params
 	const getCurrencyAndSolPrice = () => {
 		if (loginStatus === true){
-			Axios.get("http://3.8.159.233:3001/getUserSettings").then((response) => {
+			Axios.get(`${AppUrl}/getUserSettings`).then((response) => {
 				if (response.data[0]?.currency === "GBP") {
 					setCurrency("GBP");
 					//Get GBP price of SOlana
@@ -86,15 +89,17 @@ const App = () => {
 	};
 
 	const getUserLoginStatus = () => {
-		Axios.get("http://3.8.159.233:3001/login").then((response) => {
+		Axios.get(`${AppUrl}/login`).then((response) => {
 			if (response.data.loggedIn === true) {
 				setLoginStatus(true);
+			} else {
+				Navigate('/');
 			}
 		});
 	};
 
 	const getUserName = () => {
-		Axios.get("http://3.8.159.233:3001/getUserNameNav").then((response) => {
+		Axios.get(`${AppUrl}/getUserNameNav`).then((response) => {
 			setUserName(response.data);
 		});
 	};

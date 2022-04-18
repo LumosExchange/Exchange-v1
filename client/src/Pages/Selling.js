@@ -27,6 +27,7 @@ import {
 import { Link } from 'react-router-dom';
 import { StyledCode } from "./Profile/Wallets";
 import { Warning } from "./Register";
+import { AppUrl } from "../App";
 
 const socket = io.connect("http://localhost:3002");
 
@@ -61,7 +62,7 @@ const Selling = ({ userName }) => {
 	//Get trade ID then use that to populate other things
 	const getTradeDetails = () => {
 		axios
-		.get("http://3.8.159.233:3001/GetLiveTradeDetails", {
+		.get(`${AppUrl}/GetLiveTradeDetails`, {
 		  params: {
 			liveTradeID: liveTradeID,
 		  },
@@ -83,7 +84,7 @@ const Selling = ({ userName }) => {
 
 			//Get buyer username 
 
-			axios.get("http://3.8.159.233:3001/getUserNameBuyer", { params: {
+			axios.get(`${AppUrl}/getUserNameBuyer`, { params: {
 				buyerID: response.data[0].buyerID,
 			}}).then((response2) => {
 				setUserNameBuyer(response2.data[0].userName);
@@ -109,7 +110,7 @@ const Selling = ({ userName }) => {
 
 	const sentPayment = () => {
 		axios
-		  .post("http://3.8.159.233:3001/updateLiveTradePayment", {
+		  .post(`${AppUrl}/updateLiveTradePayment`, {
 			liveTradeID,
 			userName,
 		  })

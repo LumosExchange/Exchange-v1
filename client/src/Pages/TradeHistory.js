@@ -16,6 +16,7 @@ import { useNavigate } from "react-router";
 import { CardDivider } from "../Components/TradeCard";
 import { LoadingState } from "../Components/Profile";
 import PrimaryButton from "../Components/Buttons";
+import { AppUrl } from "../App";
 
 const Reference = styled(Paragraph)`text-transform: uppercase;`;
 const TitledIcon = styled.i`cursor: help;`;
@@ -72,7 +73,7 @@ const ActiveTradeCard = ({ tradeInfo, type, noButtons, noMessage }) => {
 	const navigate = useNavigate();
 
 	const deleteLiveTrade = ({ liveTradeID }) => {
-		Axios.post("http://3.8.159.233:3001/DeleteLiveTrade", {
+		Axios.post(`${AppUrl}/DeleteLiveTrade`, {
 			liveTradeID,
 		}).then((response) => {
 			setMessage(response.data.message);
@@ -188,7 +189,7 @@ const TradeHistory = () => {
 
 	const getLiveTradesBuyer = () => {
 		setIsLoading(true);
-		Axios.post("http://3.8.159.233:3001/GetLiveTradesBuyer").then((response) => {
+		Axios.post(`${AppUrl}/GetLiveTradesBuyer`).then((response) => {
 			if (response.data.message){
 				setMessageForPurchases(response.data.message);
 				setIsLoading(false);
@@ -202,7 +203,7 @@ const TradeHistory = () => {
 
 	const getLiveTradesSeller = () => {
 		setIsLoading(true);
-		Axios.post("http://3.8.159.233:3001/GetLiveTradesSeller").then((response) => {
+		Axios.post(`${AppUrl}/GetLiveTradesSeller`).then((response) => {
 			if (response.data.message){
 				setMessageForSales(response.data.message);
 				setIsLoading(false);
@@ -216,7 +217,7 @@ const TradeHistory = () => {
 
 	const getTradeHistory = () => {
 		setIsLoading(true);
-		Axios.post("http://3.8.159.233:3001/TradeHistory").then((response) => {
+		Axios.post(`${AppUrl}/TradeHistory`).then((response) => {
 			if (response.data.message){
 				setMessageForHistory(response.data.message);
 				setIsLoading(false);

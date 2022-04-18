@@ -24,6 +24,7 @@ import Paragraph from "../../Components/Paragraph";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { CodeSentMessage } from "../ChangePassword";
 import GradientButton from "../../Components/GradientButton";
+import { AppUrl } from "../../App";
 
 const MethodIcon = styled.i(
   ({ theme }) => css`
@@ -212,11 +213,11 @@ const PaymentMethods = () => {
 
     const getUserPaymentMethods = () => {
       Axios.all([
-        Axios.post(`http://3.8.159.233:3001/getUKBankDetails`),
-        Axios.post(`http://3.8.159.233:3001/getEUBankDetails`),
-        Axios.post(`http://3.8.159.233:3001/getInterBankDetails`),
-        Axios.post(`http://3.8.159.233:3001/getPaypalDetails`),
-        Axios.post(`http://3.8.159.233:3001/getSkrillDetails`),
+        Axios.post(`${AppUrl}/getUKBankDetails`),
+        Axios.post(`${AppUrl}/getEUBankDetails`),
+        Axios.post(`${AppUrl}/getInterBankDetails`),
+        Axios.post(`${AppUrl}/getPaypalDetails`),
+        Axios.post(`${AppUrl}/getSkrillDetails`),
       ])
         .catch((err) => {
           if (err) {
@@ -304,7 +305,7 @@ const PaymentMethods = () => {
 
     const deletePayment = () => {
       if (deleteModalData.type === "ukbank") {
-        Axios.post(`http://3.8.159.233:3001/deleteUKBank`).then((response) => {
+        Axios.post(`${AppUrl}/deleteUKBank`).then((response) => {
           if (response.status === 200) {
             setDeleteConfirmationMessage(response.data.message);
             setDeleteModalMode("confirmation");
@@ -313,7 +314,7 @@ const PaymentMethods = () => {
       }
 
       if (deleteModalData.type === "eubank") {
-        Axios.post(`http://3.8.159.233:3001/deleteEUBank`).then((response) => {
+        Axios.post(`${AppUrl}/deleteEUBank`).then((response) => {
           if (response.status === 200) {
             setDeleteConfirmationMessage(response.data.message);
             setDeleteModalMode("confirmation");
@@ -322,7 +323,7 @@ const PaymentMethods = () => {
       }
 
       if (deleteModalData.type === "internationalBank") {
-        Axios.post(`http://3.8.159.233:3001/deleteInterBank`).then((response) => {
+        Axios.post(`${AppUrl}/deleteInterBank`).then((response) => {
           if (response.status === 200) {
             setDeleteConfirmationMessage(response.data.message);
             setDeleteModalMode("confirmation");
@@ -330,7 +331,7 @@ const PaymentMethods = () => {
         });
       }
       if (deleteModalData.type === "paypal") {
-        Axios.post(`http://3.8.159.233:3001/deletePaypalBank`).then(
+        Axios.post(`${AppUrl}/deletePaypalBank`).then(
           (response) => {
             if (response.status === 200) {
               setDeleteConfirmationMessage(response.data.message);
@@ -341,7 +342,7 @@ const PaymentMethods = () => {
       }
 
       if (deleteModalData.type === "skrill") {
-        Axios.post(`http://3.8.159.233:3001/deleteSkrillBank`).then(
+        Axios.post(`${AppUrl}/deleteSkrillBank`).then(
           (response) => {
             if (response.status === 200) {
               setDeleteConfirmationMessage(response.data.message);
@@ -490,7 +491,7 @@ const PaymentMethods = () => {
 
   // Add & Edit Cards
   const addCard = () => {
-    Axios.post("http://3.8.159.233:3001/RegisterCard", {
+    Axios.post(`${AppUrl}/RegisterCard`, {
       nameOnCard,
       cardExpiration,
       cardCvc,
@@ -504,7 +505,7 @@ const PaymentMethods = () => {
   };
 
   const editCard = () => {
-    Axios.post("http://3.8.159.233:3001/UpdateCard", {
+    Axios.post(`${AppUrl}/UpdateCard`, {
       nameOnCard,
       cardExpiration,
       cardCvc,
@@ -519,7 +520,7 @@ const PaymentMethods = () => {
 
   // Add & Edit UK Bank
   const addUKBank = () => {
-    Axios.post("http://3.8.159.233:3001/RegisterUkBank", {
+    Axios.post(`${AppUrl}/RegisterUkBank`, {
       sortCode,
       accountNumber,
     }).then((response) => {
@@ -533,7 +534,7 @@ const PaymentMethods = () => {
   };
 
   const editUKBank = () => {
-    Axios.post("http://3.8.159.233:3001/UpdateUkBank", {
+    Axios.post(`${AppUrl}/UpdateUkBank`, {
       sortCode,
       accountNumber,
     }).then((response) => {
@@ -548,7 +549,7 @@ const PaymentMethods = () => {
 
   // Add & Edit EU Bank
   const addEUBank = () => {
-    Axios.post("http://3.8.159.233:3001/RegisterEUBank", {
+    Axios.post(`${AppUrl}/RegisterEUBank`, {
       bankName,
       IBAN,
       BIC,
@@ -563,7 +564,7 @@ const PaymentMethods = () => {
   };
 
   const editEUBank = () => {
-    Axios.post("http://3.8.159.233:3001/UpdateEUBank", {
+    Axios.post(`${AppUrl}/UpdateEUBank`, {
       bankName,
       IBAN,
       BIC,
@@ -579,7 +580,7 @@ const PaymentMethods = () => {
 
   // Add & Edit International Bank
   const addIntBank = () => {
-    Axios.post("http://3.8.159.233:3001/RegisterInternationalBank", {
+    Axios.post(`${AppUrl}/RegisterInternationalBank`, {
       bankName,
       bankCity,
       bankCountry,
@@ -601,7 +602,7 @@ const PaymentMethods = () => {
   };
 
   const editIntBank = () => {
-    Axios.post("http://3.8.159.233:3001/UpdateInternationalBank", {
+    Axios.post(`${AppUrl}/UpdateInternationalBank`, {
       bankName,
       bankCity,
       bankCountry,
@@ -624,7 +625,7 @@ const PaymentMethods = () => {
 
   // Add & Edit International Bank
   const addPayPal = () => {
-    Axios.post("http://3.8.159.233:3001/RegisterPaypal", {
+    Axios.post(`${AppUrl}/RegisterPaypal`, {
       paypalEmail,
     }).then((response) => {
       if (!response.data.code) {
@@ -637,7 +638,7 @@ const PaymentMethods = () => {
   };
 
   const editPayPal = () => {
-    Axios.post("http://3.8.159.233:3001/UpdatePaypal", {
+    Axios.post(`${AppUrl}/UpdatePaypal`, {
       paypalEmail,
     }).then((response) => {
       if (!response.data.code) {
@@ -651,7 +652,7 @@ const PaymentMethods = () => {
 
   // Add & Edit International Bank
   const addSkrill = () => {
-    Axios.post("http://3.8.159.233:3001/RegisterSkrill", {
+    Axios.post(`${AppUrl}/RegisterSkrill`, {
       skrillEmail,
     }).then((response) => {
       if (!response.data.code) {
@@ -664,7 +665,7 @@ const PaymentMethods = () => {
   };
 
   const editSkrill = () => {
-    Axios.post("http://3.8.159.233:3001/UpdateSkrill", {
+    Axios.post(`${AppUrl}/UpdateSkrill`, {
       skrillEmail,
     }).then((response) => {
       console.log(response, "response from editSkrill");

@@ -19,6 +19,7 @@ import { CodeSentMessage } from "./ChangePassword";
 import { useNavigate } from "react-router";
 import TradeCard from "../Components/TradeCard";
 import { LoadingState } from "../Components/Profile";
+import { AppUrl } from "../App";
 
 const PaymentMethods = [
 	"Please Select",
@@ -60,7 +61,7 @@ const MyListings = ({ solGbp, currency }) => {
 	const [isLoading, setIsLoading] = useState(true);
 
 	const getUserListings = () => {
-		Axios.get("http://3.8.159.233:3001/getListings").then((response) => {
+		Axios.get(`${AppUrl}/getListings`).then((response) => {
 			setUserListings(response.data);
 			setIsLoading(false);
 		});
@@ -85,7 +86,7 @@ const MyListings = ({ solGbp, currency }) => {
 	}
 
 	const editListing = () => {
-		Axios.post("http://3.8.159.233:3001/UpdateMyListings", {
+		Axios.post(`${AppUrl}/UpdateMyListings`, {
 			amountForSale: volumeForSale,
 			aboveOrBelow,
 			percentChange: percentageDifference,
@@ -105,7 +106,7 @@ const MyListings = ({ solGbp, currency }) => {
 	};
 
 	const deleteListing = () => {
-		Axios.post("http://3.8.159.233:3001/DeleteMyListing", {
+		Axios.post(`${AppUrl}/DeleteMyListing`, {
 			saleID,
 		  }).then((response) => {
 			  if (response.status === 200){

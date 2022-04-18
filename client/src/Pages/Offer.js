@@ -12,6 +12,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import IconSolana from "../Images/icon-circle-solana.svg";
 import TradeCard from "../Components/TradeCard";
 import { convertCurrencyToSymbol } from "../Helpers";
+import { AppUrl } from "../App";
 
 const SwitchButton = styled.button(
   ({ theme }) => css`
@@ -138,7 +139,7 @@ const Offer = ({ solGbp, solUsd, currency }) => {
   };
 
   const getSellerInfo = () => {
-    Axios.post("http://3.8.159.233:3001/GetSellerInfo", {
+    Axios.post(`${AppUrl}/GetSellerInfo`, {
       sellerID: data.userID,
     }).then((response) => {
       console.log(response, "----debug");
@@ -151,7 +152,7 @@ const Offer = ({ solGbp, solUsd, currency }) => {
   };
 
   const getUserWallets = () => {
-    Axios.post("http://3.8.159.233:3001/GetWallets", {}).then((response) => {
+    Axios.post(`${AppUrl}/GetWallets`, {}).then((response) => {
       console.log(response, "response from /GetWallets");
       if (!response.data.code) {
         const formattedWallets = response.data.filter(
@@ -167,7 +168,7 @@ const Offer = ({ solGbp, solUsd, currency }) => {
 
   const openTrade = () => {
     console.log(data.saleID);
-    Axios.post("http://3.8.159.233:3001/OpenTrade", {
+    Axios.post(`${AppUrl}/OpenTrade`, {
       saleID: data.saleID,
       sellerID: data.userID,
       paymentMethod: paymentMethod,

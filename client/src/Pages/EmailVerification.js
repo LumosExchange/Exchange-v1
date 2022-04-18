@@ -8,6 +8,7 @@ import Card from "../Components/Card";
 import Axios from "axios";
 import { useNavigate } from "react-router";
 import Paragraph from "../Components/Paragraph";
+import { AppUrl } from "../App";
 
 
 const EmailVerification = () => {
@@ -25,7 +26,7 @@ const EmailVerification = () => {
   async function VerifyEmailAuth(event) {
     event.preventDefault();
 
-    Axios.post("http://3.8.159.233:3001/VerifyEmail2FA", {
+    Axios.post(`${AppUrl}/VerifyEmail2FA`, {
       email: state.email,
       passcode: Twofa,
     }).then((response) => {

@@ -20,6 +20,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { IconHelper } from "../Login";
 import { Nationalities } from "../../Constants/Index";
+import { AppUrl } from "../../App";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => css`
 	background-color: ${theme.colors.accordion} !important;
@@ -85,7 +86,7 @@ const AccountUpgrade = () => {
 	};
 
 	const getAccountTier = () => {
-		Axios.get("http://3.8.159.233:3001/getUserAccountLevel").then((response) => {
+		Axios.get(`${AppUrl}/getUserAccountLevel`).then((response) => {
 			setAccountTier(response.data[0]?.accountLevel);
 		});
 	};
@@ -105,7 +106,7 @@ const AccountUpgrade = () => {
 //			.then((res) => console.log(res))
 	//		.catch((err) => console.log(err));
 
-		Axios.post("http://3.8.159.233:3001/upgradeBronze", data, {}).then((response) => {
+		Axios.post(`${AppUrl}/upgradeBronze`, data, {}).then((response) => {
 			//handle message retunred from endpoint
 			setConfirmationMessage(response.data.message);
 			//Go to next step
@@ -125,7 +126,7 @@ const AccountUpgrade = () => {
   
 
     
-		Axios.post("http://3.8.159.233:3001/upgradeSilver", dataSilver,{
+		Axios.post(`${AppUrl}/upgradeSilver`, dataSilver,{
 		}).then((response) => {
 			//handle message retunred from endpoint
 			setConfirmationMessage(response.data.message);
@@ -146,7 +147,7 @@ const AccountUpgrade = () => {
     dataGold.append("Income", income);
 
 
-		Axios.post("http://3.8.159.233:3001/upgradeGold", dataGold, {
+		Axios.post(`${AppUrl}/upgradeGold`, dataGold, {
 
 		}).then((response) => {
 			setConfirmationMessage(response.data.message);

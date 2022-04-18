@@ -17,6 +17,7 @@ import Paragraph from "../Components/Paragraph";
 import Buttons from "../Components/Buttons";
 import { Nationalities } from "../Constants/Index";
 import { IconHelper } from "./Login";
+import { AppUrl } from "../App";
 
 const WarningIconBase = styled.svg(
   ({ theme }) => css`
@@ -89,7 +90,7 @@ const Register = () => {
   const navigate = useNavigate();
 
   const register = () => {
-    Axios.post("http://3.8.159.233:3001/register", {
+    Axios.post(`${AppUrl}/register`, {
       firstName,
       lastName,
       email,
@@ -98,7 +99,7 @@ const Register = () => {
     }).then((response) => {
       if (response.data.registered === true) {
         //Send email verification
-        Axios.post("http://3.8.159.233:3001/SendEmailVerification", {
+        Axios.post(`${AppUrl}/SendEmailVerification`, {
           email,
           firstName,
           lastName,

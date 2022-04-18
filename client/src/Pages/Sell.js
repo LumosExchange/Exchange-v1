@@ -10,6 +10,7 @@ import { FormInput, StyledLabel } from "../Components/FormInputs";
 import { useNavigate } from "react-router-dom";
 import { StyledLinkTo } from "../Components/Profile";
 import { IconHelper } from "./Login";
+import { AppUrl } from "../App";
 
 const CRYPTO_KIN = "KIN";
 const CRYPTO_SOL = "SOL";
@@ -228,7 +229,7 @@ const Sell = () => {
   const navigate = useNavigate();
 
   const updatePayments = () => {
-    Axios.post("http://3.8.159.233:3001/FindUserPaymentMethods", {}).then(
+    Axios.post(`${AppUrl}/FindUserPaymentMethods`, {}).then(
       (response) => {
         const methods = ["Please Select"];
         if (response.data[0].EUBank === 1) {
@@ -253,14 +254,14 @@ const Sell = () => {
 
 
   const checkEligibility = () => {
-	Axios.post("http://3.8.159.233:3001/CheckSaleEligibility", {	
+	Axios.post(`${AppUrl}/CheckSaleEligibility`, {	
 	}).then((response) => {
 		setAccountLimit(response.data.solLimit - response.data.amountSolSold)
 	});
   }
 
 	const addSale = () => {
-		Axios.post("http://3.8.159.233:3001/sell", {
+		Axios.post(`${AppUrl}/sell`, {
 			amountForSale: amountForSaleReg,
 			aboveOrBelow: aboveOrBelowReg,
 			change: changeReg,

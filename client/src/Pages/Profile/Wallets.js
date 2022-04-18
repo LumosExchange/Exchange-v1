@@ -12,6 +12,7 @@ import Card from "../../Components/Card";
 import PhantomIcon from '../../Images/phantom-icon-purple.svg';
 import SlopeIcon from '../../Images/slope-finance-icon.png';
 import SolflareIcon from '../../Images/solflare-icon.svg';
+import { AppUrl } from "../../App";
 import * as web3 from '@solana/web3.js';
 
 export const StyledModal = styled(Modal)(({ theme }) => css`
@@ -244,7 +245,7 @@ const Wallets = () => {
 
 	const addWallet = (type, walletAddress) => {
 		console.log(type, 'type of wallet added');
-		Axios.post("http://3.8.159.233:3001/AddWallet", {
+		Axios.post(`${AppUrl}/AddWallet`, {
 			walletID: walletCount,
 			walletAddress,
 			type,
@@ -259,7 +260,7 @@ const Wallets = () => {
 	};
 
 	const updateWallet = () => {
-		Axios.post("http://3.8.159.233:3001/EditWallet", {
+		Axios.post(`${AppUrl}/EditWallet`, {
 			walletID: editingWalletID,
 			walletAddress: editingWalletAddress,
 		}).then((response) => {
@@ -274,7 +275,7 @@ const Wallets = () => {
 	};
 
 	const deleteWallet = () => {
-		Axios.post("http://3.8.159.233:3001/DeleteWallet", {
+		Axios.post(`${AppUrl}/DeleteWallet`, {
 			walletID: deletingWalletID,
 			walletAddress: deletingWalletAddress,
 		}).then((response) => {
@@ -288,7 +289,7 @@ const Wallets = () => {
 	};
 
 	const getWalletAddresses = () => {
-		Axios.post("http://3.8.159.233:3001/GetWallets").then((response) => {
+		Axios.post(`${AppUrl}/GetWallets`).then((response) => {
 			console.log(response, "response from /GetWallets");
 			if (!response.data.code) {
 				const formattedWallets = response.data.filter(fw => fw.address.length > 1);
