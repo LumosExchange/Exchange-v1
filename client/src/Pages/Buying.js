@@ -27,9 +27,9 @@ import {
 import { Link } from "react-router-dom";
 import { StyledCode } from "./Profile/Wallets";
 import { Warning } from "./Register";
-import { AppUrl } from "../App";
+import { AppUrl, SocketUrl } from "../App";
 
-const socket = io.connect("http://localhost:3002");
+const socket = io.connect(`${SocketUrl}`);
 
 const Buying = ({ userName }) => {
 	const [currentMessage, setCurrentMessage] = useState("");

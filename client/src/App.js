@@ -44,6 +44,7 @@ import WalletTesting from './Pages/WalletTesting';
 
 export const AppUrl = "http://3.8.159.233:3001";
 export const AppUrlNoPort = "http://3.8.159.233";
+export const SocketUrl = "http://3.8.159.233:3002";
 
 const App = () => {
 	const [theme, toggleTheme] = useDarkMode();
