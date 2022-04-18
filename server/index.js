@@ -308,7 +308,7 @@ app.post("/sell", (req, res) => {
   const payment2 = req.body.payment2;
 
   var sql =
-    "SELECT Country AS Country FROM userInformation WHERE (userID) = (?);SELECT Town AS Town FROM userInformation WHERE (userID) = (?);SELECT saleID AS SaleID FROM TradeHistory WHERE (sellerID) = (?)";
+    "SELECT country AS Country FROM upgradeTiers WHERE (userID) = (?);SELECT city AS Town FROM upgradeTiers WHERE (userID) = (?);SELECT saleID AS SaleID FROM TradeHistory WHERE (sellerID) = (?)";
 
   db.query(sql, [id, id, id], function (error, results) {
     if (error) {
@@ -2270,7 +2270,7 @@ app.post("/TradeHistory", (req, res) => {
 app.post("/GetFeedbackPage", (req, res) => {
   const userID = req.body.userID;
   var sql =
-    "SELECT userName FROM users WHERE (userID) = (?);SELECT COUNT (*) AS total FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?);SELECT AVG (feedbackScore) AS feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?);SELECT Country AS country FROM userInformation WHERE (userID) = (?);SELECT registeredDate AS registeredDate FROM users WHERE (userID) = (?);SELECT emailVerified, SMS FROM userAuth WHERE (userID) = (?)";
+    "SELECT userName FROM users WHERE (userID) = (?);SELECT COUNT (*) AS total FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?);SELECT AVG (feedbackScore) AS feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?);SELECT country AS country FROM upgradeTiers WHERE (userID) = (?);SELECT registeredDate AS registeredDate FROM users WHERE (userID) = (?);SELECT emailVerified, SMS FROM userAuth WHERE (userID) = (?)";
 
   db.query(
     sql,
