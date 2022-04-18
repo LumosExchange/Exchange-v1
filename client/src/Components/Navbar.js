@@ -84,9 +84,11 @@ const Navbar = ({ loginStatus, userName }) => {
 	};
 
 	const getAccountTier = () => {
-		Axios.get(`${AppUrl}/getUserAccountLevel`).then((response) => {
-			setAccountTier(response.data[0]?.accountLevel);
-		});
+		if (loginStatus === true){
+			Axios.get(`${AppUrl}/getUserAccountLevel`).then((response) => {
+				setAccountTier(response.data[0]?.accountLevel);
+			});
+		}
 	};
 
 	useEffect(() => {
