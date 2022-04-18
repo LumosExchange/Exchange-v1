@@ -48,7 +48,7 @@ const Card = styled.div(({ theme }) => css`
 `);
 
 const IconCard = ({ icon, title, text, children }) => (
-    <div className="col-10 col-sm-6 col-md-6 col-xl-3 mb-4 mb-xl-0">
+    <div className="col-12 col-sm-6 col-md-6 col-xl-3 mb-4 mb-xl-0">
         <Card className="p-4 text-center mb-4 mb-xl-0 h-100">
             {children}
             {/* Make these icons tomorrow */}
@@ -78,7 +78,7 @@ const Showcase = ({ theme }) => (
 const AccentShape = styled.img(({ theme }) => css`
     position: absolute;
     display: block;
-    bottom: -20px;
+    bottom: 30px;
     left: -5%;
     width: 105%;
     z-index: 0;
@@ -96,7 +96,7 @@ const Home = ({ theme }) => {
     const navigate = useNavigate();
     return (
     <PageBody>
-        <div className="row pt-5 d-flex justify-content-center container m-auto p-0 position-relative">
+        <div className="row pt-5 d-flex justify-content-center container m-auto p-0">
             <div className="col-12 col-lg-6 col-xxl-5 d-flex align-items-center justify-content-center">
                 <div className="my-5">
                     <Heading size="48px" bold className="mb-0">
@@ -126,11 +126,11 @@ const Home = ({ theme }) => {
                     </div>
                 </div>
             </div>
-            <div className="col-12 col-lg-6 col-xxl-7">
+            <div className="col-12 col-lg-6 col-xxl-7 position-relative">
                 <Showcase theme={theme} />
+                <AccentShape src={theme === "dark" ? MobileAccentShapeDark : MobileAccentShapeLight} alt="dasd" className="d-sm-none" />
             </div>
         </div>
-        <AccentShape src={theme === "dark" ? MobileAccentShapeDark : MobileAccentShapeLight} alt="dasd" />
         <div className="container mt-4">
             <div className="row justify-content-center mb-4">
                 <IconCard
