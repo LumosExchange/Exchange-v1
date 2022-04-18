@@ -52,7 +52,7 @@ const App = () => {
 	const [currency, setCurrency] = useState("");
 	const [solGbp, setSolGbp] = useState(0);
 	const [solUsd, setSolUsd] = useState(0);
-	const [loginStatus, setLoginStatus] = useState(false);
+	const [loginStatus, setLoginStatus] = useState("");
 	const [userName, setUserName] = useState("");
 
 	//Check

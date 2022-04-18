@@ -95,6 +95,8 @@ const Navbar = ({ loginStatus, userName }) => {
 		getAccountTier();
 	}, []);
 
+	console.log(loginStatus, 'is user logged in?');
+
 	return (
 		<Base className="d-flex justify-content-center">
 			<div className="container d-flex fixedHeight">
