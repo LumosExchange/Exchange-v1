@@ -51,25 +51,58 @@ const MobilePriceCard = styled(Card)(({ theme, border }) => css`
 	border-bottom: 4px solid ${theme.colors[border]};
 `);
 
+const CoinCircle = styled.div(({ theme, color }) => css`
+	background: ${theme.colors[color]};
+	height: 30px;
+	border-radius: 50px;
+	padding: 10px 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: ${theme.colors.actual_white};
+	font-family: 'THICCCBOI-BOLD';
+`);
+
 const Prices = () => {
-	const [coins, setcoins] = useState([]);
+	const [coins, setCoins] = useState([]);
 	const [isLoading, setIsLoading] = useState("");
+	const [marketsDown, setMarketsDown] = useState("");
 
 	useEffect(() => {
 		async function fetchData() {
 			setIsLoading(true);
 			const result = await CoinGeckoClient.coins.markets({ vs_currency: "gbp" });
-			setcoins(result.data);
+			setCoins(result.data);
 			setIsLoading(false);
+			console.log(result.data.filter(data => data.price_change_percentage_24h.toString().includes("-")));
+			setMarketsDown(result.data.filter(data => data.price_change_percentage_24h.toString().includes("-")).length);
 		}
 		fetchData();
 	}, []);
 
+	console.log(marketsDown, 'coins down');
+	const marketsUp = coins.length - marketsDown;
+	console.log(marketsUp, 'coins up');
+
 	return (
 		<PageBody style={{ padding: "50px 0 100px 0" }}>
 			{/*      Mobile View      */}
-			<div className="container py-5 d-flex d-lg-none row mx-auto">
+			<div className="container py-3 d-flex d-lg-none row mx-auto">
 				{isLoading && <LoadingState />}
+				<div className="d-flex justify-content-between align-items-center mb-3">
+					<div className="d-flex">
+						<CoinCircle color="valid" className="me-1">
+							{marketsUp}
+						</CoinCircle>
+						<CoinCircle color="invalid">
+							{marketsDown}
+						</CoinCircle>
+					</div>
+					{marketsUp > marketsDown
+						? <Paragraph color="valid" size="20px" className="mb-0">Markets are UP!</Paragraph>
+						: <Paragraph color="invalid" size="20px" className="mb-0">Markets are DOWN!</Paragraph>
+					}
+				</div>
 				{coins.map((e) => (
 					<MobilePriceCard key={e.id} className="d-flex p-4 col-12 mb-3 align-items-center flex-wrap" border={convertPriceChangeToColor(e.price_change_percentage_24h)}>
 						<div className="d-flex justify-content-between w-100">
