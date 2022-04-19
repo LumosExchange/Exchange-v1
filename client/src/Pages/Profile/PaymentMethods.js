@@ -668,7 +668,6 @@ const PaymentMethods = () => {
     Axios.post(`${AppUrl}/UpdateSkrill`, {
       skrillEmail,
     }).then((response) => {
-      console.log(response, "response from editSkrill");
       if (!response.data.code) {
         setConfirmationMessage(response.data.message);
         setModalMode("confirmation");

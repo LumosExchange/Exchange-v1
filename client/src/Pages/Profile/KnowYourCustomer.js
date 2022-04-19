@@ -33,12 +33,6 @@ const KnowYourCustomer = () => {
   const [countryReg, setCountryReg] = useState("");
   const [documentReg, setDocumentReg] = useState("");
 
-  const getUserInfo = () => {
-    Axios.get(`${AppUrl}/getUserInfo`).then((response) => {
-      console.log(response);
-    });
-  }
-
   const userInfo = () => {
     Axios.post(`${AppUrl}/userInfo`, {
       LegalName: legalNameReg,

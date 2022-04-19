@@ -43,7 +43,6 @@ const Login = () => {
       password: passwordLog,
     })
     .then((response) => {
-      console.log(response, 'response');
       if (!response.data.auth) {
         setLoginStatus(false);
         setLoginError(response.data.message);
@@ -51,12 +50,10 @@ const Login = () => {
         setLoginStatus(true);
         //store JWT token in localstorage
         localStorage.setItem("token", response.data.token);
-        console.log(response.data);
         navigate("/");
         window.location.reload(false);
       }
     }).catch((err) => {
-      console.log(err, 'error from login')
         setLoginError(err.message);
     });
   };
@@ -71,12 +68,10 @@ const Login = () => {
     }).then((response) => {
       if (response.data.loggedIn === true) {
         setLoginStatus(true);
-        console.log(response);
       }
     });
 
     if (loginStatus === true){
-      console.log('redirect');
       navigate('/');
     }
   }, [loginStatus]);

@@ -88,7 +88,6 @@ const Selling = ({ userName }) => {
 				buyerID: response.data[0].buyerID,
 			}}).then((response2) => {
 				setUserNameBuyer(response2.data[0].userName);
-				console.log('Buyer username : ', response2.data[0].userName);
 
 				const messageData = {
 					room: response.data[0].Reference,

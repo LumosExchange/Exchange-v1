@@ -40,7 +40,6 @@ const Security = () => {
     // get user settings from usersettings db
     Axios.post(`${AppUrl}/getUser2FAOptions`, {}).then(
       (response) => {
-        console.log(response, "2fa options response");
         if (response.data.length > 0) {
           setTwoFaOptions(response.data);
         } else {
@@ -54,8 +53,6 @@ const Security = () => {
     getUser2FAOptions();
     getUserEmail();
   }, []);
-
-  console.log(twoFaOptions, "2fa options");
 
   return (
     <PageBody>

@@ -87,7 +87,6 @@ const MyWallet = () => {
 		setIsPhantomInstalled(true);
 	} else {
 		setIsPhantomInstalled(false);
-		console.log("Phantom not installed");
 	}
   }
 
@@ -95,19 +94,16 @@ const MyWallet = () => {
     try {
       const wallet = window.solana;
 		if (wallet){
-			console.log(wallet.isPhantom, 'is phantom installed?');
 			eagerlyConnectPhantomWallet();
 			setIsPhantomInstalled(true);
 		}
     } catch (err) {
-      console.log('error: ', err);
 	  setIsPhantomInstalled(false);
     }
   }
 
   const getWallet = async () => {
     try {
-		console.log('getwallet triggered');
       const wallet = typeof window !== 'undefined' && window.solana;
       await wallet.connect();
 	  
@@ -149,16 +145,7 @@ sendAndConfirmTransaction(
   [pubKey]
 );
   }
-  
-  {/* Connect phantom wallet automatically
- const connectPhantomWallet = () => {
-	window.solana.connect();
-	window.solana.on("connect", () => console.log("Phantom wallet connected!"));
-	
-	const walletPublicKey = window.solana.publickey;
-	console.log(walletPublicKey);
-  } */}
-  
+ 
   // Connect phantom wallet only if the wallet has been connected before
  const eagerlyConnectPhantomWallet = () => {
 	window.solana.connect({ onlyIfTrusted: true });

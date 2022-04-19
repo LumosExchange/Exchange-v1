@@ -101,10 +101,9 @@ const AccountUpgrade = () => {
 		data.append("postCode", postCode);
 		data.append("country", country);
 
-		console.log(data);
-	//	Axios.post("https://httpbin.org/anything", data)
-//			.then((res) => console.log(res))
-	//		.catch((err) => console.log(err));
+		//	Axios.post("https://httpbin.org/anything", data)
+		//		.then((res) => console.log(res))
+		//		.catch((err) => console.log(err));
 
 		Axios.post(`${AppUrl}/upgradeBronze`, data, {}).then((response) => {
 			//handle message retunred from endpoint
@@ -178,10 +177,7 @@ const AccountUpgrade = () => {
 		[accountTier]
 	);
 
-	console.log(nationality, 'nationality');
-	console.log(country, 'country');
-
-  return (
+  	return (
 		<PageBody>
 			<div className="container pt-5">
 				<ProfileTabs selected="AccountUpgrade" />

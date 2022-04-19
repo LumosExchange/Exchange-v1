@@ -43,8 +43,6 @@ const ConnectToggle = ({ id, image, wallet, className, onClick }) => (
 const Login = () => {
   const [selectedWallet, selectWallet] = useState("");
 
-  console.log('selected wallet is', selectedWallet);
-
   return (
 		<PageBody className="d-flex align-items-center">
 			<div className="container d-flex align-items-center justify-content-center py-5 flex-column">

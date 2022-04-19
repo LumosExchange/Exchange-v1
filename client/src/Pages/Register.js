@@ -104,7 +104,6 @@ const Register = () => {
           firstName,
           lastName,
         }).then((response) => {
-          console.log(response, "response from send email");
           if (response.data.emailSent === true) {
             //Navigate to emailVerification
             navigate("/EmailVerification", {

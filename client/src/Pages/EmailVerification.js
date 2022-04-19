@@ -30,7 +30,6 @@ const EmailVerification = () => {
       email: state.email,
       passcode: Twofa,
     }).then((response) => {
-      console.log(response, '----response')
       if (response.data.auth === true) {
         verified = true;
         navigate("/Login");

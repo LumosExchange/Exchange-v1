@@ -68,7 +68,6 @@ const MyListings = ({ solGbp, currency }) => {
 	}
 
 	const openEditModal = (val) => {
-		console.log(val, 'val');
 		setPrimaryPaymentMethod(val.paymentMethod1);
 		setSecondaryPaymentMethod(val.paymentMethod2);
 		setAboveOrBelow(val.aboveOrBelow);

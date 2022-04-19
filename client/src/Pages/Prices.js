@@ -65,8 +65,6 @@ const Prices = () => {
 		fetchData();
 	}, []);
 
-	console.log(coins.length, 'length of coins')
-
 	return (
 		<PageBody style={{ padding: "50px 0 100px 0" }}>
 			{/*      Mobile View      */}

@@ -137,7 +137,6 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 
 	const getAllListings = () => {
 		Axios.get(`${AppUrl}/getAllListings`).then((response) => {
-			console.log(response, 'response');
 			setAllListings(response.data);
 		});
 	}

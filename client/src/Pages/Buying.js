@@ -90,9 +90,7 @@ const Buying = ({ userName }) => {
 			axios.get(`${AppUrl}/getUserNameSeller`, { params: {
 				sellerID: response.data[0].sellerID,
 			}}).then((response2) => {
-				console.log(response2,' response from getUserNameSeller');
 				setUserNameSeller(response2.data[0].userName);
-				console.log('Buyer username : ', response2.data[0].userName);
 
 				const messageData = {
 					room: response.data[0].Reference,
@@ -438,7 +436,6 @@ const Buying = ({ userName }) => {
 											</div>
 											<Paragraph size="18px">Feedback Score {feedbackScore}</Paragraph>
 											<Paragraph size="18px">Registered Date {registerdDate}</Paragraph>
-											{console.log(totalTrades, "total trades?")}
 											<Paragraph size="18px">Total Trades {totalTrades}</Paragraph>
 										</div>
 										<div className="col-6">

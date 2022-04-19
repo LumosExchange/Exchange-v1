@@ -142,7 +142,6 @@ const Offer = ({ solGbp, solUsd, currency }) => {
     Axios.post(`${AppUrl}/GetSellerInfo`, {
       sellerID: data.userID,
     }).then((response) => {
-      console.log(response, "----debug");
       setRegisteredDate(response.data.registeredDate[0].registeredDate);
       setFeedbackScore(response.data.feedbackScore[0].feedbackScore);
       setEscrowReleaseTime(
@@ -153,21 +152,17 @@ const Offer = ({ solGbp, solUsd, currency }) => {
 
   const getUserWallets = () => {
     Axios.post(`${AppUrl}/GetWallets`, {}).then((response) => {
-      console.log(response, "response from /GetWallets");
       if (!response.data.code) {
         const formattedWallets = response.data.filter(
           (fw) => fw.address.length > 1
         );
-        console.log(formattedWallets);
         setUserWallets(formattedWallets);
       } else {
-        console.log(response.data.sqlMessage);
       }
     });
   };
 
   const openTrade = () => {
-    console.log(data.saleID);
     Axios.post(`${AppUrl}/OpenTrade`, {
       saleID: data.saleID,
       sellerID: data.userID,
@@ -206,17 +201,12 @@ const Offer = ({ solGbp, solUsd, currency }) => {
     }
   }, [data, state, registeredDate]);
 
-  console.log(data, "data in stata");
-
   const filteredPaymentMethods = [
     "Please Select",
     data.paymentMethod1,
     data.paymentMethod2,
   ];
   const formattedCurrency = convertCurrencyToSymbol(currency);
-
-  console.log(solGbp, " sol price");
-  console.log(listingPrice, "listing price");
 
   return data.length === 0 ? (
     <PageBody className="d-flex justify-content-center flex-column">
