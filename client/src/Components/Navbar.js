@@ -84,18 +84,19 @@ const Navbar = ({ loginStatus, userName }) => {
 	};
 
 	const getAccountTier = () => {
-		if (loginStatus === true){
-			Axios.get(`${AppUrl}/getUserAccountLevel`).then((response) => {
-				setAccountTier(response.data[0]?.accountLevel);
-			});
-		}
+		Axios.get(`${AppUrl}/getUserAccountLevel`).then((response) => {
+			setAccountTier(response.data[0]?.accountLevel);
+		});
 	};
 
 	useEffect(() => {
-		getAccountTier();
-	}, []);
+		if (loginStatus === true){
+			getAccountTier();
+		}
+	}, [loginStatus]);
 
 	console.log(loginStatus, 'is user logged in?');
+	console.log(accountTier, 'current user account tier');
 
 	return (
 		<Base className="d-flex justify-content-center">
