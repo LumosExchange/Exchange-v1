@@ -12,6 +12,9 @@ import { StyledLinkTo } from "../Components/Profile";
 import { IconHelper } from "./Login";
 import { AppUrl } from "../App";
 import { CodeSentMessage } from "./ChangePassword";
+import { ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+import { StyledModal } from "./Profile/PaymentMethods";
+import { InlineButton } from "../Components/Buttons";
 
 const CRYPTO_KIN = "KIN";
 const CRYPTO_SOL = "SOL";
@@ -170,6 +173,7 @@ const Sell = () => {
 	const [newPaymentMethods, setNewPaymentMethods] = useState([]);
 	const [accountLimit, setAccountLimit] = useState(0);
 	const [currentStep, setCurrentStep] = useState("initial");
+	const [modal, setModal] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -208,14 +212,28 @@ const Sell = () => {
 			change: changeReg,
 			payment1: preferredPayment,
 			payment2: secondaryPayment,
-		}).then(() => {
-
+		}).then((response) => {
+			if (response.data.saleListing === true){
+				openModal(true);
+				setCurrentStep("confirmation");
+			} else {
+				setCurrentStep("failure");
+			}
 		})}
 
 	//Get account level and
 	const switchMode = () => {
 		navigate("/Buy");
 	};
+
+	const openModal = () => {
+		setModal(!modal);
+	}
+
+	const confirmModal = () => {
+		setModal(!modal);
+		navigate("/Buy");
+	}
 
 	useEffect(() => {
 		updatePayments();
@@ -293,147 +311,164 @@ const Sell = () => {
 							</div>
 						</Card>
 					</div>
-					{currentStep === "initial" && (
-						<div className="col-12 col-md-7 mt-4 mt-md-0">
-							<Heading size="24px">List {selectedCrypto} for Sale</Heading>
-							<Card radius="20px" className="p-4">
-								<div className="row">
-									<div className="col-12 col-md-6 mb-3">
-										<StyledLabel padding="0 0 10px 0" htmlFor="amount" bold>
-											Amount of SOL for sale
-										</StyledLabel>
-										<FormInput
-											autofocus="true"
-											type="number"
-											placeholder="0 SOL"
-											name="amount"
-											color="btn"
-											id="amount"
-											className="w-100"
-											onChange={(e) => {
-												setAmountForSaleReg(e.target.value);
-											}}
-											required
-										/>
-									</div>
-									<div className="col-12 col-md-6">
-										<StyledLabel padding="0 0 10px 0" htmlFor="aboveOrBelow" bold>
-											Sell above or below market
-										</StyledLabel>
-										<StyledDropdown
-											type="aboveOrBelow"
-											placeholder="aboveOrBelow"
-											name="aboveOrBelow"
-											id="aboveOrBelow"
-											color="btn"
-											onChange={(e) => {
-												setAboveOrBelowReg(e.target.value);
-											}}
-											className="w-100"
-											required
-										>
-											<option value="Please Select">Please Select</option>
-											<option value="below">Below</option>
-											<option value="above">Above</option>
-										</StyledDropdown>
-									</div>
-									<div className="col-12 col-md-6">
-										<StyledLabel padding="0 0 10px 0" htmlFor="change" bold>
-											Percentage Market
-										</StyledLabel>
-										<FormInput
-											type="number"
-											placeholder="2.5%"
-											name="change"
-											color="btn"
-											id="change"
-											className="w-100"
-											onChange={(e) => {
-												setChangeReg(e.target.value);
-											}}
-											required
-										/>
-									</div>
-									<div className="col-12 col-md-6 mb-3">
-										<StyledLabel padding="0 0 10px 0" htmlFor="preferredPayment" bold>
-											Preferred Payment
-										</StyledLabel>
-										<StyledDropdown
-											type="change"
-											placeholder="preferredPayment"
-											name="preferredPayment"
-											id="preferredPayment"
-											color="btn"
-											onChange={(e) => {
-												setPreferredPayment(e.target.value);
-											}}
-											className="w-100"
-											required
-										>
-											{newPaymentMethods.map((data) => (
-												<option value={data} key={data}>
-													{data}
-												</option>
-											))}
-										</StyledDropdown>
-									</div>
-									<div className="col-12 col-md-6">
-										<StyledLabel padding="0 0 10px 0" htmlFor="secondaryPayment" bold>
-											Secondary Payment
-										</StyledLabel>
-										<StyledDropdown
-											placeholder="aboveOrBelow"
-											name="secondaryPayment"
-											id="secondaryPayment"
-											color="btn"
-											onChange={(e) => {
-												setSecondaryPayment(e.target.value);
-											}}
-											className="w-100"
-											required
-										>
-											{filteredNewPaymentMethods.map((data) => (
-												<option value={data} key={data}>
-													{data}
-												</option>
-											))}
-										</StyledDropdown>
-									</div>
-									<div className="col-12 col-md-6 d-flex align-items-end mt-4 mt-md-0">
-										<PrimaryButton
-											value="sell"
-											text="List Sale"
-											onClick={addSale}
-											className="w-100"
-											size="lg"
-											disabled={amountForSaleReg > accountLimit}
-										/>
-									</div>
-									{amountForSaleReg > accountLimit && (
-										<div className="col-12 mt-3 d-flex">
-											<IconHelper className="material-icons me-2" color="invalid">
-												error_outline
-											</IconHelper>
-											<Paragraph className="mb-0" size="20px" color="invalid">
-												Amount of SOL for sale is higher than your account limit allows. Please
-												<StyledLinkTo to="/Profile/AccountUpgrade" className="ms-2">
-													Upgrade your account
-												</StyledLinkTo>
-											</Paragraph>
-										</div>
-									)}
-									{currentStep === "confirmation" && (
-										<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
-											<i className="material-icons me-2">mark_email_read</i>
-											<Paragraph bold size="20px" className="mb-0">
-												Listed added!
-											</Paragraph>
-										</CodeSentMessage>
-									)}
+					<div className="col-12 col-md-7 mt-4 mt-md-0">
+						<Heading size="24px">List {selectedCrypto} for Sale</Heading>
+						<Card radius="20px" className="p-4">
+							<div className="row">
+								<div className="col-12 col-md-6 mb-3">
+									<StyledLabel padding="0 0 10px 0" htmlFor="amount" bold>
+										Amount of SOL for sale
+									</StyledLabel>
+									<FormInput
+										autofocus="true"
+										type="number"
+										placeholder="0 SOL"
+										name="amount"
+										color="btn"
+										id="amount"
+										className="w-100"
+										onChange={(e) => {
+											setAmountForSaleReg(e.target.value);
+										}}
+										required
+									/>
 								</div>
-							</Card>
-						</div>
-					)}
+								<div className="col-12 col-md-6">
+									<StyledLabel padding="0 0 10px 0" htmlFor="aboveOrBelow" bold>
+										Sell above or below market
+									</StyledLabel>
+									<StyledDropdown
+										type="aboveOrBelow"
+										placeholder="aboveOrBelow"
+										name="aboveOrBelow"
+										id="aboveOrBelow"
+										color="btn"
+										onChange={(e) => {
+											setAboveOrBelowReg(e.target.value);
+										}}
+										className="w-100"
+										required
+									>
+										<option value="Please Select">Please Select</option>
+										<option value="below">Below</option>
+										<option value="above">Above</option>
+									</StyledDropdown>
+								</div>
+								<div className="col-12 col-md-6">
+									<StyledLabel padding="0 0 10px 0" htmlFor="change" bold>
+										Percentage Market
+									</StyledLabel>
+									<FormInput
+										type="number"
+										placeholder="2.5%"
+										name="change"
+										color="btn"
+										id="change"
+										className="w-100"
+										onChange={(e) => {
+											setChangeReg(e.target.value);
+										}}
+										required
+									/>
+								</div>
+								<div className="col-12 col-md-6 mb-3">
+									<StyledLabel padding="0 0 10px 0" htmlFor="preferredPayment" bold>
+										Preferred Payment
+									</StyledLabel>
+									<StyledDropdown
+										type="change"
+										placeholder="preferredPayment"
+										name="preferredPayment"
+										id="preferredPayment"
+										color="btn"
+										onChange={(e) => {
+											setPreferredPayment(e.target.value);
+										}}
+										className="w-100"
+										required
+									>
+										{newPaymentMethods.map((data) => (
+											<option value={data} key={data}>
+												{data}
+											</option>
+										))}
+									</StyledDropdown>
+								</div>
+								<div className="col-12 col-md-6">
+									<StyledLabel padding="0 0 10px 0" htmlFor="secondaryPayment" bold>
+										Secondary Payment
+									</StyledLabel>
+									<StyledDropdown
+										placeholder="aboveOrBelow"
+										name="secondaryPayment"
+										id="secondaryPayment"
+										color="btn"
+										onChange={(e) => {
+											setSecondaryPayment(e.target.value);
+										}}
+										className="w-100"
+										required
+									>
+										{filteredNewPaymentMethods.map((data) => (
+											<option value={data} key={data}>
+												{data}
+											</option>
+										))}
+									</StyledDropdown>
+								</div>
+								<div className="col-12 col-md-6 d-flex align-items-end mt-4 mt-md-0">
+									<PrimaryButton
+										value="sell"
+										text="List Sale"
+										onClick={addSale}
+										className="w-100"
+										size="lg"
+										disabled={amountForSaleReg > accountLimit}
+									/>
+								</div>
+								{amountForSaleReg > accountLimit && (
+									<div className="col-12 mt-3 d-flex">
+										<IconHelper className="material-icons me-2" color="invalid">
+											error_outline
+										</IconHelper>
+										<Paragraph className="mb-0" size="20px" color="invalid">
+											Amount of SOL for sale is higher than your account limit allows. Please
+											<StyledLinkTo to="/Profile/AccountUpgrade" className="ms-2">
+												Upgrade your account
+											</StyledLinkTo>
+										</Paragraph>
+									</div>
+								)}
+							</div>
+						</Card>
+					</div>
+					<StyledModal
+						centered
+						isOpen={modal}
+						toggle={openModal}
+					>
+						<ModalBody>
+							{currentStep === "confirmation" && (
+								<CodeSentMessage className="d-flex mb-4 align-items-center flex-column">
+									<i className="material-icons me-2">playlist_add_check_circle</i>
+									<Paragraph bold size="20px" className="mb-0">
+										Listed Successfully added!
+									</Paragraph>
+								</CodeSentMessage>
+							)}
+							{currentStep === "failure" && (
+								<CodeSentMessage className="d-flex mb-4 align-items-center flex-column" error>
+									<i className="material-icons me-2">cancel</i>
+									<Paragraph bold size="20px" className="mb-0">
+										An Error Occurred
+									</Paragraph>
+								</CodeSentMessage>
+							)}
+							<div className="col-12">
+								<PrimaryButton onClick={() => confirmModal()} text="OK" className="w-100" />
+							</div>
+						</ModalBody>
+					</StyledModal>
 				</div>
 			</div>
 		</PageBody>

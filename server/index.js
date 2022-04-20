@@ -329,6 +329,16 @@ app.post("/sell", (req, res) => {
         results[2].length,
       ],
       (err, resultt) => {
+        if (err) {
+          res.send({
+            error: err,
+            saleListing: false,
+          });
+        } else {
+          res.send({
+            saleListing: true,
+          });
+        }
         console.log(err);
       }
     );
