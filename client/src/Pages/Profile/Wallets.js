@@ -427,7 +427,7 @@ const Wallets = () => {
 								<PrimaryButton
 									className="w-100 mt-3"
 									text="Add Wallet"
-									onClick={() => addWallet("local")}
+									onClick={() => addWallet("local", walletAddress)}
 									disabled={(walletAddress.length > 44) || (walletAddress.length < 32)}
 								/>
 							</ModalBody>

@@ -70,10 +70,6 @@ const Login = () => {
         setLoginStatus(true);
       }
     });
-
-    if (loginStatus === true){
-      navigate('/');
-    }
   }, [loginStatus]);
 
   return (
