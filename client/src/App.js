@@ -94,7 +94,7 @@ const App = () => {
 			if (response.data.loggedIn === true) {
 				setLoginStatus(true);
 			} else {
-		//		Navigate('/');
+				// Navigate('/');
 			}
 		});
 	};
