@@ -110,6 +110,8 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 	const [selectedCrypto, selectCrypto] = useState(CRYPTO_SOL);
 	const [searchCriteriaPayment, setSearchCriteriaPayment] = useState('Please Select');
 	const [searchCriteriaLocation, setSearchCriteriaLocation] = useState('Please Select');
+	const [searchCriteriaFeedback, setSearchCriteriaFeedback] = useState('Please select');
+	const [searchCriteriaPrice, setSearchCriteriaPrice] = useState('Please select');
 	const [filteredListings, setFilteredListings] = useState([]);
 	const [isFiltering, setIsFiltering] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
@@ -130,6 +132,18 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 		"France",
 	];
 
+	const feedbackMethods = [
+		"Please Select",
+		"High - Low",
+		"Low - High",
+	];
+
+	const priceMethods = [
+		"Please Select",
+		"High - Low",
+		"Low - High",
+	]
+
 	const ListingArea = styled.div`
 		max-height: 100vh;
 		overflow-y: auto;
@@ -142,7 +156,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 	}
 
 	const filterListings = () => {
-		if (searchCriteriaPayment === "Please Select" || searchCriteriaLocation === "Please Select"){
+		if (searchCriteriaPayment === "Please Select" || searchCriteriaLocation === "Please Select" || searchCriteriaFeedback === "Please Select" || searchCriteriaPrice === "Please Select" ){
 			setIsFiltering(false);
 			setFilteredListings([]);
 		}
@@ -159,6 +173,19 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 				.filter(al => al.Country === searchCriteriaLocation);
 				setFilteredListings(filteredListings2);
 			}
+				if(searchCriteriaFeedback !== "Please Select") {
+					setIsFiltering(true);
+					if (searchCriteriaFeedback === "High - Low") {
+						const filteredListings3 = filteredListings
+						.filter(al => (al.feedbackScore.sort().reverse()));
+						setFilteredListings(filteredListings3);
+
+					} else if (searchCriteriaFeedback === "Low - High") {
+						const filteredListings4 = filteredListings
+						.filter(al => (al.feedbackScore.sort()));
+						setFilteredListings(filteredListings4);
+					}
+				}
 		}
 
 		if (searchCriteriaPayment === "Please Select" && searchCriteriaLocation !== "Please Select"){
@@ -173,6 +200,8 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 		setIsFiltering(false);
 		setSearchCriteriaPayment('Please Select');
 		setSearchCriteriaLocation('Please Select');
+		setSearchCriteriaFeedback('Please Select');
+		setSearchCriteriaPrice('Please Select');
 		setFilteredListings([]);
 	}
 
@@ -296,9 +325,57 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 									<option value={data}>{data}</option>
 								))}
 							</StyledDropdown>
+
+							<div className="col-12">
+								<StyledLabel bold padding="10px 0 5px 0" htmlFor="preferredFeedback">
+									Feedback Score
+								</StyledLabel>
+							</div>
+							<StyledDropdown
+								type="change"
+								placeholder="preferredFeedback"
+								name="preferredFeedback"
+								value={searchCriteriaLocation}
+								id="preferredFeedback"
+								color="btn"
+								onChange={(e) => {
+									setSearchCriteriaFeedback(e.target.value);
+								}}
+								className="w-100"
+								required
+							>
+								{feedbackMethods.map((data) => (
+									<option value={data}>{data}</option>
+								))}
+							</StyledDropdown>
+
+							<div className="col-12">
+								<StyledLabel bold padding="10px 0 5px 0" htmlFor="preferredPrice">
+									Price
+								</StyledLabel>
+							</div>
+							<StyledDropdown
+								type="change"
+								placeholder="preferredPrice"
+								name="preferredPrice"
+								value={searchCriteriaPrice}
+								id="preferredPrice"
+								color="btn"
+								onChange={(e) => {
+									setSearchCriteriaPrice(e.target.value);
+								}}
+								className="w-100"
+								required
+							>
+								{priceMethods.map((data) => (
+									<option value={data}>{data}</option>
+								))}
+							</StyledDropdown>
+
+
 							<div className="col-12 mt-3">
 								<GradientButton
-									text="Filter"
+									text="Filter Listings"
 									onClick={filterListings}
 									fontSize="20px"
 									padding="4px 20px"
