@@ -308,14 +308,18 @@ app.post("/sell", (req, res) => {
   const payment2 = req.body.payment2;
 
   var sql =
-    "SELECT country AS Country FROM upgradeTiers WHERE (userID) = (?);SELECT city AS Town FROM upgradeTiers WHERE (userID) = (?);SELECT saleID AS SaleID FROM TradeHistory WHERE (sellerID) = (?)";
+    "SELECT country AS Country FROM upgradeTiers WHERE (userID) = (?);SELECT city AS Town FROM upgradeTiers WHERE (userID) = (?);SELECT saleID AS SaleID FROM TradeHistory WHERE (sellerID) = (?);SELECT AVG(feedbackScore) as feedbackScore from feedback WHERE (sellerUserID) = (?);";
 
-  db.query(sql, [id, id, id], function (error, results) {
+  db.query(sql, [id, id, id, id], function (error, results) {
     if (error) {
       console.log(error);
+    } else {
+      console.log(results);
+      console.log(results[3][0].feedbackScore);
     }
+    
     db.query(
-      "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory) VALUES (?,?,?,?,?,?,?,?,?,?)",
+      "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory, feedbackScore) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
       [
         id,
         amountForSale,
@@ -327,6 +331,7 @@ app.post("/sell", (req, res) => {
         payment1,
         payment2,
         results[2].length,
+        results[3][0].feedbackScore || 0,
       ],
       (err, resultt) => {
         if (err) {
@@ -341,9 +346,10 @@ app.post("/sell", (req, res) => {
         }
         console.log(err);
       }
-    );
-  });
+     );
+   });
 });
+
 
 //Get users open listings
 app.get("/getListings", (req, res) => {
