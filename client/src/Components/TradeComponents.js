@@ -7,6 +7,7 @@ import ErrorBG from '../Images/errorbg.svg';
 import PositiveFeedbackBG from '../Images/PositiveFeedbackBG.svg';
 import NegativeFeedbackBG from '../Images/NegativeFeedbackBG.svg';
 import Card from "../Components/Card";
+import { InvisibleButton } from "./Buttons";
 
 export const FeedbackContext = createContext(null);
 
@@ -437,3 +438,109 @@ export const IconPrimaryCta = styled.i(({ theme }) => css`
 export const HighlightedText = styled.span(({ theme }) => css`
     color: ${theme.colors.primary_cta};
 `);
+
+export const Reference = styled(Paragraph)`
+	text-transform: uppercase;
+`;
+
+export const TitledIcon = styled.i`
+	cursor: help;
+`;
+
+export const MaxHeightBarrier = styled.div(
+	({ theme }) => css`
+		overflow: auto;
+		padding: 0 15px;
+	`
+);
+
+export const ActionButton = styled(InvisibleButton)(
+	({ theme, color, textColor }) => css`
+		background: ${theme.colors[color]};
+		border-radius: 50px;
+		padding: 10px 25px;
+		color: ${theme.colors.base_bg};
+		font-size: 20px;
+
+		&.delete {
+			background: ${theme.colors.invalid};
+			color: ${theme.colors.actual_white};
+		}
+
+		&:hover {
+			transform: scale(1.05);
+		}
+
+		&:disabled {
+			background: ${theme.colors.disabledGrey};
+			cursor: not-allowed;
+			color: ${theme.colors.actual_white};
+
+			&:hover {
+				transform: initial;
+			}
+		}
+	`
+);
+
+export const MissingIcon = styled.i(
+	({ theme }) => css`
+		font-size: 80px;
+		color: ${theme.colors.primary_cta};
+	`
+);
+
+export const TradeHistoryTab = styled.a(
+	({ theme }) => css`
+		background: ${theme.colors.btn};
+		color: ${theme.colors.text_primary};
+		padding: 10px 30px;
+		border-radius: 5px 5px 0 0;
+		border-bottom: 2px solid ${theme.colors.btn};
+		margin-right: 16px;
+		text-decoration: none;
+
+		&:hover {
+			color: ${theme.colors.primary_cta};
+		}
+
+		&.selected {
+			background: ${theme.colors.primary_cta};
+			color: ${theme.colors.base_bg};
+			border-bottom: 2px solid ${theme.colors.primary_cta};
+			font-family: "THICCCBOI-BOLD";
+		}
+
+		&.wide {
+			min-width: 200px;
+			text-align: center;
+		}
+	`
+);
+
+export const Tabs = styled.div`
+	padding: 0 0 0 9px;
+	overflow-x: auto;
+`;
+
+export const TradeHistoryTabs = ({ selected }) => (
+	<Tabs className="d-flex align-items-end">
+		<TradeHistoryTab href="/TradeHistory/Buy" className={selected === "Buy" && "selected"}>
+			Buy
+		</TradeHistoryTab>
+		<TradeHistoryTab href="/TradeHistory/Sell" className={selected === "Sell" && "selected"}>
+			Sell
+		</TradeHistoryTab>
+		<TradeHistoryTab href="/TradeHistory/Completed" className={selected === "Completed" && "selected"}>
+			Completed
+		</TradeHistoryTab>
+	</Tabs>
+);
+
+export const ContentTab = styled.div(
+	({ theme }) => css`
+		background: ${theme.colors.panel_bg};
+		border-radius: 3px;
+		border: 2px solid ${theme.colors.primary_cta};
+	`
+);

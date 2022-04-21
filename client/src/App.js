@@ -19,7 +19,9 @@ import Footer from "./Components/Footer";
 import ConnectWallet from "./Pages/ConnectWallet";
 import ChangePassword from "./Pages/ChangePassword";
 import MyWallet from "./Pages/MyWallet";
-import TradeHistory from "./Pages/TradeHistory";
+import TradeHistoryBuy from "./Pages/TradeHistory/Buy";
+import TradeHistorySell from "./Pages/TradeHistory/Sell";
+import TradeHistoryCompleted from "./Pages/TradeHistory/Completed";
 import EmailVerification from "./Pages/EmailVerification";
 import AirDrops from "./Pages/AirDrops";
 import GoogleAuth from "./Pages/Auth/GoogleAuth";
@@ -143,7 +145,9 @@ const App = () => {
 							<Route path="/Sell" element={<Sell />} />
 							<Route path="/Selling" element={<Selling userName={userName} />} />
 							<Route path="/Offer" element={<Offer solGbp={solGbp} solUsd={solUsd} currency={currency} />} />
-							<Route path="/TradeHistory" element={<TradeHistory />} />
+							<Route path="/TradeHistory/Buy" element={<TradeHistoryBuy />} />
+							<Route path="/TradeHistory/Sell" element={<TradeHistorySell />} />
+							<Route path="/TradeHistory/Completed" element={<TradeHistoryCompleted />} />
 							<Route path="/profile/user/:id" element={<Feedback />} />
 							<Route path="/ConnectWallet" element={<ConnectWallet />} />
 							<Route path="/ChangePassword" element={<ChangePassword />} />

@@ -111,7 +111,7 @@ const Navbar = ({ loginStatus, userName }) => {
 								<Link href="/MyListings" className="me-4 me-xl-5">
 									My Listings
 								</Link>
-								<Link href="/TradeHistory" className="me-4 me-xl-5">
+								<Link href="/TradeHistory/Buy" className="me-4 me-xl-5">
 									My Trades
 								</Link>
 								<Link href="/MyWallet" className="me-4 me-xl-5">
@@ -228,7 +228,7 @@ const Navbar = ({ loginStatus, userName }) => {
 							<Link href="/MyListings" className="mb-3">
 								My Listings
 							</Link>
-							<Link href="/TradeHistory" className="mb-3">
+							<Link href="/TradeHistory/Buy" className="mb-3">
 								My Trades
 							</Link>
 							<Link href="/MyWallet" className="mb-3">

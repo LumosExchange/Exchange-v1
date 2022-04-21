@@ -673,7 +673,7 @@ const AccountUpgrade = () => {
 								className={accountTier === "Gold" && "expanded"}
 							>
 								<AccordionSummary aria-controls="panel4bh-content" id="panel4bh-header">
-									<div className="d-flex justify-content-between w-100">
+									<div className="d-flex justify-content-between align-items-center w-100">
 										<Paragraph size="20px" bold className="mb-0">
 											Gold Tier
 										</Paragraph>
