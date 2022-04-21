@@ -11,6 +11,7 @@ import { convertCurrencyToSymbol } from "../Helpers";
 import FlagUK from '../Images/flag-icons/gb.png';
 import { Link } from "react-router-dom";
 import { InvisibleButton } from "./Buttons";
+import { TitledIcon, Reference, ActionButton } from "./TradeComponents";
 
 export const CardDivider = styled.hr(({ theme }) => css`
     :not([size]){
@@ -123,3 +124,137 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
 }
 
 export default TradeCard;
+
+export const ActiveTradeCard = ({ tradeInfo, type, noButtons, noMessage }) => {
+    const formattedDate = Date(tradeInfo.Date).split("GMT", 1);
+	const formattedCurrencySymbol = convertCurrencyToSymbol(tradeInfo.paymentCurrency);
+	const liveTradeID = tradeInfo.LiveTradeID;
+	const paymentSent = tradeInfo.paymentRecieved;
+
+	const navigate = useNavigate();
+
+	return (
+		<Card className="w-100 p-4 mb-3" color="grey" key={tradeInfo.Reference}>
+			<div className="row">
+				<div className="col-12 col-lg-3">
+					<div className="d-flex flex-column">
+						<Heading bold size="22px" className="text-start mb-3">
+							MetaData
+						</Heading>
+						<div className="d-flex">
+							<TitledIcon className="material-icons me-2" title="Reference">
+								tag
+							</TitledIcon>
+							<Paragraph size="18px" className="me-2">
+								{tradeInfo.HistoryID ? tradeInfo.HistoryID : tradeInfo.LiveTradeID}
+							</Paragraph>
+						</div>
+						<div className="d-flex">
+							<TitledIcon className="material-icons me-2" title="Date/Time Created">
+								schedule
+							</TitledIcon>
+							<Paragraph size="18px" className="me-2 text-start">
+								{formattedDate}
+							</Paragraph>
+						</div>
+						{!noMessage && tradeInfo.Message && (
+							<div className="d-flex">
+								<TitledIcon className="material-icons me-2" title="Message from Seller">
+									message
+								</TitledIcon>
+								<Paragraph size="18px" className="mb-0 overflow-hidden text-truncate">
+									{tradeInfo.Message}
+								</Paragraph>
+							</div>
+						)}
+					</div>
+				</div>
+				<div className="col-12 d-lg-none">
+					<CardDivider />
+				</div>
+				<div className="col-12 col-lg-3">
+					<Heading bold size="22px" className="text-start mb-3">
+						Price/Coin Data
+					</Heading>
+					<div className="d-flex">
+						<Paragraph size="18px" bold className="me-2">
+							Rate:
+						</Paragraph>
+						<Paragraph size="18px" className="mb-0">
+							{formattedCurrencySymbol}
+							{tradeInfo.userSolPrice} per SOL
+						</Paragraph>
+					</div>
+					<div className="d-flex">
+						<Paragraph size="18px" bold className="me-2">
+							Amount:
+						</Paragraph>
+						<Paragraph size="18px" className="mb-2">
+							{tradeInfo.amountOfSol}
+						</Paragraph>
+					</div>
+					<div className="d-flex">
+						<Paragraph size="18px" bold className="me-2">
+							Total:
+						</Paragraph>
+						<Paragraph size="18px" className="mb-0">
+							{formattedCurrencySymbol}
+							{tradeInfo.fiatAmount}
+						</Paragraph>
+					</div>
+				</div>
+				<div className="col-12 d-lg-none">
+					<CardDivider />
+				</div>
+				<div className="col-12 col-lg-3 mb-4 mb-md-0">
+					<Heading bold size="22px" className="text-start mb-3">
+						Payment Data
+					</Heading>
+					<div className="d-flex">
+						<Paragraph size="18px" bold className="me-2">
+							Method:
+						</Paragraph>
+						<Paragraph size="18px" className="mb-2">
+							{tradeInfo.paymentMethod}
+						</Paragraph>
+					</div>
+					<div className="d-flex">
+						<Paragraph size="18px" bold className="me-2">
+							Payment:
+						</Paragraph>
+						<Paragraph size="18px" className="mb-2">
+							{tradeInfo.paymentRecieved === "NO" ? "Not yet paid" : "Mark as Paid"}
+						</Paragraph>
+					</div>
+					<div className="d-flex">
+						<Paragraph size="18px" bold className="me-2">
+							Ref:
+						</Paragraph>
+						<Reference size="18px" className="mb-2">
+							{tradeInfo.Reference}
+						</Reference>
+					</div>
+				</div>
+				<div className="col-12 col-lg-3 d-flex align-items-end justify-content-end flex-column">
+					<ActionButton
+						className="w-100 mb-2"
+						fontSize="20px"
+						color="primary_cta"
+						textColor="actual_white"
+						disabled={noButtons}
+						onClick={() =>
+							navigate(type === "buying" ? "/Buying" : "/Selling", {
+								state: {
+									liveTradeID,
+									paymentSent,
+								},
+							})
+						}
+					>
+						View Trade
+					</ActionButton>
+				</div>
+			</div>
+		</Card>
+	);
+};

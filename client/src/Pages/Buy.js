@@ -142,7 +142,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 	}
 
 	const filterListings = () => {
-		if (searchCriteriaPayment === "Please Select" || setSearchCriteriaLocation === "Please Select"){
+		if (searchCriteriaPayment === "Please Select" || searchCriteriaLocation === "Please Select"){
 			setIsFiltering(false);
 			setFilteredListings([]);
 		}
