@@ -48,6 +48,7 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
     const navigate = useNavigate();
     const userID = val.userID;
     const userName = val.userName;
+    const feedbackScore = val.feedbackScore;
 
     return (
         <Card className="p-3 mb-3" color="grey">
@@ -87,7 +88,13 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
                         {' '}{val.aboveOrBelow}{' '}market
                     </Paragraph>
                 </div>
-                <div className="col-12 col-xl-3 d-flex align-items-center">
+                <div className="col-12 col-xl-3 d-flex flex-column">
+                    <div className="d-flex align-items-center">
+                        <i className="material-icons me-2">recommend</i>
+                        <Paragraph size="16px" className="mb-0">
+                            {feedbackScore}% Feedback
+                        </Paragraph>
+                    </div>
                     <div className="d-flex">
                         <i className="material-icons me-2">swap_horiz</i>
                         <Paragraph size="16px" className="mb-0">
