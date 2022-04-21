@@ -125,7 +125,7 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
 
 export default TradeCard;
 
-export const ActiveTradeCard = ({ tradeInfo, type, noButtons, noMessage }) => {
+export const ActiveTradeCard = ({ tradeInfo, type, withView, noMessage, withReports }) => {
     const formattedDate = Date(tradeInfo.Date).split("GMT", 1);
 	const formattedCurrencySymbol = convertCurrencyToSymbol(tradeInfo.paymentCurrency);
 	const liveTradeID = tradeInfo.LiveTradeID;
@@ -236,23 +236,36 @@ export const ActiveTradeCard = ({ tradeInfo, type, noButtons, noMessage }) => {
 					</div>
 				</div>
 				<div className="col-12 col-lg-3 d-flex align-items-end justify-content-end flex-column">
-					<ActionButton
-						className="w-100 mb-2"
-						fontSize="20px"
-						color="primary_cta"
-						textColor="actual_white"
-						disabled={noButtons}
-						onClick={() =>
-							navigate(type === "buying" ? "/Buying" : "/Selling", {
-								state: {
-									liveTradeID,
-									paymentSent,
-								},
-							})
-						}
-					>
-						View Trade
-					</ActionButton>
+					{withView && (
+                        <ActionButton
+                            className="w-100 mb-2"
+                            fontSize="20px"
+                            color="primary_cta"
+                            textColor="actual_white"
+                            onClick={() =>
+                                navigate(type === "buying" ? "/Buying" : "/Selling", {
+                                    state: {
+                                        liveTradeID,
+                                        paymentSent,
+                                    },
+                                })
+                            }
+                        >
+                            View Trade
+                        </ActionButton>
+                    )}
+                    {withReports && (
+                        <ActionButton
+                            className="w-100 mb-2"
+                            fontSize="20px"
+                            color="primary_cta"
+                            textColor="actual_white"
+                            disabled
+                            onClick={null}
+                        >
+                            Download Report
+                        </ActionButton>
+                    )}
 				</div>
 			</div>
 		</Card>

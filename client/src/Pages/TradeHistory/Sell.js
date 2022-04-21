@@ -80,7 +80,7 @@ const TradeHistorySell = () => {
 							</Heading>
 							<MaxHeightBarrier>
 								{liveTradesSeller.map((tradeInfo, index) => (
-									<ActiveTradeCard tradeInfo={tradeInfo} type="selling" key={index} />
+									<ActiveTradeCard tradeInfo={tradeInfo} type="selling" key={index} withView />
 								))}
 								{messageForSales && (
 									<Paragraph size="20px" className="ms-2">

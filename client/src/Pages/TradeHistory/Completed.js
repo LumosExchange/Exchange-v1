@@ -57,7 +57,7 @@ const TradeHistoryCompleted = () => {
 							</Heading>
 							<MaxHeightBarrier>
 								{tradeHistory.map((trades, index) => (
-									<ActiveTradeCard tradeInfo={trades} noButtons noMessage key={index} />
+									<ActiveTradeCard tradeInfo={trades} noButtons noMessage withReports key={index} />
 								))}
 								{messageForHistory && <Paragraph size="20px" className="ms-2">{messageForHistory}</Paragraph>}
 							</MaxHeightBarrier>

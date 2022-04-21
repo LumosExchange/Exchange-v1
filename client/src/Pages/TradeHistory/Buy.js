@@ -72,7 +72,7 @@ const TradeHistoryBuy = () => {
 							<MaxHeightBarrier>
 								{liveTradesBuyer.map((tradeInfo, index) => (
 									<React.Fragment>
-										<ActiveTradeCard tradeInfo={tradeInfo} type="buying" key={index} />
+										<ActiveTradeCard tradeInfo={tradeInfo} type="buying" key={index} withView />
 									</React.Fragment>
 								))}
 								{messageForPurchases && (
