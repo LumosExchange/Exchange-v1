@@ -147,7 +147,7 @@ const MyListings = ({ solGbp, currency }) => {
 					<PrimaryButton text="Create Listing" onClick={ () => navigate('/Sell') } />
 				</div>
 			)}
-			<div className="col-12 col-lg-6 col-xl-9">
+			<div className="col-12">
 				{userListings.map((val, index) => (
 					<TradeCard val={val} withoutButton solGbp={solGbp} currency={currency} key={index}>
 						<div className="col-3 d-flex align-items-end justify-content-end">
@@ -314,10 +314,10 @@ const MyListings = ({ solGbp, currency }) => {
 					<ModalBody>
 						<div className="row">
 							<div className="col-6">
-								<InlineButton className="cancel" onClick={openDeleteModal}>Cancel</InlineButton>
+								<PrimaryButton className="clear w-100" text="Cancel" onClick={openDeleteModal} />
 							</div>
 							<div className="col-6">
-								<InlineButton className="delete" onClick={deleteListing}>Delete Listing</InlineButton>
+								<PrimaryButton className="red w-100" onClick={deleteListing} text="Delete Listing" />
 							</div>
 						</div>
 					</ModalBody>

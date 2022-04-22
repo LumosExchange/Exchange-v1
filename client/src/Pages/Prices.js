@@ -89,12 +89,12 @@ const Prices = () => {
 			{/*      Mobile View      */}
 			<div className="container py-3 d-flex d-lg-none row mx-auto">
 				{isLoading && <LoadingState />}
-				<div className="d-flex justify-content-between align-items-center mb-3">
+				<div className="d-flex justify-content-center align-items-center mb-3">
 					<div className="d-flex">
 						<CoinCircle color="valid" className="me-1">
 							{marketsUp}
 						</CoinCircle>
-						<CoinCircle color="invalid">
+						<CoinCircle color="invalid" className="me-3">
 							{marketsDown}
 						</CoinCircle>
 					</div>

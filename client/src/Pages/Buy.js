@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled, { css } from 'styled-components';
 import Axios from "axios";
-import { PageBody, StyledDropdown } from "../Components/FormInputs";
+import { InvisibleDropdown, PageBody, StyledDropdown } from "../Components/FormInputs";
 import Card from "../Components/Card";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import TradeCard from "../Components/TradeCard";
 import { LoadingState } from "../Components/Profile";
 import { AppUrl } from "../App";
+import { IconHelper } from "./Login";
 
 const CRYPTO_KIN = 'KIN';
 const CRYPTO_SOL = 'SOL';
@@ -139,7 +140,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 	];
 
 	const priceMethods = [
-		"Please Select",
+		"Price",
 		"High - Low",
 		"Low - High",
 	]
@@ -189,7 +190,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 					}
 				}
 
-				if(searchCriteriaPrice !== "Please Select") {
+				if (searchCriteriaPrice !== "Please Select") {
 					setIsFiltering(true);
 				} if (searchCriteriaPrice === "High - Low") {
 					const filteredListing5 = filteredListings
@@ -398,31 +399,6 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 									<option value={data}>{data}</option>
 								))}
 							</StyledDropdown>
-
-							<div className="col-12">
-								<StyledLabel bold padding="10px 0 5px 0" htmlFor="preferredPrice">
-									Price
-								</StyledLabel>
-							</div>
-							<StyledDropdown
-								type="change"
-								placeholder="preferredPrice"
-								name="preferredPrice"
-								value={searchCriteriaPrice}
-								id="preferredPrice"
-								color="btn"
-								onChange={(e) => {
-									setSearchCriteriaPrice(e.target.value);
-								}}
-								className="w-100"
-								required
-							>
-								{priceMethods.map((data) => (
-									<option value={data}>{data}</option>
-								))}
-							</StyledDropdown>
-
-
 							<div className="col-12 mt-3">
 								<GradientButton
 									text="Filter Results"
@@ -439,7 +415,27 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 						{filteredAllListings.length === 0 && (
 							<LoadingState />
 						)}
-						<Heading size="24px">Buy {selectedCrypto} from these Sellers</Heading>
+						<div className="d-flex justify-content-between flex-row pb-2">
+							<Heading size="24px">Buy {selectedCrypto} from these Sellers</Heading>
+							<div className="d-flex align-items-center">
+								<InvisibleDropdown
+									type="change"
+									placeholder="preferredPrice"
+									name="preferredPrice"
+									value={searchCriteriaPrice}
+									id="preferredPrice"
+									onChange={(e) => {
+										setSearchCriteriaPrice(e.target.value);
+									}}
+									required
+								>
+									{priceMethods.map((data) => (
+										<option value={data}>{data}</option>
+									))}
+								</InvisibleDropdown>
+								<IconHelper className="material-icons">expand_more</IconHelper>
+							</div>
+						</div>
 						<ListingArea>
 							{isFiltering && (
 								<div className="d-flex mb-3">
