@@ -90,7 +90,7 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
                 </div>
                 <div className="col-12 col-xl-3 d-flex flex-column">
                     <div className="d-flex align-items-center">
-                        <i className="material-icons me-2">recommend</i>
+                        <i className="material-icons me-2">emoji_events</i>
                         <Paragraph size="16px" className="mb-0">
                             {feedbackScore}% Feedback
                         </Paragraph>

@@ -5,6 +5,7 @@ import Heading from "../Components/Heading";
 import GradientButton from "../Components/GradientButton";
 import { SecondaryButton, LinkButton } from "../Components/Buttons";
 import Paragraph from "../Components/Paragraph";
+import { Link } from 'react-router-dom';
 
 // Images
 import ShowCaseDark from '../Images/showcase_dark.png';
@@ -24,7 +25,6 @@ import {
     CopeIcon,
 } from '../Components/SVGComponents';
 import { useNavigate } from "react-router";
-
 
 const ShowcaseBase = styled.div(({ theme, currentTheme }) => css`
     min-height: 600px;
@@ -47,8 +47,8 @@ const Card = styled.div(({ theme }) => css`
     border-radius: 20px;
 `);
 
-const IconCard = ({ icon, title, text, children }) => (
-    <div className="col-12 col-sm-6 col-md-6 col-xl-3 mb-4 mb-xl-0">
+const IconCard = ({ icon, title, text, children, link }) => (
+    <Link to={`/Prices#${link}`} className="col-12 col-sm-6 col-md-6 col-xl-3 mb-4 mb-xl-0 text-decoration-none">
         <Card className="p-4 text-center mb-4 mb-xl-0 h-100">
             {children}
             {/* Make these icons tomorrow */}
@@ -57,7 +57,7 @@ const IconCard = ({ icon, title, text, children }) => (
                 {text}
             </Paragraph>
         </Card>
-    </div>
+    </Link>
 );
 
 const GradientHeading = styled(Heading)(({ theme }) => css`
@@ -134,6 +134,7 @@ const Home = ({ theme }) => {
         <div className="container mt-4">
             <div className="row justify-content-center mb-4">
                 <IconCard
+                    link="solana"
                     title="Solana"
                     icon={IconSolana}
                     text="The open-source crypto with the fastest responsive speed and rapidly growing ecosystem."
@@ -141,6 +142,7 @@ const Home = ({ theme }) => {
                     <img src={IconSolana} alt="Solana" className="mb-3" />
                 </IconCard>
                 <IconCard
+                    link="solana"
                     title="Lumos Rewards"
                     text="Our SPL asset focused on providing users an incentive to trade regularly, event participation & referrals."
                 >

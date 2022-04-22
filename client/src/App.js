@@ -45,7 +45,7 @@ import Prices from './Pages/Prices';
 import WalletTesting from './Pages/WalletTesting';
 
 export const AppUrl = "http://localhost:3001";
-export const AppUrlNoPort = "http://localhost.233";
+export const AppUrlNoPort = "http://localhost";
 export const SocketUrl = "http://localhost:3002";
 
 const App = () => {

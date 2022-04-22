@@ -104,7 +104,7 @@ const Prices = () => {
 					}
 				</div>
 				{coins.map((e) => (
-					<MobilePriceCard key={e.id} className="d-flex p-4 col-12 mb-3 align-items-center flex-wrap" border={convertPriceChangeToColor(e.price_change_percentage_24h)}>
+					<MobilePriceCard key={e.id} id={e.id} className="d-flex p-4 col-12 mb-3 align-items-center flex-wrap" border={convertPriceChangeToColor(e.price_change_percentage_24h)}>
 						<div className="d-flex justify-content-between w-100">
 							<div className="d-flex align-items-center">
 								<img src={e.image} alt={e.name} width="48" height="48" />
@@ -163,7 +163,7 @@ const Prices = () => {
 					</thead>
 					<tbody>
 						{coins.map((e, i) => (
-							<tr key={e.id}>
+							<tr key={e.id} id={e.id}>
 								<th className="d-inline-flex align-items-center prices">
 									<img src={e.image} alt={e.name} width="30" height="30" />
 									<Paragraph size="18px" className="mb-0 ms-3">
