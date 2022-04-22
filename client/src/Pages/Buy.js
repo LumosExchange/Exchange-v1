@@ -375,7 +375,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 
 							<div className="col-12 mt-3">
 								<GradientButton
-									text="Filter Listings"
+									text="Filter Results"
 									onClick={filterListings}
 									fontSize="20px"
 									padding="4px 20px"

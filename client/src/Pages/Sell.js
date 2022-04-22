@@ -61,6 +61,11 @@ const QuadButton = styled.button(
 			font-family: "THICCCBOI-BOLD";
 			color: ${theme.colors.base_bg};
 		}
+
+		:disabled {
+			opacity: 70%;
+			cursor: not-allowed;
+		}
 	`
 );
 
@@ -246,7 +251,7 @@ const Sell = () => {
 		<PageBody>
 			<div className="container">
 				<div className="row pt-5">
-					<div className="col-12 col-md-5">
+					<div className="col-12 col-md-5 col-xl-4">
 						<Card radius="10px" className="p-4">
 							<div className="d-flex">
 								<div className="col-6">
@@ -281,6 +286,7 @@ const Sell = () => {
 											selectedCrypto === CRYPTO_KIN && "selected"
 										}`}
 										onClick={() => selectCrypto(CRYPTO_KIN)}
+										disabled
 									>
 										{convertAssetToSvg(CRYPTO_KIN)}
 										<span className="ms-2">{CRYPTO_KIN}</span>
@@ -292,6 +298,7 @@ const Sell = () => {
 											selectedCrypto === CRYPTO_COPE && "selected"
 										}`}
 										onClick={() => selectCrypto(CRYPTO_COPE)}
+										disabled
 									>
 										{convertAssetToSvg(CRYPTO_COPE)}
 										<span className="ms-2">{CRYPTO_COPE}</span>
@@ -303,6 +310,7 @@ const Sell = () => {
 											selectedCrypto === CRYPTO_LRA && "selected"
 										}`}
 										onClick={() => selectCrypto(CRYPTO_LRA)}
+										disabled
 									>
 										{convertAssetToSvg(CRYPTO_LRA)}
 										<span className="ms-2">{CRYPTO_LRA}</span>
