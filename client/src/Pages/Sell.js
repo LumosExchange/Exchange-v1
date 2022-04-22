@@ -21,53 +21,49 @@ const CRYPTO_SOL = "SOL";
 const CRYPTO_LRA = "LRA";
 const CRYPTO_COPE = "COPE";
 
-const ToggleButton = styled.button(
-	({ theme }) => css`
-		background: ${theme.colors.btn};
-		padding: 10px 0;
-		border: 2px solid ${theme.colors.primary_cta};
-		color: ${theme.colors.text_primary};
-		font-size: 18px;
+const ToggleButton = styled.button(({ theme }) => css`
+	background: ${theme.colors.btn};
+	padding: 10px 0;
+	border: 2px solid ${theme.colors.primary_cta};
+	color: ${theme.colors.text_primary};
+	font-size: 18px;
 
-		&.left {
-			border-radius: 10px 0 0px 10px;
-		}
-		&.right {
-			border-radius: 0 10px 10px 0;
-		}
+	&.left {
+		border-radius: 10px 0 0px 10px;
+	}
+	&.right {
+		border-radius: 0 10px 10px 0;
+	}
 
-		&.selected {
-			background: ${theme.colors.primary_cta};
-			font-family: "THICCCBOI-BOLD";
-			color: ${theme.colors.base_bg};
-		}
-	`
-);
+	&.selected {
+		background: ${theme.colors.primary_cta};
+		font-family: "THICCCBOI-BOLD";
+		color: ${theme.colors.base_bg};
+	}
+`);
 
-const QuadButton = styled.button(
-	({ theme }) => css`
-		background: ${theme.colors.btn};
-		padding: 10px 0;
-		border: 0;
-		border-radius: 10px;
-		color: ${theme.colors.text_primary};
-		svg {
-			fill: ${theme.colors.text_primary};
-		}
-		font-size: 18px;
+const QuadButton = styled.button(({ theme }) => css`
+	background: ${theme.colors.btn};
+	padding: 10px 0;
+	border: 0;
+	border-radius: 10px;
+	color: ${theme.colors.text_primary};
+	svg {
+		fill: ${theme.colors.text_primary};
+	}
+	font-size: 18px;
 
-		&.selected {
-			background: ${theme.colors.primary_cta};
-			font-family: "THICCCBOI-BOLD";
-			color: ${theme.colors.base_bg};
-		}
+	&.selected {
+		background: ${theme.colors.primary_cta};
+		font-family: "THICCCBOI-BOLD";
+		color: ${theme.colors.base_bg};
+	}
 
-		:disabled {
-			opacity: 70%;
-			cursor: not-allowed;
-		}
-	`
-);
+	:disabled {
+		opacity: 70%;
+		cursor: not-allowed;
+	}
+`);
 
 export const convertAssetToSvg = (asset) => {
 	if (asset === "SOL") {

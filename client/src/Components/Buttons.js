@@ -25,6 +25,16 @@ const ButtonBase = styled.button(({
         &:hover { transform: none; }
     }
 
+    &.red {
+        background: ${theme.colors.invalid};
+    }
+
+    &.clear {
+        background: transparent;
+        border: 2px solid ${theme.colors.primary_cta};
+        span { color: ${theme.colors.primary_cta}; }
+    }
+
     span, i { color: ${theme.colors.base_bg}; };
 
     @media screen and (min-width: ${theme.breakpoints.md}) {
