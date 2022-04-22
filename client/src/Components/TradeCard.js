@@ -49,6 +49,8 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
     const userID = val.userID;
     const userName = val.userName;
     const feedbackScore = val.feedbackScore;
+    const priceAbove = val.aboveOrBelow === 'above' && ((solGbp / 100) * (100 + val.percentChange)).toFixed(2);
+    const priceBelow = val.aboveOrBelow === 'below' && ((solGbp / 100) * (100 - val.percentChange)).toFixed(2);
 
     return (
         <Card className="p-3 mb-3" color="grey">
@@ -64,7 +66,7 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
                         })}
                     >
                         <Paragraph size="24px" bold color="primary_cta" className="mb-0">
-                            {val.userName}
+                            {userName}
                         </Paragraph>
                     </ProfileLink>
                 </div>
@@ -80,8 +82,9 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
                 </div>
                 <div className="col-12 col-xl-3 d-flex flex-column align-items-xl-end mb-3 mb-xl-0">
                     <Heading size="24px" bold color="primary_cta" className="mb-0">
-                        {convertCurrencyToSymbol(currency)}{val.aboveOrBelow === 'above' && ((solGbp / 100) * (100 + val.percentChange)).toFixed(2)}
-                        {val.aboveOrBelow === 'below' && ((solGbp / 100) * (100 - val.percentChange)).toFixed(2)}
+                        {convertCurrencyToSymbol(currency)}
+                        {priceAbove}
+                        {priceBelow}
                     </Heading>
                     <Paragraph size="16px" className="mb-0">
                         {val.percentChange}%
