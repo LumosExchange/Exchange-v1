@@ -177,14 +177,28 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 					setIsFiltering(true);
 					if (searchCriteriaFeedback === "High - Low") {
 						const filteredListings3 = filteredListings
-						.filter(al => al.feedbackScore).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore));
+						.filter(al => al.feedbackScore).sort((a,b) => Number(a.feedbackScore) - Number(b.feedbackScore));
 						setFilteredListings(filteredListings3);
+						console.log(filteredAllListings);
 
 					} else if (searchCriteriaFeedback === "Low - High") {
-						const filteredListings4 = filteredListings.sort((a,b) => Number(a.feedbackScore) - Number(b.feedbackScore));
+						const filteredListings4 = filteredListings
+						.filter(al => al.feedbackScore).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore));
 						console.log('low: ', filteredListings4);
 						setFilteredListings(filteredListings4);
 					}
+				}
+
+				if(searchCriteriaPrice !== "Please Select") {
+					setIsFiltering(true);
+				} if (searchCriteriaPrice === "High - Low") {
+					const filteredListing5 = filteredListings
+					.sort().reverse();
+					console.log('High to low: ', filteredListing5);
+					setFilteredListings(filteredListing5);
+				} else if( searchCriteriaPrice === "Low - High") {
+					const filteredListings6 = filteredListings.sort();
+					setFilteredListings(filteredListings6);
 				}
 		}
 
