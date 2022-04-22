@@ -177,12 +177,11 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 					setIsFiltering(true);
 					if (searchCriteriaFeedback === "High - Low") {
 						const filteredListings3 = filteredListings
-						.filter(al => al.feedbackScore).sort((b,a,c) => Number(a.feedbackScore) - Number(b.feedbackScore));
-						console.log('High ', filteredListings3);
+						.filter(al => al.feedbackScore).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore));
 						setFilteredListings(filteredListings3);
 
 					} else if (searchCriteriaFeedback === "Low - High") {
-						const filteredListings4 = filteredListings.sort((b,a,c) => Number(b.feedbackScore) - Number(a.feedbackScore));
+						const filteredListings4 = filteredListings.sort((a,b) => Number(a.feedbackScore) - Number(b.feedbackScore));
 						console.log('low: ', filteredListings4);
 						setFilteredListings(filteredListings4);
 					}
