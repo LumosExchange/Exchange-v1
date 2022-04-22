@@ -157,94 +157,60 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 	}
 
 	const filterListings = () => {
-		if (searchCriteriaPayment === "Please Select" || searchCriteriaLocation === "Please Select" || searchCriteriaFeedback === "Please Select" || searchCriteriaPrice === "Please Select" ){
+		// if the select boxes are empty
+		if (searchCriteriaPayment === "Please Select" && searchCriteriaLocation === "Please Select"){
 			setIsFiltering(false);
 			setFilteredListings([]);
 		}
 
+		// if payment method is selected
 		if (searchCriteriaPayment !== "Please Select"){
 			setIsFiltering(true);
-			const filteredListings = filteredAllListings
-			.filter(al => (al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment));
+			const filteredListings = filteredAllListings.filter(al => (al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment));
 			setFilteredListings(filteredListings);
 
+			// if payment is selected AND location is selected
 			if (searchCriteriaLocation !== "Please Select"){
 				setIsFiltering(true);
 				const filteredListings2 = filteredListings
 				.filter(al => al.Country === searchCriteriaLocation);
 				setFilteredListings(filteredListings2);
 			}
-				if(searchCriteriaFeedback !== "Please Select") {
-					setIsFiltering(true);
-					if (searchCriteriaFeedback === "High - Low") {
-						const filteredListings3 = filteredListings
-						.filter(al => al.feedbackScore).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore));
-						setFilteredListings(filteredListings3);
-					
 
-					} else if (searchCriteriaFeedback === "Low - High") {
-						const filteredListings4 = filteredListings
-						.filter(al => al.feedbackScore).sort((a,b) => Number(a.feedbackScore) - Number(b.feedbackScore));
-						console.log('low: ', filteredListings4);
-						setFilteredListings(filteredListings4);
-					}
+			// if payment is selected AND feedback is selected
+			if (searchCriteriaFeedback !== "Please Select"){
+				if (searchCriteriaFeedback === "High - Low") {
+					const filteredListings3 = filteredListings
+					.filter(al => al.feedbackScore).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore));
+					setFilteredListings(filteredListings3);
+				} else if (searchCriteriaFeedback === "Low - High") {
+					const filteredListings4 = filteredListings
+					.filter(al => al.feedbackScore).sort((a,b) => Number(a.feedbackScore) - Number(b.feedbackScore));
+					console.log('low: ', filteredListings4);
+					setFilteredListings(filteredListings4);
 				}
-
-				if (searchCriteriaPrice !== "Please Select") {
-					setIsFiltering(true);
-				} if (searchCriteriaPrice === "High - Low") {
-					const filteredListing5 = filteredListings
-					.sort().reverse();
-					console.log('High to low: ', filteredListing5);
-					setFilteredListings(filteredListing5);
-				} else if( searchCriteriaPrice === "Low - High") {
-					const filteredListings6 = filteredListings.sort();
-					setFilteredListings(filteredListings6);
-				}
+			}
 		}
-		//Just Payment
+
 		if (searchCriteriaPayment === "Please Select" && searchCriteriaLocation !== "Please Select"){
 			setIsFiltering(true);
-			const filteredListings9 = filteredListings
+			const filteredListings = filteredAllListings
 			.filter(al => al.Country === searchCriteriaLocation);
-			setFilteredListings(filteredListings9);
+			setFilteredListings(filteredListings);
 		}
 
-		//Payment + location
-
-		if (searchCriteriaPayment !== "Please Select" && searchCriteriaLocation !== "Please Select"){
+		// if feedback score is selected (and no others are)
+		if (searchCriteriaFeedback !== "Please Select"){
 			setIsFiltering(true);
-			console.log('Search payment:', searchCriteriaPayment, 'search location: ', searchCriteriaLocation);
-			const filteredListings6 = filteredListings
-			.filter(al => ((al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment)&& al.Country === searchCriteriaLocation));
-			setFilteredListings(filteredListings6);
-		}
 
-		//payment + feedbackscore
-
-		if (searchCriteriaPayment !== "Please Select" && searchCriteriaFeedback !== "Please Select"){
-			setIsFiltering(true);
-			if (searchCriteriaPayment !== "Please Select" && searchCriteriaFeedback === "High - Low") {
-				const filteredListings7 = filteredListings
-				.filter(al => al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore));
-				setFilteredListings(filteredListings7);
-			}
-			else if (searchCriteriaPayment !== "Please Select" && searchCriteriaFeedback === "Low - High") {
-				const filteredListings8 = filteredListings
-				.filter(al => al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment).sort((a,b) => Number(a.feedbackScore) - Number(b.feedbackScore));
-				setFilteredListings(filteredListings8);
+			if (searchCriteriaFeedback === "High - Low"){
+				const feedbackHighToLow = filteredAllListings.filter(al => al.feedbackScore).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore));
+				setFilteredListings(feedbackHighToLow);
+			} else {
+				const feedbackLowToHigh = filteredAllListings.filter(al => al.feedbackScore).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore)).reverse();
+				setFilteredListings(feedbackLowToHigh);
 			}
 		}
-
-		//Just location
-
-		//location + feedback
-
-		//just score
-
-		//score + payment
-
-		//score + location
 	}
 
 	const resetFilters = () => {
@@ -376,7 +342,6 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 									<option value={data}>{data}</option>
 								))}
 							</StyledDropdown>
-
 							<div className="col-12">
 								<StyledLabel bold padding="10px 0 5px 0" htmlFor="preferredFeedback">
 									Feedback Score
@@ -438,7 +403,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 						</div>
 						<ListingArea>
 							{isFiltering && (
-								<div className="d-flex mb-3">
+								<div className="d-flex mb-3 align-items-baseline">
 									<Paragraph size="20px" bold className="mb-0 me-1">{filteredListings.length}</Paragraph>
 									<Paragraph size="20px" className="mb-0">result{filteredListings.length > 1 && 's'} found</Paragraph>
 									<ClearFilterButton onClick={ resetFilters } className="d-flex align-items-center">
