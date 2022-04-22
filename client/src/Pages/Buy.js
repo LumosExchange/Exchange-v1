@@ -177,13 +177,13 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 					setIsFiltering(true);
 					if (searchCriteriaFeedback === "High - Low") {
 						const filteredListings3 = filteredListings
-						.filter(al => al.feedbackScore).sort((a,b) => Number(a.feedbackScore) - Number(b.feedbackScore));
+						.filter(al => al.feedbackScore).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore));
 						setFilteredListings(filteredListings3);
-						console.log(filteredAllListings);
+					
 
 					} else if (searchCriteriaFeedback === "Low - High") {
 						const filteredListings4 = filteredListings
-						.filter(al => al.feedbackScore).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore));
+						.filter(al => al.feedbackScore).sort((a,b) => Number(a.feedbackScore) - Number(b.feedbackScore));
 						console.log('low: ', filteredListings4);
 						setFilteredListings(filteredListings4);
 					}
@@ -201,13 +201,49 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 					setFilteredListings(filteredListings6);
 				}
 		}
-
+		//Just Payment
 		if (searchCriteriaPayment === "Please Select" && searchCriteriaLocation !== "Please Select"){
 			setIsFiltering(true);
-			const filteredListings = filteredAllListings
+			const filteredListings9 = filteredListings
 			.filter(al => al.Country === searchCriteriaLocation);
-			setFilteredListings(filteredListings);
+			setFilteredListings(filteredListings9);
 		}
+
+		//Payment + location
+
+		if (searchCriteriaPayment !== "Please Select" && searchCriteriaLocation !== "Please Select"){
+			setIsFiltering(true);
+			console.log('Search payment:', searchCriteriaPayment, 'search location: ', searchCriteriaLocation);
+			const filteredListings6 = filteredListings
+			.filter(al => ((al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment)&& al.Country === searchCriteriaLocation));
+			setFilteredListings(filteredListings6);
+		}
+
+		//payment + feedbackscore
+
+		if (searchCriteriaPayment !== "Please Select" && searchCriteriaFeedback !== "Please Select"){
+			setIsFiltering(true);
+			if (searchCriteriaPayment !== "Please Select" && searchCriteriaFeedback === "High - Low") {
+				const filteredListings7 = filteredListings
+				.filter(al => al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore));
+				setFilteredListings(filteredListings7);
+			}
+			else if (searchCriteriaPayment !== "Please Select" && searchCriteriaFeedback === "Low - High") {
+				const filteredListings8 = filteredListings
+				.filter(al => al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment).sort((a,b) => Number(a.feedbackScore) - Number(b.feedbackScore));
+				setFilteredListings(filteredListings8);
+			}
+		}
+
+		//Just location
+
+		//location + feedback
+
+		//just score
+
+		//score + payment
+
+		//score + location
 	}
 
 	const resetFilters = () => {
