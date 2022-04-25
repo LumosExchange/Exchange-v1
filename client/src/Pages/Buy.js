@@ -154,30 +154,40 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 
 	const getAllListings = () => {
 		Axios.get(`${AppUrl}/getAllListings`).then((response) => {
-			setAllListings(response.data);
-			console.log(response.data);
-			
+			const newArray = response.data.map(function(item){
+				return {
+					saleID: item.saleID,
+					userID: item.userID,
+					amountForSale: item.amountForSale,
+					aboveOrBelow: item.aboveOrBelow,
+					percentChange: item.percentChange,
+					tradeHistory: item.tradeHistory,
+					userName: item.userName,
+					feedbackScore: item.feedbackScore,
+					Town: item.Town,
+					Country: item.Country,
+					paymentMethods: [item.paymentMethod1, item.paymentMethod2],
+				}
+			});
+			console.log(newArray, 'new array');
+			setAllListings(newArray);
 		});
 	}
 
 	const filterListings = () => {
-
 		const filter = {
-		
 			paymentMethod1: [searchCriteriaPayment],
-			Country: ['United Kingdom'],
-			
+			Country: ["United Kingdom"],
+
 			//feedbackScore: ['High - Low'],
-		}
+		};
 
 		const data = allListings;
-		console.log('Listings: ', allListings);
+		console.log("Listings: ", allListings);
 		const query = buildFilter(filter);
-		console.log('Query: ', query);
+		console.log("Query: ", query);
 		const result = filterData(data, query);
-		console.log('RESULT : ', result);
-		
-	
+		console.log("RESULT : ", result);
 	};
 
 	const resetFilters = () => {
