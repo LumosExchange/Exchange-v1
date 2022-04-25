@@ -13,6 +13,8 @@ import TradeCard from "../Components/TradeCard";
 import { LoadingState } from "../Components/Profile";
 import { AppUrl } from "../App";
 import { IconHelper } from "./Login";
+import {buildFilter, filterData} from "../Helpers";
+
 
 const CRYPTO_KIN = 'KIN';
 const CRYPTO_SOL = 'SOL';
@@ -153,65 +155,30 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 	const getAllListings = () => {
 		Axios.get(`${AppUrl}/getAllListings`).then((response) => {
 			setAllListings(response.data);
+			console.log(response.data);
+			
 		});
 	}
 
 	const filterListings = () => {
-		// if the select boxes are empty
-		if (searchCriteriaPayment === "Please Select" && searchCriteriaLocation === "Please Select"){
-			setIsFiltering(false);
-			setFilteredListings([]);
+
+		const filter = {
+		
+			paymentMethod1: [searchCriteriaPayment],
+			Country: ['United Kingdom'],
+			
+			//feedbackScore: ['High - Low'],
 		}
 
-		// if payment method is selected
-		if (searchCriteriaPayment !== "Please Select"){
-			setIsFiltering(true);
-			const filteredListings = filteredAllListings.filter(al => (al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment));
-			setFilteredListings(filteredListings);
-
-			// if payment is selected AND location is selected
-			if (searchCriteriaLocation !== "Please Select"){
-				setIsFiltering(true);
-				const filteredListings2 = filteredListings
-				.filter(al => al.Country === searchCriteriaLocation);
-				setFilteredListings(filteredListings2);
-			}
-
-			// if payment is selected AND feedback is selected
-			if (searchCriteriaFeedback !== "Please Select"){
-				if (searchCriteriaFeedback === "High - Low") {
-					const filteredListings3 = filteredListings
-					.filter(al => al.feedbackScore).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore));
-					setFilteredListings(filteredListings3);
-				} else if (searchCriteriaFeedback === "Low - High") {
-					const filteredListings4 = filteredListings
-					.filter(al => al.feedbackScore).sort((a,b) => Number(a.feedbackScore) - Number(b.feedbackScore));
-					console.log('low: ', filteredListings4);
-					setFilteredListings(filteredListings4);
-				}
-			}
-		}
-
-		if (searchCriteriaPayment === "Please Select" && searchCriteriaLocation !== "Please Select"){
-			setIsFiltering(true);
-			const filteredListings = filteredAllListings
-			.filter(al => al.Country === searchCriteriaLocation);
-			setFilteredListings(filteredListings);
-		}
-
-		// if feedback score is selected (and no others are)
-		if (searchCriteriaFeedback !== "Please Select"){
-			setIsFiltering(true);
-
-			if (searchCriteriaFeedback === "High - Low"){
-				const feedbackHighToLow = filteredAllListings.filter(al => al.feedbackScore).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore));
-				setFilteredListings(feedbackHighToLow);
-			} else {
-				const feedbackLowToHigh = filteredAllListings.filter(al => al.feedbackScore).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore)).reverse();
-				setFilteredListings(feedbackLowToHigh);
-			}
-		}
-	}
+		const data = allListings;
+		console.log('Listings: ', allListings);
+		const query = buildFilter(filter);
+		console.log('Query: ', query);
+		const result = filterData(data, query);
+		console.log('RESULT : ', result);
+		
+	
+	};
 
 	const resetFilters = () => {
 		setIsFiltering(false);

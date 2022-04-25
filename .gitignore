@@ -24,6 +24,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 *.env
+server/.env
 node_modules/.bin/loose-envify
 node_modules/.bin/loose-envify.cmd
 node_modules/.bin/loose-envify.ps1
@@ -2584,3 +2585,4 @@ server/node_modules/yargs/README.md
 server/node_modules/yargs/yargs.js
 server/package-lock.json
 server/package.json
+server/env
