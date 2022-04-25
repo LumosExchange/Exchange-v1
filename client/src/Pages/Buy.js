@@ -247,7 +247,6 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 									<QuadButton
 										className={`w-100 me-1 mb-1 d-flex justify-content-center align-items-center ${selectedCrypto === CRYPTO_KIN && 'selected'}`}
 										onClick={ () => selectCrypto(CRYPTO_KIN) }
-										disabled
 									>
 										{convertAssetToSvg(CRYPTO_KIN)}
 										<span className="ms-2">{CRYPTO_KIN}</span>
@@ -257,7 +256,6 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 									<QuadButton
 										className={`w-100 me-1 mb-1 d-flex justify-content-center align-items-center ${selectedCrypto === CRYPTO_COPE && 'selected'}`}
 										onClick={ () => selectCrypto(CRYPTO_COPE) }
-										disabled
 									>
 										{convertAssetToSvg(CRYPTO_COPE)}
 										<span className="ms-2">{CRYPTO_COPE}</span>
@@ -267,7 +265,6 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 									<QuadButton
 										className={`w-100 me-1 mb-1 d-flex justify-content-center align-items-center ${selectedCrypto === CRYPTO_LRA && 'selected'}`}
 										onClick={ () => selectCrypto(CRYPTO_LRA) }
-										disabled
 									>
 										{convertAssetToSvg(CRYPTO_LRA)}
 										<span className="ms-2">{CRYPTO_LRA}</span>
@@ -378,26 +375,31 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 								<IconHelper className="material-icons">expand_more</IconHelper>
 							</div>
 						</div>
-						<ListingArea>
-							{isFiltering && (
-								<div className="d-flex mb-3 align-items-baseline">
-									<Paragraph size="20px" bold className="mb-0 me-1">{filteredListings.length}</Paragraph>
-									<Paragraph size="20px" className="mb-0">result{filteredListings.length > 1 && 's'} found</Paragraph>
-									<ClearFilterButton onClick={ resetFilters } className="d-flex align-items-center">
-										<span className="me-1">Clear</span>
-										<i className="material-icons">cancel</i>
-									</ClearFilterButton>
-								</div>
-							)}
-							{isFiltering ? (
-								filteredListings.map((val, index) => (
-									<TradeCard val={val} solGbp={solGbp} solUsd={solUsd} currency={currency} key={index} />
-							))) : (
-								filteredAllListings.map((val, index) => (
-									<TradeCard val={val} solGbp={solGbp} solUsd={solUsd} currency={currency} key={index} />
-								))
-							)}
-						</ListingArea>
+						{selectedCrypto === "SOL" && (
+							<ListingArea>
+								{isFiltering && (
+									<div className="d-flex mb-3 align-items-baseline">
+										<Paragraph size="20px" bold className="mb-0 me-1">{filteredListings.length}</Paragraph>
+										<Paragraph size="20px" className="mb-0">result{filteredListings.length > 1 && 's'} found</Paragraph>
+										<ClearFilterButton onClick={ resetFilters } className="d-flex align-items-center">
+											<span className="me-1">Clear</span>
+											<i className="material-icons">cancel</i>
+										</ClearFilterButton>
+									</div>
+								)}
+								{isFiltering ? (
+									filteredListings.map((val, index) => (
+										<TradeCard val={val} solGbp={solGbp} solUsd={solUsd} currency={currency} key={index} />
+								))) : (
+									filteredAllListings.map((val, index) => (
+										<TradeCard val={val} solGbp={solGbp} solUsd={solUsd} currency={currency} key={index} />
+									))
+								)}
+							</ListingArea>
+						)}
+						{(selectedCrypto === "KIN" || selectedCrypto === "COPE" || selectedCrypto === "LRA") && (
+							<Paragraph size="20px" bold className="pt-2">Coming Soon</Paragraph>
+						)}
 					</div>
 				</div>
 			</div>
