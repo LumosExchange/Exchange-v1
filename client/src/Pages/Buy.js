@@ -309,7 +309,6 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 									<option value={data}>{data}</option>
 								))}
 							</StyledDropdown>
-
 							<div className="col-12">
 								<StyledLabel bold padding="10px 0 5px 0" htmlFor="preferredFeedback">
 									Feedback Score
@@ -371,7 +370,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 						</div>
 						<ListingArea>
 							{isFiltering && (
-								<div className="d-flex mb-3">
+								<div className="d-flex mb-3 align-items-baseline">
 									<Paragraph size="20px" bold className="mb-0 me-1">{filteredListings.length}</Paragraph>
 									<Paragraph size="20px" className="mb-0">result{filteredListings.length > 1 && 's'} found</Paragraph>
 									<ClearFilterButton onClick={ resetFilters } className="d-flex align-items-center">
