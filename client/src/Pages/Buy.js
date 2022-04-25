@@ -13,6 +13,8 @@ import TradeCard from "../Components/TradeCard";
 import { LoadingState } from "../Components/Profile";
 import { AppUrl } from "../App";
 import { IconHelper } from "./Login";
+import {buildFilter, filterData} from "../Helpers";
+
 
 const CRYPTO_KIN = 'KIN';
 const CRYPTO_SOL = 'SOL';
@@ -153,99 +155,30 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 	const getAllListings = () => {
 		Axios.get(`${AppUrl}/getAllListings`).then((response) => {
 			setAllListings(response.data);
+			console.log(response.data);
+			
 		});
 	}
 
 	const filterListings = () => {
-		if (searchCriteriaPayment === "Please Select" || searchCriteriaLocation === "Please Select" || searchCriteriaFeedback === "Please Select" || searchCriteriaPrice === "Please Select" ){
-			setIsFiltering(false);
-			setFilteredListings([]);
+
+		const filter = {
+		
+			paymentMethod1: [searchCriteriaPayment],
+			Country: ['United Kingdom'],
+			
+			//feedbackScore: ['High - Low'],
 		}
 
-		if (searchCriteriaPayment !== "Please Select"){
-			setIsFiltering(true);
-			const filteredListings = filteredAllListings
-			.filter(al => (al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment));
-			setFilteredListings(filteredListings);
-
-			if (searchCriteriaLocation !== "Please Select"){
-				setIsFiltering(true);
-				const filteredListings2 = filteredListings
-				.filter(al => al.Country === searchCriteriaLocation);
-				setFilteredListings(filteredListings2);
-			}
-				if(searchCriteriaFeedback !== "Please Select") {
-					setIsFiltering(true);
-					if (searchCriteriaFeedback === "High - Low") {
-						const filteredListings3 = filteredListings
-						.filter(al => al.feedbackScore).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore));
-						setFilteredListings(filteredListings3);
-					
-
-					} else if (searchCriteriaFeedback === "Low - High") {
-						const filteredListings4 = filteredListings
-						.filter(al => al.feedbackScore).sort((a,b) => Number(a.feedbackScore) - Number(b.feedbackScore));
-						console.log('low: ', filteredListings4);
-						setFilteredListings(filteredListings4);
-					}
-				}
-
-				if (searchCriteriaPrice !== "Please Select") {
-					setIsFiltering(true);
-				} if (searchCriteriaPrice === "High - Low") {
-					const filteredListing5 = filteredListings
-					.sort().reverse();
-					console.log('High to low: ', filteredListing5);
-					setFilteredListings(filteredListing5);
-				} else if( searchCriteriaPrice === "Low - High") {
-					const filteredListings6 = filteredListings.sort();
-					setFilteredListings(filteredListings6);
-				}
-		}
-		//Just Payment
-		if (searchCriteriaPayment === "Please Select" && searchCriteriaLocation !== "Please Select"){
-			setIsFiltering(true);
-			const filteredListings9 = filteredListings
-			.filter(al => al.Country === searchCriteriaLocation);
-			setFilteredListings(filteredListings9);
-		}
-
-		//Payment + location
-
-		if (searchCriteriaPayment !== "Please Select" && searchCriteriaLocation !== "Please Select"){
-			setIsFiltering(true);
-			console.log('Search payment:', searchCriteriaPayment, 'search location: ', searchCriteriaLocation);
-			const filteredListings6 = filteredListings
-			.filter(al => ((al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment)&& al.Country === searchCriteriaLocation));
-			setFilteredListings(filteredListings6);
-		}
-
-		//payment + feedbackscore
-
-		if (searchCriteriaPayment !== "Please Select" && searchCriteriaFeedback !== "Please Select"){
-			setIsFiltering(true);
-			if (searchCriteriaPayment !== "Please Select" && searchCriteriaFeedback === "High - Low") {
-				const filteredListings7 = filteredListings
-				.filter(al => al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment).sort((a,b) => Number(b.feedbackScore) - Number(a.feedbackScore));
-				setFilteredListings(filteredListings7);
-			}
-			else if (searchCriteriaPayment !== "Please Select" && searchCriteriaFeedback === "Low - High") {
-				const filteredListings8 = filteredListings
-				.filter(al => al.paymentMethod1 === searchCriteriaPayment || al.paymentMethod2 === searchCriteriaPayment).sort((a,b) => Number(a.feedbackScore) - Number(b.feedbackScore));
-				setFilteredListings(filteredListings8);
-			}
-		}
-
-		//Just location
-
-		//location + feedback
-
-		//just score
-
-		//score + payment
-
-		//score + location
-	}
+		const data = allListings;
+		console.log('Listings: ', allListings);
+		const query = buildFilter(filter);
+		console.log('Query: ', query);
+		const result = filterData(data, query);
+		console.log('RESULT : ', result);
+		
+	
+	};
 
 	const resetFilters = () => {
 		setIsFiltering(false);
