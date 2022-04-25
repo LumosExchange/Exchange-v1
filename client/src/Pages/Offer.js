@@ -67,7 +67,7 @@ const VerticalDivider = styled.hr(
   ({ theme }) => css`
     :not([size]) {
       color: ${theme.colors.text_primary};
-      height: 100%;
+      height: 98%;
       width: 1px;
       opacity: 0.2;
     }
@@ -246,17 +246,11 @@ const Offer = ({ solGbp, solUsd, currency }) => {
               solGbp={solGbp}
               currency={currency}
               listingPrice={listingPrice}
-            >
-              <div className="col-3 text-end">
-                <Paragraph className="mb-0">
-                  {data.amountForSale} for sale
-                </Paragraph>
-              </div>
-            </TradeCard>
+            />
           </div>
-          <div className="col-12 col-md-6 row">
+          <div className="col-12 col-md-6 d-flex flex-column flex-md-row">
             <div
-              className="col d-flex align-items-center"
+              className="col-2 d-flex align-items-center"
               style={{ maxHeight: "200px" }}
             >
               <SwitchButton
@@ -266,7 +260,7 @@ const Offer = ({ solGbp, solUsd, currency }) => {
                 <i className="material-icons">import_export</i>
               </SwitchButton>
             </div>
-            <div className="col-10">
+            <div className="col-12 col-md-10" style={{ marginBottom: "100px" }}>
               <StyledLabel padding="0 0 10px 0" bold htmlFor="offerAmount">
                 Offer Amount
               </StyledLabel>
@@ -399,10 +393,10 @@ const Offer = ({ solGbp, solUsd, currency }) => {
             </div>
           </div>
           <div className="col-1 d-flex justify-content-center">
-            <VerticalDivider />
+            <VerticalDivider className="d-none d-md-block" />
           </div>
-          <div className="col-12 col-md-5 row mt-4">
-            <div className="col-12 text-center">
+          <div className="col-12 col-md-5 row mt-4 pb-5">
+            <div className="col-12 text-center pb-5">
               <Heading bold>
                 1 SOL = {formattedCurrency}
                 {listingPrice}
@@ -429,13 +423,13 @@ const Offer = ({ solGbp, solUsd, currency }) => {
                 Feedback score: {((feedbackScore * 100) / 3).toFixed(2)}
                 {"%"}
               </Paragraph>
-              <Paragraph>
-                Registered: {new Date(registeredDate).toLocaleDateString()}
-              </Paragraph>
               <Paragraph>Total Trades: {data.tradeHistory}</Paragraph>
               <Paragraph>
-                Median Escrow Time: {(escrowReleaseTime / 60).toFixed(2)}
+                Average Trade Time: {(escrowReleaseTime / 60).toFixed(2)}
                 {" Mins"}
+              </Paragraph>
+              <Paragraph>
+                Registered: {new Date(registeredDate).toString().split("GMT", 1)}
               </Paragraph>
             </div>
             <div className="col-6">
@@ -444,8 +438,11 @@ const Offer = ({ solGbp, solUsd, currency }) => {
                 Paypal, Wise supported. Quick response!
               </Card>
               <Paragraph bold>Payment Methods</Paragraph>
+              <Paragraph className="mb-0">
+                &bull; {data.paymentMethod1}
+              </Paragraph>
               <Paragraph>
-                {data.paymentMethod1}, {data.paymentMethod2}
+                &bull; {data.paymentMethod2}
               </Paragraph>
             </div>
           </div>

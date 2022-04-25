@@ -55,7 +55,7 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
     return (
         <Card className="p-3 mb-3" color="grey">
             <div className="row">
-                <div className="col-12 col-xl-3 d-flex justify-content-center flex-column mb-0">
+                <div className="col-12 col-xl-3 d-flex justify-content-center flex-column mb-0 p-1">
                     <ProfileLink
                         className="d-flex align-items-center"
                         onClick={ () => navigate(`/profile/user/${userID}`, {
@@ -70,12 +70,9 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
                         </Paragraph>
                     </ProfileLink>
                 </div>
-                <div className="col-12 col-xl-4 d-flex align-items-center mb-0">
+                <div className="col-12 col-xl-6 d-flex align-items-center mb-0">
                     {convertCountryToFlag(val.Country)}
                     <Paragraph size="18px" className="mb-0 text-truncate overflow-hidden">{val.Town}, {val.Country}</Paragraph>
-                </div>
-                <div className="col-12 col-xl-2 d-flex align-items-center justify-content-xl-end mb-3 mb-xl-0">
-                    <Paragraph size="18px" className="mb-0">{val.amountForSale} for sale</Paragraph>
                 </div>
                 <div className="d-block d-xl-none">
                     <CardDivider />
@@ -90,23 +87,19 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
                         {val.percentChange}%
                         {' '}{val.aboveOrBelow}{' '}market
                     </Paragraph>
+                    <Paragraph size="16px" className="mb-0">
+                        {val.amountForSale} for sale
+                    </Paragraph>
                 </div>
                 <div className="col-12 col-xl-3 d-flex flex-column">
-                    <div className="d-flex align-items-center">
-                        <i className="material-icons me-2">emoji_events</i>
-                        <Paragraph size="16px" className="mb-0">
-                            {feedbackScore}% Feedback
-                        </Paragraph>
-                    </div>
-                    <div className="d-flex">
-                        <i className="material-icons me-2">swap_horiz</i>
-                        <Paragraph size="16px" className="mb-0">
-                            {val.tradeHistory}{' '}{val.tradeHistory === 1 ? 'Trade' : 'Trades'}
-                        </Paragraph>
-                    </div>
+                    <Paragraph size="16px" className="mb-0">
+                        {feedbackScore}% Feedback
+                    </Paragraph>
+                    <Paragraph size="16px" className="mb-0 ms-1">
+                        {val.tradeHistory}{' '}{val.tradeHistory === 1 ? 'Trade' : 'Trades'}
+                    </Paragraph>
                 </div>
-                <div className="col-12 col-xl-6 d-flex align-items-center mb-3 mb-xl-0">
-                    <i className="material-icons me-2">account_balance_wallet</i>
+                <div className="col-12 col-xl-6 d-flex mb-3 mb-xl-0">
                     <Paragraph size="18px" className="mb-0 overflow-hidden text-truncate">
                         {val.paymentMethod1}{' & '}{val.paymentMethod2}
                     </Paragraph>
