@@ -24,6 +24,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 *.env
+server/.env
 node_modules/.bin/loose-envify
 node_modules/.bin/loose-envify.cmd
 node_modules/.bin/loose-envify.ps1
