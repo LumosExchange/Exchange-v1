@@ -176,7 +176,8 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 
 	const filterListings = () => {
 		const filter = {
-			Country: [searchCriteriaLocation],
+			Country: searchCriteriaLocation !== "Please Select" && [searchCriteriaLocation],
+			paymentMethods: searchCriteriaPayment !== "Please Select" && [searchCriteriaPayment],
 
 			//feedbackScore: ['High - Low'],
 		};
