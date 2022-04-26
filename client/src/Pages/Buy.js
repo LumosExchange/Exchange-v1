@@ -169,15 +169,14 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 					paymentMethods: [item.paymentMethod1, item.paymentMethod2],
 				}
 			});
-			console.log(newArray, 'new array');
+			console.log(newArray, 'listings');
 			setAllListings(newArray);
 		});
 	}
 
 	const filterListings = () => {
 		const filter = {
-			paymentMethod1: [searchCriteriaPayment],
-			Country: ["United Kingdom"],
+			Country: [searchCriteriaLocation],
 
 			//feedbackScore: ['High - Low'],
 		};
@@ -187,6 +186,8 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 		const query = buildFilter(filter);
 		console.log("Query: ", query);
 		const result = filterData(data, query);
+		setFilteredListings(result);
+		setIsFiltering(true);
 		console.log("RESULT : ", result);
 	};
 
