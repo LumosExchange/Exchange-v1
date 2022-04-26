@@ -13,8 +13,8 @@ import TradeCard from "../Components/TradeCard";
 import { LoadingState } from "../Components/Profile";
 import { AppUrl } from "../App";
 import { IconHelper } from "./Login";
-import {buildFilter, filterData} from "../Helpers";
 
+import { filterData, SearchType } from 'filter-data';
 
 const CRYPTO_KIN = 'KIN';
 const CRYPTO_SOL = 'SOL';
@@ -126,6 +126,8 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 		"UK Bank Transfer",
 		"EU Bank Transfer",
 		"International Wire Transfer",
+		"Paypal",
+		"Skrill",
 	];
 
 	const locationMethods = [
@@ -174,23 +176,18 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 		});
 	}
 
-	const filterListings = () => {
-		const filter = {
-			Country: searchCriteriaLocation !== "Please Select" && [searchCriteriaLocation],
-			paymentMethods: searchCriteriaPayment !== "Please Select" && [searchCriteriaPayment],
-
-			//feedbackScore: ['High - Low'],
-		};
-
-		const data = allListings;
-		console.log("Listings: ", allListings);
-		const query = buildFilter(filter);
-		console.log("Query: ", query);
-		const result = filterData(data, query);
-		setFilteredListings(result);
-		setIsFiltering(true);
-		console.log("RESULT : ", result);
-	};
+	const searchConditions = [
+		{
+			key: "country",
+			value: searchCriteriaLocation,
+			type: SearchType.EQ,
+		},
+		{
+			key: "paymentMethod",
+			value: searchCriteriaPayment,
+			type: SearchType.EQ,
+		}
+	  ];
 
 	const resetFilters = () => {
 		setIsFiltering(false);
@@ -343,7 +340,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 							<div className="col-12 mt-3">
 								<GradientButton
 									text="Filter Results"
-									onClick={filterListings}
+									onClick={null}
 									fontSize="20px"
 									padding="4px 20px"
 									className="w-100" 
