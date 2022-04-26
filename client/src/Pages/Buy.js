@@ -176,21 +176,25 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 		});
 	}
 
-	const searchConditions = [
-		{
-			key: "Country",
-			value: searchCriteriaLocation,
-			type: SearchType.EQ,
-		},
-		{
-			key: "paymentMethods",
-			value: searchCriteriaPayment,
-			type: SearchType.EQ,
-		}
-	  ];
-
+	const searchConditions = [];
 
 	  const filter = () =>{
+		  if (searchCriteriaLocation !== "Please Select") {
+			searchConditions.push({
+				key: "Country",
+				value: searchCriteriaLocation,
+				type: SearchType.EQ,
+			});
+		  }
+		  if (searchCriteriaPayment !== "Please Select") {
+			searchConditions.push({
+				key: "paymentMethods",
+				value: searchCriteriaPayment,
+				type: SearchType.EQ,
+			});
+		  }
+		
+		
 		console.log(searchConditions);
 		const result = filterData(allListings, searchConditions);
 		console.log(result);
