@@ -199,7 +199,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 		const result = filterData(allListings, searchConditions);
 		console.log(result);
 		setIsFiltering(true);
-		setFilteredListings(result);
+		setFilteredListings(result.filter(al => (al.userName !== userName)));
 	  };
 
 
@@ -216,8 +216,6 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
     useEffect(() => {
 		getAllListings();
 	}, []);
-
-	const filteredAllListings = allListings.filter(al => (al.userName !== userName));
 
   	return (
 		<PageBody>
@@ -365,7 +363,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 						</Card>
 					</div>
 					<div className="col-12 col-md-7 col-xl-8 mt-4 mt-md-0 position-relative">
-						{filteredAllListings.length === 0 && (
+						{allListings.length === 0 && (
 							<LoadingState />
 						)}
 						<div className="d-flex justify-content-between flex-row pb-2">
@@ -405,7 +403,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 									filteredListings.map((val, index) => (
 										<TradeCard val={val} solGbp={solGbp} solUsd={solUsd} currency={currency} key={index} />
 								))) : (
-									filteredAllListings.map((val, index) => (
+									allListings.filter(al => (al.userName !== userName)).map((val, index) => (
 										<TradeCard val={val} solGbp={solGbp} solUsd={solUsd} currency={currency} key={index} />
 									))
 								)}
