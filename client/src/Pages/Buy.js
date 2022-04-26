@@ -178,16 +178,25 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 
 	const searchConditions = [
 		{
-			key: "country",
+			key: "Country",
 			value: searchCriteriaLocation,
 			type: SearchType.EQ,
 		},
 		{
-			key: "paymentMethod",
+			key: "paymentMethods",
 			value: searchCriteriaPayment,
 			type: SearchType.EQ,
 		}
 	  ];
+
+
+	  const filter = () =>{
+		console.log(searchConditions);
+		const result = filterData(allListings, searchConditions);
+		console.log(result);
+	  };
+
+
 
 	const resetFilters = () => {
 		setIsFiltering(false);
@@ -340,7 +349,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 							<div className="col-12 mt-3">
 								<GradientButton
 									text="Filter Results"
-									onClick={null}
+									onClick={filter}
 									fontSize="20px"
 									padding="4px 20px"
 									className="w-100" 
