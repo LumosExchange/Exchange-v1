@@ -101,7 +101,7 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
                 </div>
                 <div className="col-12 col-xl-6 d-flex mb-3 mb-xl-0">
                     <Paragraph size="18px" className="mb-0 overflow-hidden text-truncate">
-                        {val.paymentMethod1 || val.paymentMethod2} {val.paymentMethods[0]}, {val.paymentMethods[1]}
+                        {val.paymentMethod1 || val.paymentMethods[0]}, {val.paymentMethod2 || val.paymentMethods[1]}
                     </Paragraph>
                 </div>
                 {!withoutButton && (
