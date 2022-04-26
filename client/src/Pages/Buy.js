@@ -198,6 +198,8 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 		console.log(searchConditions);
 		const result = filterData(allListings, searchConditions);
 		console.log(result);
+		setIsFiltering(true);
+		setFilteredListings(result);
 	  };
 
 
