@@ -21,11 +21,11 @@ export const filterData = (data, query) => {
     const filteredData = data.filter( (item) => {
         console.log(item, 'item in filterData');
         for (let key in query) {
-            if (item.paymentMethods.toString().includes(query.paymentMethods)){
-                return true;
-            }
             if (item[key] === undefined || !query[key].includes(item[key])) {
                 return false;
+            }
+            if (item.paymentMethods.toString().includes(query.paymentMethods)){
+                return true;
             }
         }
         return true;
