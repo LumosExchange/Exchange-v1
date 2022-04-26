@@ -139,8 +139,10 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 
 	const feedbackMethods = [
 		"Please Select",
-		"High - Low",
-		"Low - High",
+		"80% +",
+		"60% +",
+		"40% +",
+		"20% +",
 	];
 
 	const priceMethods = [
@@ -193,6 +195,35 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 				type: SearchType.EQ,
 			});
 		  }
+		  if (searchCriteriaFeedback === "80% +") {
+			searchConditions.push({
+				key: "feedbackScore",
+				value: "80",
+				type: SearchType.GTE,
+			});
+		  }
+		  if (searchCriteriaFeedback === "60% +") {
+			searchConditions.push({
+				key: "feedbackScore",
+				value: "60",
+				type: SearchType.GTE,
+			});
+		  }
+		  if (searchCriteriaFeedback === "40% +") {
+			searchConditions.push({
+				key: "feedbackScore",
+				value: "40",
+				type: SearchType.GTE,
+			});
+		  }
+		  if (searchCriteriaFeedback === "20% +") {
+			searchConditions.push({
+				key: "feedbackScore",
+				value: "20",
+				type: SearchType.GTE,
+			});
+		  }
+		  
 		
 		
 		console.log(searchConditions);
@@ -336,7 +367,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 							<StyledDropdown
 								type="change"
 								placeholder="preferredFeedback"
-								name="preferredFeedback"
+								name="Minimum Feedback Score"
 								value={searchCriteriaFeedback}
 								id="preferredFeedback"
 								color="btn"
