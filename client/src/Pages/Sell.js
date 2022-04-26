@@ -169,8 +169,8 @@ const Sell = () => {
 	const [amountForSaleReg, setAmountForSaleReg] = useState("");
 	const [aboveOrBelowReg, setAboveOrBelowReg] = useState("");
 	const [changeReg, setChangeReg] = useState("");
-	const [preferredPayment, setPreferredPayment] = useState("");
-	const [secondaryPayment, setSecondaryPayment] = useState("");
+	const [preferredPayment, setPreferredPayment] = useState("Please Select");
+	const [secondaryPayment, setSecondaryPayment] = useState("Please Select");
 	const [newPaymentMethods, setNewPaymentMethods] = useState([]);
 	const [accountLimit, setAccountLimit] = useState(0);
 	const [currentStep, setCurrentStep] = useState("initial");
@@ -413,6 +413,7 @@ const Sell = () => {
 										className="w-100"
 										required
 									>
+										<option value="Please Select">Please Select</option>
 										{filteredNewPaymentMethods.map((data) => (
 											<option value={data} key={data}>
 												{data}
@@ -427,7 +428,10 @@ const Sell = () => {
 										onClick={addSale}
 										className="w-100"
 										size="lg"
-										disabled={amountForSaleReg > accountLimit}
+										disabled={
+											(amountForSaleReg > accountLimit) ||
+											(preferredPayment === "Please Select" || secondaryPayment === "Please Select")
+										}
 									/>
 								</div>
 								{amountForSaleReg > accountLimit && (
