@@ -434,6 +434,19 @@ const Sell = () => {
 										}
 									/>
 								</div>
+								{filteredNewPaymentMethods.length === 0 && (
+									<div className="col-12 mt-3 d-flex">
+										<IconHelper className="material-icons me-2" color="invalid">
+											error_outline
+										</IconHelper>
+										<Paragraph className="mb-0" size="20px" color="invalid">
+											No payment methods added, please 
+											<StyledLinkTo to="/Profile/PaymentMethods" className="ms-2">
+												Add a payment method
+											</StyledLinkTo>
+										</Paragraph>
+									</div>
+								)}
 								{amountForSaleReg > accountLimit && (
 									<div className="col-12 mt-3 d-flex">
 										<IconHelper className="material-icons me-2" color="invalid">
