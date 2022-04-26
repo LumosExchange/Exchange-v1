@@ -41,7 +41,7 @@ const ShowcaseBase = styled.div(
       background: ${currentTheme === "dark"
         ? `url(${ShowCaseDark})`
         : `url(${ShowCaseLight})`};
-      background-size: contain;
+      background-size: 80%;
       background-repeat: no-repeat;
       background-position: center center;
     }
@@ -190,7 +190,7 @@ const Home = ({ theme }) => {
           </IconCard>
         </div>
         <div className="row justify-content-between align-items-center py-6">
-          <div className="col-12 col-xl-4 mb-5 mb-xl-0">
+          <div className="col-12 col-xl-4 mb-5 mb-xl-0 p-4">
             <Heading size="48px">
               Your Coins <br />
               In Your Seize

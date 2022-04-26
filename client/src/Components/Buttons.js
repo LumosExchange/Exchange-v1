@@ -181,7 +181,7 @@ export const LinkButton = ({
         onClick={onClick} type={type} form={form} value={value}
         size={size} textColor={textColor} disabled={disabled}
         round={round} boldText={boldText} fontSize={fontSize}
-        className={`d-flex align-items-center justify-content-center ${className ? className : ''}`}
+        className={`d-flex align-items-center ${className ? className : ''}`}
     >
         {(hasIcon) && (iconPosition === 'left') && (
             <i className="material-icons me-3">{iconName}</i>

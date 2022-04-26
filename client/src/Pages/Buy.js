@@ -149,7 +149,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 		"Price",
 		"High - Low",
 		"Low - High",
-	]
+	];
 
 	const ListingArea = styled.div`
 		max-height: 100vh;
