@@ -120,7 +120,7 @@ const AccountUpgrade = () => {
 
     const dataSilver = new FormData();
     dataSilver.append("name", name);
-		dataSilver.append("file", file);
+	dataSilver.append("file", file);
     dataSilver.append("birthDay", birthDay);
     dataSilver.append("birthMonth", birthMonth);
     dataSilver.append("birthYear", birthYear);
@@ -141,7 +141,7 @@ const AccountUpgrade = () => {
 
     const dataGold = new FormData();
     dataGold.append("name", name);
-		dataGold.append("file", file);
+	dataGold.append("file", file);
     dataGold.append("EmployerName", employerName);
     dataGold.append("EmployerAddress", employerAddress);
     dataGold.append("Occupation", occupation);

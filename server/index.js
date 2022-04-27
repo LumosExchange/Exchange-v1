@@ -1070,8 +1070,9 @@ app.post("/RegisterInternationalBank", (req, res) => {
   const bankName = req.body.bankName;
   const bankCity = req.body.bankCity;
   const bankCountry = req.body.bankCountry;
-  const SWIFTCode = req.body.SWIFTCode;
-  const payeesName = req.body.payeesName;
+  const SWIFTCode = req.body.BIC;
+  const payeeName = req.body.payeeName;
+  console.log('Payee name: ',  payeeName);
   const interBankName = req.body.interBankName;
   const interBankCity = req.body.interBankCity;
   const interBankCountry = req.body.interBankCountry;
@@ -1079,14 +1080,14 @@ app.post("/RegisterInternationalBank", (req, res) => {
   const interBankRoutingNumber = req.body.bankName;
 
   db.query(
-    "INSERT INTO internationalBankAccounts (userID, bankName, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber) VALUES (?,?,?,?,?,?,?,?,?,?)",
+    "INSERT INTO internationalBankAccounts (userID, bankName, bankCity, bankCountry, SWIFTCode, payeeName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
     [
       user,
       bankName,
       bankCity,
       bankCountry,
       SWIFTCode,
-      payeesName,
+      payeeName,
       interBankName,
       interBankCity,
       interBankCountry,
@@ -1215,7 +1216,7 @@ app.post("/getEUBankDetails", (req, res) => {
 app.post("/getInterBankDetails", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
-    "SELECT bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE (userID) = (?)",
+    "SELECT bankName, bankCity, bankCountry, SWIFTCode, payeeName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE (userID) = (?)",
     [user],
     (err, result) => {
       console.log(err, "error in getIntbankDetails");
@@ -1227,7 +1228,7 @@ app.post("/getInterBankDetails", (req, res) => {
           BIC: result[0].SWIFTCode,
           bankCity: result[0].bankCity,
           bankCountry: result[0].bankCountry,
-          payeeName: result[0].payeesName,
+          payeeName: result[0].payeeName,
           interBankName: result[0].interBankName,
           interBankCity: result[0].interBankCity,
           interBankCountry: result[0].interBankCountry,
@@ -1367,7 +1368,7 @@ app.post("/UpdateInterBank", (req, res) => {
   const bankCity = req.body.bankCity;
   const bankCountry = req.body.bankCountry;
   const SWIFTCode = req.body.SWIFTCode;
-  const payeesName = req.body.payeesName;
+  const payeeName = req.body.payeeName;
   const interBankName = req.body.interBankName;
   const interBankCity = req.body.interBankCity;
   const interBankCountry = req.body.interBankCountry;
@@ -1375,13 +1376,13 @@ app.post("/UpdateInterBank", (req, res) => {
   const interBankRoutingNumber = req.body.bankName;
 
   db.query(
-    "UPDATE internationalBankAccounts SET bankName = ?, bankCity = ?, bankCountry = ?, SWIFTCode = ?, payeesName = ?, interBankName = ?, interBankCity = ?, interBankCountry =?, interBankAccountNumber =?, interBankRoutingNumber =?  WHERE userID = ?",
+    "UPDATE internationalBankAccounts SET bankName = ?, bankCity = ?, bankCountry = ?, SWIFTCode = ?, payeeName = ?, interBankName = ?, interBankCity = ?, interBankCountry =?, interBankAccountNumber =?, interBankRoutingNumber =?  WHERE userID = ?",
     [
       bankName,
       bankCity,
       bankCountry,
       SWIFTCode,
-      payeesName,
+      payeeName,
       interBankName,
       interBankCity,
       interBankCountry,

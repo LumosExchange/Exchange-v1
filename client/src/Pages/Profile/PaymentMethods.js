@@ -580,6 +580,7 @@ const PaymentMethods = () => {
 
   // Add & Edit International Bank
   const addIntBank = () => {
+    console.log('name: ', payeeName);
     Axios.post(`${AppUrl}/RegisterInternationalBank`, {
       bankName,
       bankCity,

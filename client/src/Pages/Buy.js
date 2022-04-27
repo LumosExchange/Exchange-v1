@@ -180,6 +180,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 	const searchConditions = [];
 
 	  const filter = () =>{
+		  console.log(allListings);
 		  if (searchCriteriaLocation !== "Please Select") {
 			searchConditions.push({
 				key: "Country",
