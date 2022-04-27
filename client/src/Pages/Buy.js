@@ -6,14 +6,13 @@ import Card from "../Components/Card";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
 import GradientButton from "../Components/GradientButton";
-import PrimaryButton, { InvisibleButton } from "../Components/Buttons";
-import { FormInput, StyledLabel } from "../Components/FormInputs";
+import { InvisibleButton } from "../Components/Buttons";
+import { StyledLabel } from "../Components/FormInputs";
 import { useNavigate } from "react-router-dom";
 import TradeCard from "../Components/TradeCard";
 import { LoadingState } from "../Components/Profile";
 import { AppUrl } from "../App";
 import { IconHelper } from "./Login";
-
 import { filterData, SearchType } from 'filter-data';
 
 const CRYPTO_KIN = 'KIN';
@@ -113,7 +112,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 	const [selectedCrypto, selectCrypto] = useState(CRYPTO_SOL);
 	const [searchCriteriaPayment, setSearchCriteriaPayment] = useState('Please Select');
 	const [searchCriteriaLocation, setSearchCriteriaLocation] = useState('Please Select');
-	const [searchCriteriaFeedback, setSearchCriteriaFeedback] = useState('Please select');
+	const [searchCriteriaFeedback, setSearchCriteriaFeedback] = useState('Please Select');
 	const [searchCriteriaPrice, setSearchCriteriaPrice] = useState('Please select');
 	const [filteredListings, setFilteredListings] = useState([]);
 	const [isFiltering, setIsFiltering] = useState(false);
@@ -387,7 +386,12 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 									onClick={filter}
 									fontSize="20px"
 									padding="4px 20px"
-									className="w-100" 
+									className="w-100"
+									disabled={
+										searchCriteriaPayment === "Please Select" &&
+										searchCriteriaLocation === "Please Select" &&
+										searchCriteriaFeedback === "Please Select"
+									}
 								/>
 							</div>
 							</div>
