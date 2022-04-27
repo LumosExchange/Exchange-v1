@@ -120,6 +120,14 @@ const CustomWalletIcon = styled.img`
 	margin-right: 10px;
 `;
 
+export const MobileAddButton = styled(InlineButton)(({ theme }) => css`
+	width: 50px;
+	height: 50px;
+	max-width: 50px;
+	min-width: 50px;
+	border-radius: 50px;
+`);
+
 const Wallets = () => {
 	// Modal Controls
 	const [modalMode, setModalMode] = useState("initial");
@@ -321,8 +329,11 @@ const Wallets = () => {
 								<Heading size="18px" bold className="mb-0">
 									Wallet Addresses
 								</Heading>
-								<div className="col-3">
-									<InlineButton onClick={toggleAddWallet}>Add a Wallet</InlineButton>
+								<div className="col-3 text-end">
+									<InlineButton onClick={toggleAddWallet} className="d-none d-lg-block">Add a Wallet</InlineButton>
+									<MobileAddButton className="d-lg-none" onClick={toggleAddWallet}>
+										<i className="material-icons">add</i>
+									</MobileAddButton>
 								</div>
 							</div>
 							{wallets.length > 0 ? (

@@ -25,6 +25,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { CodeSentMessage } from "../ChangePassword";
 import GradientButton from "../../Components/GradientButton";
 import { AppUrl } from "../../App";
+import { MobileAddButton } from "./Wallets";
 
 const MethodIcon = styled.i(
   ({ theme }) => css`
@@ -691,17 +692,20 @@ const PaymentMethods = () => {
         <ContentTab className="text-white">
           <div className="d-flex p-4 row">
             <div className="col-12">
-              <div className="d-flex justify-content-between align-items-center flex-column flex-md-row">
-                <div className="col-12 col-md-6">
+              <div className="row">
+                <div className="col-9 col-lg-8">
                 <Heading size="18px" bold className="mb-0">
                   Payment Methods
                 </Heading>
                 </div>
-                <div className="col-12 col-md-6 col-lg-3 mt-2 mt-md-0">
-                  <InlineButton onClick={toggle}>
-                    Add a Payment Method
-                  </InlineButton>
-              </div>
+                  <div className="col-3 col-lg-4 mt-2 mt-md-0 text-end">
+                    <InlineButton onClick={toggle} className="d-none d-lg-block">
+                      Add a Payment Method
+                    </InlineButton>
+                    <MobileAddButton className="d-lg-none" onClick={toggle}>
+                      <i className="material-icons">add</i>
+                    </MobileAddButton>
+                </div>
               </div>
               <div className="d-flex p-4 row">
                 <ShowAddedPaymentMethods />

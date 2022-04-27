@@ -176,6 +176,7 @@ const Sell = () => {
 	const [currentStep, setCurrentStep] = useState("initial");
 	const [modal, setModal] = useState(false);
 	const [userLocation, setUserLocation] = useState("");
+	const [accountTier, setAccountTier] = useState("");
 
 	const navigate = useNavigate();
 
@@ -208,9 +209,14 @@ const Sell = () => {
 	};
 
 	const getUserLocation = () => {
-		Axios.get(`${AppUrl}/getUserLocation`, {}).then((response) => {
+		Axios.get(`${AppUrl}/getUserLocation`).then((response) => {
 			setUserLocation(response.data.location);
-			console.log(response.data.location);
+		});
+	};
+
+	const getAccountTier = () => {
+		Axios.get(`${AppUrl}/getUserAccountLevel`).then((response) => {
+			setAccountTier(response.data[0]?.accountLevel);
 		});
 	};
 
@@ -245,10 +251,14 @@ const Sell = () => {
 	}
 
 	useEffect(() => {
+		getAccountTier();
 		updatePayments();
 		checkEligibility();
-		getUserLocation();
-	}, []);
+
+		if (accountTier === "Bronze" || accountTier === "Silver" || accountTier === "Gold"){
+			getUserLocation();
+		}
+	}, [accountTier]);
 
 	const filteredNewPaymentMethods = newPaymentMethods.filter((method) => method !== preferredPayment);
 
@@ -442,6 +452,11 @@ const Sell = () => {
 											(preferredPayment === "Please Select" || secondaryPayment === "Please Select")
 										}
 									/>
+								</div>
+								<div className="col-12 mt-3">
+									<Paragraph size="20px">
+										Selling from: {userLocation}
+									</Paragraph>
 								</div>
 								{filteredNewPaymentMethods.length === 0 && (
 									<div className="col-12 mt-3 d-flex">
