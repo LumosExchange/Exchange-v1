@@ -175,6 +175,7 @@ const Sell = () => {
 	const [accountLimit, setAccountLimit] = useState(0);
 	const [currentStep, setCurrentStep] = useState("initial");
 	const [modal, setModal] = useState(false);
+	const [userLocation, setUserLocation] = useState("");
 
 	const navigate = useNavigate();
 
@@ -203,6 +204,12 @@ const Sell = () => {
 	const checkEligibility = () => {
 		Axios.post(`${AppUrl}/CheckSaleEligibility`, {}).then((response) => {
 			setAccountLimit(response.data.solLimit - response.data.amountSolSold);
+		});
+	};
+
+	const getUserLocation = () => {
+		Axios.post(`${AppUrl}/getUserLocation`, {}).then((response) => {
+			setUserLocation(response.data.location);
 		});
 	};
 
