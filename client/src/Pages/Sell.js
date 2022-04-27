@@ -175,6 +175,7 @@ const Sell = () => {
 	const [accountLimit, setAccountLimit] = useState(0);
 	const [currentStep, setCurrentStep] = useState("initial");
 	const [modal, setModal] = useState(false);
+	const [accountTier, setAccountTier] = useState("");
 
 	const navigate = useNavigate();
 
@@ -187,7 +188,7 @@ const Sell = () => {
 			if (response.data[0].UKBank === 1) {
 				methods.push("UK Bank Transfer");
 			}
-			if (response.data[0].InterBank === 1) {
+			if (response.data[0].InterBank === 1  ) {
 				methods.push("International Bank Transfer");
 			}
 			if (response.data[0].Paypal === 1) {
@@ -203,6 +204,8 @@ const Sell = () => {
 	const checkEligibility = () => {
 		Axios.post(`${AppUrl}/CheckSaleEligibility`, {}).then((response) => {
 			setAccountLimit(response.data.solLimit - response.data.amountSolSold);
+			setAccountTier(response.data.accountLevel);
+
 		});
 	};
 
