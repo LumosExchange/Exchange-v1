@@ -5,7 +5,7 @@ import qrcode from "qrcode";
 import styled, { css, keyframes } from "styled-components";
 import { PageBody } from "../../Components/FormInputs";
 import { FormInput, StyledLabel } from "../../Components/FormInputs";
-import PrimaryButton from "../../Components/Buttons";
+import PrimaryButton, { InvisibleButton } from "../../Components/Buttons";
 import Card from "../../Components/Card";
 import Heading from "../../Components/Heading";
 import Paragraph from "../../Components/Paragraph";
@@ -184,8 +184,18 @@ function GoogleAuth() {
               </StyledLabel>
               <PrimaryButton
                 text="Get Code"
-                className="m-auto my-3"
+                className="m-auto mt-5"
                 onClick={sendVerification}
+                type="check"
+                value="check"
+              />
+              <PrimaryButton
+                text="Cancel"
+                className="m-auto mt-2 red"
+                onClick={(event) => {
+                  event.preventDefault();
+                  navigate('/Profile/Security')
+                }}
                 type="check"
                 value="check"
               />

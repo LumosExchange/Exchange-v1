@@ -144,7 +144,7 @@ const AuthyAuth = () => {
     }
   }, [secret]);
 
-  	console.log("user email is:", userEmail);
+	const navigate = useNavigate();
 
 	return (
 		<PageBody className="d-flex align-items-center justify-content-center py-5 flex-column">
@@ -167,8 +167,18 @@ const AuthyAuth = () => {
 				</StyledLabel>
 				<PrimaryButton
 					text="Get Code"
-					className="m-auto my-3"
+					className="m-auto mt-5"
 					onClick={sendVerification}
+					type="check"
+					value="check"
+				/>
+				<PrimaryButton
+					text="Cancel"
+					className="m-auto mt-2 red"
+					onClick={(event) => {
+						event.preventDefault();
+						navigate('/Profile/Security')
+					}}
 					type="check"
 					value="check"
 				/>

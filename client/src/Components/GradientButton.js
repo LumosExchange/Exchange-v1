@@ -2,7 +2,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 import PropTypes from 'prop-types';
 
-const ButtonBase = styled.div(({ theme, fontSize, padding, borderSize, dark }) => css`
+const ButtonBase = styled.button(({ theme, fontSize, padding, borderSize, dark }) => css`
 	border-radius: 50px;
 	background: rgba(46, 46, 46, 0.5);
 	background: linear-gradient(90deg,
@@ -11,6 +11,8 @@ const ButtonBase = styled.div(({ theme, fontSize, padding, borderSize, dark }) =
 				${theme.colors.gradients.mauve} 66%,
 				${theme.colors.gradients.blue} 100%
 			);
+	border: 0;
+	padding: 0;
 
 	.innerButton {
 		background: ${theme.colors.grad_button};
@@ -21,13 +23,15 @@ const ButtonBase = styled.div(({ theme, fontSize, padding, borderSize, dark }) =
 		color: ${theme.colors.actual_white};
 		border: 0;
 
-		&:disabled {
+		:disabled {
 			opacity: 0.7;
 			cursor: not-allowed;
 		}
 	}
 
-	&:hover { transform: scale(1.05); }
+	&:hover { 
+		transform: scale(1.05);
+	}
 `);
 
 const GradientButton = ({

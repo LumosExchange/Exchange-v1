@@ -169,13 +169,13 @@ const Sell = () => {
 	const [amountForSaleReg, setAmountForSaleReg] = useState("");
 	const [aboveOrBelowReg, setAboveOrBelowReg] = useState("");
 	const [changeReg, setChangeReg] = useState("");
-	const [preferredPayment, setPreferredPayment] = useState("");
-	const [secondaryPayment, setSecondaryPayment] = useState("");
+	const [preferredPayment, setPreferredPayment] = useState("Please Select");
+	const [secondaryPayment, setSecondaryPayment] = useState("Please Select");
 	const [newPaymentMethods, setNewPaymentMethods] = useState([]);
 	const [accountLimit, setAccountLimit] = useState(0);
 	const [currentStep, setCurrentStep] = useState("initial");
 	const [modal, setModal] = useState(false);
-	const [accountTier, setAccountTier] = useState("");
+	const [userLocation, setUserLocation] = useState("");
 
 	const navigate = useNavigate();
 
@@ -206,6 +206,12 @@ const Sell = () => {
 			setAccountLimit(response.data.solLimit - response.data.amountSolSold);
 			setAccountTier(response.data.accountLevel);
 
+		});
+	};
+
+	const getUserLocation = () => {
+		Axios.post(`${AppUrl}/getUserLocation`, {}).then((response) => {
+			setUserLocation(response.data.location);
 		});
 	};
 
@@ -416,6 +422,7 @@ const Sell = () => {
 										className="w-100"
 										required
 									>
+										<option value="Please Select">Please Select</option>
 										{filteredNewPaymentMethods.map((data) => (
 											<option value={data} key={data}>
 												{data}
@@ -430,9 +437,25 @@ const Sell = () => {
 										onClick={addSale}
 										className="w-100"
 										size="lg"
-										disabled={amountForSaleReg > accountLimit}
+										disabled={
+											(amountForSaleReg > accountLimit) ||
+											(preferredPayment === "Please Select" || secondaryPayment === "Please Select")
+										}
 									/>
 								</div>
+								{filteredNewPaymentMethods.length === 0 && (
+									<div className="col-12 mt-3 d-flex">
+										<IconHelper className="material-icons me-2" color="invalid">
+											error_outline
+										</IconHelper>
+										<Paragraph className="mb-0" size="20px" color="invalid">
+											No payment methods added, please 
+											<StyledLinkTo to="/Profile/PaymentMethods" className="ms-2">
+												Add a payment method
+											</StyledLinkTo>
+										</Paragraph>
+									</div>
+								)}
 								{amountForSaleReg > accountLimit && (
 									<div className="col-12 mt-3 d-flex">
 										<IconHelper className="material-icons me-2" color="invalid">

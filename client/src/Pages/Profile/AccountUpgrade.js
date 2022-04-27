@@ -49,18 +49,20 @@ const reloadPage = () => {
 const AccountUpgrade = () => {
 	// step 0 upgrade bronze
 	const [name, setName] = useState("");
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
 	const [streetAddress, setStreetAddress] = useState("");
 	const [city, setCity] = useState("");
 	const [cityState, setCityState] = useState("");
 	const [postCode, setPostCode] = useState("");
-	const [country, setCountry] = useState("");
+	const [country, setCountry] = useState("Please Select");
 	const [document, setDocument] = useState("");
-	const [nationality, setNationality] = useState("");
+	const [nationality, setNationality] = useState("Please Select");
 
 	//step 1 upgrade silver
-	const [birthDay, setBirthDay] = useState("");
-	const [birthMonth, setBirthMonth] = useState("");
-	const [birthYear, setBirthYear] = useState("");
+	const [birthDay, setBirthDay] = useState("---");
+	const [birthMonth, setBirthMonth] = useState("---");
+	const [birthYear, setBirthYear] = useState("---");
 	const [phone, setPhoneReg] = useState("");
 	const [tax, setTaxReg] = useState("");
 	const [countryOfResidence, setCountryOfResidenceReg] = useState("");
@@ -93,7 +95,7 @@ const AccountUpgrade = () => {
 
 	const upgradeBronze = () => {
 		const data = new FormData();
-		data.append("name", name);
+		data.append("name", firstName + lastName);
 		data.append("file", file);
 		data.append("streetAddress", streetAddress);
 		data.append("city", city);
@@ -196,16 +198,36 @@ const AccountUpgrade = () => {
 													bold
 													fontSize="20px"
 												>
-													Legal Name
+													Legal First Name
 												</StyledLabel>
 												<FormInput
 													id="legalName"
 													name="legalName"
 													className="w-100"
 													type="text"
-													placeholder="Legal Name"
+													placeholder="Legal First Name"
 													onChange={(e) => {
-														setName(e.target.value);
+														setFirstName(e.target.value);
+													}}
+												/>
+											</div>
+											<div className="col-12 mb-4">
+												<StyledLabel
+													htmlFor="legalName"
+													padding="0 0 5px 0"
+													bold
+													fontSize="20px"
+												>
+													Legal Last Name
+												</StyledLabel>
+												<FormInput
+													id="legalName"
+													name="legalName"
+													className="w-100"
+													type="text"
+													placeholder="Legal Last Name"
+													onChange={(e) => {
+														setLastName(e.target.value);
 													}}
 												/>
 											</div>
@@ -359,12 +381,14 @@ const AccountUpgrade = () => {
 													text="Upgrade To Bronze"
 													hasIcon
 													disabled={
-														name.length === 0 ||
+														firstName.length === 0 ||
+														lastName.length === 0 ||
 														streetAddress.length === 0 ||
 														city.length === 0 ||
 														postCode.length === 0 ||
 														country === "Please Select" ||
-														nationality === "Please Select"
+														nationality === "Please Select" ||
+														document.length === 0
 													}
 												/>
 											</div>
@@ -471,7 +495,8 @@ const AccountUpgrade = () => {
 											disabled={
 												birthDay === "---" ||
 												birthMonth === "---" ||
-												birthYear === "---"
+												birthYear === "---" ||
+												file.length === 0
 											}
 											hasIcon
 										/>

@@ -126,8 +126,18 @@ function SMSAuth() {
 							</StyledLabel>
 							<PrimaryButton
 								text="Get Code"
-								className="m-auto my-3"
+								className="m-auto mt-5"
 								onClick={sendVerification}
+								type="check"
+								value="check"
+							/>
+							<PrimaryButton
+								text="Cancel"
+								className="m-auto mt-2 red"
+								onClick={(event) => {
+									event.preventDefault();
+									navigate('/Profile/Security')
+								}}
 								type="check"
 								value="check"
 							/>
