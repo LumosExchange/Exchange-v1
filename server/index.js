@@ -439,6 +439,25 @@ app.get("/getUserID", (req, res) => {
   res.send(id);
 });
 
+app.get("/getUserLocation", (req, res) => {
+  const id = req.session.user[0].userID;
+
+  db.query(
+    "SELECT country FROM upgradeTiers WHERE (userID) = (?)",
+    [id],
+    (err, result) => {
+      if(err) {
+        res.send(err);
+      }
+
+      res.send({
+        location: result[0].country,
+      })
+    }
+  )
+
+});
+
 //update user settings
 app.post("/updateUserSettings", (req, res) => {
   const timezone = req.body.timezone;

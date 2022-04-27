@@ -204,14 +204,13 @@ const Sell = () => {
 	const checkEligibility = () => {
 		Axios.post(`${AppUrl}/CheckSaleEligibility`, {}).then((response) => {
 			setAccountLimit(response.data.solLimit - response.data.amountSolSold);
-			setAccountTier(response.data.accountLevel);
-
 		});
 	};
 
 	const getUserLocation = () => {
-		Axios.post(`${AppUrl}/getUserLocation`, {}).then((response) => {
+		Axios.get(`${AppUrl}/getUserLocation`, {}).then((response) => {
 			setUserLocation(response.data.location);
+			console.log(response.data.location);
 		});
 	};
 
@@ -248,6 +247,7 @@ const Sell = () => {
 	useEffect(() => {
 		updatePayments();
 		checkEligibility();
+		getUserLocation();
 	}, []);
 
 	const filteredNewPaymentMethods = newPaymentMethods.filter((method) => method !== preferredPayment);
