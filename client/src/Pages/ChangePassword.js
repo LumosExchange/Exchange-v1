@@ -117,6 +117,7 @@ function ChangePassword() {
             know your current password before you will be allowed to change the
             password on the account.
           </Paragraph>
+		  <div className="col-12">
           {!isCodeSent && (
             <PrimaryButton
                 text="Get Code"
@@ -126,6 +127,17 @@ function ChangePassword() {
                 value="check"
             />
           )}
+			<PrimaryButton
+				text="Cancel"
+				className="m-auto mt-2 red"
+				onClick={(event) => {
+					event.preventDefault();
+					navigate('/Profile/Security')
+				}}
+				type="check"
+				value="check"
+			/>
+		  </div>
           <div className="w-100">
             <form>
 				{currentStep === 2 && (
