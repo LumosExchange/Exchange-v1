@@ -38,7 +38,8 @@ const server = http.createServer(app);
 
 //Needed for storing images for KYC
 
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: __dirname +'/uploads/'});
+
 
 //Setting up socket for chatroom
 const io = new Server(server, {
