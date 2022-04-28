@@ -604,7 +604,7 @@ const PaymentMethods = () => {
   };
 
   const editIntBank = () => {
-    Axios.post(`${AppUrl}/UpdateInternationalBank`, {
+    Axios.post(`${AppUrl}/UpdateInterBank`, {
       bankName,
       bankCity,
       bankCountry,
