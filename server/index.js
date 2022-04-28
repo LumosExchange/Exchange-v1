@@ -739,7 +739,7 @@ app.post("/UpgradeBronze", upload.single('file'), async (req, res) => {
   //Now update sql upgradeTiers & account level
 
   var sql =
-    "Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;INSERT INTO KYC set userID =?, documentAddress =?, date=?;";
+    "Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;INSERT INTO KYC set userID =?, documentAddressKYC =?, KYCdate=?;";
 
   db.query(
     sql,
@@ -1760,7 +1760,7 @@ app.get("/GetLiveTradePaymentInfo", (req, res) => {
               bankCity: result[0].bankCity,
               bankCountry: result[0].bankCountry,
               SWIFTCode: result[0].SWIFTCode,
-              payeesName: result[0].payeesName,
+              payeeName: result[0].payeeName,
               interBankName: result[0].interBankName,
               interBankCity: result[0].interBankCity,
               interBankCountry: result[0].interBankCountry,

@@ -354,7 +354,7 @@ const AccountUpgrade = () => {
 											</div>
 											<div className="col-12">
 												<StyledLabel htmlFor="file" padding="0 0 5px 0" bold fontSize="20px">
-													Upload Document
+													Upload Identity Document
 												</StyledLabel>
 												<FormInput
 													id="file"

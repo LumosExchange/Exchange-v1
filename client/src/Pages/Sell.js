@@ -196,6 +196,7 @@ const Sell = () => {
 	const checkEligibility = () => {
 		Axios.post(`${AppUrl}/CheckSaleEligibility`, {}).then((response) => {
 			setAccountLimit(response.data.solLimit - response.data.amountSolSold);
+			setAccountTier(response.data.accountLevel);
 		});
 	};
 
