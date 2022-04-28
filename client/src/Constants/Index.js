@@ -473,3 +473,33 @@ export const Nationalities = [
 	'Zambian',
 	'Zimbabwean'	
 ];
+
+export const paymentMethods = [
+	"Please Select",
+	"UK Bank Transfer",
+	"EU Bank Transfer",
+	"International Wire Transfer",
+	"Paypal",
+	"Skrill",
+];
+
+export const locationMethods = [
+	"Please Select",
+	"United Kingdom",
+	"America",
+	"France",
+];
+
+export const feedbackMethods = [
+	"Please Select",
+	"80% +",
+	"60% +",
+	"40% +",
+	"20% +",
+];
+
+export const priceMethods = [
+	"Price",
+	"High - Low",
+	"Low - High",
+];

@@ -155,15 +155,6 @@ export const convertAssetToSvg = (asset) => {
 
 //Write something to populate these from userPyamentsAccounts db
 
-const PaymentMethods = [
-	"Please Select",
-	"UK Bank Transfer",
-	"EU Bank Transfer",
-	"International Wire Transfer",
-	"Paypal Transfer",
-	"Skrill Transfer",
-];
-
 const Sell = () => {
 	const [selectedCrypto, selectCrypto] = useState(CRYPTO_SOL);
 	const [amountForSaleReg, setAmountForSaleReg] = useState("");

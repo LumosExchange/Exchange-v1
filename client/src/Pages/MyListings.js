@@ -20,13 +20,8 @@ import { useNavigate } from "react-router";
 import TradeCard from "../Components/TradeCard";
 import { LoadingState } from "../Components/Profile";
 import { AppUrl } from "../App";
+import { paymentMethods } from "../Constants/Index";
 
-const PaymentMethods = [
-	"Please Select",
-	"UK Bank Transfer",
-	"EU Bank Transfer",
-	"International Wire Transfer",
-];
 
 const CardActionButton = styled(InvisibleButton)(({ theme }) => css`
 	.edit { color: ${theme.colors.primary_cta} };
@@ -68,6 +63,7 @@ const MyListings = ({ solGbp, currency }) => {
 	}
 
 	const openEditModal = (val) => {
+		console.log(val);
 		setPrimaryPaymentMethod(val.paymentMethod1);
 		setSecondaryPaymentMethod(val.paymentMethod2);
 		setAboveOrBelow(val.aboveOrBelow);
@@ -189,7 +185,7 @@ const MyListings = ({ solGbp, currency }) => {
 								}}
 								className="w-100"
 							>
-								{PaymentMethods.map((data) => (
+								{paymentMethods.map((data) => (
 									<option value={data}>{data}</option>
 								))}
 							</StyledDropdown>
@@ -211,7 +207,7 @@ const MyListings = ({ solGbp, currency }) => {
 								}}
 								className="w-100"
 							>
-								{PaymentMethods.map((data) => (
+								{paymentMethods.map((data) => (
 									<option value={data}>{data}</option>
 								))}
 							</StyledDropdown>

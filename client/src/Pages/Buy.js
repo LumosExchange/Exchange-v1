@@ -14,6 +14,7 @@ import { LoadingState } from "../Components/Profile";
 import { AppUrl } from "../App";
 import { IconHelper } from "./Login";
 import { filterData, SearchType } from 'filter-data';
+import { paymentMethods, locationMethods, feedbackMethods, priceMethods  } from "../Constants/Index";
 
 const CRYPTO_KIN = 'KIN';
 const CRYPTO_SOL = 'SOL';
@@ -107,6 +108,12 @@ export const convertAssetToSvg = (asset) => {
 	)}
     if (asset === ''){ return <i className="material-icons">token</i> }
 }
+
+const ListingArea = styled.div`
+	max-height: 100vh;
+	overflow-y: auto;
+`;
+
 const Buy = ({ solGbp, solUsd, currency, userName }) => {
 	const [allListings, setAllListings] = useState([]);
 	const [selectedCrypto, selectCrypto] = useState(CRYPTO_SOL);
@@ -120,41 +127,6 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
   
 	const navigate = useNavigate();
 	
-	const PaymentMethods = [
-		"Please Select",
-		"UK Bank Transfer",
-		"EU Bank Transfer",
-		"International Wire Transfer",
-		"Paypal",
-		"Skrill",
-	];
-
-	const locationMethods = [
-		"Please Select",
-		"United Kingdom",
-		"America",
-		"France",
-	];
-
-	const feedbackMethods = [
-		"Please Select",
-		"80% +",
-		"60% +",
-		"40% +",
-		"20% +",
-	];
-
-	const priceMethods = [
-		"Price",
-		"High - Low",
-		"Low - High",
-	];
-
-	const ListingArea = styled.div`
-		max-height: 100vh;
-		overflow-y: auto;
-	`;
-
 	const getAllListings = () => {
 		Axios.get(`${AppUrl}/getAllListings`).then((response) => {
 			const newArray = response.data.map(function(item){
@@ -333,7 +305,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 								className="w-100"
 								required
 							>
-								{PaymentMethods.map((data) => (
+								{paymentMethods.map((data) => (
 									<option value={data}>{data}</option>
 								))}
 							</StyledDropdown>
