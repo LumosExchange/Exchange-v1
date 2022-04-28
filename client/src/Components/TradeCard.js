@@ -95,7 +95,7 @@ const TradeCard = ({ val, children, withoutButton, solGbp, solUsd, currency }) =
                     <Paragraph size="16px" className="mb-0">
                         {feedbackScore}% Feedback
                     </Paragraph>
-                    <Paragraph size="16px" className="mb-0 ms-1">
+                    <Paragraph size="16px" className="mb-0">
                         {val.tradeHistory}{' '}{val.tradeHistory === 1 ? 'Trade' : 'Trades'}
                     </Paragraph>
                 </div>
