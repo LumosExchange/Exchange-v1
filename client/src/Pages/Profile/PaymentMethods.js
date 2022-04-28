@@ -418,15 +418,11 @@ const PaymentMethods = () => {
                 payment method?
               </Paragraph>
               <div className="row">
-                <div className="col-6">
-                  <InlineButton className="cancel" onClick={toggleDelete}>
-                    Cancel
-                  </InlineButton>
+                <div className="col-12">
+                  <PrimaryButton className="clear w-100" onClick={toggleDelete} text="Cancel" />
                 </div>
-                <div className="col-6 mb-3">
-                  <InlineButton className="delete" onClick={deletePayment}>
-                    Remove
-                  </InlineButton>
+                <div className="col-12 mt-3">
+                  <PrimaryButton className="delete red w-100" onClick={deletePayment} text="Remove" />
                 </div>
               </div>
             </ModalBody>
@@ -604,7 +600,7 @@ const PaymentMethods = () => {
   };
 
   const editIntBank = () => {
-    Axios.post(`${AppUrl}/UpdateInternationalBank`, {
+    Axios.post(`${AppUrl}/UpdateInterBank`, {
       bankName,
       bankCity,
       bankCountry,

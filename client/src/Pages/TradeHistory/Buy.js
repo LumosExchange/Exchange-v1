@@ -62,28 +62,30 @@ const TradeHistoryBuy = () => {
 					</div>
 				)}
 				{isLoading && <LoadingState />}
-				<TradeHistoryTabs selected="Buy" />
-				<ContentTab>
-					{liveTradesBuyer.length > 0 && (
-						<div className="d-flex justify-content-center pt-4 pb-3 flex-column">
-							<Heading size="24px" className="mb-4 text-start ps-3" bold>
-								{liveTradesBuyer.length} Active Buy Trades
-							</Heading>
-							<MaxHeightBarrier>
-								{liveTradesBuyer.map((tradeInfo, index) => (
-									<React.Fragment>
-										<ActiveTradeCard tradeInfo={tradeInfo} type="buying" key={index} withView />
-									</React.Fragment>
-								))}
-								{messageForPurchases && (
-									<Paragraph size="20px" className="ms-2">
-										{messageForPurchases}
-									</Paragraph>
-								)}
-							</MaxHeightBarrier>
-						</div>
-					)}
-				</ContentTab>
+				{liveTradesBuyer.length > 0 && (
+					<React.Fragment>
+						<TradeHistoryTabs selected="Buy" />
+						<ContentTab>
+								<div className="d-flex justify-content-center pt-4 pb-3 flex-column">
+									<Heading size="24px" className="mb-4 text-start ps-3" bold>
+										{liveTradesBuyer.length} Active Buy Trades
+									</Heading>
+									<MaxHeightBarrier>
+										{liveTradesBuyer.map((tradeInfo, index) => (
+											<React.Fragment>
+												<ActiveTradeCard tradeInfo={tradeInfo} type="buying" key={index} withView />
+											</React.Fragment>
+										))}
+										{messageForPurchases && (
+											<Paragraph size="20px" className="ms-2">
+												{messageForPurchases}
+											</Paragraph>
+										)}
+									</MaxHeightBarrier>
+								</div>
+						</ContentTab>
+				</React.Fragment>
+				)}
 			</div>
 		</PageBody>
 	);

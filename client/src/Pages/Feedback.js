@@ -68,7 +68,9 @@ const Feedback = () => {
 			setTotalTrades(response.data.totalTrades[0].total);
 			setFeedbackScore(response.data.feedbackScore[0].feedback);
 			setRegisteredDate(response.data.registeredDate[0].registeredDate);
-			setCountry(response.data.country[0].country);
+			if (response.data.country.length > 0){
+				setCountry(response.data.country[0].country);
+			}  else { setCountry('N/A')}
 			setEmailVerified(response.data.verified[0].emailVerified);
 			setPhoneVerified(response.data.verified[0].SMS);
 			setUserName(response.data.userName[0].userName);
