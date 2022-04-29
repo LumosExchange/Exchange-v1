@@ -208,9 +208,6 @@ const Offer = ({ solGbp, solUsd, currency }) => {
   ];
   const formattedCurrency = convertCurrencyToSymbol(currency);
 
-  console.log(data.paymentMethods && data.paymentMethods[0]);
-  
-
   return data.length === 0 ? (
     <PageBody className="d-flex justify-content-center flex-column">
       <div className="container text-center">
@@ -240,8 +237,8 @@ const Offer = ({ solGbp, solUsd, currency }) => {
           </div>
           <div className="col-12 mb-5 pb-5">
             <Heading size="26px" className="mb-4">
-              Buy SOL from {data.userName} with {data.paymentMethod1}{" "}
-              {data.paymentMethod2 && `or ${data.paymentMethod2}`}.
+              Buy SOL from {data.userName} with {data.paymentMethods && data.paymentMethods[0]}{" "}
+              {data.paymentMethods && `or ${data.paymentMethods[1]}`}.
             </Heading>
             <TradeCard
               val={data}
@@ -432,7 +429,8 @@ const Offer = ({ solGbp, solUsd, currency }) => {
                 {" Mins"}
               </Paragraph>
               <Paragraph>
-                Registered: {new Date(registeredDate).toString().split("GMT", 1)}
+                {console.log(registeredDate)}
+                Registered: {new Date(registeredDate).toString().split("T", 1)}
               </Paragraph>
             </div>
             <div className="col-6">
