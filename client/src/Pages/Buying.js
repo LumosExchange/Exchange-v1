@@ -216,12 +216,12 @@ const Buying = ({ userName }) => {
 		<PageBody>
 			<div className="container">
 				<div className="row py-5 mb-5">
-					<div className="col-12 mb-5 pb-5">
+					<div className="col-12 mb-5">
 						<Heading size="26px" className="mb-4">
 							Offers &gt; Buy SOL from {userNameSeller} with {paymentMethod}.
 						</Heading>
 					</div>
-					<div className="col-12 col-md-6 row">
+					<div className="col-12 col-md-6 row order-1 order-md-0">
 						<ChatWrapper>
 							<div className="chat-header d-flex align-items-center flex-column">
 								<div className="d-flex align-items-center mb-5">
@@ -296,11 +296,11 @@ const Buying = ({ userName }) => {
 							</div>
 						</ChatWrapper>
 					</div>
-					<div className="col-1 d-flex justify-content-center">
+					<div className="col-1 d-none d-md-flex justify-content-center">
 						<VerticalDivider />
 					</div>
 					{currentStep === "buying" && (
-						<div className="col-12 col-md-5">
+						<div className="col-12 col-md-5 order-0 order-md-1">
 							<HalfStepper step2Title="Send Payment to the Seller" />
 							<div className="col-12 text-center">
 								<Heading className="me-2 d-inline-block">Buying</Heading>
@@ -338,7 +338,7 @@ const Buying = ({ userName }) => {
 											disabled={isPaymentSent}
 										/>
 									</div>
-									<div className="row mt-5">
+									<div className="row mt-5 mb-5 mb-md-0">
 										<div className="col-6">
 											<SecondaryButton
 												text="Cancel"
