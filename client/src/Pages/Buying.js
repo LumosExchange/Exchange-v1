@@ -322,9 +322,6 @@ const Buying = ({ userName }) => {
 										Please pay {formattedCurrency}
 										{fiatAmount}
 									</Paragraph>
-									<Paragraph size="18px" className="me-2">
-										into
-									</Paragraph>
 									<PaymentInfoArea
 										paymentInfo={paymentInfo}
 										paymentMethod={paymentMethod}

@@ -324,7 +324,7 @@ export const ChatWrapper = styled.div(({ theme }) => css`
 
 export const PaymentInfoArea = ({ paymentInfo, paymentMethod, reference }) => (
 	<Card className="p-3 mb-4 d-flex flex-column" color="grey">
-		<Paragraph size="20px">The buyer will transfer funds using the following details:</Paragraph>
+		<Paragraph size="20px">Using the following details:</Paragraph>
 		<Paragraph size="24px" bold color="primary_cta">
 			{paymentMethod}
 		</Paragraph>
@@ -360,10 +360,10 @@ export const PaymentInfoArea = ({ paymentInfo, paymentMethod, reference }) => (
 		)}
 		{reference && (
 			<div className="d-flex justify-content-center">
-				<Paragraph bold size="20px" className="me-2">
+				<Paragraph bold size="20px" className="me-2 mb-0">
 					Ref:
 				</Paragraph>
-				<Paragraph className="text-uppercase" size="20px">
+				<Paragraph className="text-uppercase mb-0" size="20px">
 					{reference}
 				</Paragraph>
 			</div>
