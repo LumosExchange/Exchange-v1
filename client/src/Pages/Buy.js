@@ -6,7 +6,7 @@ import Card from "../Components/Card";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
 import GradientButton from "../Components/GradientButton";
-import { InvisibleButton } from "../Components/Buttons";
+import PrimaryButton, { InvisibleButton } from "../Components/Buttons";
 import { StyledLabel } from "../Components/FormInputs";
 import { useNavigate } from "react-router-dom";
 import TradeCard from "../Components/TradeCard";
@@ -15,6 +15,7 @@ import { AppUrl } from "../App";
 import { IconHelper } from "./Login";
 import { filterData, SearchType } from 'filter-data';
 import { paymentMethods, locationMethods, feedbackMethods, priceMethods  } from "../Constants/Index";
+import { Collapse } from "@material-ui/core";
 
 const CRYPTO_KIN = 'KIN';
 const CRYPTO_SOL = 'SOL';
@@ -124,6 +125,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 	const [filteredListings, setFilteredListings] = useState([]);
 	const [isFiltering, setIsFiltering] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
+	const [filtersExpanded, setFiltersExpanded] = useState(false);
   
 	const navigate = useNavigate();
 	
@@ -216,9 +218,18 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 		setFilteredListings([]);
 	}
 
+	const ShowFiltersOnDesktop = () => {
+		if (window.innerWidth > 992){
+			setFiltersExpanded(true);
+		}
+	}
+
     useEffect(() => {
 		getAllListings();
+		ShowFiltersOnDesktop();
 	}, []);
+
+	console.log(window.innerWidth, 'windows inner width');
 
   	return (
 		<PageBody>
@@ -287,49 +298,57 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 								</div>
 							</div>
 							<div>
-							<div className="col-12">
-								<StyledLabel bold padding="10px 0 5px 0" htmlFor="preferredPayment">
-									Preferred Payment Method
-								</StyledLabel>
-							</div>
-							<StyledDropdown
-								type="change"
-								placeholder="preferredPayment"
-								name="preferredPayment"
-								value={searchCriteriaPayment}
-								id="preferredPayment"
-								color="btn"
-								onChange={(e) => {
-									setSearchCriteriaPayment(e.target.value);
-								}}
-								className="w-100"
-								required
-							>
-								{paymentMethods.map((data) => (
-									<option value={data}>{data}</option>
-								))}
-							</StyledDropdown>
-							<div className="col-12">
-								<StyledLabel bold padding="10px 0 5px 0" htmlFor="preferredLocation">
-									Preferred Location
-								</StyledLabel>
-							</div>
-							<StyledDropdown
-								type="change"
-								placeholder="preferredLocation"
-								name="preferredLocation"
-								value={searchCriteriaLocation}
-								id="preferredLocation"
-								color="btn"
-								onChange={(e) => {
-									setSearchCriteriaLocation(e.target.value);
-								}}
-								className="w-100"
-								required
-							>
-								{locationMethods.map((data) => (
-									<option value={data}>{data}</option>
-								))}
+							<GradientButton
+								onClick={() => setFiltersExpanded(!filtersExpanded)}
+								text="Show Filters"
+								className="mt-3 w-100 mb-3"
+								fontSize="20px"
+								padding="4px 20px"
+							/>
+							<Collapse orientation="horizontal" in={filtersExpanded}>
+								<div className="col-12">
+									<StyledLabel bold padding="10px 0 5px 0" htmlFor="preferredPayment">
+										Preferred Payment Method
+									</StyledLabel>
+								</div>
+								<StyledDropdown
+									type="change"
+									placeholder="preferredPayment"
+									name="preferredPayment"
+									value={searchCriteriaPayment}
+									id="preferredPayment"
+									color="btn"
+									onChange={(e) => {
+										setSearchCriteriaPayment(e.target.value);
+									}}
+									className="w-100"
+									required
+								>
+									{paymentMethods.map((data) => (
+										<option value={data}>{data}</option>
+									))}
+								</StyledDropdown>
+								<div className="col-12">
+									<StyledLabel bold padding="10px 0 5px 0" htmlFor="preferredLocation">
+										Preferred Location
+									</StyledLabel>
+								</div>
+								<StyledDropdown
+									type="change"
+									placeholder="preferredLocation"
+									name="preferredLocation"
+									value={searchCriteriaLocation}
+									id="preferredLocation"
+									color="btn"
+									onChange={(e) => {
+										setSearchCriteriaLocation(e.target.value);
+									}}
+									className="w-100"
+									required
+								>
+									{locationMethods.map((data) => (
+										<option value={data}>{data}</option>
+									))}
 							</StyledDropdown>
 							<div className="col-12">
 								<StyledLabel bold padding="10px 0 5px 0" htmlFor="preferredFeedback">
@@ -367,6 +386,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 									}
 								/>
 							</div>
+							</Collapse>
 							</div>
 						</Card>
 					</div>
@@ -376,24 +396,26 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 						)}
 						<div className="d-flex justify-content-between flex-row pb-2">
 							<Heading size="24px">Buy {selectedCrypto} from these Sellers</Heading>
-							<div className="d-flex align-items-center">
-								<InvisibleDropdown
-									type="change"
-									placeholder="preferredPrice"
-									name="preferredPrice"
-									value={searchCriteriaPrice}
-									id="preferredPrice"
-									onChange={(e) => {
-										setSearchCriteriaPrice(e.target.value);
-									}}
-									required
-								>
-									{priceMethods.map((data) => (
-										<option value={data}>{data}</option>
-									))}
-								</InvisibleDropdown>
-								<IconHelper className="material-icons">expand_more</IconHelper>
-							</div>
+							{/*
+								<div className="d-flex align-items-center">
+									<InvisibleDropdown
+										type="change"
+										placeholder="preferredPrice"
+										name="preferredPrice"
+										value={searchCriteriaPrice}
+										id="preferredPrice"
+										onChange={(e) => {
+											setSearchCriteriaPrice(e.target.value);
+										}}
+										required
+									>
+										{priceMethods.map((data) => (
+											<option value={data}>{data}</option>
+										))}
+									</InvisibleDropdown>
+									<IconHelper className="material-icons">expand_more</IconHelper>
+								</div>
+							*/}
 						</div>
 						{selectedCrypto === "SOL" && (
 							<ListingArea>
