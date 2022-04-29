@@ -203,10 +203,13 @@ const Offer = ({ solGbp, solUsd, currency }) => {
 
   const filteredPaymentMethods = [
     "Please Select",
-    data.paymentMethod1,
-    data.paymentMethod2,
+    data.paymentMethods && data.paymentMethods[0],
+    data.paymentMethods && data.paymentMethods[1],
   ];
   const formattedCurrency = convertCurrencyToSymbol(currency);
+
+  console.log(data.paymentMethods && data.paymentMethods[0]);
+  
 
   return data.length === 0 ? (
     <PageBody className="d-flex justify-content-center flex-column">
@@ -439,10 +442,10 @@ const Offer = ({ solGbp, solUsd, currency }) => {
               </Card>
               <Paragraph bold>Payment Methods</Paragraph>
               <Paragraph className="mb-0">
-                &bull; {data.paymentMethod1}
+                &bull; {data.paymentMethods && data.paymentMethods[0]}
               </Paragraph>
               <Paragraph>
-                &bull; {data.paymentMethod2}
+                &bull; {data.paymentMethods && data.paymentMethods[1]}
               </Paragraph>
             </div>
           </div>
