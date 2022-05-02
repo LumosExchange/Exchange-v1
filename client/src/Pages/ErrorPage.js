@@ -7,9 +7,10 @@ const NotFoundIcon = styled.i(({ theme }) => css`
     color: ${theme.colors.primary_cta};
 `);
 
-const ShortPageBody = styled.div`
+const ShortPageBody = styled.div(({ theme }) => css`
     min-height: 50vh;
-`;
+    background: ${theme.colors.base_bg};
+`);
 
 const ErrorPage = () => (
     <ShortPageBody className="d-flex align-items-center justify-content-center flex-column py-5">

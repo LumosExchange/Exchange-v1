@@ -45,44 +45,38 @@ const TradeHistorySell = () => {
 	}, []);
 
 	return (
-		<PageBody
-			className={`d-flex flex-column ${
-				liveTradesSeller.length === 0 ? "justify-content-center" : "justify-content-start py-5"
-			}`}
-		>
+		<PageBody className="d-flex flex-column justify-content-start py-5">
 			<div className="container text-center">
-				{liveTradesSeller.length === 0 && (
-					<div className="d-flex align-items-center justify-content-center flex-column">
-						<MissingIcon className="material-icons mb-3">manage_search</MissingIcon>
-						<Heading bold size="24px" className="mb-4">
-							No Trades Found
-						</Heading>
-						<PrimaryButton text="Start Trading" onClick={() => navigate("/Sell")} />
-					</div>
-				)}
 				{isLoading && <LoadingState />}
-				{liveTradesSeller.length > 0 && (
-					<React.Fragment>
-						<TradeHistoryTabs selected="Sell" />
-						<ContentTab>
-							<div className="d-flex justify-content-center pt-4 pb-3 flex-column">
-								<Heading size="24px" className="mb-4 text-start ms-3" bold>
-									{liveTradesSeller.length} Active Sell Trade{liveTradesSeller.length > 1 && "s"}
+					<TradeHistoryTabs selected="Sell" />
+					<ContentTab>
+					{liveTradesSeller.length > 0 && (
+						<div className="d-flex justify-content-center pt-4 pb-3 flex-column">
+							<Heading size="24px" className="mb-4 text-start ms-3" bold>
+								{liveTradesSeller.length} Active Sell Trade{liveTradesSeller.length > 1 && "s"}
+							</Heading>
+							<MaxHeightBarrier>
+								{liveTradesSeller.map((tradeInfo, index) => (
+									<ActiveTradeCard tradeInfo={tradeInfo} type="selling" key={index} withView />
+								))}
+								{messageForSales && (
+									<Paragraph size="20px" className="ms-2">
+										{messageForSales}
+									</Paragraph>
+								)}
+							</MaxHeightBarrier>
+						</div>
+						)}
+						{liveTradesSeller.length === 0 && (
+							<div className="d-flex align-items-center justify-content-center flex-column p-5">
+								<MissingIcon className="material-icons mb-3">manage_search</MissingIcon>
+								<Heading bold size="24px" className="mb-4">
+									No Trades Found
 								</Heading>
-								<MaxHeightBarrier>
-									{liveTradesSeller.map((tradeInfo, index) => (
-										<ActiveTradeCard tradeInfo={tradeInfo} type="selling" key={index} withView />
-									))}
-									{messageForSales && (
-										<Paragraph size="20px" className="ms-2">
-											{messageForSales}
-										</Paragraph>
-									)}
-								</MaxHeightBarrier>
+								<PrimaryButton text="Start Trading" onClick={() => navigate("/Sell")} />
 							</div>
-						</ContentTab>
-					</React.Fragment>
-				)}
+						)}
+					</ContentTab>
 			</div>
 		</PageBody>
 	);
