@@ -300,7 +300,7 @@ const Buy = ({ solGbp, solUsd, currency, userName }) => {
 							<div>
 							<GradientButton
 								onClick={() => setFiltersExpanded(!filtersExpanded)}
-								text="Show Filters"
+								text={filtersExpanded ? 'Hide Filters' : "Show Filters"}
 								className="mt-3 w-100 mb-3"
 								fontSize="20px"
 								padding="4px 20px"

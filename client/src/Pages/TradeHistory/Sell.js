@@ -17,12 +17,7 @@ import { ActiveTradeCard } from "../../Components/TradeCard";
 import { LoadingState } from "../../Components/Profile";
 import PrimaryButton from "../../Components/Buttons";
 import { AppUrl } from "../../App";
-import {
-	MissingIcon,
-	TradeHistoryTabs,
-	ContentTab,
-	MaxHeightBarrier,
-} from '../../Components/TradeComponents';
+import { MissingIcon, TradeHistoryTabs, ContentTab, MaxHeightBarrier } from "../../Components/TradeComponents";
 
 const TradeHistorySell = () => {
 	// Collapse Sections
@@ -46,18 +41,13 @@ const TradeHistorySell = () => {
 	};
 
 	useEffect(() => {
-		if (liveTradesSeller.length === 0) {
-			getLiveTradesSeller();
-		}
-
-	}, [liveTradesSeller]);
+		getLiveTradesSeller();
+	}, []);
 
 	return (
 		<PageBody
 			className={`d-flex flex-column ${
-				liveTradesSeller.length === 0
-					? "justify-content-center"
-					: "justify-content-start py-5"
+				liveTradesSeller.length === 0 ? "justify-content-center" : "justify-content-start py-5"
 			}`}
 		>
 			<div className="container text-center">
@@ -71,26 +61,28 @@ const TradeHistorySell = () => {
 					</div>
 				)}
 				{isLoading && <LoadingState />}
-				<TradeHistoryTabs selected="Sell" />
-				<ContentTab>
-					{liveTradesSeller.length > 0 && (
-						<div className="d-flex justify-content-center pt-4 pb-3 flex-column">
-							<Heading size="24px" className="mb-4 text-start ms-3" bold>
-								{liveTradesSeller.length} Active Sell Trade{liveTradesSeller.length > 1 && 's'}
-							</Heading>
-							<MaxHeightBarrier>
-								{liveTradesSeller.map((tradeInfo, index) => (
-									<ActiveTradeCard tradeInfo={tradeInfo} type="selling" key={index} withView />
-								))}
-								{messageForSales && (
-									<Paragraph size="20px" className="ms-2">
-										{messageForSales}
-									</Paragraph>
-								)}
-							</MaxHeightBarrier>
-						</div>
-					)}
-				</ContentTab>
+				{liveTradesSeller.length > 0 && (
+					<React.Fragment>
+						<TradeHistoryTabs selected="Sell" />
+						<ContentTab>
+							<div className="d-flex justify-content-center pt-4 pb-3 flex-column">
+								<Heading size="24px" className="mb-4 text-start ms-3" bold>
+									{liveTradesSeller.length} Active Sell Trade{liveTradesSeller.length > 1 && "s"}
+								</Heading>
+								<MaxHeightBarrier>
+									{liveTradesSeller.map((tradeInfo, index) => (
+										<ActiveTradeCard tradeInfo={tradeInfo} type="selling" key={index} withView />
+									))}
+									{messageForSales && (
+										<Paragraph size="20px" className="ms-2">
+											{messageForSales}
+										</Paragraph>
+									)}
+								</MaxHeightBarrier>
+							</div>
+						</ContentTab>
+					</React.Fragment>
+				)}
 			</div>
 		</PageBody>
 	);

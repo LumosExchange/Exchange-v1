@@ -19,7 +19,6 @@ const TradeHistoryBuy = () => {
 	// Collapse Sections
 	const [messageForPurchases, setMessageForPurchases] = useState("");
 	const [liveTradesBuyer, setLiveTradesBuyer] = useState([]);
-	const [liveTradesSeller, setLiveTradesSeller] = useState([]);
 	const [isLoading, setIsLoading] = useState("");
 
 	const navigate = useNavigate();
@@ -38,10 +37,8 @@ const TradeHistoryBuy = () => {
 	};
 
 	useEffect(() => {
-		if (liveTradesBuyer.length === 0) {
-			getLiveTradesBuyer();
-		}
-	}, [liveTradesBuyer, liveTradesSeller]);
+		getLiveTradesBuyer();
+	}, []);
 
 	return (
 		<PageBody
