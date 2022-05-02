@@ -13,126 +13,131 @@ import ExodusIcon from "../Images/exodus-icon.svg";
 import Link, { AltLink } from "../Components/Link";
 import { AppUrl, AppUrlNoPort } from "../App";
 
-const FormBackground = styled.div(({ theme }) => css`
-    background: ${theme.colors.card_bg};
-    border-radius: 20px;
-    max-width: 550px;
-`);
+const FormBackground = styled.div(
+	({ theme }) => css`
+		background: ${theme.colors.card_bg};
+		border-radius: 20px;
+		max-width: 550px;
+	`
+);
 
-export const IconHelper = styled.i(({ theme, color }) => css`
-  color: ${theme.colors[color]};
-`);
+export const IconHelper = styled.i(
+	({ theme, color }) => css`
+		color: ${theme.colors[color]};
+	`
+);
 
 const Login = () => {
-  const [userLog, setUserLog] = useState("");
-  const [passwordLog, setPasswordLog] = useState("");
-  const [loginStatus, setLoginStatus] = useState(false);
-  const [loginError, setLoginError] = useState("");
+	const [userLog, setUserLog] = useState("");
+	const [passwordLog, setPasswordLog] = useState("");
+	const [loginStatus, setLoginStatus] = useState(false);
+	const [loginError, setLoginError] = useState("");
 
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
-  Axios.defaults.withCredentials = true;
+	Axios.defaults.withCredentials = true;
 
-  const login = () => {
-    Axios.post(`${AppUrl}/login`, {
-      header: {
-        "origin": `${AppUrlNoPort}`,
-        "cache-control": 'no-store, no-cache, must-revalidate',
-      },
-      userName: userLog,
-      password: passwordLog,
-    })
-    .then((response) => {
-      if (!response.data.auth) {
-        setLoginStatus(false);
-        setLoginError(response.data.message);
-      } else {
-        setLoginStatus(true);
-        //store JWT token in localstorage
-        localStorage.setItem("token", response.data.token);
-        navigate("/");
-        window.location.reload(false);
-      }
-    }).catch((err) => {
-        setLoginError(err.message);
-    });
-  };
+	const login = () => {
+		Axios.post(`${AppUrl}/login`, {
+			header: {
+				origin: `${AppUrlNoPort}`,
+				"cache-control": "no-store, no-cache, must-revalidate",
+			},
+			userName: userLog,
+			password: passwordLog,
+		})
+			.then((response) => {
+				if (!response.data.auth) {
+					setLoginStatus(false);
+					setLoginError(response.data.message);
+				} else {
+					setLoginStatus(true);
+					//store JWT token in localstorage
+					localStorage.setItem("token", response.data.token);
+					navigate("/");
+					window.location.reload(false);
+				}
+			})
+			.catch((err) => {
+				setLoginError(err.message);
+			});
+	};
 
-  //testing logged in
-  useEffect(() => {
+	//testing logged in
+	useEffect(() => {
+		Axios.get(`${AppUrl}/login`, {
+			header: {
+				origin: `${AppUrlNoPort}`,
+			},
+		}).then((response) => {
+			if (response.data.loggedIn === true) {
+				setLoginStatus(true);
+			}
+		});
+	}, [loginStatus]);
 
-    Axios.get(`${AppUrl}/login`, {
-      header: {
-        "origin": `${AppUrlNoPort}`,
-      },
-    }).then((response) => {
-      if (response.data.loggedIn === true) {
-        setLoginStatus(true);
-      }
-    });
-  }, [loginStatus]);
-
-  return (
-    <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">
-      <Heading className="pb-4 text-center">Sign in with Lumos account</Heading>
-      <FormBackground className="col-12 col-sm-10 col-md-7 col-xl-5 col-xxl-4 p-5">
-        <div className="d-flex flex-column m-auto">
-          <div className="text-center">
-            <form>
-              <FormInput
-                className="w-100"
-                id="email"
-                name="email"
-                onChange={(e) => {
-                  setUserLog(e.target.value);
-                }}
-                placeholder="username"
-                required
-                type="text"
-                hasIcon
-                icon="person"
-              />
-              <div className="my-3">
-                <FormInput
-                  className="w-100"
-                  hasIcon
-                  icon="lock"
-                  id="psw"
-                  name="psw"
-                  onChange={(e) => {
-                    setPasswordLog(e.target.value);
-                  }}
-                  placeholder="password"
-                  required
-                  type="password"
-                />
-              </div>
-              <PrimaryButton
-                text="Log In"
-                className="m-auto mt-3 w-100"
-                onClick={login}
-                type="logIn"
-                form="nameform"
-                value="logIn"
-                hasIcon
-              />
-              {loginError && loginError.length > 0 && (
-                <div className="d-flex justify-content-center mt-4">
-                    <IconHelper className="material-icons me-2" color="invalid">error_outline</IconHelper>
-                    <Paragraph color="invalid" size="20px" className="mb-0">
-                      {loginError}, Please try again.
-                    </Paragraph>
-                  </div>
-              )}
-            </form>
-          </div>
-        </div>
-      </FormBackground>
-      <Paragraph size="18px" className="mt-4">
-        Not got an account yet? <AltLink href="/Register">Register here</AltLink>.
-      </Paragraph>
-    </PageBody>
-  );
+	return (
+		<PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">
+			<Heading className="pb-4 text-center">Sign in with Lumos account</Heading>
+			<FormBackground className="col-12 col-sm-10 col-md-7 col-xl-5 col-xxl-4 p-5">
+				<div className="d-flex flex-column m-auto">
+					<div className="text-center">
+						<form>
+							<FormInput
+								className="w-100"
+								id="email"
+								name="email"
+								onChange={(e) => {
+									setUserLog(e.target.value);
+								}}
+								placeholder="username"
+								required
+								type="text"
+								hasIcon
+								icon="person"
+							/>
+							<div className="my-3">
+								<FormInput
+									className="w-100"
+									hasIcon
+									icon="lock"
+									id="psw"
+									name="psw"
+									onChange={(e) => {
+										setPasswordLog(e.target.value);
+									}}
+									placeholder="password"
+									required
+									type="password"
+								/>
+							</div>
+							<PrimaryButton
+								text="Log In"
+								className="m-auto mt-3 w-100"
+								onClick={login}
+								type="submit"
+								form="loginForm"
+								hasIcon
+							/>
+							{loginError && loginError.length > 0 && (
+								<div className="d-flex justify-content-center mt-4">
+									<IconHelper className="material-icons me-2" color="invalid">
+										error_outline
+									</IconHelper>
+									<Paragraph color="invalid" size="20px" className="mb-0">
+										{loginError}, Please try again.
+									</Paragraph>
+								</div>
+							)}
+						</form>
+					</div>
+				</div>
+			</FormBackground>
+			<Paragraph size="18px" className="mt-4">
+				Not got an account yet? <AltLink href="/Register">Register here</AltLink>.
+			</Paragraph>
+		</PageBody>
+	);
 };
 
 export default Login;

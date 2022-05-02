@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import styled, { css, keyframes } from "styled-components";
 import Heading from "./Heading";
 import PropTypes from 'prop-types';
+import { useState } from "react";
 
 export const ContentTab = styled.div(({ theme }) => css`
 	background: ${theme.colors.panel_bg};
@@ -73,10 +74,29 @@ export const ProfileTabLink = styled.a(({ theme }) => css`
         }
 `);
 
-export const Tabs = styled.div`
+const Throb = keyframes`
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+`;
+
+export const Tabs = styled.div(({ theme }) => css`
       padding: 0 0 0 9px;
       overflow-x: auto;
-`;
+      overflow-y: hidden;
+
+      .hinter {
+          position: absolute;
+          top: 5px;
+          right: 0;
+          animation: 3s linear infinite ${Throb};
+
+          i {
+              color: ${theme.colors.text_primary};
+              font-size: 40px;
+          }
+      }
+`);
   
 export const AccountTierCard = styled.div(({ theme, tier }) => css`
       background: ${theme.colors[tier]};
@@ -210,16 +230,24 @@ export const TopBanner = styled.span(({ theme }) => css`
     border-bottom: 1px solid ${theme.colors.grey};
 `);
 
-export const ProfileTabs = ({ selected }) => (
-	<Tabs className="d-flex align-items-end">
-		<ProfileTabLink href="/Profile/Basic" className={selected === "Basic" && "selected"}>
-			Basic
-		</ProfileTabLink>
-		<ProfileTabLink href="/Profile/Security" className={selected === "Security" && "selected"}>
-			Security
-		</ProfileTabLink>
-		<ProfileTabLink href="/Profile/PaymentMethods" className={`wide ${selected === "PaymentMethods" && "selected"}`}>Payment Methods</ProfileTabLink>
-		<ProfileTabLink href="/Profile/AccountUpgrade" className={`wide ${selected === "AccountUpgrade" && "selected"}`}>Account Upgrade</ProfileTabLink>
-		<ProfileTabLink href="/Profile/Wallets" className={selected === "Wallets" && "selected"}>Wallets</ProfileTabLink>
-	</Tabs>
-);
+export const ProfileTabs = ({ selected }) => {
+    const [isScrolling, setIsScrolling] = useState(false);
+    const detectScroll = () => setIsScrolling(true);
+
+    return (
+        <Tabs className={`d-flex align-items-end position-relative`} onScroll={detectScroll}>
+            <div className={`hinter d-lg-none ${isScrolling && 'd-none'}`}>
+                <i className="material-icons">chevron_right</i>
+            </div>
+            <ProfileTabLink href="/Profile/Basic" className={selected === "Basic" && "selected"}>
+                Basic
+            </ProfileTabLink>
+            <ProfileTabLink href="/Profile/Security" className={selected === "Security" && "selected"}>
+                Security
+            </ProfileTabLink>
+            <ProfileTabLink href="/Profile/PaymentMethods" className={`wide ${selected === "PaymentMethods" && "selected"}`}>Payment Methods</ProfileTabLink>
+            <ProfileTabLink href="/Profile/AccountUpgrade" className={`wide ${selected === "AccountUpgrade" && "selected"}`}>Account Upgrade</ProfileTabLink>
+            <ProfileTabLink href="/Profile/Wallets" className={selected === "Wallets" && "selected"}>Wallets</ProfileTabLink>
+        </Tabs>
+    );
+}
