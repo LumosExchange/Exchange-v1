@@ -173,20 +173,20 @@ const Sell = () => {
 
 	const updatePayments = () => {
 		Axios.post(`${AppUrl}/FindUserPaymentMethods`, {}).then((response) => {
-			const methods = ["Please Select"];
+			const methods = [];
 			if (response.data[0].EUBank === 1) {
 				methods.push("EU Bank Transfer");
 			}
 			if (response.data[0].UKBank === 1) {
 				methods.push("UK Bank Transfer");
 			}
-			if (response.data[0].InterBank === 1  ) {
+			if (response.data[0].InterBank === 1 && accountTier === "Gold") {
 				methods.push("International Bank Transfer");
 			}
-			if (response.data[0].Paypal === 1) {
+			if (response.data[0].Paypal === 1 && (accountTier === "Silver" || accountTier === "Gold")) {
 				methods.push("Paypal");
 			}
-			if (response.data[0].Skrill === 1) {
+			if (response.data[0].Skrill === 1 && (accountTier === "Silver" || accountTier === "Gold")) {
 				methods.push("Skrill");
 			}
 			setNewPaymentMethods(methods);
@@ -402,6 +402,7 @@ const Sell = () => {
 										className="w-100"
 										required
 									>
+										<option value="Please Select">Please Select</option>
 										{newPaymentMethods.map((data) => (
 											<option value={data} key={data}>
 												{data}
