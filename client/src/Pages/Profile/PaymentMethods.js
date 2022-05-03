@@ -41,6 +41,10 @@ const PaymentMethodCard = styled.div(
 			color: ${theme.colors.invalid};
 		}
 
+		.showValid {
+			color: ${theme.colors.valid};
+		}
+
 		.edit {
 			color: ${theme.colors.primary_cta};
 		}
@@ -1063,7 +1067,7 @@ const PaymentMethods = () => {
 									<StyledLabel padding="0 0 10px 0" bold htmlFor="BIC">
 										BIC{" "}
 										{BIC.length > 0 && (
-											<span className={BIC.length > 11 && "showError"}> - {BIC.length}/11</span>
+											<span className={BIC.length > 11 && "showError" }> - {BIC.length}/11</span>
 										)}
 									</StyledLabel>
 									<FormInput
@@ -1155,12 +1159,16 @@ const PaymentMethods = () => {
 								<div className="col-12 mb-3">
 									<StyledLabel padding="0 0 10px 0" bold htmlFor="BIC">
 										Bank BIC/SWIFT code
+										{BIC.length > 0 && (
+											<span className={BIC.length > 11 && "showError"}> - {BIC.length}/11</span>
+										)}
 									</StyledLabel>
 									<FormInput
 										type="text"
 										id="BIC"
 										name="BIC"
 										value={BIC}
+										maxLength="11"
 										placeholder="Enter BIC/SWIFT"
 										onChange={(e) => {
 											setBIC(e.target.value);
@@ -1189,6 +1197,13 @@ const PaymentMethods = () => {
 										text="Next"
 										className="w-100"
 										onClick={() => setModalMode("intbankPage2")}
+										disabled={
+											bankName.length === 0 ||
+											bankCity.length === 0 ||
+											bankCountry.length === 0 ||
+											BIC.length === 0 ||
+											payeeName.length === 0
+										}
 									/>
 								</div>
 							</ModalBody>
