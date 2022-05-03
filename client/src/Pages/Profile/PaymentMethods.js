@@ -85,6 +85,23 @@ const AddBankButton = styled(InvisibleButton)(
 				}
 			}
 		}
+
+		&:disabled {
+			.inner {
+				background: ${theme.colors.valid};
+				cursor: initial;
+				p { 
+					color: ${theme.colors.actual_white};
+				}
+				
+				i, i.arrow {
+					color: ${theme.colors.actual_white};
+					&:hover {
+						color: ${theme.colors.actual_white};
+					}
+				}
+			}	
+		}
 	`
 );
 
@@ -184,6 +201,8 @@ const PaymentMethods = () => {
 	const [errorMessage, setErrorMessage] = useState("");
 
 	const [isEditing, setIsEditing] = useState(false);
+
+	const [test, setTest] = useState([]);
 
 	const ShowAddedPaymentMethods = () => {
 		const [userPaymentMethods, setUserPaymentMethods] = useState([]);
@@ -640,7 +659,34 @@ const PaymentMethods = () => {
 		window.location.reload(true);
 	};
 
-	useEffect(() => {}, []);
+	const getUserPaymentMethods = () => {
+		Axios.all([
+			Axios.post(`${AppUrl}/getUKBankDetails`),
+			Axios.post(`${AppUrl}/getEUBankDetails`),
+			Axios.post(`${AppUrl}/getInterBankDetails`),
+			Axios.post(`${AppUrl}/getPaypalDetails`),
+			Axios.post(`${AppUrl}/getSkrillDetails`),
+		])
+			.catch((err) => {
+				if (err) {
+					console.log(err, "error from getUserPaymentMethods");
+				}
+			})
+			.then(
+				Axios.spread((...responses) => {
+					const filteredResponse = responses
+						.filter((u) => u.data.status !== "none-added")
+						.map(u => u.data.name);
+					setTest(filteredResponse);
+				})
+			);
+	};
+
+	useEffect(() => {
+		getUserPaymentMethods();
+	}, []);
+
+	console.log(test, 'test');
 
 	return (
 		<PageBody>
@@ -702,7 +748,7 @@ const PaymentMethods = () => {
 						)}
 						{modalMode === "initial" && (
 							<ModalBody className="row">
-								<AddBankButton onClick={() => setModalMode("ukbank")} className="mb-2">
+								<AddBankButton onClick={() => setModalMode("ukbank")} className="mb-2" disabled={test.includes("UK Bank Account")}>
 									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 										<div className="d-flex">
 											<i className="material-icons me-2 d-flex align-items-center">
@@ -712,10 +758,10 @@ const PaymentMethods = () => {
 												Add UK Bank Account
 											</Paragraph>
 										</div>
-										<i className="material-icons arrow">arrow_forward</i>
+										<i className="material-icons arrow">{test.includes("UK Bank Account") ? 'check_circle' : 'arrow_forward'}</i>
 									</div>
 								</AddBankButton>
-								<AddBankButton onClick={() => setModalMode("eubank")} className="mb-2">
+								<AddBankButton onClick={() => setModalMode("eubank")} className="mb-2" disabled={test.includes("EU Bank Account")}>
 									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 										<div className="d-flex">
 											<i className="material-icons me-2 d-flex align-items-center">
@@ -725,10 +771,10 @@ const PaymentMethods = () => {
 												Add EU Bank Account
 											</Paragraph>
 										</div>
-										<i className="material-icons arrow">arrow_forward</i>
+										<i className="material-icons arrow">{test.includes("EU Bank Account") ? 'check_circle' : 'arrow_forward'}</i>
 									</div>
 								</AddBankButton>
-								<AddBankButton onClick={() => setModalMode("intbank")} className="mb-2">
+								<AddBankButton onClick={() => setModalMode("intbank")} className="mb-2" disabled={test.includes("International Bank")}>
 									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 										<div className="d-flex">
 											<i className="material-icons me-2 d-flex align-items-center">
@@ -738,10 +784,10 @@ const PaymentMethods = () => {
 												Add International Bank Account
 											</Paragraph>
 										</div>
-										<i className="material-icons arrow">arrow_forward</i>
+										<i className="material-icons arrow">{test.includes("International Bank") ? 'check_circle' : 'arrow_forward'}</i>
 									</div>
 								</AddBankButton>
-								<AddBankButton onClick={() => setModalMode("paypal")} className="mb-2">
+								<AddBankButton onClick={() => setModalMode("paypal")} className="mb-2" disabled={test.includes("Paypal")}>
 									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 										<div className="d-flex">
 											<i className="material-icons me-2 d-flex align-items-center">
@@ -751,10 +797,10 @@ const PaymentMethods = () => {
 												Add PayPal Account
 											</Paragraph>
 										</div>
-										<i className="material-icons arrow">arrow_forward</i>
+										<i className="material-icons arrow">{test.includes("Paypal") ? 'check_circle' : 'arrow_forward'}</i>
 									</div>
 								</AddBankButton>
-								<AddBankButton onClick={() => setModalMode("skrill")} className="mb-2">
+								<AddBankButton onClick={() => setModalMode("skrill")} className="mb-2" disabled={test.includes("Skrill")}>
 									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
 										<div className="d-flex">
 											<i className="material-icons me-2 d-flex align-items-center">
@@ -764,7 +810,7 @@ const PaymentMethods = () => {
 												Add Skrill Account
 											</Paragraph>
 										</div>
-										<i className="material-icons arrow">arrow_forward</i>
+										<i className="material-icons arrow">{test.includes("Skrill") ? 'check_circle' : 'arrow_forward'}</i>
 									</div>
 								</AddBankButton>
 							</ModalBody>
