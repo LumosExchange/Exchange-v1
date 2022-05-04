@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
-import { PageBody, FormInput } from "../Components/FormInputs";
+import { PageBody, FormInput, StyledDropdown } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
 import Paragraph from "../Components/Paragraph";
 import PrimaryButton, { InvisibleButton } from "../Components/Buttons";
@@ -11,12 +11,7 @@ import { Collapse } from "@material-ui/core";
 import SolanaIcon from '../Images/icon-solana.svg';
 import DropdownIcon from '../Images/icon-dropdown.svg';
 import StyledTable from "../Components/Tables";
-import * as solanaWeb3 from '@solana/web3.js';
-const {Keypair, Transaction, SystemProgram, LAMPORTS_PER_SOL} = require("@solana/web3.js");
-const {sendAndConfirmTransaction, clusterApiUrl, Connection} = require("@solana/web3.js");
-
-
-
+import { convertAssetToIcon } from '../Components/AirDrops';
 
 
 const ToggleIconBase = styled.svg(({ toggled, theme }) => css`
@@ -53,6 +48,21 @@ const Divider = styled.hr(({ theme }) => css`
 	opacity: 1;
 `);
 
+const RewardPools = [
+	{
+		'currency': 'SOL',
+		'amount': '5',
+	},
+	{
+		'currency': 'LRA',
+		'amount': '100',
+	},
+	{
+		'currency': 'COPE',
+		'amount': '12',
+	},
+];
+
 const FakeTableData = [
 	{
 		'provider': 'shinji0314',
@@ -70,248 +80,88 @@ const FakeTableData = [
 		'amount': 1,
 		'currency': 'SOL',
 	},
-]
+	{
+		'provider': 'johnsmith05',
+		'region': 'United Kingdom',
+		'date': '15-07-2021 - 09:30:00',
+		'type': 'Airdrop',
+		'amount': 1,
+		'currency': 'COPE',
+	},
+	{
+		'provider': 'user4578',
+		'region': 'Spain',
+		'date': '15-07-2021 - 09:30:00',
+		'type': 'Airdrop',
+		'amount': 1,
+		'currency': 'LRA',
+	},
+];
+
+const IconContainer = styled.div(({ theme }) => css`
+	img, svg {
+		width: 100%;
+		height: 117px;
+	}
+`);
+
+const pubKey="GAECQos3deHaqzB1EDvPJcqaGVvG9xqDuFYU239KAsXV";
 
 const MyWallet = () => {
   const [walletExpanded, expandWallet] = useState(false);
-  const [rewardsExpanded, expandRewards] = useState(false);
-  const [walletKey, setWalletKey] = useState("");
-	const [phantomInstalled, setIsPhantomInstalled] = useState(false);
+  const [rewardsExpanded, expandRewards] = useState(true);
+  const [selectedCrypto, setSelectedCrypto] = useState("SOL");
 
-	const [pubKey, setPubKey] = useState("");
- 
-  const isPhantomInstalled = () => {
-	const phantomInstalled = window.solana && window.solana.isPhantom;
-
-	if (phantomInstalled){
-		setIsPhantomInstalled(true);
-	} else {
-		setIsPhantomInstalled(false);
-	}
-  }
-
-   const checkPhantomStatus = async () => {
-    try {
-      const wallet = window.solana;
-		if (wallet){
-			eagerlyConnectPhantomWallet();
-			setIsPhantomInstalled(true);
-		}
-    } catch (err) {
-	  setIsPhantomInstalled(false);
-    }
-  }
-
-  const getWallet = async () => {
-    try {
-      const wallet = typeof window !== 'undefined' && window.solana;
-      await wallet.connect();
-	  
-    } catch (err) {
-      console.log('err: ', err)
-    }
-  }
-
-    // Returns the public key of the connected phantom wallet as a string
-  const connectPhantomWallet = () => {
-	window.solana.connect();
-	window.solana.on("connect", () => console.log("Phantom wallet connected!"));
-	setPubKey(window.solana.publicKey.toString());
-
-	
-  }
-
-  const createTransaction = () => {
-	
-	let toKeypair = Keypair.generate();
-	let transaction = new Transaction();
-	
-	transaction.add(
-	  SystemProgram.transfer({
-		fromPubkey: window.solana.publicKey,
-		toPubkey: new solanaWeb3.PublicKey("6ftMNVRAFAc1Wb372xg3Kq6zZ8rhr6b7DGyuhgSELwZ2"),
-		lamports: LAMPORTS_PER_SOL
-	  })
-	);
-
-	
-
-let keypair = Keypair.generate();
-let connection = new Connection(clusterApiUrl('testnet'));
-
-sendAndConfirmTransaction(
-  connection,
-  transaction,
-  [pubKey]
-);
-  }
- 
-  // Connect phantom wallet only if the wallet has been connected before
- const eagerlyConnectPhantomWallet = () => {
-	window.solana.connect({ onlyIfTrusted: true });
-  }
-  
-  // Disconnect from phantom wallet
-  const disconnectPhantomWallet = () => {
-	window.solana.disconnect();
-	window.solana.on("disconnect", () =>
-	  console.log("Phantom wallet disconnected!")
-	);
-  }
-  
-  useEffect(() => {
-	checkPhantomStatus();
-
-	if (phantomInstalled){
-		getWallet();
-	}
-}, []);
+  console.log(selectedCrypto, 'selected coin');
 
   return (
-		<PageBody className="d-flex align-items-center">
+		<PageBody className="d-flex align-items-start pt-5">
 			<div className="container d-flex align-items-center justify-content-center py-5 flex-column">
 				<div className="row w-100">
-					<div className="col-12 col-lg-8">
+					<div className="col-12">
 						<div className="flex-column">
 							<Heading className="pb-3">Your Wallet</Heading>
 							<Paragraph size="18px" bold>
 								Manage your credits, and grab a chance to earn with our reward pool.
 							</Paragraph>
-							<PrimaryButton className="w-100 mt-3" text="Connect Wallet" onClick={() => connectPhantomWallet()} disabled={!phantomInstalled} />
-							<PrimaryButton className="w-100 mt-3" text="Disconnect Wallet" onClick={() => disconnectPhantomWallet()} disabled={!phantomInstalled} />
-							<PrimaryButton className="w-100 mt-3" text="Test Trnsaction" onClick={() =>createTransaction()} disabled={!phantomInstalled} />
-
-							
 						</div>
 					</div>
-					<div className="col-12 col-lg-4">
+					<div className="col-12 col-lg-6">
 						<Card className="p-4 flex-column">
-							<Heading size="24px" color="text_primary">Reward Pool</Heading>
+							<Heading size="24px" color="text_primary" bold>Overview</Heading>
 							<div className="d-flex justify-content-between align-items-center">
-								<Heading size="28px" className="mb-0">0.05 SOL</Heading>
+								<StyledDropdown
+									className="w-100"
+									placeholder="Please Select"
+									name="preferredPayment"
+									value={selectedCrypto}
+									id="preferredPayment"
+									onChange={(e) => {
+										setSelectedCrypto(e.target.value);
+									}}
+								>
+									<option value="Please Select">Please Select</option>
+									<option value="SOL">Solana (SOL)</option>
+									<option value="LRA">Lumos Rewards (LRA)</option>
+									<option value="COPE">COPE (COPE)</option>
+								</StyledDropdown>
+							</div>
+						</Card>
+					</div>
+					<div className="col-12 col-lg-6">
+						<Card className="p-4 flex-column">
+							<Heading size="24px" color="text_primary" bold>Reward Pool</Heading>
+							<div className="d-flex justify-content-between align-items-center">
+								<Heading size="28px" className="mb-0">{RewardPools.filter(rp => rp.currency === selectedCrypto).map(rp => rp.amount)} {selectedCrypto}</Heading>
 								<GradientButton text="Claim" fontSize="20px" />
 							</div>
 						</Card>
 					</div>
 				</div>
-				<div className="row w-100 d-flex justify-content-center pt-5">
-					<div className="col-12">
-						<GradientCard
-							stopOne="magenta"
-							stopOnePosition={ 0 }
-							stopTwo="sage"
-							stopTwoPosition={ 100 }
-							className="d-flex p-4"
-						>
-							<div className="col-0 col-lg-2 d-none d-lg-flex justify-content-center">
-								<img src={SolanaIcon} alt="Solana Icon" />
-							</div>
-							<div className="col-9 col-lg-8 d-flex flex-column">
-								<div className="d-flex">
-									<img src={SolanaIcon} alt="Solana Icon" className="inline me-2 d-lg-none" />
-									<Heading size="36px" bold className="mb-0">Solana</Heading>
-								</div>
-								<Heading size="36px" bold>11,000 SOL</Heading>
-								<Paragraph size="18px" className="mb-0 text-break">
-									{pubKey}
-								</Paragraph>
-							</div>
-							<div className="col-3 col-lg-2 d-flex justify-content-end">
-								<InvisibleButton onClick={ () => expandWallet((prev) => !prev) }>
-									<ToggleIcon toggled={walletExpanded} alt="Dropdown" className="w-100" />
-								</InvisibleButton>
-							</div>
-						</GradientCard>
-					</div>
-				</div>
-				<div className="row w-100">
-					<Collapse orientation="horizontal" in={walletExpanded}>
-						<Card className="d-flex flex-column p-4 flex-wrap">
-							<div className="row d-flex justify-content-center align-items-end">
-								<div className="col-12 col-md-6">
-									<Heading size="24px">Send</Heading>
-									<Paragraph size="18px">To address</Paragraph>
-									<FormInput padding="3px 10px" className="w-100" />
-								</div>
-								<div className="col-12 col-md-6 d-flex flex-column mt-3 mt-md-0">
-									<Paragraph size="18px">Amount (SOL)</Paragraph>
-									<FormInput padding="3px 10px" className="w-100" />
-								</div>
-								<div className="col-12 d-flex justify-content-end align-items-start pt-5">
-									<PrimaryButton
-										text="Check"
-										color="brightGrey"
-										textColor="grey"
-										hasIcon
-										round
-										className="me-5"
-										size="md"
-										fontSize="26px"
-									/>
-									<PrimaryButton
-										text="Send"
-										color="yellow"
-										textColor="grey"
-										round
-										size="md"
-										fontSize="26px"
-									/>
-								</div>
-							</div>
-						</Card>
-					</Collapse>
-				</div>
-				<div className="row w-100 mt-4">
-					<div className="col-12 col-lg-4">
-						<GradientCard
-							stops={ 4 }
-							stopOne="yellow"
-							stopTwo="peach"
-							stopTwoPosition="30"
-							stopThree="mauve"
-							stopThreePosition="50"
-							stopFour="blue"
-							stopFourPosition="70"
-							gradientAngle="45"
-							padding="35px"
-							className="d-flex align-items-center justify-content-center"
-						>
-							<Heading size="28px" className="mb-0">17,727 LRA</Heading>
-						</GradientCard>
-					</div>
-					<div className="col-12 col-lg-4 my-3 my-lg-0">
-						<GradientCard
-							padding="35px"
-							stops={ 2 }
-							stopOne="bluePurple"
-							stopTwo="bluePurple"
-							className="d-flex align-items-center justify-content-center"
-						>
-							<Heading size="28px" className="mb-0">2,500 KIN</Heading>
-						</GradientCard>
-					</div>
-					<div className="col-12 col-lg-4">
-						<GradientCard
-							padding="35px"
-							stops={ 2 }
-							stopOne="slate"
-							stopTwo="slate"
-							className="d-flex align-items-center justify-content-center"
-						>
-							<Heading size="28px" className="mb-0">3,628 COPE</Heading>
-						</GradientCard>
-					</div>
-				</div>
 				<div className="row w-100 mt-4">
 					<div className="col-12 d-flex flex-column">
 						<Divider />
-						<InvisibleButton
-							onClick={ () => expandRewards((prev) => !prev)}
-							className="d-flex align-items-center pt-2"
-						>
-							<Heading size="24px" className="mb-0">Reward History</Heading>
-							<ToggleIcon src={DropdownIcon} toggled={rewardsExpanded} alt="Dropdown" className="small ms-3" />
-						</InvisibleButton>
+						<Heading size="24px" className="mb-0 pt-4">Reward History</Heading>
 					</div>
 					<Collapse orientation="horizontal" in={rewardsExpanded}>
 						<StyledTable className="w-100 mt-4">
@@ -325,7 +175,7 @@ sendAndConfirmTransaction(
 								</tr>
 							</thead>
 							<tbody>
-								{FakeTableData.map((data, d) => (
+								{selectedCrypto && FakeTableData.filter(fd => fd.currency === selectedCrypto).map((data, d) => (
 									<tr key={d}>
 										<td>
 											<span>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext, useMemo } from "react";
 import styled, { css, keyframes } from "styled-components";
+import { AppUrl } from "../App";
 import Axios from "axios";
 import { PageBody, TextArea } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
@@ -27,9 +28,9 @@ import {
 import { Link } from 'react-router-dom';
 import { StyledCode } from "./Profile/Wallets";
 import { Warning } from "./Register";
-import { AppUrl } from "../App";
+import { SocketUrl } from '../Constants/Index';
 
-const socket = io.connect("http://3.8.159.233:3002");
+const socket = io.connect(SocketUrl);
 
 const Selling = ({ userName }) => {
 	const [currentMessage, setCurrentMessage] = useState("");

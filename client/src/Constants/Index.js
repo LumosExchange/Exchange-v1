@@ -503,3 +503,5 @@ export const priceMethods = [
 	"High - Low",
 	"Low - High",
 ];
+
+export const SocketUrl = "http://localhost:3002";

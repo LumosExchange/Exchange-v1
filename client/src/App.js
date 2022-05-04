@@ -7,7 +7,6 @@ import { BrowserRouter as Router, Route, Routes, Link, Navigate, Outlet } from "
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
-
 import UpgradeTeam from "./Pages/UpgradeTeam";
 import LoggedHome from "./Pages/LoggedHome";
 import ErrorPage from "./Pages/ErrorPage";
