@@ -57,7 +57,7 @@ const Selling = ({ userName }) => {
 	const [confirmation, setConfirmation] = useState(false);
 	const [saleID, setSaleID] = useState("");
 	const [feedbackScore, setFeedbackScore] = useState("");
-	const [registerdDate, setRegisteredDate] = useState("");
+	const [registeredDate, setRegisteredDate] = useState("");
 	const [totalTrades, setTotalTrades] = useState("");
 	const [errors, setErrors] = useState("");
 
@@ -180,7 +180,7 @@ const Selling = ({ userName }) => {
 			.then((response) => {
 				console.log(response, 'response from /CompleteTrade');
 				if (response.data.tradeComplete === true){
-					navigate('/TradeComplete')
+					navigate(`/TradeComplete?${reference}`);
 				} else {
 					setErrors(response.data.error);
 				}
@@ -496,9 +496,12 @@ const Selling = ({ userName }) => {
 													</Paragraph>
 												</Link>
 											</div>
-											<Paragraph size="18px">Buyer Feedback Here</Paragraph>
-											<Paragraph size="18px">Buyer Register Date Here</Paragraph>
-											<Paragraph size="18px">Total Trades Here</Paragraph>
+											<Paragraph size="18px" bold className="d-inline">Feedback Score:</Paragraph>
+											<Paragraph size="18px" className="d-inline ms-1 mb-3">{feedbackScore && feedbackScore.toFixed(0)}%</Paragraph>
+											<Paragraph size="18px" bold className="mb-1 mt-2">Registered Date:</Paragraph>
+											<Paragraph size="18px">{registeredDate}</Paragraph>
+											<Paragraph size="18px" className="mb-1 d-inline" bold>Total Trades:</Paragraph>
+											<Paragraph size="18px" className="d-inline ms-1">{totalTrades}</Paragraph>
 										</div>
 										<div className="col-6">
 											<Paragraph size="18px">How was the buyer?</Paragraph>

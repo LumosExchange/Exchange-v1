@@ -124,7 +124,7 @@ const MyWallet = () => {
 					</div>
 					<div className="col-12 col-lg-6">
 						<Card className="p-4 flex-column">
-							<Heading size="24px" color="text_primary" bold>Overview</Heading>
+							<Heading size="24px" color="text_primary" bold>Select Crypto</Heading>
 							<div className="d-flex justify-content-between align-items-center">
 								<StyledDropdown
 									className="w-100"

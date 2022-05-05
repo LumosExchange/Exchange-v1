@@ -1,5 +1,7 @@
 import React from "react";
+import { Navigate, useNavigate } from "react-router";
 import styled, { css, keyframes } from 'styled-components';
+import PrimaryButton from "../Components/Buttons";
 import Heading from "../Components/Heading";
 
 const Jump = keyframes`
@@ -19,11 +21,15 @@ const ShortPageBody = styled.div(({ theme }) => css`
     background: ${theme.colors.base_bg};
 `);
 
-const ErrorPage = () => (
-    <ShortPageBody className="d-flex align-items-center justify-content-center flex-column py-5">
-        <TradeCompleteIcon className="material-icons mb-3">check_circle</TradeCompleteIcon>
-        <Heading bold size="48px">Trade Complete!</Heading>
-    </ShortPageBody>
-);
+const ErrorPage = () => {
+    const navigate = useNavigate();
+    return(
+        <ShortPageBody className="d-flex align-items-center justify-content-center flex-column py-5">
+            <TradeCompleteIcon className="material-icons mb-3">check_circle</TradeCompleteIcon>
+            <Heading bold size="48px" className="mb-5">Trade Complete!</Heading>
+            <PrimaryButton text="Go to trade history" onClick={() => navigate(`/TradeHistory/Completed?ref=hithere`)} />
+        </ShortPageBody>
+    )
+};
 
 export default ErrorPage;
