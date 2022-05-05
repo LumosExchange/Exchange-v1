@@ -171,7 +171,7 @@ const Selling = ({ userName }) => {
 		axios.get(`${AppUrl}/GetTradeFeedbackInfo`, {params: {
 			ID
 		}}).then ((response) => {
-			setFeedbackScore(response.data.feedbackScore.feedback);
+			setFeedbackScore(response.data.feedbackScore.score);
 			setRegisteredDate(response.data.registeredDate.date);
 			setTotalTrades(response.data.totalTrades.total);
 		});

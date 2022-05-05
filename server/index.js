@@ -1964,15 +1964,11 @@ db.query(
     if (error) {
       throw error;
     }
-    console.log(results);
-    console.log('Registered date: ',results[0]);
-    console.log('total trades: ',results[1]);
-    console.log('feedback score: ',results[2]);
-
+     const score = ((results[2][0].feedback / 3) * 100);
     res.send({
       registeredDate: results[0],
       totalTrades: results[1],
-      feedbackScore: results[2],
+      feedbackScore: score,
     })
   }
 )
