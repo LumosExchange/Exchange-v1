@@ -1947,65 +1947,38 @@ app.post("/updateLiveTradePayment", (req, res) => {
 });
 
 app.get("/GetTradeFeedbackInfo", (req, res) => {
-  const id = req.query.UserID;
+  const id = req.query.ID;
+  console.log(req.query);
+  console.log(req.params);
 
-  console.log("ID : ", id);
+  console.log('ID for feedback:',id)
 
-  let registeredDate = " ";
-  let totalTrades = 0;
-  let feedbackScore = 0;
 
-  //Get registered date
 
-  db.query(
-    "SELECT registeredDate FROM users WHERE (userID) = (?) ",
-    [id],
-    (err, result) => {
-      console.log("Registered date : ", result);
-      registeredDate = result[0].registeredDate;
+  var sql = "SELECT registeredDate AS date FROM users WHERE (userID) = (?);SELECT COUNT (*) AS total FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?);SELECT AVG (feedbackScore) as feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?)"
+
+db.query(
+  sql,
+  [id, id, id, id, id],
+  function (error, results, fields) {
+    if (error) {
+      throw error;
     }
-  );
+    console.log(results);
+    console.log('Registered date: ',results[0]);
+    console.log('total trades: ',results[1]);
+    console.log('feedback score: ',results[2]);
 
-  //get total trades
+    res.send({
+      registeredDate: results[0],
+      totalTrades: results[1],
+      feedbackScore: results[2],
+    })
+  }
+)
 
-  db.query(
-    "SELECT COUNT (*) AS total FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?)",
-    [id, id],
-    (err, result) => {
-      console.log(err);
 
-      if (err) {
-        res.send(err);
-      } else if ((result = 0)) {
-        totalTrades = 0;
-      } else {
-        totalTrades = result.total;
-      }
-    }
-  );
 
-  //Get Buyer feedback score
-
-  db.query(
-    "SELECT AVG (feedbackScore) as feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?)",
-    [id, id],
-    (err, result) => {
-      if (err) {
-        res.send(err);
-      } else if ((result = 0)) {
-        feedbackScore = 0;
-      } else {
-        feedbackScore = result.feedback;
-
-        res.send({
-          registeredDate: registeredDate,
-          totalTrades: totalTrades,
-          feedbackScore: feedbackScore,
-        });
-        console.log("feedback Score : ", result);
-      }
-    }
-  );
 });
 
 app.post("/CompleteTrade", (req, res) => {

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, createContext, useMemo } from "react";
 import styled, { css, keyframes } from "styled-components";
-import { AppUrl } from "../App";
 import Axios from "axios";
 import { PageBody, TextArea } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
@@ -28,8 +27,10 @@ import {
 import { Link } from 'react-router-dom';
 import { StyledCode } from "./Profile/Wallets";
 import { Warning } from "./Register";
+import { AppUrl } from "../App";
 import { SocketUrl } from '../Constants/Index';
 
+//const socket = io.connect("http://3.8.159.233:3002");
 const socket = io.connect(SocketUrl);
 
 const Selling = ({ userName }) => {
@@ -55,6 +56,9 @@ const Selling = ({ userName }) => {
 	const [walletAddress, setWalletAddress] = useState("");
 	const [confirmation, setConfirmation] = useState(false);
 	const [saleID, setSaleID] = useState("");
+	const [feedbackScore, setFeedbackScore] = useState("");
+	const [registerdDate, setRegisteredDate] = useState("");
+	const [totalTrades, setTotalTrades] = useState("");
 
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
@@ -123,7 +127,7 @@ const Selling = ({ userName }) => {
 				message:
 				  "Please note " +
 				  userName +
-				  " has confirmed they have sent the payment",
+				  " has confirmed they have recieved the payment",
 				time:
 				  new Date(Date.now()).getHours() +
 				  ":" +
@@ -140,9 +144,39 @@ const Selling = ({ userName }) => {
 		  });
 	  };
 
+	  const sentSolMsg = () => {
+		const messageData = {
+			room: room,
+			author: "Lumos Exchange",
+			message:
+			  "Please note " +
+			  userName +
+			  " has confirmed they have sent the solana",
+			time:
+			  new Date(Date.now()).getHours() +
+			  ":" +
+			  new Date(Date.now()).getMinutes(),
+		  };
+		  socket.emit("send_message", messageData);
+		  setMessageList((list) => [...list, messageData]);
+		  setCurrentMessage("");
+	  }
+
 	  const setPaymentAsSent = () => {
 		setPaymentAsSent(true);
 	  };
+
+	  const getFeedbackDetails =() => {
+		const ID = buyerID;
+		axios.get(`${AppUrl}/GetTradeFeedbackInfo`, {params: {
+			ID
+		}}).then ((response) => {
+			setFeedbackScore(response.data.feedbackScore.feedback);
+			setRegisteredDate(response.data.registeredDate.date);
+			setTotalTrades(response.data.totalTrades.total);
+		});
+	};
+
 
 	//Join the user to the room
 	const joinRoom = async () => {
@@ -175,6 +209,7 @@ const Selling = ({ userName }) => {
 	useEffect(() => {
 		getTradeDetails();
 		joinRoom();
+		getFeedbackDetails();
 
 		if (paymentSentSetter === "YES") {
 			setCurrentStep("transfer");
@@ -371,7 +406,10 @@ const Selling = ({ userName }) => {
 										<PrimaryButton
 											text="Continue"
 											className="w-100 mt-3"
-											onClick={() => setCurrentStep("sold")}
+											onClick={() => {
+												setCurrentStep("sold");
+												sentSolMsg();
+											}}
 											disabled={!confirmation}
 										/>
 									</div>
