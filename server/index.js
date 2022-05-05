@@ -2056,10 +2056,14 @@ app.post("/CompleteTrade", (req, res) => {
           (err, resultss) => {
             if (err) {
               console.log(err);
-              res.send(err);
+              res.send({
+                tradeComplete: false,
+                error:  err,
+              })
             } else {
-              console.log(resultss);
-              //Return some sort of reponse
+              res.send({
+                tradeComplete: true,
+              })
             }
           }
         );
