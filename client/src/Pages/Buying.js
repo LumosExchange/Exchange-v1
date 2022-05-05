@@ -144,7 +144,7 @@ const Buying = ({ userName }) => {
 			return 2;
 		}
 		if (feedBack === "Negative") {
-			return 3;
+			return 1;
 		}
 	};
 
