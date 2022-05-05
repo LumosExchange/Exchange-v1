@@ -42,6 +42,7 @@ import Feedback from "./Pages/Feedback";
 import ProtectedRoutes from "./Components/ProtectedRoutes";
 import Prices from './Pages/Prices';
 import WalletTesting from './Pages/WalletTesting';
+import TradeComplete from './Pages/TradeComplete';
 
 export const AppUrl = "http://localhost:3001";
 export const AppUrlNoPort = "http://localhost";
@@ -160,6 +161,7 @@ const App = () => {
 							<Route path="/GoogleAuth" element={<GoogleAuth />} />
 							<Route path="/SMSAuth" element={<SMSAuth />} />
 							<Route path="/AuthyAuth" element={<AuthyAuth />} />
+							<Route path="/TradeComplete" element={<TradeComplete />} />
 							<Route path="/Profile/PaymentMethods" element={<PaymentMethods />} />
 							<Route path="/Profile/AccountUpgrade" element={<AccountUpgrade />} />
 							<Route
