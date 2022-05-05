@@ -58,10 +58,13 @@ const Buying = ({ userName }) => {
 	const [walletAddress, setWalletAddress] = useState("");
 	const [confirmation, setConfirmation] = useState(false);
 	const [saleID, setSaleID] = useState("");
+	const [errors, setErrors] = useState("");
 
 	const { state } = useLocation();
 	const liveTradeID = state.liveTradeID;
 	const paymentSentSetter = state.paymentSent;
+
+	const navigate = useNavigate();
 
 	//Get trade ID then use that to populate other things
 	const getTradeDetails = () => {
@@ -163,6 +166,11 @@ const Buying = ({ userName }) => {
 			})
 			.then((response) => {
 				console.log(response, 'response from /CompleteTrade');
+				if (response.data.tradeComplete === true){
+					navigate('/TradeComplete')
+				} else {
+					setErrors(response.data.error);
+				}
 			});
 	};
 
@@ -481,7 +489,7 @@ const Buying = ({ userName }) => {
 												</Link>
 											</div>
 											<Paragraph size="18px" bold className="d-inline">Feedback Score:</Paragraph>
-											<Paragraph size="18px" className="d-inline ms-1 mb-3">{feedbackScore.toFixed(0)}%</Paragraph>
+											<Paragraph size="18px" className="d-inline ms-1 mb-3">{feedbackScore && feedbackScore.toFixed(0)}%</Paragraph>
 											<Paragraph size="18px" bold className="mb-1 mt-2">Registered Date:</Paragraph>
 											<Paragraph size="18px">{registeredDate}</Paragraph>
 											<Paragraph size="18px" className="mb-1 d-inline" bold>Total Trades:</Paragraph>
