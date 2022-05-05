@@ -189,6 +189,7 @@ const Buying = ({ userName }) => {
 		}
 	};
 
+
 	const value = useMemo(() => {
 		return {
 			feedBack,
@@ -196,9 +197,40 @@ const Buying = ({ userName }) => {
 		};
 	}, [feedBack, setFeedback]);
 
+
+	const recievedSolMsg = () => {
+		const messageData = {
+			room: room,
+			author: "Lumos Exchange",
+			message:
+			  "Please note " +
+			  userName +
+			  " has confirmed they have recieved the solana",
+			time:
+			  new Date(Date.now()).getHours() +
+			  ":" +
+			  new Date(Date.now()).getMinutes(),
+		  };
+		  socket.emit("send_message", messageData);
+		  setMessageList((list) => [...list, messageData]);
+		  setCurrentMessage("");
+
+	}
+
+	const getFeedbackDetails =() => {
+		const ID = sellerID;
+		console.log('seller ID is:',ID );
+		axios.get(`${AppUrl}/GetTradeFeedbackInfo`, {ID}).then ((response) => {
+			setFeedbackScore(response.data.feedbackScore);
+			setRegisteredDate(response.data.registerdDate);
+			setTotalTrades(response.data.totalTrades);
+		});
+	};
+
 	useEffect(() => {
 		getTradeDetails();
 		joinRoom();
+		
 
 		if (paymentSentSetter === "YES") {
 			setCurrentStep("transfer");
@@ -332,7 +364,10 @@ const Buying = ({ userName }) => {
 										<PrimaryButton
 											text={isPaymentSent ? "Payment marked as sent" : "I've sent the payment"}
 											className="w-100"
-											onClick={() => setIsPaymentSent(true)}
+											onClick={() => {
+											setIsPaymentSent(true);
+											
+										}}
 											disabled={isPaymentSent}
 										/>
 									</div>
@@ -350,7 +385,10 @@ const Buying = ({ userName }) => {
 											<PrimaryButton
 												text="Continue"
 												className="m-auto mt-3"
-												onClick={sentPayment}
+												onClick={() => {
+													sentPayment();
+												
+												}}
 												type="check"
 												value="check"
 												hasIcon
@@ -388,7 +426,11 @@ const Buying = ({ userName }) => {
 										<PrimaryButton
 											text="Continue"
 											className="w-100 mt-3"
-											onClick={() => setCurrentStep("bought")}
+											onClick={() => {
+												setCurrentStep("bought");
+												recievedSolMsg();
+												getFeedbackDetails();
+											}}
 											disabled={!confirmation}
 										/>
 									</div>
