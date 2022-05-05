@@ -1989,26 +1989,16 @@ app.post("/CompleteTrade", (req, res) => {
 
   let EscrowTime = " ";
 
-  //Update the escrow release time
-  db.query(
-    "UPDATE LiveTrades SET escrowReleaseTime = ? WHERE LiveTradeID = ?",
-    [date, liveTradeID],
-    (err, result) => {
-      if (err) {
-        res.send(err);
-      } else {
-      }
-    }
-  );
+  var sql = "UPDATE LiveTrades SET escrowReleaseTime = ? WHERE LiveTradeID = ?;INSERT INTO TradeHistory SELECT * FROM LiveTrades WHERE LiveTradeID = ?;"
 
-  //insert into tradeHistory
+  
+  //Update the escrow release time && insert into tradeHistory
   db.query(
-    "INSERT INTO TradeHistory SELECT * FROM LiveTrades WHERE LiveTradeID = ?",
-    [liveTradeID],
-    (err, results) => {
-      if (err) {
-        res.send(err);
-      } else {
+    sql,
+    [date, liveTradeID, liveTradeID],
+    function (error, results, fields) {
+      if (error) {
+        throw error;
       }
     }
   );
