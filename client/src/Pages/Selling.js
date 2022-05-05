@@ -193,11 +193,13 @@ const Selling = ({ userName }) => {
 
 	const getFeedbackDetails = () => {
 		const ID = buyerID;
+		console.log(buyerID);
+		console.log('buyer ID is:', ID );
 		axios
 			.get(`${AppUrl}/GetTradeFeedbackInfo`, {
 				params: {
 					ID,
-				},
+				}
 			})
 			.then((response) => {
 				setFeedbackScore(response.data.feedbackScore);
@@ -237,7 +239,7 @@ const Selling = ({ userName }) => {
 	useEffect(() => {
 		getTradeDetails();
 		joinRoom();
-		getFeedbackDetails();
+		
 
 		if (paymentSentSetter === "YES") {
 			setCurrentStep("transfer");
@@ -449,6 +451,7 @@ const Selling = ({ userName }) => {
 											onClick={() => {
 												setCurrentStep("sold");
 												sentSolMsg();
+												getFeedbackDetails();
 											}}
 											disabled={!confirmation}
 										/>
