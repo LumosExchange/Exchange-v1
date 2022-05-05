@@ -161,7 +161,9 @@ const Buying = ({ userName }) => {
 				buyerID,
 				solAmount,
 			})
-			.then((response) => {});
+			.then((response) => {
+				console.log(response, 'response from /CompleteTrade');
+			});
 	};
 
 	const setPaymentAsSent = () => {
@@ -479,7 +481,7 @@ const Buying = ({ userName }) => {
 												</Link>
 											</div>
 											<Paragraph size="18px" bold className="d-inline">Feedback Score:</Paragraph>
-											<Paragraph size="18px" className="d-inline ms-1 mb-3">{feedbackScore}%</Paragraph>
+											<Paragraph size="18px" className="d-inline ms-1 mb-3">{feedbackScore.toFixed(0)}%</Paragraph>
 											<Paragraph size="18px" bold className="mb-1 mt-2">Registered Date:</Paragraph>
 											<Paragraph size="18px">{registeredDate}</Paragraph>
 											<Paragraph size="18px" className="mb-1 d-inline" bold>Total Trades:</Paragraph>
