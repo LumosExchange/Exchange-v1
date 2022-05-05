@@ -108,11 +108,7 @@ const IconContainer = styled.div(({ theme }) => css`
 const pubKey="GAECQos3deHaqzB1EDvPJcqaGVvG9xqDuFYU239KAsXV";
 
 const MyWallet = () => {
-  const [walletExpanded, expandWallet] = useState(false);
-  const [rewardsExpanded, expandRewards] = useState(true);
   const [selectedCrypto, setSelectedCrypto] = useState("SOL");
-
-  console.log(selectedCrypto, 'selected coin');
 
   return (
 		<PageBody className="d-flex align-items-start pt-5">
@@ -140,7 +136,6 @@ const MyWallet = () => {
 										setSelectedCrypto(e.target.value);
 									}}
 								>
-									<option value="Please Select">Please Select</option>
 									<option value="SOL">Solana (SOL)</option>
 									<option value="LRA">Lumos Rewards (LRA)</option>
 									<option value="COPE">COPE (COPE)</option>
@@ -163,34 +158,32 @@ const MyWallet = () => {
 						<Divider />
 						<Heading size="24px" className="mb-0 pt-4">Reward History</Heading>
 					</div>
-					<Collapse orientation="horizontal" in={rewardsExpanded}>
-						<StyledTable className="w-100 mt-4">
-							<thead>
-								<tr>
-									<th>Provider</th>
-									<th>Region</th>
-									<th>Date</th>
-									<th>Type</th>
-									<th>Amount</th>
+					<StyledTable className="w-100 mt-4">
+						<thead>
+							<tr>
+								<th>Provider</th>
+								<th>Region</th>
+								<th>Date</th>
+								<th>Type</th>
+								<th>Amount</th>
+							</tr>
+						</thead>
+						<tbody>
+							{selectedCrypto && FakeTableData.filter(fd => fd.currency === selectedCrypto).map((data, d) => (
+								<tr key={d}>
+									<td>
+										<span>
+											{data.provider}
+										</span>
+									</td>
+									<td>{data.region}</td>
+									<td>{data.date}</td>
+									<td>{data.type}</td>
+									<td>{data.amount} {data.currency}</td>
 								</tr>
-							</thead>
-							<tbody>
-								{selectedCrypto && FakeTableData.filter(fd => fd.currency === selectedCrypto).map((data, d) => (
-									<tr key={d}>
-										<td>
-											<span>
-												{data.provider}
-											</span>
-										</td>
-										<td>{data.region}</td>
-										<td>{data.date}</td>
-										<td>{data.type}</td>
-										<td>{data.amount} {data.currency}</td>
-									</tr>
-								))}
-							</tbody>
-						</StyledTable>
-					</Collapse>
+							))}
+						</tbody>
+					</StyledTable>
 				</div>
 			</div>
     	</PageBody>

@@ -50,7 +50,7 @@ const Buying = ({ userName }) => {
 	const [firstMessage, setFirstMessage] = useState("");
 	const [currentStep, setCurrentStep] = useState("buying");
 	const [isPaymentSent, setIsPaymentSent] = useState(false);
-	const [registerdDate, setRegisteredDate] = useState("");
+	const [registeredDate, setRegisteredDate] = useState("");
 	const [feedbackScore, setFeedbackScore] = useState("");
 	const [totalTrades, setTotalTrades] = useState("");
 	const [feedbackMessage, setFeedbackMessage] = useState("");
@@ -143,7 +143,7 @@ const Buying = ({ userName }) => {
 		if (feedBack === "Neutral") {
 			return 2;
 		}
-		if (feedBack === "Negaitve") {
+		if (feedBack === "Negative") {
 			return 3;
 		}
 	};
@@ -223,9 +223,9 @@ const Buying = ({ userName }) => {
 		axios.get(`${AppUrl}/GetTradeFeedbackInfo`, {params: {
 			ID
 		}}).then ((response) => {
-			setFeedbackScore(response.data.feedbackScore.score);
-			setRegisteredDate(response.data.registeredDate.date);
-			setTotalTrades(response.data.totalTrades.total);
+			setFeedbackScore(response.data.feedbackScore);
+			setRegisteredDate(response.data.registeredDate[0].date.split("T", 1));
+			setTotalTrades(response.data.totalTrades[0].total);
 		});
 	};
 
@@ -246,6 +246,8 @@ const Buying = ({ userName }) => {
 	}, [socket]);
 
 	const formattedCurrency = convertCurrencyToSymbol(paymentCurrency);
+
+	console.log(feedbackScore, 'feedback score');
 
 	return (
 		<PageBody>
@@ -476,9 +478,12 @@ const Buying = ({ userName }) => {
 													</Paragraph>
 												</Link>
 											</div>
-											<Paragraph size="18px">Feedback Score {feedbackScore}</Paragraph>
-											<Paragraph size="18px">Registered Date {registerdDate}</Paragraph>
-											<Paragraph size="18px">Total Trades {totalTrades}</Paragraph>
+											<Paragraph size="18px" bold className="d-inline">Feedback Score:</Paragraph>
+											<Paragraph size="18px" className="d-inline ms-1 mb-3">{feedbackScore}%</Paragraph>
+											<Paragraph size="18px" bold className="mb-1 mt-2">Registered Date:</Paragraph>
+											<Paragraph size="18px">{registeredDate}</Paragraph>
+											<Paragraph size="18px" className="mb-1 d-inline" bold>Total Trades:</Paragraph>
+											<Paragraph size="18px" className="d-inline ms-1">{totalTrades}</Paragraph>
 										</div>
 										<div className="col-6">
 											<Paragraph size="18px">How was the seller?</Paragraph>
