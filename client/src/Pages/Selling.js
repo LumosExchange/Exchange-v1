@@ -1,6 +1,5 @@
 import React, { useState, useEffect, createContext, useMemo } from "react";
 import styled, { css, keyframes } from "styled-components";
-import { AppUrl } from "../App";
 import Axios from "axios";
 import { PageBody, TextArea } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
@@ -169,10 +168,12 @@ const Selling = ({ userName }) => {
 
 	  const getFeedbackDetails =() => {
 		const ID = buyerID;
-		axios.get(`${AppUrl}/GetTradeFeedbackInfo`, {ID}).then ((response) => {
-			setFeedbackScore(response.data.feedbackScore);
-			setRegisteredDate(response.data.registerdDate);
-			setTotalTrades(response.data.totalTrades);
+		axios.get(`${AppUrl}/GetTradeFeedbackInfo`, {params: {
+			ID
+		}}).then ((response) => {
+			setFeedbackScore(response.data.feedbackScore.feedback);
+			setRegisteredDate(response.data.registeredDate.date);
+			setTotalTrades(response.data.totalTrades.total);
 		});
 	};
 

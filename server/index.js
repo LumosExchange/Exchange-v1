@@ -1947,7 +1947,10 @@ app.post("/updateLiveTradePayment", (req, res) => {
 });
 
 app.get("/GetTradeFeedbackInfo", (req, res) => {
-  const id = req.params.ID;
+  const id = req.query.ID;
+  console.log(req.query);
+  console.log(req.params);
+
   console.log('ID for feedback:',id)
 
 
