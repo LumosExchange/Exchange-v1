@@ -137,18 +137,13 @@ var secret = speakeasy.generateSecret({
   name: "LumosExchange",
 });
 
-const db_database = process.env.MYSQL_DATABASE;
-const db_host = process.env.MYSQL_HOST;
-const db_user = process.env.MYSQL_USER;
-const db_pass = process.env.MYSQL_PASS;
-
 // Connection deatils for DB
 const db = mysql.createPool({
   connectionLimit: 100,
-  host: db_host,
-  user: db_user,
-  password: db_pass,
-  database: db_database,
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASS,
+  database: process.env.MYSQL_DATABASE,
   multipleStatements: true,
 });
 
