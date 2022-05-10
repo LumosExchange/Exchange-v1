@@ -43,6 +43,7 @@ import ProtectedRoutes from "./Components/ProtectedRoutes";
 import Prices from './Pages/Prices';
 import WalletTesting from './Pages/WalletTesting';
 import TradeComplete from './Pages/TradeComplete';
+import AccountRegistered from "./Pages/AccountRegistered";
 
 export const AppUrl = "http://localhost:3001";
 export const AppUrlNoPort = "http://localhost";
@@ -137,6 +138,7 @@ const App = () => {
 						<Route path="/Prices" element={<Prices />} />
 						<Route path="/EmailVerification" element={<EmailVerification />} />
 						<Route path="/wallettesting" element={<WalletTesting />} />
+						<Route path="/AccountRegistered" element={<AccountRegistered />} />
 
 						{/* Protected Routes */}
 						<Route path="/" element={<ProtectedRoutes />}>

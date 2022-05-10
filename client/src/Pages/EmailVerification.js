@@ -27,7 +27,7 @@ const EmailVerification = () => {
     event.preventDefault();
 
     Axios.post(`${AppUrl}/VerifyEmail2FA`, {
-      email: state.email,
+      email: state.userEmail,
       passcode: Twofa,
     }).then((response) => {
       if (response.data.auth === true) {
@@ -50,11 +50,11 @@ const EmailVerification = () => {
     <PageBody className="d-flex align-items-center justify-content-center py-5 container-fluid flex-column">
       <Card radius="20px" className="p-5 d-flex flex-column" style={{ maxWidth: '600px' }}>
         <Heading className="pb-4 text-center" bold>
-          2FA Code sent to {state.email}
+          2FA Code sent to {state.userEmail}
         </Heading>
         <Paragraph size="20px" className="text-center">Please check your email and enter the code below.</Paragraph>
         <form>
-          <div className="w-100 row">
+          <div className="w-100 row m-0">
             <div className="col-12 p-0 mb-3">
                 <FormInput
                   type="text"
