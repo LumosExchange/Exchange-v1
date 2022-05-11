@@ -252,10 +252,10 @@ const Selling = ({ userName }) => {
 		});
 	}, [socket]);
 
-	const hurrdurr = messageList.filter(ml => ml.message.includes("sent the solana")).length > 0;
-	const hurrderp = messageList.filter(ml => ml.message.includes("recieved the payment")).length > 0;
-	console.log(hurrdurr, 'is solana sent?');
-	console.log(hurrderp, 'is payment sent?');
+	const isTheSolanaSent = messageList.filter(ml => ml.message.includes("sent the solana")).length > 0;
+	const isThePaymentRecieved = messageList.filter(ml => ml.message.includes("recieved the payment")).length > 0;
+	console.log(isTheSolanaSent, 'is solana sent?');
+	console.log(isThePaymentRecieved, 'is payment sent?');
 
 	const formattedCurrency = convertCurrencyToSymbol(paymentCurrency);
 

@@ -140,7 +140,7 @@ const Feedback = () => {
 													</td>
 													<td>
 														<Paragraph size="18px" className="d-inline">
-															{((feedbackScore * 100) / 3).toFixed(2)}%
+															{((feedbackScore * 100) / 3).toFixed(0)}%
 														</Paragraph>
 													</td>
 												</tr>
