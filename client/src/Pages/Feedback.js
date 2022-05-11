@@ -11,7 +11,7 @@ import { AppUrl } from "../App";
 const VerifiedIcon = styled.i(({ theme }) => css`
 	&.true { color: ${theme.colors.valid} };
 	&.false { color: ${theme.colors.invalid} };
-	&.neutral { color: ${theme.colors.grey} };
+	&.neutral { color: ${theme.colors.neutral} };
 `);
 
 const Striped = styled.div(({ theme }) => css`

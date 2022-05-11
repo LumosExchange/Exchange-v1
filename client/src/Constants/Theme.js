@@ -9,6 +9,7 @@ export const darkTheme = {
     diamond: "#b9f2ff",
     valid: "#00CC66",
     invalid: "#EA5151",
+    neutral: "#979797",
 
     // Generic Theme Colors
 	  base_bg: "#131313",
@@ -82,6 +83,7 @@ export const lightTheme = {
     diamond: "#b9f2ff",
     valid: "#00CC66",
     invalid: "#EA5151",
+    neutral: "#979797",
 
 	  // Generic Theme Colors
 	  base_bg: "#FFF",
