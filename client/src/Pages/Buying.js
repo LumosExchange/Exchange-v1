@@ -261,10 +261,14 @@ const Buying = ({ userName }) => {
 
 	console.log(feedbackScore, 'feedback score');
 
+	const isTheSolanaSent = messageList.filter(ml => ml.message.includes("sent the solana")).length > 0;
+	const isThePaymentRecieved = messageList.filter(ml => ml.message.includes("sent the payment")).length > 0;
 	const isThePaymentSent = messageList.filter(ml => ml.message.includes("sent the payment")).length > 0;
 	const isTheSolanaRecieved = messageList.filter(ml => ml.message.includes("recieved the solana")).length > 0;
-	console.log(isThePaymentSent, 'is payment sent?');
-	console.log(isTheSolanaRecieved, 'is solana sent?');
+	console.log(isThePaymentSent, 'is the payment sent?');
+	console.log(isTheSolanaSent, 'is solana sent?');
+	console.log(isTheSolanaRecieved, 'is solana recieved?');
+	console.log(isThePaymentRecieved, 'is payment sent?');
 
 	return (
 		<PageBody>
