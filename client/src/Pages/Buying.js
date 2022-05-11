@@ -255,9 +255,16 @@ const Buying = ({ userName }) => {
 		});
 	}, [socket]);
 
+	console.log(messageList, 'message list');
+
 	const formattedCurrency = convertCurrencyToSymbol(paymentCurrency);
 
 	console.log(feedbackScore, 'feedback score');
+
+	const hurrdurr = messageList.filter(ml => ml.message.includes("sent the payment")).length > 0;
+	const hurrderp = messageList.filter(ml => ml.message.includes("recieved the solana")).length > 0;
+	console.log(hurrdurr, 'is payment sent?');
+	console.log(hurrderp, 'is solana sent?');
 
 	return (
 		<PageBody>
