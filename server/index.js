@@ -2308,7 +2308,7 @@ app.post("/CheckSaleEligibility", (req, res) => {
 
   //Get current user account level
   var sql =
-    "SELECT accountLevel as accountLevel FROM accountLevel WHERE (userID) = (?);SELECT SUM(amountOfSol) as amountOfSol FROM TradeHistory WHERE (sellerID) = (?) ";
+    "SELECT accountLevel as accountLevel FROM accountLevel WHERE (userID) = (?);SELECT SUM(amountOfSol) as amountOfSol FROM TradeHistory WHERE (sellerID) = (?);";
 
   db.query(sql, [userID, userID], function (error, results, fields) {
     if (error) {
