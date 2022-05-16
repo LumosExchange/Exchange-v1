@@ -124,10 +124,10 @@ var secret = speakeasy.generateSecret({
 // Connection deatils for DB
 const db = mysql.createPool({
   connectionLimit: 100,
-  host: "remotemysql.com",
-  user: "zEPptCpVyR",
-  password: "qmZ0jhRFE5",
-  database: "zEPptCpVyR",
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASS,
+  database: process.env.MYSQL_DATABASE,
   multipleStatements: true,
 });
 
@@ -138,7 +138,7 @@ app.post("/register", (req, res) => {
   const lastName = req.body.lastName;
   const email = req.body.email;
   const password = req.body.password;
-  const userName = req.body.userName;
+  const userName = req.body.userName
   const date = new Date();
 
   const theme = "Dark";
@@ -292,14 +292,18 @@ app.post("/sell", (req, res) => {
   const payment2 = req.body.payment2;
 
   var sql =
-    "SELECT country AS Country FROM upgradeTiers WHERE (userID) = (?);SELECT city AS Town FROM upgradeTiers WHERE (userID) = (?);SELECT saleID AS SaleID FROM TradeHistory WHERE (sellerID) = (?)";
+    "SELECT country AS Country FROM upgradeTiers WHERE (userID) = (?);SELECT city AS Town FROM upgradeTiers WHERE (userID) = (?);SELECT saleID AS SaleID FROM TradeHistory WHERE (sellerID) = (?);SELECT AVG(feedbackScore) as feedbackScore from feedback WHERE (sellerUserID) = (?);";
 
-  db.query(sql, [id, id, id], function (error, results) {
+  db.query(sql, [id, id, id, id], function (error, results) {
     if (error) {
       console.log(error);
+    } else {
+      console.log(results);
+      console.log(results[3][0].feedbackScore);
     }
+    
     db.query(
-      "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory) VALUES (?,?,?,?,?,?,?,?,?,?)",
+      "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory, feedbackScore) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
       [
         id,
         amountForSale,
@@ -311,13 +315,25 @@ app.post("/sell", (req, res) => {
         payment1,
         payment2,
         results[2].length,
+        results[3][0].feedbackScore || 0,
       ],
       (err, resultt) => {
+        if (err) {
+          res.send({
+            error: err,
+            saleListing: false,
+          });
+        } else {
+          res.send({
+            saleListing: true,
+          });
+        }
         console.log(err);
       }
-    );
-  });
+     );
+   });
 });
+
 
 //Get users open listings
 app.get("/getListings", (req, res) => {
@@ -400,6 +416,25 @@ app.get("/getUserAccountLevel", (req, res) => {
 app.get("/getUserID", (req, res) => {
   id = req.session.user[0].userID;
   res.send(id);
+});
+
+app.get("/getUserLocation", (req, res) => {
+  const id = req.session.user[0].userID;
+
+  db.query(
+    "SELECT country FROM upgradeTiers WHERE (userID) = (?)",
+    [id],
+    (err, result) => {
+      if(err) {
+        res.send(err);
+      }
+
+      res.send({
+        location: result[0].country,
+      })
+    }
+  )
+
 });
 
 //update user settings
@@ -683,7 +718,7 @@ app.post("/UpgradeBronze", upload.single('file'), async (req, res) => {
   //Now update sql upgradeTiers & account level
 
   var sql =
-    "Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;INSERT INTO KYC set userID =?, documentAddress =?, date=?;";
+    "Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;INSERT INTO KYC set userID =?, documentAddressKYC =?, KYCdate=?;";
 
   db.query(
     sql,
@@ -1033,8 +1068,9 @@ app.post("/RegisterInternationalBank", (req, res) => {
   const bankName = req.body.bankName;
   const bankCity = req.body.bankCity;
   const bankCountry = req.body.bankCountry;
-  const SWIFTCode = req.body.SWIFTCode;
-  const payeesName = req.body.payeesName;
+  const SWIFTCode = req.body.BIC;
+  const payeeName = req.body.payeeName;
+  console.log('Payee name: ',  payeeName);
   const interBankName = req.body.interBankName;
   const interBankCity = req.body.interBankCity;
   const interBankCountry = req.body.interBankCountry;
@@ -1042,14 +1078,14 @@ app.post("/RegisterInternationalBank", (req, res) => {
   const interBankRoutingNumber = req.body.bankName;
 
   db.query(
-    "INSERT INTO internationalBankAccounts (userID, bankName, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber) VALUES (?,?,?,?,?,?,?,?,?,?)",
+    "INSERT INTO internationalBankAccounts (userID, bankName, bankCity, bankCountry, SWIFTCode, payeeName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
     [
       user,
       bankName,
       bankCity,
       bankCountry,
       SWIFTCode,
-      payeesName,
+      payeeName,
       interBankName,
       interBankCity,
       interBankCountry,
@@ -1178,7 +1214,7 @@ app.post("/getEUBankDetails", (req, res) => {
 app.post("/getInterBankDetails", (req, res) => {
   const user = req.session.user[0].userID;
   db.query(
-    "SELECT bankName, bankCity, bankCountry, SWIFTCode, payeesName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE (userID) = (?)",
+    "SELECT bankName, bankCity, bankCountry, SWIFTCode, payeeName, interBankName, interBankCity, interBankCountry, interBankAccountNumber, interBankRoutingNumber FROM internationalBankAccounts WHERE (userID) = (?)",
     [user],
     (err, result) => {
       console.log(err, "error in getIntbankDetails");
@@ -1190,7 +1226,7 @@ app.post("/getInterBankDetails", (req, res) => {
           BIC: result[0].SWIFTCode,
           bankCity: result[0].bankCity,
           bankCountry: result[0].bankCountry,
-          payeeName: result[0].payeesName,
+          payeeName: result[0].payeeName,
           interBankName: result[0].interBankName,
           interBankCity: result[0].interBankCity,
           interBankCountry: result[0].interBankCountry,
@@ -1329,8 +1365,8 @@ app.post("/UpdateInterBank", (req, res) => {
   const bankName = req.body.bankName;
   const bankCity = req.body.bankCity;
   const bankCountry = req.body.bankCountry;
-  const SWIFTCode = req.body.SWIFTCode;
-  const payeesName = req.body.payeesName;
+  const SWIFTCode = req.body.BIC;
+  const payeeName = req.body.payeeName;
   const interBankName = req.body.interBankName;
   const interBankCity = req.body.interBankCity;
   const interBankCountry = req.body.interBankCountry;
@@ -1338,13 +1374,13 @@ app.post("/UpdateInterBank", (req, res) => {
   const interBankRoutingNumber = req.body.bankName;
 
   db.query(
-    "UPDATE internationalBankAccounts SET bankName = ?, bankCity = ?, bankCountry = ?, SWIFTCode = ?, payeesName = ?, interBankName = ?, interBankCity = ?, interBankCountry =?, interBankAccountNumber =?, interBankRoutingNumber =?  WHERE userID = ?",
+    "UPDATE internationalBankAccounts SET bankName = ?, bankCity = ?, bankCountry = ?, SWIFTCode = ?, payeeName = ?, interBankName = ?, interBankCity = ?, interBankCountry =?, interBankAccountNumber =?, interBankRoutingNumber =?  WHERE userID = ?",
     [
       bankName,
       bankCity,
       bankCountry,
       SWIFTCode,
-      payeesName,
+      payeeName,
       interBankName,
       interBankCity,
       interBankCountry,
@@ -1703,7 +1739,7 @@ app.get("/GetLiveTradePaymentInfo", (req, res) => {
               bankCity: result[0].bankCity,
               bankCountry: result[0].bankCountry,
               SWIFTCode: result[0].SWIFTCode,
-              payeesName: result[0].payeesName,
+              payeeName: result[0].payeeName,
               interBankName: result[0].interBankName,
               interBankCity: result[0].interBankCity,
               interBankCountry: result[0].interBankCountry,
@@ -1890,65 +1926,34 @@ app.post("/updateLiveTradePayment", (req, res) => {
 });
 
 app.get("/GetTradeFeedbackInfo", (req, res) => {
-  const id = req.query.UserID;
+  const id = req.query.ID;
+  console.log(req.query);
+  console.log(req.params);
 
-  console.log("ID : ", id);
+  console.log('ID for feedback:',id)
 
-  let registeredDate = " ";
-  let totalTrades = 0;
-  let feedbackScore = 0;
 
-  //Get registered date
 
-  db.query(
-    "SELECT registeredDate FROM users WHERE (userID) = (?) ",
-    [id],
-    (err, result) => {
-      console.log("Registered date : ", result);
-      registeredDate = result[0].registeredDate;
+  var sql = "SELECT registeredDate AS date FROM users WHERE (userID) = (?);SELECT COUNT (*) AS total FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?);SELECT AVG (feedbackScore) as feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?)"
+
+db.query(
+  sql,
+  [id, id, id, id, id],
+  function (error, results, fields) {
+    if (error) {
+      throw error;
     }
-  );
+     const score = ((results[2][0].feedback / 3) * 100);
+    res.send({
+      registeredDate: results[0],
+      totalTrades: results[1],
+      feedbackScore: score,
+    })
+  }
+)
 
-  //get total trades
 
-  db.query(
-    "SELECT COUNT (*) AS total FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?)",
-    [id, id],
-    (err, result) => {
-      console.log(err);
 
-      if (err) {
-        res.send(err);
-      } else if ((result = 0)) {
-        totalTrades = 0;
-      } else {
-        totalTrades = result.total;
-      }
-    }
-  );
-
-  //Get Buyer feedback score
-
-  db.query(
-    "SELECT AVG (feedbackScore) as feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?)",
-    [id, id],
-    (err, result) => {
-      if (err) {
-        res.send(err);
-      } else if ((result = 0)) {
-        feedbackScore = 0;
-      } else {
-        feedbackScore = result.feedback;
-
-        res.send({
-          registeredDate: registeredDate,
-          totalTrades: totalTrades,
-          feedbackScore: feedbackScore,
-        });
-        console.log("feedback Score : ", result);
-      }
-    }
-  );
 });
 
 app.post("/CompleteTrade", (req, res) => {
@@ -1963,26 +1968,16 @@ app.post("/CompleteTrade", (req, res) => {
 
   let EscrowTime = " ";
 
-  //Update the escrow release time
-  db.query(
-    "UPDATE LiveTrades SET escrowReleaseTime = ? WHERE LiveTradeID = ?",
-    [date, liveTradeID],
-    (err, result) => {
-      if (err) {
-        res.send(err);
-      } else {
-      }
-    }
-  );
+  var sql = "UPDATE LiveTrades SET escrowReleaseTime = ? WHERE LiveTradeID = ?;INSERT INTO TradeHistory SELECT * FROM LiveTrades WHERE LiveTradeID = ?;"
 
-  //insert into tradeHistory
+  
+  //Update the escrow release time && insert into tradeHistory
   db.query(
-    "INSERT INTO TradeHistory SELECT * FROM LiveTrades WHERE LiveTradeID = ?",
-    [liveTradeID],
-    (err, results) => {
-      if (err) {
-        res.send(err);
-      } else {
+    sql,
+    [date, liveTradeID, liveTradeID],
+    function (error, results, fields) {
+      if (error) {
+        throw error;
       }
     }
   );
@@ -2030,10 +2025,14 @@ app.post("/CompleteTrade", (req, res) => {
           (err, resultss) => {
             if (err) {
               console.log(err);
-              res.send(err);
+              res.send({
+                tradeComplete: false,
+                error:  err,
+              })
             } else {
-              console.log(resultss);
-              //Return some sort of reponse
+              res.send({
+                tradeComplete: true,
+              })
             }
           }
         );
@@ -2293,7 +2292,7 @@ app.post("/CheckSaleEligibility", (req, res) => {
 
   //Get current user account level
   var sql =
-    "SELECT accountLevel as accountLevel FROM accountLevel WHERE (userID) = (?);SELECT SUM(amountOfSol) as amountOfSol FROM TradeHistory WHERE (sellerID) = (?) ";
+    "SELECT accountLevel as accountLevel FROM accountLevel WHERE (userID) = (?);SELECT SUM(amountOfSol) as amountOfSol FROM TradeHistory WHERE (sellerID) = (?);";
 
   db.query(sql, [userID, userID], function (error, results, fields) {
     if (error) {

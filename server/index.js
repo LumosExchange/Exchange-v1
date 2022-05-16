@@ -154,7 +154,7 @@ app.post("/register", (req, res) => {
   const lastName = req.body.lastName;
   const email = req.body.email;
   const password = req.body.password;
-  const userName = req.body.userName;
+  const userName = req.body.userName
   const date = new Date();
 
   const theme = "Dark";

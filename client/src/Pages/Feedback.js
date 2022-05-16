@@ -29,13 +29,13 @@ const convertVerifiedToIcon = (status) => {
 }
 
 const convertScoreToIcon = (rating) => {
-	if (rating === 1){
+	if (rating === 3){
 		return <VerifiedIcon className="material-icons true me-2">thumb_up</VerifiedIcon>
 	}
 	if (rating === 2){
 		return <VerifiedIcon className="material-icons neutral me-2">sentiment_neutral</VerifiedIcon>
 	}
-	if (rating === 3){
+	if (rating === 1){
 		return <VerifiedIcon className="material-icons false me-2">thumb_down</VerifiedIcon>
 	}
 }
