@@ -8,8 +8,9 @@ import PhantomIcon from "../Images/phantom-icon-purple.svg";
 import SolflareIcon from "../Images/solflare-icon.svg";
 import Link from "../Components/Link";
 import GradientButton from "../Components/GradientButton";
-import * as web3 from '@solana/web3.js';
-import SlopeIcon from '../Images/slope-finance-icon.png';
+import * as web3 from "@solana/web3.js";
+import SlopeIcon from "../Images/slope-finance-icon.png";
+import Card from "../Components/Card";
 
 const ToggleIconBase = styled.svg(
   ({ toggled, theme }) => css`
@@ -122,31 +123,33 @@ const pubKey = "GAECQos3deHaqzB1EDvPJcqaGVvG9xqDuFYU239KAsXV";
 const MyWallet = () => {
   const [selectedWallet, selectWallet] = useState("");
   const [currentStep, setCurrentStep] = useState("connectWallet");
+  const [PubKey, setPubKey] = useState("");
 
-  const pubKey = "";
-
-
-  //Get provider 
+  //Get provider
   const getProvider = async () => {
     if ("solana" in window) {
-
       // opens wallet to connect to
-      await window.solana.connect(); 
+      await window.solana.connect();
 
       const provider = window.solana;
-	  if (provider.isPhantom) {
-		console.log("Is Phantom installed? ", provider.isPhantom);
-		setCurrentStep("walletOverview");
-		return provider;
-	} if (provider.isSolflare){
-		console.log("Is Solflare installed? ", provider.isSolflare);
-		setCurrentStep("walletOverview");
-		return provider;
-	} if (provider.isSlope) {
-		console.log("Is Slope installed? ", provider.isSlope);
-		setCurrentStep("walletOverview");
-		return provider;
-	}  
+      if (provider.isPhantom) {
+        console.log("Is Phantom installed? ", provider.isPhantom);
+        setCurrentStep("walletOverview");
+        setPubKey(provider.publicKey.toString());
+        return provider;
+      }
+      if (provider.isSolflare) {
+        console.log("Is Solflare installed? ", provider.isSolflare);
+        setCurrentStep("walletOverview");
+        setPubKey(provider.publicKey.toString());
+        return provider;
+      }
+      if (provider.isSlope) {
+        console.log("Is Slope installed? ", provider.isSlope);
+        setCurrentStep("walletOverview");
+        setPubKey(provider.publicKey.toString());
+        return provider;
+      }
     } else {
       window.open("https://www.phantom.app/", "_blank");
     }
@@ -195,7 +198,9 @@ const MyWallet = () => {
                 <PrimaryButton
                   text="Connect"
                   className="m-auto mt-3"
-                  onClick={() => {getProvider();}}
+                  onClick={() => {
+                    getProvider();
+                  }}
                   type="check"
                   value="check"
                   hasIcon
@@ -217,7 +222,9 @@ const MyWallet = () => {
                 <PrimaryButton
                   text="Connect"
                   className="m-auto mt-3"
-                  onClick={() => {getProvider();}}
+                  onClick={() => {
+                    getProvider();
+                  }}
                   type="check"
                   value="check"
                   hasIcon
@@ -226,11 +233,7 @@ const MyWallet = () => {
             )}
             {selectedWallet === "Slope" && (
               <Paragraph size="18px">
-                <Link
-                  href="https://www.slope.com/"
-                  alt="Slope"
-                  target="_blank"
-                >
+                <Link href="https://www.slope.com/" alt="Slope" target="_blank">
                   Slope
                 </Link>{" "}
                 is a friendly non-custodial, browser extension, Solana wallet
@@ -239,21 +242,31 @@ const MyWallet = () => {
                 <PrimaryButton
                   text="Connect"
                   className="m-auto mt-3"
-                  onClick={() => {getProvider();}}
+                  onClick={() => {
+                    getProvider();
+                  }}
                   type="check"
                   value="check"
                   hasIcon
                 />
               </Paragraph>
             )}
-			{currentStep === "walletOverview" && (
-				<Paragraph>
-					Hello
-				</Paragraph>
-
-			)}
-
           </div>
+          {currentStep === "walletOverview" && (
+            <div className="row w-100">
+              <div className="col-12">
+                <div className="flex-column text-center">
+                  <Heading className="pb-3">Your Wallet</Heading>
+                  <Heading className="pb-2" size="18px">
+                    Public Key: {PubKey}
+                  </Heading>
+                  <Paragraph size="18px" bold>
+                    Manage your tokens and NFT's below
+                  </Paragraph>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </PageBody>
