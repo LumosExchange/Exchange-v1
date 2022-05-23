@@ -65,21 +65,16 @@ try {
       if(transaction) {
         console.log("Txn created successfully");
       }
-      
       // Request creator to sign the transaction (allow the transaction)
       let signed = await provider.signTransaction(transaction);
       // The signature is generated
       let signature = await connection.sendRawTransaction(signed.serialize());
       // Confirm whether the transaction went through or not
       await connection.confirmTransaction(signature);
-  
       //Signature
       console.log("Signature: ", signature);
 
 }
-
-
-
   }
  
 

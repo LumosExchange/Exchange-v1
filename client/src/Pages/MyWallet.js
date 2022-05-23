@@ -9,8 +9,10 @@ import SolflareIcon from "../Images/solflare-icon.svg";
 import Link from "../Components/Link";
 import GradientButton from "../Components/GradientButton";
 import * as web3 from "@solana/web3.js";
+import {AccountLayout, TOKEN_PROGRAM_ID} from "@solana/spl-token";
 import SlopeIcon from "../Images/slope-finance-icon.png";
 import Card from "../Components/Card";
+import StyledTable from "../Components/Tables";
 
 const ToggleIconBase = styled.svg(
   ({ toggled, theme }) => css`
@@ -112,6 +114,24 @@ const IconContainer = styled.div(
   `
 );
 
+const FakeTableData = [
+	{
+		'token': 'Solana',
+		'ticker': 'SOL',
+		'amount': '225.4',
+		'value': '£10000',
+
+	},
+	{
+		'token': 'Wrapped BTC',
+		'ticker': 'WBTC',
+		'amount': '0.5',
+		'value': '£30000',
+
+	},
+
+];
+
 const pubKey = "GAECQos3deHaqzB1EDvPJcqaGVvG9xqDuFYU239KAsXV";
 
 //TODO:
@@ -136,7 +156,9 @@ const MyWallet = () => {
         console.log("Is Phantom installed? ", provider.isPhantom);
         setCurrentStep("walletOverview");
         setPubKey(provider.publicKey.toString());
+		getTokenBalance();
         return provider;
+		
       }
       if (provider.isSolflare) {
         console.log("Is Solflare installed? ", provider.isSolflare);
@@ -153,13 +175,48 @@ const MyWallet = () => {
     } else {
       window.open("https://www.phantom.app/", "_blank");
     }
+	
   };
+
+  const getTokenBalance = async () =>{
+
+		  //Wait for web 3 connection
+		  var provider = await getProvider();
+
+		  const connection = new web3.Connection(web3.clusterApiUrl('devnet'));
+
+		  const balance = await connection.getAccountInfoAndContext(provider.publicKey).then(function(value) { console.log(value)});
+
+      const tokenAccounts = await connection.getTokenAccountsByOwner(new web3.PublicKey(provider.pubKey), 
+      {
+        programId: TOKEN_PROGRAM_ID,
+
+      }
+      );
+
+      tokenAccounts.value.forEach((e) => {
+        const accountInfo = AccountLayout.decode(e.account.data);
+        console.log(accountInfo);
+      })
+
+      
+		  console.log('SOL BALANCE: ', balance);
+
+
+		  
+		  
+
+		  //Now get the token balance from the pub key 
+	
+
+	  }
+
 
   return (
     <PageBody className="d-flex align-items-center">
       <div className="container d-flex align-items-center justify-content-center py-5 flex-column">
         <Heading className="pb-4 text-center">
-          Connect Using a web3 Wallet
+          Connect using a web3 Wallet
         </Heading>
         <Heading size="24px" className="text-center">
           Please select your wallet
@@ -192,7 +249,7 @@ const MyWallet = () => {
                 <Link href="https://phantom.app" alt="Phantom" target="_blank">
                   Phantom
                 </Link>{" "}
-                is a friendly non-custodial, browser extension, Solana wallet
+                is a friendly, non-custodial browser extension, solana wallet
                 that makes it safe & easy for you to store, send, receive,
                 collect, and swap tokens.
                 <PrimaryButton
@@ -253,6 +310,7 @@ const MyWallet = () => {
             )}
           </div>
           {currentStep === "walletOverview" && (
+			 <div>
             <div className="row w-100">
               <div className="col-12">
                 <div className="flex-column text-center">
@@ -261,11 +319,44 @@ const MyWallet = () => {
                     Public Key: {PubKey}
                   </Heading>
                   <Paragraph size="18px" bold>
-                    Manage your tokens and NFT's below
+                    Manage your solana tokens and NFT's below
                   </Paragraph>
                 </div>
               </div>
             </div>
+			
+			<div className="row w-100 mt-4">
+			<div className="col-12 d-flex flex-column">
+				<Divider />
+				<Heading size="24px" className="mb-0 pt-4">Solana Tokens</Heading>
+			</div>
+			<StyledTable className="w-100 mt-4">
+				<thead>
+					<tr>
+						<th>Token</th>
+						<th>Ticker</th>
+						<th>Amount</th>
+						<th>Value</th>
+					</tr>
+				</thead>
+				<tbody>
+					{FakeTableData.filter(fd => fd).map((data, d) => (
+						<tr key={d}>
+							<td>
+								<span>
+									{data.token}
+								</span>
+							</td>
+							<td>{data.ticker}</td>
+							<td>{data.amount}</td>
+							<td>{data.value}</td>
+							
+						</tr>
+					))}
+				</tbody>
+			</StyledTable>
+		</div>
+		</div>	
           )}
         </div>
       </div>

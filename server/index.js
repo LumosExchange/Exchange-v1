@@ -99,17 +99,11 @@ app.use(function (req, res, next) {
 app.use(
   cors(
     {
-      origin: ["http:localhost:3000"],
+      origin: ["http:localhost:3000", "https://api.coingecko.com/api/v3/coins"],
       methods: ["GET", "POST"],
       credentials: true,
       optionSuccessStatus: 200,
-    },
-    {
-      origin: ["https://api.coingecko.com/api/v3/coins"],
-      methods: ["GET", "POST"],
-      credentials: true,
-      optionSuccessStatus: 200,
-    }
+    } 
   )
 );
 

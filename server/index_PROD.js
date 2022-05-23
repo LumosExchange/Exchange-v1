@@ -83,13 +83,7 @@ app.use(function (req, res, next) {
 app.use(
   cors(
     {
-      origin: "http://3.8.159.233",
-      methods: ["GET", "POST"],
-      credentials: true,
-      optionSuccessStatus: 200,
-    },
-    {
-      origin: ["https://api.coingecko.com/api/v3/coins"],
+      origin: ["http://3.8.159.233", "https://api.coingecko.com/api/v3/coins"],
       methods: ["GET", "POST"],
       credentials: true,
       optionSuccessStatus: 200,
@@ -124,10 +118,10 @@ var secret = speakeasy.generateSecret({
 // Connection deatils for DB
 const db = mysql.createPool({
   connectionLimit: 100,
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASS,
-  database: process.env.MYSQL_DATABASE,
+  host: 'remotemysql.com',
+  user: 'zEPptCpVyR',
+  password: 'Zlr85S0BRN',
+  database: 'zEPptCpVyR',
   multipleStatements: true,
 });
 
