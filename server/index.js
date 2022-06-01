@@ -25,8 +25,9 @@ const fs = require("fs");
 const { promisify } = require("util");
 const pipeline = promisify(require("stream").pipeline);
 const S3 = require('aws-sdk/clients/s3');
-const validation = require('./Middlewares/validationMiddlewear');
-const userSchema = require('./Validations/userValidation');
+//const validation = require('./Middlewares/validationMiddlewear');
+//const userSchema =  require('./Validations/userValidation');
+
 
 
 //import s3 
@@ -144,7 +145,7 @@ const db = mysql.createPool({
 });
 
 //Register
-app.post("/register", (req, res) => {
+app.post("/register",(req, res) => {
   const firstName = req.body.firstName;
 
   const lastName = req.body.lastName;
