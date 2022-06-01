@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import styled, { css } from "styled-components";
 import Axios from "axios";
 import { PageBody, StyledDropdown } from "../Components/FormInputs";
@@ -15,6 +17,7 @@ import { CodeSentMessage } from "./ChangePassword";
 import { ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { StyledModal } from "./Profile/PaymentMethods";
 import { InlineButton } from "../Components/Buttons";
+import web3Provider from './../Reducers/web3Provider';
 
 const CRYPTO_KIN = "KIN";
 const CRYPTO_SOL = "SOL";
@@ -168,6 +171,14 @@ const Sell = () => {
 	const [modal, setModal] = useState(false);
 	const [userLocation, setUserLocation] = useState("");
 	const [accountTier, setAccountTier] = useState("");
+
+	// redux-store thing
+	const web3Provider = useSelector(state => state.web3Provider);
+
+	useEffect(() => {
+		console.log("we are here?");
+		console.log(web3Provider);
+	}, web3Provider)
 
 	const navigate = useNavigate();
 

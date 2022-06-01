@@ -151,17 +151,18 @@ const Wallets = () => {
 	const [errorMessage, setErrorMessage] = useState("");
 
 	const [isEditing, setIsEditing] = useState(false);
+
+	const [provider, setProvider] = useState("");
 	
 	const [pubKey, setPubKey] = useState("");
-
-
+	
 	const getProvider = async () => {
 		if ("solana" in window) {
 			await window.solana.connect();
 			const provider = window.solana;
 			if (provider.isPhantom) {
 				console.log("Is Phantom installed? ", provider.isPhantom);
-				return provider;
+				return setProvider(provider);
 			} if (provider.isSolflare){
 				console.log("Is Solflare installed? ", provider.isSolflare);
 				return provider;
@@ -169,10 +170,10 @@ const Wallets = () => {
 				console.log("Is Slope installed? ", provider.isSlope);
 				return provider;
 			}
-			} else {
-				//Please install a sol wallet 
-				window.open("https://www.phantom.app", "_blank");
-			}	
+		} else {
+			//Please install a sol wallet 
+			window.open("https://www.phantom.app", "_blank");
+		}	
 	};
 
 	const getWallet = async () => {
@@ -187,8 +188,8 @@ const Wallets = () => {
 
 	const connectPhantomWallet = async() => {
 		try {
-		window.solana.connect();
-		await window.solana.on("connect", () => addWallet("phantom", window.solana.publicKey.toString()));
+			window.solana.connect();
+			await window.solana.on("connect", () => addWallet("phantom", window.solana.publicKey.toString()));
 			//setPubKey(window.solana.publicKey.toString());	
 			console.log(window.solana.publicKey.toString(), 'public key');
 		} catch {
@@ -212,7 +213,6 @@ const Wallets = () => {
 		} catch {
 		}
 	}
-
 
 	const toggleAddWallet = () => {
 		setAddWalletModal(!addWalletModal);
@@ -446,8 +446,7 @@ const Wallets = () => {
 						{modalMode === "web3" && (
 							<ModalBody>
 								<AddWalletButton
-								onClick={connectPhantomWallet}
-								
+									onClick={connectPhantomWallet}
 									className="mb-2 w-100"
 								>
 									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">
@@ -461,7 +460,7 @@ const Wallets = () => {
 									</div>
 								</AddWalletButton>
 								<AddWalletButton
-										onClick={connectSlopeWallet}
+									onClick={connectSlopeWallet}
 									className="mb-2 w-100"
 								>
 									<div className="col-12 p-4 rounded d-flex justify-content-between align-items-center inner">

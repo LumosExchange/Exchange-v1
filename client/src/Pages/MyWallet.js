@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import styled, { css } from "styled-components";
 import { PageBody, FormInput, StyledDropdown } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
@@ -13,6 +14,8 @@ import { AccountLayout, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import SlopeIcon from "../Images/slope-finance-icon.png";
 import Card from "../Components/Card";
 import StyledTable from "../Components/Tables";
+
+import { updateProvider } from "../Actions/Web3Provider/web3Provider"
 
 const ToggleIconBase = styled.svg(
   ({ toggled, theme }) => css`
@@ -141,6 +144,8 @@ function MyWallet() {
   const [selectedWallet, selectWallet] = useState("");
   const [currentStep, setCurrentStep] = useState("connectWallet");
   const [PubKey, setPubKey] = useState("");
+
+  const dispatch = useDispatch();
   // const provider = window.solana;
 
   //Get provider
@@ -153,6 +158,10 @@ function MyWallet() {
       if (provider.isPhantom) {
         console.log("Is Phantom installed? ", provider.isPhantom);
         setCurrentStep("walletOverview");
+
+        // Redux - store web3 provider update
+        dispatch(updateProvider(provider));
+
         return provider;
       } else if (provider.isSolflare) {
         console.log("Is Solflare installed? ", provider.isSolflare);
