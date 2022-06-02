@@ -141,68 +141,70 @@ const db = mysql.createPool({
   multipleStatements: true,
 });
 
+app.use(require("./app/routes"));
+
 //Register
-app.post("/register", (req, res) => {
-  const firstName = req.body.firstName;
+// app.post("/register", (req, res) => {
+//   const firstName = req.body.firstName;
 
-  const lastName = req.body.lastName;
-  const email = req.body.email;
-  const password = req.body.password;
-  const userName = req.body.userName
-  const date = new Date();
+//   const lastName = req.body.lastName;
+//   const email = req.body.email;
+//   const password = req.body.password;
+//   const userName = req.body.userName
+//   const date = new Date();
 
-  const theme = "Dark";
-  const timezone = "UTC+0";
-  const currency = "GBP";
-  const accountLevel = "Standard";
+//   const theme = "Dark";
+//   const timezone = "UTC+0";
+//   const currency = "GBP";
+//   const accountLevel = "Standard";
 
-  //hash password
-  bcrypt.hash(password, saltRounds, (err, hash) => {
-    if (err) {
-      console.log(err);
-      res.send({ err });
-    } else {
-      db.query(
-        "INSERT INTO users (firstName, lastName, email, password, userName, registeredDate) VALUES (?,?,?,?,?,?)",
-        [firstName, lastName, email, hash, userName, date],
-        (err, result) => {
-          console.log(err);
-        }
-      );
-      db.query(
-        "INSERT INTO userSettings (theme, timezone, currency) VALUES (?,?,?)",
-        [theme, timezone, currency],
-        (err, result) => {
-          console.log(err);
-        }
-      );
-      db.query(
-        "INSERT INTO accountLevel (accountLevel, dateUpgraded) VALUES (?,?)",
-        [accountLevel, date,],
-        (err, result) => {
-          console.log(err);
-        }
-      );
-      db.query(
-        "INSERT INTO userAuth (Email, emailVerified, SMS, google, googleSecret, Authy, phoneNumber) VALUES (?,?,?,?,?,?,?)",
-        [email, 0, 0, 0, 0, 0, "0"],
-        (err, result) => {
-          console.log(err);
-        }
-      );
-      db.query(
-        "INSERT INTO userPaymentAccounts (EUBank, UKBank, InterBank, Paypal, Skrill) VALUES (?,?,?,?,?)",
-        [0, 0, 0, 0, 0],
-        (err, result) => {
-          console.log(err);
-        }
-      );
-      res.send({
-        registered: true,
-      });
-    }
-  });
-});
+//   //hash password
+//   bcrypt.hash(password, saltRounds, (err, hash) => {
+//     if (err) {
+//       console.log(err);
+//       res.send({ err });
+//     } else {
+//       db.query(
+//         "INSERT INTO users (firstName, lastName, email, password, userName, registeredDate) VALUES (?,?,?,?,?,?)",
+//         [firstName, lastName, email, hash, userName, date],
+//         (err, result) => {
+//           console.log(err);
+//         }
+//       );
+//       db.query(
+//         "INSERT INTO userSettings (theme, timezone, currency) VALUES (?,?,?)",
+//         [theme, timezone, currency],
+//         (err, result) => {
+//           console.log(err);
+//         }
+//       );
+//       db.query(
+//         "INSERT INTO accountLevel (accountLevel, dateUpgraded) VALUES (?,?)",
+//         [accountLevel, date,],
+//         (err, result) => {
+//           console.log(err);
+//         }
+//       );
+//       db.query(
+//         "INSERT INTO userAuth (Email, emailVerified, SMS, google, googleSecret, Authy, phoneNumber) VALUES (?,?,?,?,?,?,?)",
+//         [email, 0, 0, 0, 0, 0, "0"],
+//         (err, result) => {
+//           console.log(err);
+//         }
+//       );
+//       db.query(
+//         "INSERT INTO userPaymentAccounts (EUBank, UKBank, InterBank, Paypal, Skrill) VALUES (?,?,?,?,?)",
+//         [0, 0, 0, 0, 0],
+//         (err, result) => {
+//           console.log(err);
+//         }
+//       );
+//       res.send({
+//         registered: true,
+//       });
+//     }
+//   });
+// });
 
 app.post("/getUserInfo", (req, res) => {
   const id = req.session.user[0].userID;
@@ -211,19 +213,19 @@ app.post("/getUserInfo", (req, res) => {
 
 //Login functionality
 //check logged in state
-app.get("/login", (req, res) => {
-  if (req.session.user) {
-    res.send({ loggedIn: true, user: req.session.user });
-  } else {
-    res.send({ loggedIn: false });
-  }
-});
+// app.get("/login", (req, res) => {
+//   if (req.session.user) {
+//     res.send({ loggedIn: true, user: req.session.user });
+//   } else {
+//     res.send({ loggedIn: false });
+//   }
+// });
 
-app.post("/logout", (req, res) => {
-  req.session.destroy();
-  req.session = null;
-  res.send("User logged out");
-});
+// app.post("/logout", (req, res) => {
+//   req.session.destroy();
+//   req.session = null;
+//   res.send("User logged out");
+// });
 
 //create JWT aauth
 const verifyJWT = (req, res, next) => {
