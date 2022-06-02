@@ -1,6 +1,6 @@
 const yup = require('yup');
 
-const silverUpgrade = yup.object({
+const silverUpgradeSchema = yup.object({
     file: yup
     .require(),
     birthDay: yup
@@ -14,6 +14,6 @@ const silverUpgrade = yup.object({
     .require(),
 });
 
-silverUpgrade.validate();
+silverUpgradeSchema.validate();
 
-module.exports = {silverUpgrade};
+module.exports = {silverUpgradeSchema};
