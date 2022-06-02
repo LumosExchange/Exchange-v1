@@ -91,7 +91,7 @@ export const FormInput = ({
 	hasIcon,
 	text,
 	className,
-	textColor,
+	textcolor,
 	id,
 	pattern,
 	placeholder,
@@ -132,7 +132,7 @@ export const FormInput = ({
 				type={type}
 				value={value}
 				color={color}
-				textColor={textColor}
+				textcolor={textcolor}
 				padding={padding}
 				onChange={onChange}
 				onFocus={onFocus}
@@ -156,7 +156,7 @@ export const FormInput = ({
 				type={type}
 				value={value}
 				color={color}
-				textColor={textColor}
+				textcolor={textcolor}
 				padding={padding}
 				onChange={onChange}
 				onFocus={onFocus}
@@ -174,14 +174,14 @@ export const FormInput = ({
 
 FormInput.propTypes = {
 	color: PropTypes.string,
-	textColor: PropTypes.string,
+	textcolor: PropTypes.string,
 	rounded: PropTypes.bool,
 	hasIcon: PropTypes.bool,
 };
 
 FormInput.defaultProps = {
 	color: "grey",
-	textColor: "text-primary",
+	textcolor: "text-primary",
 	rounded: false,
 	hasIcon: false,
 	className: "",
@@ -327,12 +327,12 @@ export const InlineInput = styled.input(({ theme, hasIcon, color }) => css`
 `);
 
 InlineInput.propTypes = {
-	textColor: PropTypes.string,
+	textcolor: PropTypes.string,
 	rounded: PropTypes.bool,
 };
 
 InlineInput.defaultProps = {
-	textColor: "text-primary",
+	textcolor: "text-primary",
 	rounded: false,
 };
 
