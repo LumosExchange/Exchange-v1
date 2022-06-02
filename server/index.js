@@ -25,6 +25,8 @@ const fs = require("fs");
 const { promisify } = require("util");
 const pipeline = promisify(require("stream").pipeline);
 const S3 = require('aws-sdk/clients/s3');
+const validation = require('./Middlewares/validationMiddlewear');
+const userSchema = require('./Validations/userValidation');
 
 
 //import s3 
@@ -62,7 +64,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("User Disconnected", socket.id);
+   // console.log("User Disconnected", socket.id);
   });
 });
 

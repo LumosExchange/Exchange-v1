@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import styled, { css } from "styled-components";
 import { PageBody, FormInput, StyledDropdown } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
@@ -9,10 +10,12 @@ import SolflareIcon from "../Images/solflare-icon.svg";
 import Link from "../Components/Link";
 import GradientButton from "../Components/GradientButton";
 import * as web3 from "@solana/web3.js";
-import {AccountLayout, TOKEN_PROGRAM_ID} from "@solana/spl-token";
+import { AccountLayout, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import SlopeIcon from "../Images/slope-finance-icon.png";
 import Card from "../Components/Card";
 import StyledTable from "../Components/Tables";
+
+import { updateProvider } from "../Actions/Web3Provider/web3Provider"
 
 const ToggleIconBase = styled.svg(
   ({ toggled, theme }) => css`
@@ -115,21 +118,18 @@ const IconContainer = styled.div(
 );
 
 const FakeTableData = [
-	{
-		'token': 'Solana',
-		'ticker': 'SOL',
-		'amount': '225.4',
-		'value': '£10000',
-
-	},
-	{
-		'token': 'Wrapped BTC',
-		'ticker': 'WBTC',
-		'amount': '0.5',
-		'value': '£30000',
-
-	},
-
+  {
+    token: "Solana",
+    ticker: "SOL",
+    amount: "225.4",
+    value: "£10000",
+  },
+  {
+    token: "Wrapped BTC",
+    ticker: "WBTC",
+    amount: "0.5",
+    value: "£30000",
+  },
 ];
 
 const pubKey = "GAECQos3deHaqzB1EDvPJcqaGVvG9xqDuFYU239KAsXV";
@@ -140,77 +140,93 @@ const pubKey = "GAECQos3deHaqzB1EDvPJcqaGVvG9xqDuFYU239KAsXV";
 // - then get solana balnace / other token balance and map to table
 // - then get all NFT's in the users wallet and display below
 
-const MyWallet = () => {
+function MyWallet() {
   const [selectedWallet, selectWallet] = useState("");
   const [currentStep, setCurrentStep] = useState("connectWallet");
   const [PubKey, setPubKey] = useState("");
+
+  const dispatch = useDispatch();
+  // const provider = window.solana;
 
   //Get provider
   const getProvider = async () => {
     if ("solana" in window) {
       // opens wallet to connect to
       await window.solana.connect();
-
       const provider = window.solana;
+
       if (provider.isPhantom) {
         console.log("Is Phantom installed? ", provider.isPhantom);
         setCurrentStep("walletOverview");
-        setPubKey(provider.publicKey.toString());
-		getTokenBalance();
+
+        // Redux - store web3 provider update
+        dispatch(updateProvider(provider));
+
         return provider;
-		
-      }
-      if (provider.isSolflare) {
+      } else if (provider.isSolflare) {
         console.log("Is Solflare installed? ", provider.isSolflare);
         setCurrentStep("walletOverview");
-        setPubKey(provider.publicKey.toString());
+
         return provider;
-      }
-      if (provider.isSlope) {
+      } else if (provider.isSlope) {
         console.log("Is Slope installed? ", provider.isSlope);
         setCurrentStep("walletOverview");
-        setPubKey(provider.publicKey.toString());
+
         return provider;
       }
     } else {
       window.open("https://www.phantom.app/", "_blank");
     }
-	
   };
 
-  const getTokenBalance = async () =>{
+  async function getTokenBalance() {
+    try {
+      //Wait for web 3 connection
+      var provider = await getProvider();
 
-		  //Wait for web 3 connection
-		  var provider = await getProvider();
-
-		  const connection = new web3.Connection(web3.clusterApiUrl('devnet'));
-
-		  const balance = await connection.getAccountInfoAndContext(provider.publicKey).then(function(value) { console.log(value)});
-
-      const tokenAccounts = await connection.getTokenAccountsByOwner(new web3.PublicKey(provider.pubKey), 
-      {
-        programId: TOKEN_PROGRAM_ID,
-
-      }
+      const connection = new web3.Connection(
+        web3.clusterApiUrl("devnet"),
+        "confirmed"
       );
+
+      //const balance = await connection.getAccountInfoAndContext(provider.publicKey).then(function(value) { console.log(value)});
+
+      const tokenAccounts = await connection.getTokenAccountsByOwner(
+        new web3.PublicKey(provider.pubKey),
+        {
+          programId: TOKEN_PROGRAM_ID,
+        }
+      );
+
+      //airdrop sol to wallet in cas eits blank
+      var airdropSignature = await connection.requestAirdrop(
+        provider.publicKey,
+        web3.LAMPORTS_PER_SOL,
+      );
+
+
+
 
       tokenAccounts.value.forEach((e) => {
         const accountInfo = AccountLayout.decode(e.account.data);
-        console.log(accountInfo);
-      })
+        console.log(
+          `${new web3.PublicKey(accountInfo.mint)}   ${accountInfo.amount}`
+        );
+      });
 
-      
-		  console.log('SOL BALANCE: ', balance);
+      // Confirming that the airdrop went through
+      await connection.confirmTransaction(airdropSignature);
+      console.log("Airdropped");
 
 
-		  
-		  
+    } catch {
 
-		  //Now get the token balance from the pub key 
-	
+    } finally {
 
-	  }
+    }
+  }
 
+  //Now get the token balance from the pub key
 
   return (
     <PageBody className="d-flex align-items-center">
@@ -310,58 +326,58 @@ const MyWallet = () => {
             )}
           </div>
           {currentStep === "walletOverview" && (
-			 <div>
-            <div className="row w-100">
-              <div className="col-12">
-                <div className="flex-column text-center">
-                  <Heading className="pb-3">Your Wallet</Heading>
-                  <Heading className="pb-2" size="18px">
-                    Public Key: {PubKey}
-                  </Heading>
-                  <Paragraph size="18px" bold>
-                    Manage your solana tokens and NFT's below
-                  </Paragraph>
+            <div>
+              <div className="row w-100">
+                <div className="col-12">
+                  <div className="flex-column text-center">
+                    <Heading className="pb-3">Your Wallet</Heading>
+                    <Heading className="pb-2" size="18px">
+                      Public Key: {}
+                    </Heading>
+                    <Paragraph size="18px" bold>
+                      Manage your solana tokens and NFT's below
+                    </Paragraph>
+                    <button onClick={() => getTokenBalance()}>getWallet</button>
+                  </div>
                 </div>
               </div>
+
+              <div className="row w-100 mt-4">
+                <div className="col-12 d-flex flex-column">
+                  <Divider />
+                  <Heading size="24px" className="mb-0 pt-4">
+                    Solana Tokens
+                  </Heading>
+                </div>
+                <StyledTable className="w-100 mt-4">
+                  <thead>
+                    <tr>
+                      <th>Token</th>
+                      <th>Ticker</th>
+                      <th>Amount</th>
+                      <th>Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {FakeTableData.filter((fd) => fd).map((data, d) => (
+                      <tr key={d}>
+                        <td>
+                          <span>{data.token}</span>
+                        </td>
+                        <td>{data.ticker}</td>
+                        <td>{data.amount}</td>
+                        <td>{data.value}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </StyledTable>
+              </div>
             </div>
-			
-			<div className="row w-100 mt-4">
-			<div className="col-12 d-flex flex-column">
-				<Divider />
-				<Heading size="24px" className="mb-0 pt-4">Solana Tokens</Heading>
-			</div>
-			<StyledTable className="w-100 mt-4">
-				<thead>
-					<tr>
-						<th>Token</th>
-						<th>Ticker</th>
-						<th>Amount</th>
-						<th>Value</th>
-					</tr>
-				</thead>
-				<tbody>
-					{FakeTableData.filter(fd => fd).map((data, d) => (
-						<tr key={d}>
-							<td>
-								<span>
-									{data.token}
-								</span>
-							</td>
-							<td>{data.ticker}</td>
-							<td>{data.amount}</td>
-							<td>{data.value}</td>
-							
-						</tr>
-					))}
-				</tbody>
-			</StyledTable>
-		</div>
-		</div>	
           )}
         </div>
       </div>
     </PageBody>
   );
-};
+}
 
 export default MyWallet;
