@@ -2,28 +2,14 @@ const express = require("express");
 const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
-const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
 const session = require("express-session");
-const jwt = require("jsonwebtoken");
-const speakeasy = require("speakeasy");
-const qrcode = require("qrcode");
-const Nexmo = require("nexmo");
-const nodemailer = require("nodemailer");
-const SMTPPool = require("nodemailer/lib/smtp-pool");
-const crypto = require("crypto");
-const { Console } = require("console");
-const e = require("express");
-const { resolveNaptr } = require("dns");
-const { addAbortSignal } = require("stream");
 const { Server } = require("socket.io");
 const http = require("http");
-const { send } = require("process");
-const multer = require("multer");
 const fs = require("fs");
 const { promisify } = require("util");
 const pipeline = promisify(require("stream").pipeline);
+
 const S3 = require('aws-sdk/clients/s3');
 //const validation = require('./Middlewares/validationMiddlewear');
 //const userSchema =  require('./Validations/userValidation');
@@ -33,15 +19,12 @@ const S3 = require('aws-sdk/clients/s3');
 //import s3 
 const { uploadFile } = require('./s3');
 
+const S3 = require("aws-sdk/clients/s3");
+
+
 require("dotenv").config();
 
 const server = http.createServer(app);
-
-
-
-//Needed for storing images for KYC
-
-const upload = multer({ dest: "uploads/" });
 
 //Setting up socket for chatroom
 const io = new Server(server, {
@@ -65,7 +48,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-   // console.log("User Disconnected", socket.id);
+    // console.log("User Disconnected", socket.id);
   });
 });
 
@@ -100,14 +83,12 @@ app.use(function (req, res, next) {
 });
 
 app.use(
-  cors(
-    {
-      origin: ["http:localhost:3000", "https://api.coingecko.com/api/v3/coins"],
-      methods: ["GET", "POST"],
-      credentials: true,
-      optionSuccessStatus: 200,
-    } 
-  )
+  cors({
+    origin: ["http:localhost:3000", "https://api.coingecko.com/api/v3/coins"],
+    methods: ["GET", "POST"],
+    credentials: true,
+    optionSuccessStatus: 200,
+  })
 );
 
 //Initiate Imports
@@ -129,11 +110,6 @@ app.use(
   })
 );
 
-//initiate 2fa speakeasy for google auth
-var secret = speakeasy.generateSecret({
-  name: "LumosExchange",
-});
-
 // Connection deatils for DB
 const db = mysql.createPool({
   connectionLimit: 100,
@@ -143,6 +119,7 @@ const db = mysql.createPool({
   database: process.env.MYSQL_DATABASE,
   multipleStatements: true,
 });
+
 
 //Register
 app.post("/register",(req, res) => {
@@ -2354,6 +2331,9 @@ app.post("/CheckSaleEligibility", (req, res) => {
 
   //Check the account level and return maximum amount of sol the user can sell
 });
+
+app.use(require("./app/routes"));
+
 
 server.listen(3002, () => {
   console.log("SERVER RUNNING");
