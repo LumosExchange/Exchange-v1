@@ -244,7 +244,7 @@ export const ActiveTradeCard = ({ tradeInfo, type, withView, noMessage, withRepo
                             className="w-100 mb-2"
                             fontSize="20px"
                             color="primary_cta"
-                            textColor="actual_white"
+                            textcolor="actual_white"
                             onClick={() =>
                                 navigate(type === "buying" ? "/Buying" : "/Selling", {
                                     state: {
@@ -262,7 +262,7 @@ export const ActiveTradeCard = ({ tradeInfo, type, withView, noMessage, withRepo
                             className="w-100 mb-2"
                             fontSize="20px"
                             color="primary_cta"
-                            textColor="actual_white"
+                            textcolor="actual_white"
                             disabled
                             onClick={null}
                         >
