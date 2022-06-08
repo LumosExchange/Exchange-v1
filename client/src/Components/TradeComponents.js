@@ -455,7 +455,7 @@ export const MaxHeightBarrier = styled.div(
 );
 
 export const ActionButton = styled(InvisibleButton)(
-	({ theme, color, textcolor }) => css`
+	({ theme, color, textColor }) => css`
 		background: ${theme.colors[color]};
 		border-radius: 50px;
 		padding: 10px 25px;

@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import "./Fonts.css";
+import { useSelector, useDispatch } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import Navbar from "./Components/Navbar";
-import { BrowserRouter as Router, Route, Routes, Link, Navigate, Outlet } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
@@ -40,144 +48,194 @@ import Buying from "./Pages/Buying";
 import Wallets from "./Pages/Profile/Wallets";
 import Feedback from "./Pages/Feedback";
 import ProtectedRoutes from "./Components/ProtectedRoutes";
-import Prices from './Pages/Prices';
-import WalletTesting from './Pages/WalletTesting';
-import TradeComplete from './Pages/TradeComplete';
+import Prices from "./Pages/Prices";
+import WalletTesting from "./Pages/WalletTesting";
+import TradeComplete from "./Pages/TradeComplete";
 import AccountRegistered from "./Pages/AccountRegistered";
+import { setUserListedInfo } from "./Actions/Web3Provider/web3Provider";
 
 export const AppUrl = "http://localhost:3001";
 export const AppUrlNoPort = "http://localhost";
 export const SocketUrl = "http://localhost:3002";
 
 // Prod Details
- //export const AppUrl = "http://3.8.159.233:3001";
+//export const AppUrl = "http://3.8.159.233:3001";
 // export const AppUrlNoPort = "http://3.8.159.233";
 // export const SocketUrl = "http://3.8.159.233:3002";
 
 const App = () => {
-	const [theme, toggleTheme] = useDarkMode();
-	const themeMode = theme === "light" ? lightTheme : darkTheme;
-	const [currency, setCurrency] = useState("");
-	const [solGbp, setSolGbp] = useState(0);
-	const [solUsd, setSolUsd] = useState(0);
-	const [loginStatus, setLoginStatus] = useState("");
-	const [userName, setUserName] = useState("");
+  const walletAddress = useSelector(
+    (state) => state.web3Provider.walletAddress
+  );
+  const dispatch = useDispatch();
 
-	//Check
-	Axios.defaults.withCredentials = true;
+  const [theme, toggleTheme] = useDarkMode();
+  const themeMode = theme === "light" ? lightTheme : darkTheme;
+  const [currency, setCurrency] = useState("");
+  const [solGbp, setSolGbp] = useState(0);
+  const [solUsd, setSolUsd] = useState(0);
+  const [loginStatus, setLoginStatus] = useState("");
+  const [userName, setUserName] = useState("");
 
-	// Set global params
-	const getCurrencyAndSolPrice = () => {
-		if (loginStatus === true){
-			Axios.get(`${AppUrl}/getUserSettings`).then((response) => {
-				if (response.data[0]?.currency === "GBP") {
-					setCurrency("GBP");
-					//Get GBP price of SOlana
-					fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp").then((response) =>
-						response.json().then(function (data) {
-							setSolGbp(data.solana.gbp);
-						})
-					);
-				} else if (response.data[0]?.currency === "USD") {
-					setCurrency("USD");
-					//Get USD price of solana
-					fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd").then((response) =>
-						response.json().then(function (data) {
-							setSolUsd(data.solana.usd);
-						})
-					);}
-				});
-		} else {
-			fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp").then((response) =>
-				response.json().then(function (data) {
-					setSolGbp(data.solana.gbp);
-					setCurrency('GBP');
-				})
-			);
-		}
-	};
+  //Check
+  Axios.defaults.withCredentials = true;
 
-	const getUserLoginStatus = () => {
-		Axios.get(`${AppUrl}/login`).then((response) => {
-			if (response.data.loggedIn === true) {
-				setLoginStatus(true);
-			} else {
-				// Navigate('/');
-			}
-		});
-	};
+  // Set global params
+  const getCurrencyAndSolPrice = () => {
+    if (loginStatus === true) {
+      Axios.get(`${AppUrl}/getUserSettings`).then((response) => {
+        if (response.data[0]?.currency === "GBP") {
+          setCurrency("GBP");
+          //Get GBP price of SOlana
+          fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp"
+          ).then((response) =>
+            response.json().then(function (data) {
+              setSolGbp(data.solana.gbp);
+            })
+          );
+        } else if (response.data[0]?.currency === "USD") {
+          setCurrency("USD");
+          //Get USD price of solana
+          fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd"
+          ).then((response) =>
+            response.json().then(function (data) {
+              setSolUsd(data.solana.usd);
+            })
+          );
+        }
+      });
+    } else {
+      fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=gbp"
+      ).then((response) =>
+        response.json().then(function (data) {
+          setSolGbp(data.solana.gbp);
+          setCurrency("GBP");
+        })
+      );
+    }
+  };
 
-	const getUserName = () => {
-		Axios.get(`${AppUrl}/getUserNameNav`).then((response) => {
-			setUserName(response.data);
-		});
-	};
+  const getUserLoginStatus = () => {
+    Axios.get(`${AppUrl}/login`).then((response) => {
+      if (response.data.loggedIn === true) {
+        setLoginStatus(true);
+      } else {
+        // Navigate('/');
+      }
+    });
+  };
 
-	useEffect(() => {
-		getUserLoginStatus();
-		getCurrencyAndSolPrice();
+  const getUserName = () => {
+    Axios.get(`${AppUrl}/getUserNameNav`).then((response) => {
+      setUserName(response.data);
+    });
+  };
 
-		if (loginStatus === true){
-			getUserName();
-		}
-		
-	}, [loginStatus, solGbp, userName]);
+  useEffect(() => {
+    getUserLoginStatus();
+    getCurrencyAndSolPrice();
 
-	return (
-		<React.Fragment>
-			<ThemeProvider theme={themeMode}>
-				<Router>
-					<ThemeToggler theme={theme} toggleTheme={toggleTheme} solgbp={solGbp} currency={currency} />
-					<Navbar loginStatus={loginStatus} userName={userName} />
-					<Routes>
-						{/* Unprotected Routes */}
-						<Route path="/" element={<Home theme={theme} />} />
-						<Route path="/Login" element={<Login />} />
-						<Route path="/Register" element={<Register />} />
-						<Route path="*" element={<ErrorPage />} />
-						<Route path="/Prices" element={<Prices />} />
-						<Route path="/EmailVerification" element={<EmailVerification />} />
-						<Route path="/wallettesting" element={<WalletTesting />} />
-						<Route path="/AccountRegistered" element={<AccountRegistered />} />
+    if (loginStatus === true) {
+      getUserName();
+    }
+  }, [loginStatus, solGbp, userName]);
 
-						{/* Protected Routes */}
-						<Route path="/" element={<ProtectedRoutes />}>
-							<Route path="/Profile/Security" element={<ProfileSecurity />} />
-							<Route path="/Profile/Basic" element={<ProfileBasic />} />
-							<Route path="/Profile/KYC" element={<ProfileKYC />} />
-							<Route path="/Profile/UpgradeInfo" element={<UpgradeInfo />} />
-							<Route path="/Profile/Wallets" element={<Wallets />} />
-							<Route path="/UpgradeTeam" element={<UpgradeTeam />} />
-							<Route path="/Buy" element={<Buy solGbp={solGbp} solUsd={solUsd} currency={currency} userName={userName} />} />
-							<Route path="/Sell" element={<Sell />} />
-							<Route path="/Selling" element={<Selling userName={userName} />} />
-							<Route path="/Offer" element={<Offer solGbp={solGbp} solUsd={solUsd} currency={currency} />} />
-							<Route path="/TradeHistory/Buy" element={<TradeHistoryBuy />} />
-							<Route path="/TradeHistory/Sell" element={<TradeHistorySell />} />
-							<Route path="/TradeHistory/Completed" element={<TradeHistoryCompleted />} />
-							<Route path="/profile/user/:id" element={<Feedback />} />
-							<Route path="/ConnectWallet" element={<ConnectWallet />} />
-							<Route path="/ChangePassword" element={<ChangePassword />} />
-							<Route path="/MyWallet" element={<MyWallet />} />
-							<Route path="/AirDrops" element={<AirDrops />} />
-							<Route path="/GoogleAuth" element={<GoogleAuth />} />
-							<Route path="/SMSAuth" element={<SMSAuth />} />
-							<Route path="/AuthyAuth" element={<AuthyAuth />} />
-							<Route path="/TradeComplete" element={<TradeComplete />} />
-							<Route path="/Profile/PaymentMethods" element={<PaymentMethods />} />
-							<Route path="/Profile/AccountUpgrade" element={<AccountUpgrade />} />
-							<Route
-								path="/MyListings"
-								element={<MyListings solGbp={solGbp} solUsd={solUsd} currency={currency} />}
-							/>
-							<Route path="/Buying" element={<Buying userName={userName} />} />
-						</Route>
-					</Routes>
-				</Router>
-				<Footer />
-			</ThemeProvider>
-		</React.Fragment>
-	);
+  return (
+    <React.Fragment>
+      <ThemeProvider theme={themeMode}>
+        <Router>
+          <ThemeToggler
+            theme={theme}
+            toggleTheme={toggleTheme}
+            solgbp={solGbp}
+            currency={currency}
+          />
+          <Navbar loginStatus={loginStatus} userName={userName} />
+          <Routes>
+            {/* Unprotected Routes */}
+            <Route path="/" element={<Home theme={theme} />} />
+            <Route path="/Login" element={<Login />} />
+            <Route path="/Register" element={<Register />} />
+            <Route path="*" element={<ErrorPage />} />
+            <Route path="/Prices" element={<Prices />} />
+            <Route path="/EmailVerification" element={<EmailVerification />} />
+            <Route path="/wallettesting" element={<WalletTesting />} />
+            <Route path="/AccountRegistered" element={<AccountRegistered />} />
+
+            {/* Protected Routes */}
+            <Route path="/" element={<ProtectedRoutes />}>
+              <Route path="/Profile/Security" element={<ProfileSecurity />} />
+              <Route path="/Profile/Basic" element={<ProfileBasic />} />
+              <Route path="/Profile/KYC" element={<ProfileKYC />} />
+              <Route path="/Profile/UpgradeInfo" element={<UpgradeInfo />} />
+              <Route path="/Profile/Wallets" element={<Wallets />} />
+              <Route path="/UpgradeTeam" element={<UpgradeTeam />} />
+              <Route
+                path="/Buy"
+                element={
+                  <Buy
+                    solGbp={solGbp}
+                    solUsd={solUsd}
+                    currency={currency}
+                    userName={userName}
+                  />
+                }
+              />
+              <Route path="/Sell" element={<Sell />} />
+              <Route
+                path="/Selling"
+                element={<Selling userName={userName} />}
+              />
+              <Route
+                path="/Offer"
+                element={
+                  <Offer solGbp={solGbp} solUsd={solUsd} currency={currency} />
+                }
+              />
+              <Route path="/TradeHistory/Buy" element={<TradeHistoryBuy />} />
+              <Route path="/TradeHistory/Sell" element={<TradeHistorySell />} />
+              <Route
+                path="/TradeHistory/Completed"
+                element={<TradeHistoryCompleted />}
+              />
+              <Route path="/profile/user/:id" element={<Feedback />} />
+              <Route path="/ConnectWallet" element={<ConnectWallet />} />
+              <Route path="/ChangePassword" element={<ChangePassword />} />
+              <Route path="/MyWallet" element={<MyWallet />} />
+              <Route path="/AirDrops" element={<AirDrops />} />
+              <Route path="/GoogleAuth" element={<GoogleAuth />} />
+              <Route path="/SMSAuth" element={<SMSAuth />} />
+              <Route path="/AuthyAuth" element={<AuthyAuth />} />
+              <Route path="/TradeComplete" element={<TradeComplete />} />
+              <Route
+                path="/Profile/PaymentMethods"
+                element={<PaymentMethods />}
+              />
+              <Route
+                path="/Profile/AccountUpgrade"
+                element={<AccountUpgrade />}
+              />
+              <Route
+                path="/MyListings"
+                element={
+                  <MyListings
+                    solGbp={solGbp}
+                    solUsd={solUsd}
+                    currency={currency}
+                  />
+                }
+              />
+              <Route path="/Buying" element={<Buying userName={userName} />} />
+            </Route>
+          </Routes>
+        </Router>
+        <Footer />
+      </ThemeProvider>
+    </React.Fragment>
+  );
 };
 
 export default App;

@@ -113,7 +113,7 @@ const Login = () => {
 								<PrimaryButton
 									text="Skip this step"
 									color="grey"
-									textcolor="white"
+									textColor="white"
 									className="mt-3 w-100"
 									onClick={null}
 									type="logIn"
