@@ -173,6 +173,8 @@ const Offer = ({ solGbp, solUsd, currency }) => {
       paymentCurrency: currency,
       message: offerMessage,
       walletAddress: wallet,
+      stakeId: data.stakeId,
+      sellerAddress: data.sellerAddress,
     }).then((response) => {
       if (response.status === 200) {
         navigate("/Buying", {

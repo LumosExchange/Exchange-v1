@@ -24,19 +24,16 @@ const multer = require("multer");
 const fs = require("fs");
 const { promisify } = require("util");
 const pipeline = promisify(require("stream").pipeline);
-const S3 = require('aws-sdk/clients/s3');
-const validation = require('./Middlewares/validationMiddlewear');
-const userSchema = require('./Validations/userValidation');
+const S3 = require("aws-sdk/clients/s3");
+const validation = require("./Middlewares/validationMiddlewear");
+const userSchema = require("./Validations/userValidation");
 
-
-//import s3 
-const { uploadFile } = require('./s3');
+//import s3
+const { uploadFile } = require("./s3");
 
 require("dotenv").config();
 
 const server = http.createServer(app);
-
-
 
 //Needed for storing images for KYC
 
@@ -64,7 +61,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-   // console.log("User Disconnected", socket.id);
+    // console.log("User Disconnected", socket.id);
   });
 });
 
@@ -99,14 +96,12 @@ app.use(function (req, res, next) {
 });
 
 app.use(
-  cors(
-    {
-      origin: ["http:localhost:3000", "https://api.coingecko.com/api/v3/coins"],
-      methods: ["GET", "POST"],
-      credentials: true,
-      optionSuccessStatus: 200,
-    } 
-  )
+  cors({
+    origin: ["http:localhost:3000", "https://api.coingecko.com/api/v3/coins"],
+    methods: ["GET", "POST"],
+    credentials: true,
+    optionSuccessStatus: 200,
+  })
 );
 
 //Initiate Imports
@@ -150,7 +145,7 @@ app.post("/register", (req, res) => {
   const lastName = req.body.lastName;
   const email = req.body.email;
   const password = req.body.password;
-  const userName = req.body.userName
+  const userName = req.body.userName;
   const date = new Date();
 
   const theme = "Dark";
@@ -180,7 +175,7 @@ app.post("/register", (req, res) => {
       );
       db.query(
         "INSERT INTO accountLevel (accountLevel, dateUpgraded) VALUES (?,?)",
-        [accountLevel, date,],
+        [accountLevel, date],
         (err, result) => {
           console.log(err);
         }
@@ -302,6 +297,8 @@ app.post("/sell", (req, res) => {
   const id = req.session.user[0].userID;
   const payment1 = req.body.payment1;
   const payment2 = req.body.payment2;
+  const stakeId = req.body.stakeId;
+  const sellerAddress = req.body.sellerAddress;
 
   var sql =
     "SELECT country AS Country FROM upgradeTiers WHERE (userID) = (?);SELECT city AS Town FROM upgradeTiers WHERE (userID) = (?);SELECT saleID AS SaleID FROM TradeHistory WHERE (sellerID) = (?);SELECT AVG(feedbackScore) as feedbackScore from feedback WHERE (sellerUserID) = (?);";
@@ -313,9 +310,9 @@ app.post("/sell", (req, res) => {
       console.log(results);
       console.log(results[3][0].feedbackScore);
     }
-    
+
     db.query(
-      "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory, feedbackScore) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+      "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory, feedbackScore, stakeId, sellerAddress) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
       [
         id,
         amountForSale,
@@ -328,6 +325,8 @@ app.post("/sell", (req, res) => {
         payment2,
         results[2].length,
         results[3][0].feedbackScore || 0,
+        stakeId,
+        sellerAddress,
       ],
       (err, resultt) => {
         if (err) {
@@ -342,10 +341,9 @@ app.post("/sell", (req, res) => {
         }
         console.log(err);
       }
-     );
-   });
+    );
+  });
 });
-
 
 //Get users open listings
 app.get("/getListings", (req, res) => {
@@ -437,16 +435,15 @@ app.get("/getUserLocation", (req, res) => {
     "SELECT country FROM upgradeTiers WHERE (userID) = (?)",
     [id],
     (err, result) => {
-      if(err) {
+      if (err) {
         res.send(err);
       }
 
       res.send({
         location: result[0].country,
-      })
+      });
     }
-  )
-
+  );
 });
 
 //update user settings
@@ -537,9 +534,9 @@ app.post("/VonageSMSRequest", (req, res) => {
         console.log("---- result", result);
         //send back request ID as need for the verify step
         res.send({
-           status: result.status,
-           requestId: result.request_id,
-           });
+          status: result.status,
+          requestId: result.request_id,
+        });
       }
     }
   );
@@ -566,16 +563,16 @@ app.post("/VonageSMSVerify", (req, res) => {
         console.log("error:", err);
         return;
       } else {
-        if ( result.status == "0") {
-                //Store user phone number in db
-      db.query(
-        "UPDATE userAuth SET phoneNumber = ?, SMS = ? WHERE userID = ?",
-        [req.body.number, 1, user],
-        (err, result) => {
-          console.log(err);
-          console.log("Phone number added to db");
-        }
-      );
+        if (result.status == "0") {
+          //Store user phone number in db
+          db.query(
+            "UPDATE userAuth SET phoneNumber = ?, SMS = ? WHERE userID = ?",
+            [req.body.number, 1, user],
+            (err, result) => {
+              console.log(err);
+              console.log("Phone number added to db");
+            }
+          );
           res.send({ result: result.status, message: "SMS Verified! " });
         } else {
           res.send({ result: result.status, message: result.error_text });
@@ -684,7 +681,7 @@ app.post("/VerifyEmail2FA", (req, res) => {
     (err, result) => {
       if (result[0].Secret.toString() === userCode.toString()) {
         res.send({
-          auth: true
+          auth: true,
         });
         db.query(
           "DELETE FROM TempAuth WHERE (email) = (?)",
@@ -702,15 +699,14 @@ app.post("/VerifyEmail2FA", (req, res) => {
         );
       } else {
         res.send({
-          auth: false
+          auth: false,
         });
       }
     }
   );
 });
 
-app.post("/UpgradeBronze", upload.single('file'), async (req, res) => {
-
+app.post("/UpgradeBronze", upload.single("file"), async (req, res) => {
   const file = req.file;
   const user = req.session.user[0].userID;
   const Name = req.body.name;
@@ -735,7 +731,19 @@ app.post("/UpgradeBronze", upload.single('file'), async (req, res) => {
   db.query(
     sql,
     [
-      user, Name, address, city, cityState, postCode, country, "Bronze", date, user, user, result.key, date,
+      user,
+      Name,
+      address,
+      city,
+      cityState,
+      postCode,
+      country,
+      "Bronze",
+      date,
+      user,
+      user,
+      result.key,
+      date,
     ],
     function (error, results, fields) {
       if (error) {
@@ -750,10 +758,8 @@ app.post("/UpgradeBronze", upload.single('file'), async (req, res) => {
 });
 
 //UpgradeSilver
-app.post("/UpgradeSilver", upload.single('file'), async (req, res) => {
-
+app.post("/UpgradeSilver", upload.single("file"), async (req, res) => {
   const file = req.file;
-
 
   const user = req.session.user[0].userID;
   const birthDay = req.body.birthDay;
@@ -768,13 +774,23 @@ app.post("/UpgradeSilver", upload.single('file'), async (req, res) => {
   const result = await uploadFile(file);
   console.log(result);
 
-
   var sql =
     "UPDATE upgradeTiers SET birthDay = ?, birthMonth = ?, birthYear = ?  WHERE userID =?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;Insert INTO TAX SET userID=?, taxDocName=?, dateSubmitted=?;";
 
   db.query(
     sql,
-    [birthDay, birthMonth, birthYear, user, "Silver", date, user, user, result.key, date],
+    [
+      birthDay,
+      birthMonth,
+      birthYear,
+      user,
+      "Silver",
+      date,
+      user,
+      user,
+      result.key,
+      date,
+    ],
     function (error, results, fields) {
       if (error) {
         console.log(error);
@@ -788,7 +804,7 @@ app.post("/UpgradeSilver", upload.single('file'), async (req, res) => {
 });
 
 //UpgradeGold
-app.post("/UpgradeGold", upload.single('file'), async(req, res) => {
+app.post("/UpgradeGold", upload.single("file"), async (req, res) => {
   const file = req.file;
   const user = req.session.user[0].userID;
   const EmployerName = req.body.EmployerName;
@@ -804,7 +820,6 @@ app.post("/UpgradeGold", upload.single('file'), async(req, res) => {
 
   var sql =
     "UPDATE upgradeTiers SET EmployerName = ?, EmployerAddress = ?, Occupation = ?, Income = ?, DateSubmitted = ? WHERE userID = ?;UPDATE accountLevel SET accountLevel = ?, dateUpgraded = ? WHERE userID =?;Insert INTO Employment SET userID=?, employmentDocName=?, dateSubmitted=?;";
-
 
   db.query(
     sql,
@@ -916,8 +931,8 @@ app.post("/2FAEmailVerificationSend", (req, res) => {
 
     (err, result) => {
       res.send({
-        email: req.session.user[0].email
-      })
+        email: req.session.user[0].email,
+      });
     }
   );
 });
@@ -930,49 +945,48 @@ app.post("/Email&PassVerification2FA", (req, res) => {
   const userInputPassword = req.body.oldPassword;
   const userPass = req.session.user[0].password;
 
-  var sql = "SELECT Secret AS Secret FROM TempAuth WHERE (email) = (?);"
+  var sql = "SELECT Secret AS Secret FROM TempAuth WHERE (email) = (?);";
 
-  db.query(sql,[email,userName], function(err, result, fields) {
+  db.query(sql, [email, userName], function (err, result, fields) {
     //Check Secret
-    if(result[0].Secret.toString() === userCode.toString()) {
-
+    if (result[0].Secret.toString() === userCode.toString()) {
       //Check hashed passwords
-       bcrypt.compare(userInputPassword, userPass, function(err, result) {
-         if (err) {
-           //handle error
-           res.send({
-             error: err
-           })
-         } if (result){
-           //succesfull and delete temp db secret
-           res.send({
-             auth: true
-           });
-           db.query(
+      bcrypt.compare(userInputPassword, userPass, function (err, result) {
+        if (err) {
+          //handle error
+          res.send({
+            error: err,
+          });
+        }
+        if (result) {
+          //succesfull and delete temp db secret
+          res.send({
+            auth: true,
+          });
+          db.query(
             "DELETE FROM TempAuth WHERE email = ?",
             [email],
             (err, result) => {
               console.log(result);
             }
           );
-         } else {
-           //Password dont maatch
-           res.send({
-             auth: false,
-             message: "Passwords do not match!"
-           }); 
-         }
-       })
-      } else {
-         //Secret dosent match 
-        res.send({
-          auth: false,
-          message: "Code does not match!"
-        });     
-      }
+        } else {
+          //Password dont maatch
+          res.send({
+            auth: false,
+            message: "Passwords do not match!",
+          });
+        }
+      });
+    } else {
+      //Secret dosent match
+      res.send({
+        auth: false,
+        message: "Code does not match!",
+      });
+    }
   });
 });
-
 
 //update user password
 app.post("/updateUserPass", (req, res) => {
@@ -1082,7 +1096,7 @@ app.post("/RegisterInternationalBank", (req, res) => {
   const bankCountry = req.body.bankCountry;
   const SWIFTCode = req.body.BIC;
   const payeeName = req.body.payeeName;
-  console.log('Payee name: ',  payeeName);
+  console.log("Payee name: ", payeeName);
   const interBankName = req.body.interBankName;
   const interBankCity = req.body.interBankCity;
   const interBankCountry = req.body.interBankCountry;
@@ -1629,9 +1643,11 @@ app.post("/OpenTrade", (req, res) => {
   let reference = crypto.randomBytes(5).toString("hex");
   let no = "NO";
   const walletAddress = req.body.walletAddress;
+  const stakeId = req.body.stakeId;
+  const sellerAddress = req.body.sellerAddress;
 
   db.query(
-    "INSERT INTO LiveTrades (saleID, sellerID, buyerID, Date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, Message, Reference, paymentRecieved, escrowReleaseTime, walletAddress) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+    "INSERT INTO LiveTrades (saleID, sellerID, buyerID, Date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, Message, Reference, paymentRecieved, escrowReleaseTime, walletAddress, stakeId, sellerAddress) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
     [
       saleID,
       sellerID,
@@ -1647,6 +1663,8 @@ app.post("/OpenTrade", (req, res) => {
       no,
       date,
       walletAddress,
+      stakeId,
+      sellerAddress,
     ],
     (err, result) => {
       if (err) {
@@ -1803,9 +1821,11 @@ app.post("/UpdateMyListings", (req, res) => {
   const percentChange = req.body.percentChange;
   const paymentMethod1 = req.body.paymentMethod1;
   const paymentMethod2 = req.body.paymentMethod2;
+  const stakeId = req.body.stakeId;
+  const sellerAddress = req.body.sellerAddress;
 
   db.query(
-    "UPDATE sale SET amountForSale = ?, aboveOrBelow = ?, percentChange =? , paymentMethod1 = ?, paymentMethod2 = ?  Where userID = ? AND saleID =?",
+    "UPDATE sale SET amountForSale = ?, aboveOrBelow = ?, percentChange =? , paymentMethod1 = ?, paymentMethod2 = ?, stakeId = ?, sellerAddress = ?  Where userID = ? AND saleID = ?",
     [
       amountForSale,
       aboveOrBelow,
@@ -1814,6 +1834,8 @@ app.post("/UpdateMyListings", (req, res) => {
       paymentMethod2,
       userID,
       saleID,
+      stakeId,
+      sellerAddress,
     ],
     (err, result) => {
       if (err) {
@@ -1942,30 +1964,22 @@ app.get("/GetTradeFeedbackInfo", (req, res) => {
   console.log(req.query);
   console.log(req.params);
 
-  console.log('ID for feedback:',id)
+  console.log("ID for feedback:", id);
 
+  var sql =
+    "SELECT registeredDate AS date FROM users WHERE (userID) = (?);SELECT COUNT (*) AS total FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?);SELECT AVG (feedbackScore) as feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?)";
 
-
-  var sql = "SELECT registeredDate AS date FROM users WHERE (userID) = (?);SELECT COUNT (*) AS total FROM TradeHistory WHERE (sellerID) = (?) OR (buyerID) = (?);SELECT AVG (feedbackScore) as feedback FROM feedback WHERE (sellerUserID) = (?) OR (buyerUserID) = (?)"
-
-db.query(
-  sql,
-  [id, id, id, id, id],
-  function (error, results, fields) {
+  db.query(sql, [id, id, id, id, id], function (error, results, fields) {
     if (error) {
       throw error;
     }
-     const score = ((results[2][0].feedback / 3) * 100);
+    const score = (results[2][0].feedback / 3) * 100;
     res.send({
       registeredDate: results[0],
       totalTrades: results[1],
       feedbackScore: score,
-    })
-  }
-)
-
-
-
+    });
+  });
 });
 
 app.post("/CompleteTrade", (req, res) => {
@@ -1980,9 +1994,9 @@ app.post("/CompleteTrade", (req, res) => {
 
   let EscrowTime = " ";
 
-  var sql = "UPDATE LiveTrades SET escrowReleaseTime = ? WHERE LiveTradeID = ?;INSERT INTO TradeHistory SELECT * FROM LiveTrades WHERE LiveTradeID = ?;"
+  var sql =
+    "UPDATE LiveTrades SET escrowReleaseTime = ? WHERE LiveTradeID = ?;INSERT INTO TradeHistory SELECT * FROM LiveTrades WHERE LiveTradeID = ?;";
 
-  
   //Update the escrow release time && insert into tradeHistory
   db.query(
     sql,
@@ -2039,12 +2053,12 @@ app.post("/CompleteTrade", (req, res) => {
               console.log(err);
               res.send({
                 tradeComplete: false,
-                error:  err,
-              })
+                error: err,
+              });
             } else {
               res.send({
                 tradeComplete: true,
-              })
+              });
             }
           }
         );
@@ -2081,8 +2095,12 @@ app.post("/AddWallet", (req, res) => {
       if (result.length <= 0) {
         //Insert
         db.query(
-          "INSERT INTO SolAddress (userID, sol" + walletID + ", Type" + walletID +") VALUES (?,?,?)",
-          [userID, walletAddress , walletType],
+          "INSERT INTO SolAddress (userID, sol" +
+            walletID +
+            ", Type" +
+            walletID +
+            ") VALUES (?,?,?)",
+          [userID, walletAddress, walletType],
           (err, result) => {
             if (err) {
               console.log(err);
@@ -2098,7 +2116,11 @@ app.post("/AddWallet", (req, res) => {
       } else {
         //Update
         db.query(
-          "UPDATE SolAddress SET sol" + walletID + " =?, Type" + walletID + "=? WHERE userID =?",
+          "UPDATE SolAddress SET sol" +
+            walletID +
+            " =?, Type" +
+            walletID +
+            "=? WHERE userID =?",
           [walletAddress, walletType, userID],
           (err, result) => {
             if (err) {
@@ -2124,8 +2146,12 @@ app.post("/EditWallet", (req, res) => {
   const walletAddress = req.body.walletAddress;
 
   db.query(
-    "UPDATE SolAddress SET sol" + walletID + " =?, Type" + walletID + "=? WHERE userID =?",
-    [walletAddress,walletType, userID],
+    "UPDATE SolAddress SET sol" +
+      walletID +
+      " =?, Type" +
+      walletID +
+      "=? WHERE userID =?",
+    [walletAddress, walletType, userID],
     (err, result) => {
       if (err) {
         res.send(err);
@@ -2145,7 +2171,11 @@ app.post("/DeleteWallet", (req, res) => {
   const walletAddress = req.body.walletAddress;
 
   db.query(
-    "UPDATE SolAddress SET sol" + walletID + " =?, Type" + walletID + "=? WHERE userID =?",
+    "UPDATE SolAddress SET sol" +
+      walletID +
+      " =?, Type" +
+      walletID +
+      "=? WHERE userID =?",
     [0, 0, userID],
     (err, result) => {
       if (err) {
@@ -2171,10 +2201,7 @@ app.post("/GetWallets", (req, res) => {
       } else {
         if (result[0] !== undefined) {
           res.send([
-            { walletID: 1,
-              address: result[0].sol1,
-              type: result[0].Type1,
-            },
+            { walletID: 1, address: result[0].sol1, type: result[0].Type1 },
             {
               walletID: 2,
               address: result[0].sol2,
@@ -2198,10 +2225,7 @@ app.post("/GetWallets", (req, res) => {
           ]);
         } else {
           res.send([
-            { walletID: 1,
-               address: "",
-               type: "",
-              },
+            { walletID: 1, address: "", type: "" },
             {
               walletID: 2,
               address: "",

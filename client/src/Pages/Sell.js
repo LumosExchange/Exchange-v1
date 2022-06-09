@@ -291,15 +291,16 @@ const Sell = () => {
   };
 
   const addSale = async () => {
-    const escrowIndex = await getEscrowLastIndex();
-    console.log(escrowIndex);
     await handleStake(web3Provider.walletAddress, Number(amountForSaleReg));
+    const escrowIndex = await getEscrowLastIndex();
     Axios.post(`${AppUrl}/sell`, {
       amountForSale: amountForSaleReg,
       aboveOrBelow: aboveOrBelowReg,
       change: changeReg,
       payment1: preferredPayment,
       payment2: secondaryPayment,
+      stakeId: escrowIndex,
+      sellerAddress: web3Provider.walletAddress,
     }).then((response) => {
       if (response.data.saleListing === true) {
         openModal(true);
