@@ -3,10 +3,10 @@ const yup = require('yup');
 const userSettingsSchema = yup.object({
     timezone: yup
     .string()
-    .require(),
+    .require('Timezone is required'),
     currency: yup
     .string()
-    .require(),
+    .require('Currency is required'),
 });
 
 userSettingsSchema.validate();

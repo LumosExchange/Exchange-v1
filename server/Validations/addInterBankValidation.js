@@ -2,52 +2,52 @@ const yup = require('yup');
 
 const addInterBankSchema = yup.object({
     bankName: yup
-    .require()
+    .require('Bank name is required')
     .string()
     .min()
     .max(),
     bankCity: yup
-    .require()
+    .require('bank city is required')
     .string()
     .min()
     .max(),
     bankCountry: yup
-    .require()
+    .require('Bank country is required')
     .string()
     .min()
     .max(),
     SWIFTCode: yup
-    .require()
+    .require('SWIFT code is required')
     .number()
     .min()
     .max(),
     payeeName: yup
-    .require()
+    .require('Payee name is required')
     .string()
     .min()
     .max(),
-    interBankCountry: yup
-    .require()
+    interBankName: yup
+    .require('International bank name is required')
     .string()
     .min()
     .max(),
     interBankCity: yup
-    .require()
+    .require('International bank city is required')
     .string()
     .min()
     .max(),
     interBankCountry: yup
-    .require()
+    .require('International bank country is required')
     .string()
     .min()
     .max(),
     interBankAccountNumber: yup
-    .require()
+    .require('International bank account number is required')
     .number()
     .min()
     .max(),
     interBankRoutingNumber: yup
-    .require()
+    .require('International bank routing number is required')
     .number()
     .min()
     .max(),

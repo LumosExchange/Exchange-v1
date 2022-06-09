@@ -8,13 +8,13 @@ const openTradeSchema = yup.object({
     .require()
     .number(),
     paymentMethod: yup
-    .required()
+    .required('Payment method is required')
     .string(),
     userSolPrice: yup
     .required()
     .number(),
     amountOfSol: yup
-    .required()
+    .required('Amount of SOL is required')
     .number(),
     fiatAmount: yup
     .required()
@@ -33,7 +33,7 @@ const openTradeSchema = yup.object({
     .min()
     .max(),
     walletAddress: yup
-    .required()
+    .required('Wallet address is required')
     .string()
     .min()
     .max(),

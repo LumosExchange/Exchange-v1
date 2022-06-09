@@ -2,16 +2,16 @@ const yup = require('yup');
 
 const silverUpgradeSchema = yup.object({
     file: yup
-    .require(),
+    .require('File is required'),
     birthDay: yup
     .number()
-    .require(),
+    .require('Birthday is required'),
     birthMonth: yup
     .number()
-    .require(),
+    .require('Birth month is required'),
     birthYear: yup
     .number()
-    .require(),
+    .require('Birth year is required'),
 });
 
 silverUpgradeSchema.validate();

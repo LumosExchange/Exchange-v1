@@ -5,22 +5,22 @@ const bronzeUpgradeSchema = yup.object({
     .require('File is required'),
     name: yup
     .string()
-    .require(),
+    .require('Name is required'),
     address: yup
     .string()
-    .required(),
+    .required('Address is required'),
     city: yup
     .string()
-    .required(),
+    .required('City is required'),
     cityState: yup
     .string()
-    .required(),
+    .required(' City state is required'),
     postCode: yup
     .string()
-    .required(),
+    .required('Postcode is required'),
     country: yup
     .string()
-    .required(),
+    .required('Country is required'),
 });
 
 bronzeUpgradeSchema.validate();

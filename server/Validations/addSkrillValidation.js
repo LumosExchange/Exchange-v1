@@ -2,7 +2,7 @@ const yup = require('yup');
 
 const addSkrillSchema = yup.object({
     email: yup
-    .required()
+    .required('Email is required')
     .string()
     .min()
     .max(),

@@ -7,12 +7,12 @@ const addWalletSchema = yup.object({
     .min()
     .max(),
     walletAddress: yup
-    .require()
+    .require('Wallet address is required')
     .min()
     .max()
     .string(),
     walletType: yup
-    .require()
+    .require('Wallet type is required')
     .string()
     .min()
     .max(),

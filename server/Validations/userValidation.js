@@ -3,13 +3,13 @@ const yup = require('yup');
 const userSchema = yup.object({
     firstName: yup
     .string()
-    .required(),
+    .required('First name is required'),
     lastName: yup
     .string()
-    .required(),
+    .required('Last name is required'),
     email: yup
     .string()
-    .email().
+    .email('Email is required').
     required(),
     password: yup
     .string()

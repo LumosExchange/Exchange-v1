@@ -2,17 +2,17 @@ const yup = require('yup');
 
 const addEUBankSchema = yup.object({
     bankName: yup
-    .required()
+    .required('Bank name is required')
     .string()
     .max()
     .min(),
     BIC: yup
-    .required()
+    .required('BIC is required')
     .number()
     .min()
     .max(),
     IBAN: yup
-    .required()
+    .required('IBAN is required')
     .number()
     .min()
     .max(),

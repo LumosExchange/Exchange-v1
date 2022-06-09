@@ -2,7 +2,7 @@ const yup = require('yup');
 
 const addPaypalSchema = yup.object({
     email: yup
-    .required()
+    .required('email is required')
     .string()
     .min()
     .max(),

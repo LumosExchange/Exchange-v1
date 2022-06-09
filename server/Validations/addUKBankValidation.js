@@ -2,12 +2,12 @@ const yup = require('yup');
 
 const addUKBankSchema = yup.object({
     sortCode: yup
-    .require()
+    .require('Sort code is required')
     .number()
     .min()
     .max(),
     accountNumber: yup
-    .require()
+    .require('Account number is required')
     .number()
     .min()
     .max(),

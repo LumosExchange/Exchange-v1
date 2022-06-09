@@ -3,19 +3,19 @@ const yup = require('yup');
 const saleSchema = yup.object({
     amountForSale: yup
     .number()
-    .required(),
+    .required('Amount of SOL for sale is required'),
     aboveOrBelow: yup
     .string()
-    .required(),
+    .required('ABove ort below must be selected'),
     change: yup
     .number()
-    .required(),
+    .required('% Change is required'),
     payment1: yup
     .string()
-    .required(),
+    .required('Payment method 1 is required'),
     payment2: yup
     .string()
-    .required(),
+    .required('Payment method 2 is required'),
 });
 
 saleSchema.validate();

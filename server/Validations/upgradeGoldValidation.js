@@ -2,18 +2,18 @@ const yup = require('yup');
 
 const goldUpgrade = yup.object({
     file: yup
-    .require(),
+    .require('File is required'),
     EmployerName: yup
     .string()
-    .require(),
+    .require('Employer name is required'),
     EmployerAddress: yup
     .require()
-    .string(),
+    .string('Emplaoyer adress is required'),
     Occupation: yup
-    .require()
+    .require('Occupation is required')
     .string(),
     Income: yup
-    .require()
+    .require('Income is required')
     .string(),
 });
 
