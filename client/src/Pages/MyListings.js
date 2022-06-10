@@ -52,13 +52,17 @@ const MissingIcon = styled.i(
 );
 
 const MyListings = ({ solGbp, currency }) => {
+<<<<<<< HEAD
   const { walletAddress } = useSelector((state) => state.web3Provider);
 
+=======
+>>>>>>> main
   const [userListings, setUserListings] = useState([]);
   const [modal, setModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [modalMode, setModalMode] = useState("initial");
   const [deleteModalMode, setDeleteModalMode] = useState("initial");
+<<<<<<< HEAD
 
   // Editing Listings
   const [primaryPaymentMethod, setPrimaryPaymentMethod] = useState("");
@@ -138,6 +142,70 @@ const MyListings = ({ solGbp, currency }) => {
     }
     await handleStakeCancel(walletAddress, stakeId);
 
+=======
+
+  // Editing Listings
+  const [primaryPaymentMethod, setPrimaryPaymentMethod] = useState("");
+  const [secondaryPaymentMethod, setSecondaryPaymentMethod] = useState("");
+  const [aboveOrBelow, setAboveOrBelow] = useState("");
+  const [percentageDifference, setPercentageDifference] = useState("");
+  const [volumeForSale, setVolumeForSale] = useState("");
+
+  // Delete Listings
+  const [saleID, setSaleId] = useState("");
+  const [userID, setUserId] = useState("");
+  const [confirmationMessage, setConfirmationMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getUserListings = () => {
+    Axios.get(`${AppUrl}/getListings`).then((response) => {
+      setUserListings(response.data);
+      setIsLoading(false);
+    });
+  };
+
+  const openEditModal = (val) => {
+    console.log(val);
+    setPrimaryPaymentMethod(val.paymentMethod1);
+    setSecondaryPaymentMethod(val.paymentMethod2);
+    setAboveOrBelow(val.aboveOrBelow);
+    setPercentageDifference(val.percentChange);
+    setVolumeForSale(val.amountForSale);
+    setSaleId(val.saleID);
+    setUserId(val.userID);
+    setModal(!modal);
+  };
+
+  const openDeleteModal = (val) => {
+    setDeleteModal(!deleteModal);
+    setSaleId(val.saleID);
+    setUserId(val.userID);
+  };
+
+  const editListing = () => {
+    Axios.post(`${AppUrl}/UpdateMyListings`, {
+      amountForSale: volumeForSale,
+      aboveOrBelow,
+      percentChange: percentageDifference,
+      paymentMethod1: primaryPaymentMethod,
+      paymentMethod2: secondaryPaymentMethod,
+      userID,
+      saleID,
+    }).then((response) => {
+      if (response.status === 200) {
+        setConfirmationMessage(response.data.message);
+        setModalMode("confirmation");
+      } else {
+        setModalMode("error");
+        setErrorMessage(response.data.message);
+      }
+    });
+  };
+
+  const deleteListing = () => {
+>>>>>>> main
     Axios.post(`${AppUrl}/DeleteMyListing`, {
       saleID,
     }).then((response) => {
