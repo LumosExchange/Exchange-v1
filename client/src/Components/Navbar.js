@@ -259,12 +259,12 @@ const Navbar = ({ loginStatus, userName }) => {
 								</Link>
 								<Link to="/Airdrops">Airdrops</Link>
 								<div className="py-4">
-									<GradientButton
-										text="Register Interest"
-										linkTo="/Register"
-										className="text-decoration-none w-100"
-									/>
-								</div>
+								<GradientButton
+									text="Register Interest"
+									linkTo="/Register"
+									className="text-decoration-none w-100"
+								/>
+							</div>
 							</div>
 						</React.Fragment>
 					)}

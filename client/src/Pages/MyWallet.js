@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import styled, { css } from "styled-components";
 import { PageBody, FormInput, StyledDropdown } from "../Components/FormInputs";
@@ -15,18 +15,19 @@ import SlopeIcon from "../Images/slope-finance-icon.png";
 import Card from "../Components/Card";
 import StyledTable from "../Components/Tables";
 
-import { updateProvider } from "../Actions/Web3Provider/web3Provider"
+import {
+  updateProvider,
+  setWalletAddress,
+} from "../Actions/Web3Provider/web3Provider";
 
 const ToggleIconBase = styled.svg(
   ({ toggled, theme }) => css`
     transform: ${toggled && "rotate(180deg)"};
-
     &.small {
       width: 40px;
       min-height: 40px;
       min-width: 40px;
     }
-
     circle,
     path {
       stroke: ${theme.colors.text_primary};
@@ -45,7 +46,6 @@ const WalletCard = styled.span(
 const StyledRadio = styled.input(
   ({ theme }) => css`
     display: none;
-
     &:checked + div {
       background: -webkit-linear-gradient(
         300deg,
@@ -132,8 +132,6 @@ const FakeTableData = [
   },
 ];
 
-const pubKey = "GAECQos3deHaqzB1EDvPJcqaGVvG9xqDuFYU239KAsXV";
-
 //TODO:
 // - On page load connect to user web3 wallet
 // - Then get pub key of wallet
@@ -141,9 +139,10 @@ const pubKey = "GAECQos3deHaqzB1EDvPJcqaGVvG9xqDuFYU239KAsXV";
 // - then get all NFT's in the users wallet and display below
 
 function MyWallet() {
+  const [solanaProvider, setProvider] = useState(null);
   const [selectedWallet, selectWallet] = useState("");
   const [currentStep, setCurrentStep] = useState("connectWallet");
-  const [PubKey, setPubKey] = useState("");
+  const [pubKey, setPubKey] = useState("");
 
   const dispatch = useDispatch();
   // const provider = window.solana;
@@ -152,8 +151,10 @@ function MyWallet() {
   const getProvider = async () => {
     if ("solana" in window) {
       // opens wallet to connect to
-      await window.solana.connect();
+
       const provider = window.solana;
+      setProvider(provider);
+      await window.solana.connect();
 
       if (provider.isPhantom) {
         console.log("Is Phantom installed? ", provider.isPhantom);
@@ -201,11 +202,8 @@ function MyWallet() {
       //airdrop sol to wallet in cas eits blank
       var airdropSignature = await connection.requestAirdrop(
         provider.publicKey,
-        web3.LAMPORTS_PER_SOL,
+        web3.LAMPORTS_PER_SOL
       );
-
-
-
 
       tokenAccounts.value.forEach((e) => {
         const accountInfo = AccountLayout.decode(e.account.data);
@@ -217,16 +215,21 @@ function MyWallet() {
       // Confirming that the airdrop went through
       await connection.confirmTransaction(airdropSignature);
       console.log("Airdropped");
-
-
     } catch {
-
     } finally {
-
     }
   }
 
-  //Now get the token balance from the pub key
+  useEffect(() => {
+    solanaProvider?.on("connect", async (publicKey) => {
+      dispatch(setWalletAddress(publicKey.toString()));
+      setPubKey(publicKey.toString());
+    });
+
+    solanaProvider?.on("disconnect", async () => {
+      setPubKey(null);
+    });
+  }, [solanaProvider]);
 
   return (
     <PageBody className="d-flex align-items-center">
@@ -332,7 +335,7 @@ function MyWallet() {
                   <div className="flex-column text-center">
                     <Heading className="pb-3">Your Wallet</Heading>
                     <Heading className="pb-2" size="18px">
-                      Public Key: {}
+                      Public Key: {pubKey}
                     </Heading>
                     <Paragraph size="18px" bold>
                       Manage your solana tokens and NFT's below

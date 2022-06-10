@@ -138,7 +138,7 @@ const Home = ({ theme }) => {
                   className="w-100"
                   round
                   color="navyGrey"
-                  textcolor="white"
+                  textColor="white"
                   text="How it Works"
                   boldText={false}
                 />
@@ -204,7 +204,7 @@ const Home = ({ theme }) => {
               text="View The Marketplace"
               className="mt-5 p-0"
               color="black"
-              textcolor="yellow"
+              textColor="yellow"
               onClick={() => navigate("/Buy")}
               hasIcon
               fontSize="28px"

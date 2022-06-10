@@ -2,6 +2,8 @@ import {
     CREATE_PROVIDER,
     UPDATE_PROVIDER,
     DELETE_PROVIDER,
+    SET_WALLET_ADDRESS,
+    SET_USER_LISTED_INFO,
   } from "./types.js";
   
   export const createProvider = (payload) => async (dispatch) => {
@@ -25,3 +27,18 @@ import {
       payload: {},
     });
   };
+
+  export const setWalletAddress = (payload) => async (dispatch) => {
+    dispatch({
+      type: SET_WALLET_ADDRESS,
+      payload: payload,
+    });
+  };
+
+  export const setUserListedInfo = (payload) => async (dispatch) => {
+    dispatch({
+      type: SET_USER_LISTED_INFO,
+      payload: payload,
+    });
+  };
+

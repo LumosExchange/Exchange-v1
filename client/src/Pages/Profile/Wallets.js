@@ -491,7 +491,6 @@ const Wallets = () => {
                   id="walletAddress"
                   value={walletAddress}
                   name="walletAddress"
-                  maxLength={44}
                   placeholder="Enter Wallet Address"
                   onChange={(e) => {
                     setWalletAddress(e.target.value);
@@ -592,7 +591,6 @@ const Wallets = () => {
                   type="text"
                   id="editingWalletAddress"
                   value={editingWalletAddress}
-                  maxLength={44}
                   name="editingWalletAddress"
                   placeholder="Enter Wallet Address"
                   onChange={(e) => {

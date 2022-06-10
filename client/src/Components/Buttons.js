@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { lighten, darken } from 'polished';
 
 const ButtonBase = styled.button(({ 
-    theme, round, size, textcolor, boldText, fontSize
+    theme, round, size, textColor, boldText, fontSize
 }) => css`
 	background: ${theme.colors.primary_cta};
 	border-radius: ${round ? '50px' : '20px'};
@@ -46,18 +46,18 @@ const PrimaryButton = ({
     text, size, hasIcon, disabled,
     iconPosition, iconName, className,
     onClick, type, form, value, color,
-    textcolor, round, boldText, fontSize
+    textColor, round, boldText, fontSize
 }) => (
     <ButtonBase
         onClick={onClick} type={type} form={form} value={value}
-        size={size} textcolor={textcolor} disabled={disabled}
+        size={size} textColor={textColor} disabled={disabled}
         round={round} boldText={boldText} fontSize={fontSize}
         className={`d-flex align-items-center justify-content-center ${className ? className : ''}`}
     >
         {(hasIcon) && (iconPosition === 'left') && (
             <i className="material-icons me-3">{iconName}</i>
         )}
-        <span textcolor={textcolor}>{text}</span>
+        <span textColor={textColor}>{text}</span>
         {(hasIcon) && (iconPosition === 'right') && (
             <i className="material-icons ms-3">{iconName}</i>
         )}
@@ -69,7 +69,7 @@ PrimaryButton.propTypes = {
 	round: PropTypes.bool,
     text: PropTypes.string,
     hasIcon: PropTypes.bool,
-    textcolor: PropTypes.string,
+    textColor: PropTypes.string,
     boldText: PropTypes.bool,
 }
 
@@ -80,7 +80,7 @@ PrimaryButton.defaultProps = {
     hasIcon: false,
     iconPosition: 'right',
     iconName: 'arrow_forward',
-    textcolor: 'text_primary',
+    textColor: 'text_primary',
     boldText: true,
 }
 
@@ -111,11 +111,11 @@ export const SecondaryButton = ({
     text, size, hasIcon, disabled,
     iconPosition, iconName, className,
     onClick, type, form, value, color,
-    textcolor, round, boldText, fontSize
+    textColor, round, boldText, fontSize
 }) => (
     <SecondaryBase
         onClick={onClick} type={type} form={form} value={value}
-        size={size} color={color} textcolor={textcolor} disabled={disabled}
+        size={size} color={color} textColor={textColor} disabled={disabled}
         round={round} boldText={boldText} fontSize={fontSize}
         className={`d-flex align-items-center justify-content-center ${className ? className : ''}`}
     >
@@ -135,7 +135,7 @@ SecondaryButton.propTypes = {
     text: PropTypes.string,
     hasIcon: PropTypes.bool,
     color: PropTypes.string,
-    textcolor: PropTypes.string,
+    textColor: PropTypes.string,
     boldText: PropTypes.bool,
 }
 
@@ -147,7 +147,7 @@ SecondaryButton.defaultProps = {
     iconPosition: 'right',
     iconName: 'arrow_forward',
     color: 'yellow',
-    textcolor: 'black',
+    textColor: 'black',
     boldText: true,
 }
 
@@ -175,11 +175,11 @@ export const LinkButton = ({
     text, size, hasIcon, disabled,
     iconPosition, iconName, className,
     onClick, type, form, value,
-    textcolor, round, boldText, fontSize
+    textColor, round, boldText, fontSize
 }) => (
     <LinkButtonBase
         onClick={onClick} type={type} form={form} value={value}
-        size={size} textcolor={textcolor} disabled={disabled}
+        size={size} textColor={textColor} disabled={disabled}
         round={round} boldText={boldText} fontSize={fontSize}
         className={`d-flex align-items-center ${className ? className : ''}`}
     >
@@ -199,7 +199,7 @@ LinkButton.propTypes = {
     text: PropTypes.string,
     hasIcon: PropTypes.bool,
     color: PropTypes.string,
-    textcolor: PropTypes.string,
+    textColor: PropTypes.string,
     boldText: PropTypes.bool,
 }
 
@@ -211,7 +211,7 @@ LinkButton.defaultProps = {
     iconPosition: 'right',
     iconName: 'arrow_forward',
     color: 'yellow',
-    textcolor: 'black',
+    textColor: 'black',
     boldText: true,
 }
 
