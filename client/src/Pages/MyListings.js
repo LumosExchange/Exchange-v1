@@ -32,6 +32,7 @@ import {
   handleStake,
   getEscrowLastIndex,
 } from "../Solana/actions";
+import { useWeb3Context } from "../Utils/web3-context";
 
 const CardActionButton = styled(InvisibleButton)(
   ({ theme }) => css`
@@ -52,7 +53,7 @@ const MissingIcon = styled.i(
 );
 
 const MyListings = ({ solGbp, currency }) => {
-  const { walletAddress } = useSelector((state) => state.web3Provider);
+  const { publickey } = useWeb3Context();
 
   const [userListings, setUserListings] = useState([]);
   const [modal, setModal] = useState(false);
@@ -105,11 +106,11 @@ const MyListings = ({ solGbp, currency }) => {
   };
 
   const editListing = async () => {
-    if (!walletAddress) {
+    if (!publickey) {
       return;
     }
-    await handleStakeCancel(walletAddress, stakeId);
-    await handleStake(walletAddress, Number(volumeForSale));
+    await handleStakeCancel(publickey, stakeId);
+    await handleStake(publickey, Number(volumeForSale));
     const escrowIndex = await getEscrowLastIndex();
     Axios.post(`${AppUrl}/UpdateMyListings`, {
       amountForSale: volumeForSale,
@@ -118,7 +119,7 @@ const MyListings = ({ solGbp, currency }) => {
       paymentMethod1: primaryPaymentMethod,
       paymentMethod2: secondaryPaymentMethod,
       stakeId: escrowIndex,
-      sellerAddress: walletAddress,
+      sellerAddress: publickey,
       userID,
       saleID,
     }).then((response) => {
@@ -133,10 +134,10 @@ const MyListings = ({ solGbp, currency }) => {
   };
 
   const deleteListing = async () => {
-    if (!walletAddress) {
+    if (!publickey) {
       return;
     }
-    await handleStakeCancel(walletAddress, stakeId);
+    await handleStakeCancel(publickey, stakeId);
 
     Axios.post(`${AppUrl}/DeleteMyListing`, {
       saleID,

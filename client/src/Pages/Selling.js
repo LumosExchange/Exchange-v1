@@ -1,5 +1,4 @@
 import React, { useState, useEffect, createContext, useMemo } from "react";
-import { useSelector } from "react-redux";
 import styled, { css, keyframes } from "styled-components";
 import Axios from "axios";
 import { PageBody, TextArea } from "../Components/FormInputs";
@@ -34,12 +33,13 @@ import { Warning } from "./Register";
 import { AppUrl } from "../App";
 import { SocketUrl } from "../Constants/Index";
 import { handleStakeRelease } from "../Solana/actions";
+import { useWeb3Context } from "../Utils/web3-context";
 
 //const socket = io.connect("http://3.8.159.233:3002");
 const socket = io.connect(SocketUrl);
 
 const Selling = ({ userName }) => {
-  const web3Provider = useSelector((state) => state.web3Provider);
+  const { publickey } = useWeb3Context();
 
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
@@ -256,11 +256,7 @@ const Selling = ({ userName }) => {
   };
 
   const release = async () => {
-    await handleStakeRelease(
-      web3Provider.walletAddress,
-      walletAddress,
-      stakeId
-    );
+    await handleStakeRelease(publickey, walletAddress, stakeId);
   };
 
   const value = useMemo(() => {
@@ -486,7 +482,7 @@ const Selling = ({ userName }) => {
                   text="Release Sol"
                   className="w-100 mt-2"
                   onClick={release}
-                  disabled={!web3Provider.walletAddress}
+                  disabled={!publickey}
                 />
                 <HorizontalDivider />
                 <div className="d-flex align-items-center py-3">
