@@ -123,7 +123,7 @@ const Offer = ({ solGbp, solUsd, currency }) => {
   const convertSolToAmount = (amount) => {
     if (listingPrice !== 0.0) {
       const convertedAmount2 = listingPrice * amount;
-      setOfferAmountInCurrency(convertedAmount2);
+      setOfferAmountInCurrency(convertedAmount2.toFixed(2));
     }
   };
 
@@ -186,6 +186,13 @@ const Offer = ({ solGbp, solUsd, currency }) => {
     });
   };
 
+  const filteredPaymentMethods = [
+    "Please Select",
+    data.paymentMethods && data.paymentMethods[0],
+    data.paymentMethods && data.paymentMethods[1],
+  ];
+  const formattedCurrency = convertCurrencyToSymbol(currency);
+
   useEffect(() => {
     getListingPrice();
     getUserWallets();
@@ -199,16 +206,17 @@ const Offer = ({ solGbp, solUsd, currency }) => {
     }
 
     if (state && state !== null) {
+      console.log("state", state);
       setData(state.val);
+      setOfferAmountInSol(state.val.amountForSale);
+      // convertSolToAmount(state.val.amountForSale);
     }
   }, [data, state, registeredDate]);
 
-  const filteredPaymentMethods = [
-    "Please Select",
-    data.paymentMethods && data.paymentMethods[0],
-    data.paymentMethods && data.paymentMethods[1],
-  ];
-  const formattedCurrency = convertCurrencyToSymbol(currency);
+  useEffect(() => {
+    setOfferAmountInSol(data.amountForSale);
+    convertSolToAmount(state.val.amountForSale);
+  }, [data, listingPrice]);
 
   return data.length === 0 ? (
     <PageBody className="d-flex justify-content-center flex-column">
@@ -252,7 +260,7 @@ const Offer = ({ solGbp, solUsd, currency }) => {
             />
           </div>
           <div className="col-12 col-md-6 d-flex flex-column flex-md-row">
-            <div
+            {/* <div
               className="col-2 d-flex align-items-center"
               style={{ maxHeight: "200px" }}
             >
@@ -262,7 +270,7 @@ const Offer = ({ solGbp, solUsd, currency }) => {
               >
                 <i className="material-icons">import_export</i>
               </SwitchButton>
-            </div>
+            </div> */}
             <div className="col-12 col-md-10" style={{ marginBottom: "100px" }}>
               <StyledLabel padding="0 0 10px 0" bold htmlFor="offerAmount">
                 Offer Amount
@@ -272,15 +280,15 @@ const Offer = ({ solGbp, solUsd, currency }) => {
                   <FormInput
                     type="number"
                     id="offerAmount"
-                    value={offerAmount}
+                    value={offerAmountInCurrency}
                     name="offerAmount"
                     placeholder="0.00"
                     hasIcon
                     icon="currency_pound"
-                    onChange={(e) => {
-                      setOfferAmount(e.target.value);
-                      convertAmountToSOL(e.target.value);
-                    }}
+                    // onChange={(e) => {
+                    //   setOfferAmount(e.target.value);
+                    //   convertAmountToSOL(e.target.value);
+                    // }}
                     className="w-100 mb-2"
                   />
                   <ConversionArea>
@@ -303,10 +311,10 @@ const Offer = ({ solGbp, solUsd, currency }) => {
                     placeholder="0 SOL"
                     hasIcon
                     customIcon={IconSolana}
-                    onChange={(e) => {
-                      setOfferAmountInSol(e.target.value);
-                      convertSolToAmount(e.target.value);
-                    }}
+                    // onChange={(e) => {
+                    //   setOfferAmountInSol(e.target.value);
+                    //   convertSolToAmount(e.target.value);
+                    // }}
                     className="w-100 mb-2"
                   />
                   <ConversionArea>

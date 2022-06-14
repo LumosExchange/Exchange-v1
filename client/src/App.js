@@ -200,7 +200,16 @@ const App = () => {
               <Route path="/profile/user/:id" element={<Feedback />} />
               <Route path="/ConnectWallet" element={<ConnectWallet />} />
               <Route path="/ChangePassword" element={<ChangePassword />} />
-              <Route path="/MyWallet" element={<MyWallet />} />
+              <Route
+                path="/MyWallet"
+                element={
+                  <MyWallet
+                    solGbp={solGbp}
+                    solUsd={solUsd}
+                    currency={currency}
+                  />
+                }
+              />
               <Route path="/AirDrops" element={<AirDrops />} />
               <Route path="/GoogleAuth" element={<GoogleAuth />} />
               <Route path="/SMSAuth" element={<SMSAuth />} />

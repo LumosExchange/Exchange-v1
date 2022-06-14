@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import styled, { css } from "styled-components";
 import { PageBody, FormInput, StyledDropdown } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
@@ -134,8 +134,9 @@ const FakeTableData = [
 // - then get solana balnace / other token balance and map to table
 // - then get all NFT's in the users wallet and display below
 
-function MyWallet() {
+function MyWallet({ solGbp, solUsd, currency }) {
   const { walletConnect, publickey, provider } = useWeb3Context();
+  const solBalance = useSelector((state) => state.wallet.solBalance);
 
   const [selectedWallet, selectWallet] = useState("");
   const [currentStep, setCurrentStep] = useState("connectWallet");
@@ -299,7 +300,7 @@ function MyWallet() {
                     <Paragraph size="18px" bold>
                       Manage your solana tokens and NFT's below
                     </Paragraph>
-                    <button onClick={() => getTokenBalance()}>getWallet</button>
+                    {/* <button onClick={() => getTokenBalance()}>getWallet</button> */}
                   </div>
                 </div>
               </div>
@@ -313,7 +314,7 @@ function MyWallet() {
                 </div>
                 <StyledTable className="w-100 mt-4">
                   <thead>
-                    <tr>
+                    <tr className="text-center">
                       <th>Token</th>
                       <th>Ticker</th>
                       <th>Amount</th>
@@ -321,7 +322,17 @@ function MyWallet() {
                     </tr>
                   </thead>
                   <tbody>
-                    {FakeTableData.filter((fd) => fd).map((data, d) => (
+                    <tr className="text-center">
+                      <th>Solana</th>
+                      <th>SOL</th>
+                      <th>{solBalance.toFixed(2)}</th>
+                      <th>
+                        {currency === "GBP"
+                          ? `£ ${(solBalance * solGbp).toFixed(2)}`
+                          : `$ ${(solBalance * solUsd).toFixed(2)}`}
+                      </th>
+                    </tr>
+                    {/* {FakeTableData.filter((fd) => fd).map((data, d) => (
                       <tr key={d}>
                         <td>
                           <span>{data.token}</span>
@@ -330,7 +341,7 @@ function MyWallet() {
                         <td>{data.amount}</td>
                         <td>{data.value}</td>
                       </tr>
-                    ))}
+                    ))} */}
                   </tbody>
                 </StyledTable>
               </div>

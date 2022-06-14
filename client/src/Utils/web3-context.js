@@ -1,4 +1,7 @@
 import React, { useState, useContext, useMemo, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Wallet } from "../Utils/wallet";
+import { SET_WALLET_BALANCE } from "../Storage/Actions/actionTypes";
 
 const Web3Context = React.createContext(null);
 
@@ -17,6 +20,7 @@ export const useWeb3Context = () => {
 };
 
 export const Web3ContextProvider = ({ children }) => {
+  const dispatch = useDispatch();
   const [publickey, setPublickey] = useState("");
   const [provider, setProvider] = useState(null);
 
@@ -43,6 +47,9 @@ export const Web3ContextProvider = ({ children }) => {
       provider?.on("connect", async (publicKey) => {
         console.log("===>connect");
         setPublickey(publicKey.toString());
+        const wallet = new Wallet();
+        const solBalance = await wallet.getWalletBalance(publicKey.toString());
+        dispatch({ type: SET_WALLET_BALANCE, payload: { solBalance } });
       });
 
       provider?.on("disconnect", async () => {
