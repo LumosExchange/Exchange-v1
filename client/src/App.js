@@ -52,7 +52,6 @@ import Prices from "./Pages/Prices";
 import WalletTesting from "./Pages/WalletTesting";
 import TradeComplete from "./Pages/TradeComplete";
 import AccountRegistered from "./Pages/AccountRegistered";
-import { setUserListedInfo } from "./Actions/Web3Provider/web3Provider";
 
 export const AppUrl = "http://localhost:3001";
 export const AppUrlNoPort = "http://localhost";
@@ -64,9 +63,6 @@ export const SocketUrl = "http://localhost:3002";
 // export const SocketUrl = "http://3.8.159.233:3002";
 
 const App = () => {
-  const walletAddress = useSelector(
-    (state) => state.web3Provider.walletAddress
-  );
   const dispatch = useDispatch();
 
   const [theme, toggleTheme] = useDarkMode();
@@ -204,7 +200,16 @@ const App = () => {
               <Route path="/profile/user/:id" element={<Feedback />} />
               <Route path="/ConnectWallet" element={<ConnectWallet />} />
               <Route path="/ChangePassword" element={<ChangePassword />} />
-              <Route path="/MyWallet" element={<MyWallet />} />
+              <Route
+                path="/MyWallet"
+                element={
+                  <MyWallet
+                    solGbp={solGbp}
+                    solUsd={solUsd}
+                    currency={currency}
+                  />
+                }
+              />
               <Route path="/AirDrops" element={<AirDrops />} />
               <Route path="/GoogleAuth" element={<GoogleAuth />} />
               <Route path="/SMSAuth" element={<SMSAuth />} />

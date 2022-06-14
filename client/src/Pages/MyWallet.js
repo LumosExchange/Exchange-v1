@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import styled, { css } from "styled-components";
 import { PageBody, FormInput, StyledDropdown } from "../Components/FormInputs";
 import Heading from "../Components/Heading";
@@ -14,11 +14,7 @@ import { AccountLayout, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import SlopeIcon from "../Images/slope-finance-icon.png";
 import Card from "../Components/Card";
 import StyledTable from "../Components/Tables";
-
-import {
-  updateProvider,
-  setWalletAddress,
-} from "../Actions/Web3Provider/web3Provider";
+import { useWeb3Context } from "../Utils/web3-context";
 
 const ToggleIconBase = styled.svg(
   ({ toggled, theme }) => css`
@@ -138,53 +134,19 @@ const FakeTableData = [
 // - then get solana balnace / other token balance and map to table
 // - then get all NFT's in the users wallet and display below
 
-function MyWallet() {
-  const [solanaProvider, setProvider] = useState(null);
+function MyWallet({ solGbp, solUsd, currency }) {
+  const { walletConnect, publickey, provider } = useWeb3Context();
+  const solBalance = useSelector((state) => state.wallet.solBalance);
+
   const [selectedWallet, selectWallet] = useState("");
   const [currentStep, setCurrentStep] = useState("connectWallet");
-  const [pubKey, setPubKey] = useState("");
 
   const dispatch = useDispatch();
   // const provider = window.solana;
 
-  //Get provider
-  const getProvider = async () => {
-    if ("solana" in window) {
-      // opens wallet to connect to
-
-      const provider = window.solana;
-      setProvider(provider);
-      await window.solana.connect();
-
-      if (provider.isPhantom) {
-        console.log("Is Phantom installed? ", provider.isPhantom);
-        setCurrentStep("walletOverview");
-
-        // Redux - store web3 provider update
-        dispatch(updateProvider(provider));
-
-        return provider;
-      } else if (provider.isSolflare) {
-        console.log("Is Solflare installed? ", provider.isSolflare);
-        setCurrentStep("walletOverview");
-
-        return provider;
-      } else if (provider.isSlope) {
-        console.log("Is Slope installed? ", provider.isSlope);
-        setCurrentStep("walletOverview");
-
-        return provider;
-      }
-    } else {
-      window.open("https://www.phantom.app/", "_blank");
-    }
-  };
-
   async function getTokenBalance() {
     try {
       //Wait for web 3 connection
-      var provider = await getProvider();
-
       const connection = new web3.Connection(
         web3.clusterApiUrl("devnet"),
         "confirmed"
@@ -193,7 +155,7 @@ function MyWallet() {
       //const balance = await connection.getAccountInfoAndContext(provider.publicKey).then(function(value) { console.log(value)});
 
       const tokenAccounts = await connection.getTokenAccountsByOwner(
-        new web3.PublicKey(provider.pubKey),
+        new web3.PublicKey(publickey),
         {
           programId: TOKEN_PROGRAM_ID,
         }
@@ -221,15 +183,19 @@ function MyWallet() {
   }
 
   useEffect(() => {
-    solanaProvider?.on("connect", async (publicKey) => {
-      dispatch(setWalletAddress(publicKey.toString()));
-      setPubKey(publicKey.toString());
-    });
-
-    solanaProvider?.on("disconnect", async () => {
-      setPubKey(null);
-    });
-  }, [solanaProvider]);
+    if ("solana" in window && provider && publickey) {
+      if (provider.isPhantom) {
+        console.log("Is Phantom installed? ", provider.isPhantom);
+        setCurrentStep("walletOverview");
+      } else if (provider.isSolflare) {
+        console.log("Is Solflare installed? ", provider.isSolflare);
+        setCurrentStep("walletOverview");
+      } else if (provider.isSlope) {
+        console.log("Is Slope installed? ", provider.isSlope);
+        setCurrentStep("walletOverview");
+      }
+    }
+  }, [provider, publickey]);
 
   return (
     <PageBody className="d-flex align-items-center">
@@ -274,9 +240,7 @@ function MyWallet() {
                 <PrimaryButton
                   text="Connect"
                   className="m-auto mt-3"
-                  onClick={() => {
-                    getProvider();
-                  }}
+                  onClick={walletConnect}
                   type="check"
                   value="check"
                   hasIcon
@@ -298,9 +262,7 @@ function MyWallet() {
                 <PrimaryButton
                   text="Connect"
                   className="m-auto mt-3"
-                  onClick={() => {
-                    getProvider();
-                  }}
+                  onClick={walletConnect}
                   type="check"
                   value="check"
                   hasIcon
@@ -318,9 +280,7 @@ function MyWallet() {
                 <PrimaryButton
                   text="Connect"
                   className="m-auto mt-3"
-                  onClick={() => {
-                    getProvider();
-                  }}
+                  onClick={walletConnect}
                   type="check"
                   value="check"
                   hasIcon
@@ -335,12 +295,12 @@ function MyWallet() {
                   <div className="flex-column text-center">
                     <Heading className="pb-3">Your Wallet</Heading>
                     <Heading className="pb-2" size="18px">
-                      Public Key: {pubKey}
+                      Public Key: {publickey}
                     </Heading>
                     <Paragraph size="18px" bold>
                       Manage your solana tokens and NFT's below
                     </Paragraph>
-                    <button onClick={() => getTokenBalance()}>getWallet</button>
+                    {/* <button onClick={() => getTokenBalance()}>getWallet</button> */}
                   </div>
                 </div>
               </div>
@@ -354,7 +314,7 @@ function MyWallet() {
                 </div>
                 <StyledTable className="w-100 mt-4">
                   <thead>
-                    <tr>
+                    <tr className="text-center">
                       <th>Token</th>
                       <th>Ticker</th>
                       <th>Amount</th>
@@ -362,7 +322,17 @@ function MyWallet() {
                     </tr>
                   </thead>
                   <tbody>
-                    {FakeTableData.filter((fd) => fd).map((data, d) => (
+                    <tr className="text-center">
+                      <th>Solana</th>
+                      <th>SOL</th>
+                      <th>{solBalance.toFixed(2)}</th>
+                      <th>
+                        {currency === "GBP"
+                          ? `£ ${(solBalance * solGbp).toFixed(2)}`
+                          : `$ ${(solBalance * solUsd).toFixed(2)}`}
+                      </th>
+                    </tr>
+                    {/* {FakeTableData.filter((fd) => fd).map((data, d) => (
                       <tr key={d}>
                         <td>
                           <span>{data.token}</span>
@@ -371,7 +341,7 @@ function MyWallet() {
                         <td>{data.amount}</td>
                         <td>{data.value}</td>
                       </tr>
-                    ))}
+                    ))} */}
                   </tbody>
                 </StyledTable>
               </div>
