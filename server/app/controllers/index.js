@@ -194,6 +194,7 @@ const sell = async (req, res) => {
       console.log(results);
       console.log(results[3][0].feedbackScore);
     }
+    console.log('AMOUNT FOR SALEEEEE: ', req.body.amountForSale);
 
     db.query(
       "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory, feedbackScore, stakeId, sellerAddress) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -1487,9 +1488,11 @@ const OpenTrade = async (req, res) => {
   let reference = crypto.randomBytes(5).toString("hex");
   let no = "NO";
   const walletAddress = req.body.walletAddress;
+  const stakeId = req.body.stakeId;
+  const sellerAddress = req.body.sellerAddress;
 
   db.query(
-    "INSERT INTO LiveTrades (saleID, sellerID, buyerID, Date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, Message, Reference, paymentRecieved, escrowReleaseTime, walletAddress) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+    "INSERT INTO LiveTrades (saleID, sellerID, buyerID, Date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, Message, Reference, paymentRecieved, escrowReleaseTime, walletAddress, stakeId, sellerAddress) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
     [
       saleID,
       sellerID,
@@ -1505,6 +1508,8 @@ const OpenTrade = async (req, res) => {
       no,
       date,
       walletAddress,
+      stakeId,
+      sellerAddress,
     ],
     (err, result) => {
       if (err) {
