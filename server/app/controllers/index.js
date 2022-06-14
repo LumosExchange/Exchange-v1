@@ -179,6 +179,10 @@ const sell = async (req, res) => {
   const id = req.session.user[0].userID;
   const payment1 = req.body.payment1;
   const payment2 = req.body.payment2;
+  const stakeId = req.body.stakeId;
+  const sellerAddress = req.body.sellerAddress;
+
+  // Add functionality to store userescrow account (already made the db just need to wire it up)
 
   var sql =
     "SELECT country AS Country FROM upgradeTiers WHERE (userID) = (?);SELECT city AS Town FROM upgradeTiers WHERE (userID) = (?);SELECT saleID AS SaleID FROM TradeHistory WHERE (sellerID) = (?);SELECT AVG(feedbackScore) as feedbackScore from feedback WHERE (sellerUserID) = (?);";
@@ -192,7 +196,7 @@ const sell = async (req, res) => {
     }
 
     db.query(
-      "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory, feedbackScore) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+      "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory, feedbackScore, stakeId, sellerAddress) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
       [
         id,
         amountForSale,
@@ -205,6 +209,8 @@ const sell = async (req, res) => {
         payment2,
         results[2].length,
         results[3][0].feedbackScore || 0,
+        stakeId,
+        sellerAddress,
       ],
       (err, resultt) => {
         if (err) {

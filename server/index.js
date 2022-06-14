@@ -291,6 +291,8 @@ app.post("/login", (req, res) => {
 
 app.post("/sell", (req, res) => {
   const amountForSale = req.body.amountForSale;
+
+
   const aboveOrBelow = req.body.aboveOrBelow;
   const change = req.body.change;
   const userName = req.session.user[0].userName;
@@ -310,6 +312,7 @@ app.post("/sell", (req, res) => {
       console.log(results);
       console.log(results[3][0].feedbackScore);
     }
+    console.log('AMOUNT FOR SALEEEEE: ', req.body.amountForSale);
 
     db.query(
       "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory, feedbackScore, stakeId, sellerAddress) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
