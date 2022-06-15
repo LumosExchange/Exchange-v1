@@ -60,6 +60,13 @@ io.on("connection", (socket) => {
     console.log("RECIEVE MESSAGE: ", data);
   });
 
+  socket.on('submitImg', (data) => {
+    console.log('Client Image sent');
+    socket.to(data.room).emit('sentImg', data);
+  })
+
+  
+
   socket.on("disconnect", () => {
     // console.log("User Disconnected", socket.id);
   });
@@ -729,7 +736,7 @@ app.post("/UpgradeBronze", upload.single("file"), async (req, res) => {
   //Now update sql upgradeTiers & account level
 
   var sql =
-    "Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;INSERT INTO KYC set userID =?, documentAddressKYC =?, KYCdate=?;";
+    "Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;INSERT INTO KYC set userID =?, documentAddressKYC =?, dateKYC=?;";
 
   db.query(
     sql,
@@ -2380,6 +2387,8 @@ app.post("/CheckSaleEligibility", (req, res) => {
 
   //Check the account level and return maximum amount of sol the user can sell
 });
+
+
 
 server.listen(3002, () => {
   console.log("SERVER RUNNING");

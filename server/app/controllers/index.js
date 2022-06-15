@@ -643,7 +643,7 @@ const UpgradeBronze = async (req, res) => {
   //Now update sql upgradeTiers & account level
 
   var sql =
-    "Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;INSERT INTO KYC set userID =?, documentAddressKYC =?, KYCdate=?;";
+    "Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;INSERT INTO KYC set userID =?, documentAddressKYC =?, dateKYC=?;";
 
   db.query(
     sql,
