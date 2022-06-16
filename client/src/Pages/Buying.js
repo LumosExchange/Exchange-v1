@@ -82,7 +82,7 @@ const Buying = ({ userName }) => {
         setSolAmount(response.data[0].amountOfSol);
         setPaymentMethod(response.data[0].paymentMethod);
         setBuyerID(response.data[0].buyerID);
-        setSellerID(response.data[0].sellerID);
+        setSellerID();
         setFiatAmount(response.data[0].fiatAmount);
         setPaymentCurrency(response.data[0].paymentCurrency);
         setPaymentRecieved(response.data[0].paymentRecieved);
@@ -114,8 +114,19 @@ const Buying = ({ userName }) => {
             setMessageList((list) => [...list, messageData]);
             setCurrentMessage("");
           });
+          axios.get(`${AppUrl}/GetLiveTradePaymentInfo`, {
+            params: {
+              sellerID: response.data[0].sellerID,
+              paymentMethod: response.data[0].paymentMethod,
+            }    
+          })
+          .then((response) => {
+            setPaymentInfo(response);
+            console.log('PaymentInfo: ', response.data);
+          })
       });
   };
+
 
   const sentPayment = () => {
     axios
@@ -256,39 +267,24 @@ const Buying = ({ userName }) => {
     getTradeDetails();
     joinRoom();
 
+
     if (paymentSentSetter === "YES") {
       setCurrentStep("transfer");
     } else {
       setCurrentStep("buying");
     }
+    
 
     socket.on("recieve_message", (data) => {
       setMessageList((list) => [...list, data]);
     });
   }, [socket]);
 
-  console.log(messageList, "message list");
+
 
   const formattedCurrency = convertCurrencyToSymbol(paymentCurrency);
 
-  console.log(feedbackScore, "feedback score");
 
-  const isTheSolanaSent =
-    messageList.filter((ml) => ml.message.includes("sent the solana")).length >
-    0;
-  const isThePaymentRecieved =
-    messageList.filter((ml) => ml.message.includes("sent the payment")).length >
-    0;
-  const isThePaymentSent =
-    messageList.filter((ml) => ml.message.includes("sent the payment")).length >
-    0;
-  const isTheSolanaRecieved =
-    messageList.filter((ml) => ml.message.includes("recieved the solana"))
-      .length > 0;
-  console.log(isThePaymentSent, "is the payment sent?");
-  console.log(isTheSolanaSent, "is solana sent?");
-  console.log(isTheSolanaRecieved, "is solana recieved?");
-  console.log(isThePaymentRecieved, "is payment sent?");
 
   return (
     <PageBody>
