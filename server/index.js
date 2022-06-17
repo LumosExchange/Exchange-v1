@@ -2024,17 +2024,24 @@ app.post("/CompleteTrade", (req, res) => {
     "SELECT amountForSale FROM sale WHERE saleID =? ",
     [saleID],
     (err, results) => {
-      let newTotal = results[0].amountForSale - solAmount;
+      const newTotal = results[0].amountForSale - solAmount;
 
-      db.query(
-        "UPDATE sale SET amountForSale =? WHERE saleID =?",
-        [newTotal, saleID],
-        (err, results) => {
-          if (err) {
-            throw err;
+      if (newTotal >= 0 ) {
+        db.query(
+          "UPDATE sale SET amountForSale =? WHERE saleID =?",
+          [newTotal, saleID],
+          (err, results) => {
+            if (err) {
+              throw err;
+            }
+            //else if total <0 then delete the listing 
           }
-        }
-      );
+         
+        );
+
+      }
+
+
     }
   );
 
