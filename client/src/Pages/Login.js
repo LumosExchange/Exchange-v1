@@ -12,6 +12,12 @@ import SolflareIcon from "../Images/solflare-icon.svg";
 import ExodusIcon from "../Images/exodus-icon.svg";
 import Link, { AltLink } from "../Components/Link";
 import { AppUrl, AppUrlNoPort } from "../App";
+import {
+  FormCheckbox,
+  StyledLabel,
+  StyledDropdown,
+} from "../Components/FormInputs";
+import EmailVerification from "./EmailVerification";
 
 const FormBackground = styled.div(
   ({ theme }) => css`
@@ -22,6 +28,36 @@ const FormBackground = styled.div(
 );
 
 export const IconHelper = styled.i(
+  ({ theme, color }) => css`
+    color: ${theme.colors[color]};
+  `
+);
+const ValidationMessage = styled(Paragraph)(
+  ({ theme }) => css`
+    &.invalid {
+      color: ${theme.colors.invalid};
+    }
+    &.valid {
+      color: ${theme.colors.valid};
+    }
+  `
+);
+
+const InputValidator = ({ value, min, max }) => (
+  <div className="d-flex">
+    <ValidationMessage
+      bold
+      size="18px"
+      className={`mb-0 ${
+        value.length >= min && value.length <= max ? "valid" : "invalid"
+      }`}
+    >
+      {value.length} / {max}
+    </ValidationMessage>
+  </div>
+);
+
+const StyledIcon = styled.i(
   ({ theme, color }) => css`
     color: ${theme.colors[color]};
   `
@@ -84,32 +120,71 @@ const Login = () => {
           <div className="text-center">
             <form>
               <FormInput
-                className="w-100"
                 id="email"
                 name="email"
+                className={`
+								mb-3 w-100
+								${
+                  ((userLog.length > 0 && userLog.length < 4) ||
+                    userLog.includes(" ") ||
+                    userLog.match(/[^A-Za-z 0-9]/g)) &&
+                  "invalid"
+                }
+							`}
                 onChange={(e) => {
                   setUserLog(e.target.value);
                 }}
-                placeholder="username"
+                placeholder="User name"
                 required
                 type="text"
+                minLength={4}
+                maxLength={30}
                 hasIcon
                 icon="person"
               />
+
+              {userLog.length > 0 && userLog.length < 4 && (
+                <div className="d-flex">
+                  <StyledIcon className="material-icons me-1" color="invalid">
+                    error_outline
+                  </StyledIcon>
+                  <Paragraph size="18px" color="invalid">
+                    Username too short
+                  </Paragraph>
+                </div>
+              )}
               <div className="my-3">
                 <FormInput
-                  className="w-100"
+                  className={`
+                  mb-3 w-100
+                  ${
+                    ((passwordLog.length > 0 && passwordLog.length < 7) ||
+                      passwordLog.includes(" ")) &&
+                    "invalid"
+                  }
+                `}
                   hasIcon
                   icon="lock"
                   id="psw"
                   name="psw"
+                  maxLength={20}
                   onChange={(e) => {
                     setPasswordLog(e.target.value);
                   }}
-                  placeholder="password"
+                  placeholder="Password"
                   required
                   type="password"
                 />
+                {passwordLog.length > 0 && passwordLog.length < 8 && (
+                  <div className="d-flex">
+                    <StyledIcon className="material-icons me-1" color="invalid">
+                      error_outline
+                    </StyledIcon>
+                    <Paragraph size="18px" color="invalid">
+                      Password too short (Minimum 8 Charachters)
+                    </Paragraph>
+                  </div>
+                )}
               </div>
               <PrimaryButton
                 text="Log In"

@@ -106,7 +106,7 @@ const Register = () => {
         }).then((response) => {
           if (response.data.emailSent === true) {
             //Navigate to emailVerification
-            console.log(response.data.emailSent, 'email sent');
+            console.log(response.data.emailSent, "email sent");
             navigate("/AccountRegistered", {
               state: {
                 email,
