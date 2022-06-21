@@ -2024,9 +2024,19 @@ app.post("/CompleteTrade", (req, res) => {
     "SELECT amountForSale FROM sale WHERE saleID =? ",
     [saleID],
     (err, results) => {
+
       const newTotal = results[0].amountForSale - solAmount;
 
-      if (newTotal >= 0 ) {
+      //Check if total is <= 0 if so delete the listing 
+      if (newTotal <= 0) {
+        db.query(
+          "DELETE FROM sale WHERE LiveTradeID =?",
+          [liveTradeID],
+          (err, results) => {
+            //handle errors here
+          }
+        );
+      } else {
         db.query(
           "UPDATE sale SET amountForSale =? WHERE saleID =?",
           [newTotal, saleID],
@@ -2034,15 +2044,14 @@ app.post("/CompleteTrade", (req, res) => {
             if (err) {
               throw err;
             }
-            //else if total <0 then delete the listing 
+            
           }
-         
         );
 
       }
-
-
-    }
+    
+      }
+   
   );
 
   //update feedback and calulate escrow release time
