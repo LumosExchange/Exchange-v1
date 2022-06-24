@@ -424,7 +424,7 @@ const Buying = ({ userName }) => {
                       <SecondaryButton
                         text="Cancel"
                         className="m-auto mt-3"
-                        onClick={null}
+                        onClick={() => navigate("/Buy")}
                         type="check"
                         value="check"
                       />
