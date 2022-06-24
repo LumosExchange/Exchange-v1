@@ -215,7 +215,7 @@ const Login = () => {
                 type="submit"
                 form="loginForm"
                 hasIcon
-                disabled={userLog.length < 4 || passwordLog.length < 8}
+                /*disabled={userLog.length < 4 || passsswordLog.length < 8}*/
               />
               {loginError && loginError.length > 0 && (
                 <div className="d-flex justify-content-center mt-4">
