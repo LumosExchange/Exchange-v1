@@ -119,9 +119,28 @@ const Login = () => {
         <div className="d-flex flex-column m-auto">
           <div className="text-center">
             <form>
+              <div className="d-flex justify-content-between align-items-center">
+                <StyledLabel
+                  htmlFor="email"
+                  padding="0 0 5px 0"
+                  bold
+                  fontSize="20px"
+                >
+                  Username
+                </StyledLabel>
+                <InputValidator value={userLog} min={4} max={30} />
+              </div>
               <FormInput
-                id="email"
-                name="email"
+                id="userLog"
+                placeholder="Username"
+                required
+                type="text"
+                minLength={4}
+                maxLength={30}
+                autocomplete="off"
+                autoComplete="off"
+                hasIcon
+                icon="person"
                 className={`
 								mb-3 w-100
 								${
@@ -134,25 +153,28 @@ const Login = () => {
                 onChange={(e) => {
                   setUserLog(e.target.value);
                 }}
-                placeholder="User name"
-                required
-                type="text"
-                minLength={4}
-                maxLength={30}
-                hasIcon
-                icon="person"
               />
-
               {userLog.length > 0 && userLog.length < 4 && (
                 <div className="d-flex">
                   <StyledIcon className="material-icons me-1" color="invalid">
                     error_outline
                   </StyledIcon>
                   <Paragraph size="18px" color="invalid">
-                    Username too short
+                    Username is too short
                   </Paragraph>
                 </div>
-              )}
+              )}{" "}
+              <div className="d-flex justify-content-between align-items-center">
+                <StyledLabel
+                  htmlFor="userName"
+                  padding="0 0 5px 0"
+                  bold
+                  fontSize="20px"
+                >
+                  Password
+                </StyledLabel>
+                <InputValidator value={passwordLog} min={8} max={30} />
+              </div>
               <div className="my-3">
                 <FormInput
                   className={`
@@ -181,7 +203,7 @@ const Login = () => {
                       error_outline
                     </StyledIcon>
                     <Paragraph size="18px" color="invalid">
-                      Password too short (Minimum 8 Charachters)
+                      Password is too short (Minimum 8 Charachters)
                     </Paragraph>
                   </div>
                 )}
@@ -193,6 +215,7 @@ const Login = () => {
                 type="submit"
                 form="loginForm"
                 hasIcon
+                disabled={userLog.length < 4 || passwordLog.length < 8}
               />
               {loginError && loginError.length > 0 && (
                 <div className="d-flex justify-content-center mt-4">
