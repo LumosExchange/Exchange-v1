@@ -211,7 +211,7 @@ router.get("/GetLiveTradePaymentInfo", GetLiveTradePaymentInfo);
 //Update functionality for updating the user lisitngs
 router.post("/UpdateMyListings", UpdateMyListings);
 router.post("/DeleteMyListing", DeleteMyListing);
-//Functionality to get information baout the seller
+//Functionality to get information about the seller
 router.post("/GetSellerInfo", GetSellerInfo);
 router.post("/FindUserPaymentMethods", FindUserPaymentMethods);
 router.post("/GetLiveTradesBuyer", GetLiveTradesBuyer);

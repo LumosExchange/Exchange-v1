@@ -13,543 +13,592 @@ import axios from "axios";
 import SendButton from "../Components/SendButton";
 import { convertCurrencyToSymbol } from "../Helpers";
 import {
-	Stepper,
-	HalfStepper,
-	GiveFeedback,
-	LumosIcon,
-	HorizontalDivider,
-	VerticalDivider,
-	ChatWrapper,
-	PaymentInfoArea,
-	IconPrimaryCta,
-	FeedbackContext,
+  Stepper,
+  HalfStepper,
+  GiveFeedback,
+  LumosIcon,
+  HorizontalDivider,
+  VerticalDivider,
+  ChatWrapper,
+  PaymentInfoArea,
+  IconPrimaryCta,
+  FeedbackContext,
 } from "../Components/TradeComponents";
 import { Link } from "react-router-dom";
 import { StyledCode } from "./Profile/Wallets";
 import { Warning } from "./Register";
 import { AppUrl } from "../App";
-import { SocketUrl } from '../Constants/Index';
+import { SocketUrl } from "../Constants/Index";
 
 const socket = io.connect(SocketUrl);
 
 const Buying = ({ userName }) => {
-	const [currentMessage, setCurrentMessage] = useState("");
-	const [messageList, setMessageList] = useState([]);
-	const [paymentInfo, setPaymentInfo] = useState([]);
-	const [room, setRoom] = useState("");
-	const [userNameSeller, setUserNameSeller] = useState("");
-	const [reference, setReference] = useState("");
-	const [solAmount, setSolAmount] = useState("");
-	const [buyerID, setBuyerID] = useState("");
-	const [sellerID, setSellerID] = useState("");
-	const [fiatAmount, setFiatAmount] = useState("");
-	const [paymentCurrency, setPaymentCurrency] = useState("");
-	const [paymentRecieved, setPaymentRecieved] = useState("");
-	const [userSolPrice, setUserSolPrice] = useState("");
-	const [paymentMethod, setPaymentMethod] = useState("");
-	const [firstMessage, setFirstMessage] = useState("");
-	const [currentStep, setCurrentStep] = useState("buying");
-	const [isPaymentSent, setIsPaymentSent] = useState(false);
-	const [registeredDate, setRegisteredDate] = useState("");
-	const [feedbackScore, setFeedbackScore] = useState("");
-	const [totalTrades, setTotalTrades] = useState("");
-	const [feedbackMessage, setFeedbackMessage] = useState("");
-	const [feedBack, setFeedback] = useState("");
-	const [walletAddress, setWalletAddress] = useState("");
-	const [confirmation, setConfirmation] = useState(false);
-	const [saleID, setSaleID] = useState("");
-	const [errors, setErrors] = useState("");
+  const [currentMessage, setCurrentMessage] = useState("");
+  const [messageList, setMessageList] = useState([]);
+  const [paymentInfo, setPaymentInfo] = useState([]);
+  const [room, setRoom] = useState("");
+  const [userNameSeller, setUserNameSeller] = useState("");
+  const [reference, setReference] = useState("");
+  const [solAmount, setSolAmount] = useState("");
+  const [buyerID, setBuyerID] = useState("");
+  const [sellerID, setSellerID] = useState("");
+  const [fiatAmount, setFiatAmount] = useState("");
+  const [paymentCurrency, setPaymentCurrency] = useState("");
+  const [paymentRecieved, setPaymentRecieved] = useState("");
+  const [userSolPrice, setUserSolPrice] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [firstMessage, setFirstMessage] = useState("");
+  const [currentStep, setCurrentStep] = useState("buying");
+  const [isPaymentSent, setIsPaymentSent] = useState(false);
+  const [registeredDate, setRegisteredDate] = useState("");
+  const [feedbackScore, setFeedbackScore] = useState("");
+  const [totalTrades, setTotalTrades] = useState("");
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [feedBack, setFeedback] = useState("");
+  const [walletAddress, setWalletAddress] = useState("");
+  const [confirmation, setConfirmation] = useState(false);
+  const [saleID, setSaleID] = useState("");
+  const [errors, setErrors] = useState("");
 
-	const { state } = useLocation();
-	const liveTradeID = state.liveTradeID;
-	const paymentSentSetter = state.paymentSent;
+  const { state } = useLocation();
+  const liveTradeID = state.liveTradeID;
+  const paymentSentSetter = state.paymentSent;
 
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
-	//Get trade ID then use that to populate other things
-	const getTradeDetails = () => {
-		axios
-		.get(`${AppUrl}/GetLiveTradeDetails`, {
-		  params: {
-			liveTradeID: liveTradeID,
-		  },
-		}).then((response) => {
-			setReference(response.data[0].Reference);
-			setSaleID(response.data[0].saleID);
-			setRoom(response.data[0].Reference);
-			socket.emit("join_room", response.data[0].Reference);
-			setSolAmount(response.data[0].amountOfSol);
-			setPaymentMethod(response.data[0].paymentMethod);
-			setBuyerID(response.data[0].buyerID);
-			setSellerID(response.data[0].sellerID);
-			setFiatAmount(response.data[0].fiatAmount);
-			setPaymentCurrency(response.data[0].paymentCurrency);
-			setPaymentRecieved(response.data[0].paymentRecieved);
-			setUserSolPrice(response.data[0].userSolPrice);
-			setFirstMessage(response.data[0].Message);
-			setWalletAddress(response.data[0].walletAddress);
+  //Get trade ID then use that to populate other things
+  const getTradeDetails = () => {
+    axios
+      .get(`${AppUrl}/GetLiveTradeDetails`, {
+        params: {
+          liveTradeID: liveTradeID,
+        },
+      })
+      .then((response) => {
+        setReference(response.data[0].Reference);
+        setSaleID(response.data[0].saleID);
+        setRoom(response.data[0].Reference);
+        socket.emit("join_room", response.data[0].Reference);
+        setSolAmount(response.data[0].amountOfSol);
+        setPaymentMethod(response.data[0].paymentMethod);
+        setBuyerID(response.data[0].buyerID);
+        setSellerID();
+        setFiatAmount(response.data[0].fiatAmount);
+        setPaymentCurrency(response.data[0].paymentCurrency);
+        setPaymentRecieved(response.data[0].paymentRecieved);
+        setUserSolPrice(response.data[0].userSolPrice);
+        setFirstMessage(response.data[0].Message);
+        setWalletAddress(response.data[0].walletAddress);
 
-			//Get buyer username 
+        //Get buyer username
 
-			axios.get(`${AppUrl}/getUserNameSeller`, { params: {
-				sellerID: response.data[0].sellerID,
-			}}).then((response2) => {
-				setUserNameSeller(response2.data[0].userName);
+        axios
+          .get(`${AppUrl}/getUserNameSeller`, {
+            params: {
+              sellerID: response.data[0].sellerID,
+            },
+          })
+          .then((response2) => {
+            setUserNameSeller(response2.data[0].userName);
 
-				const messageData = {
-					room: response.data[0].Reference,
-					author: userName,
-					message: response.data[0].Message,
-					time:
-					  new Date(Date.now()).getHours() +
-					  ":" +
-					  new Date(Date.now()).getMinutes(),
-				  };
-				  socket.emit("send_message", messageData);
-							setMessageList((list) => [...list, messageData]);
-							setCurrentMessage("");
-				
-			})
-		
-		});
-	}
-
-	const sentPayment = () => {
-		axios
-			.post(`${AppUrl}/updateLiveTradePayment`, {
-				liveTradeID,
-				userName,
-			})
-			.then((response) => {
-				if (response.data.update === true) {
-					//send message to convo letting the seller know youve sent the payment
-					const messageData = {
-						room: room,
-						author: "Lumos Exchange",
-						message: "Please note " + userName + " has confirmed they have sent the payment",
-						time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
-					};
-					socket.emit("send_message", messageData);
-					setMessageList((list) => [...list, messageData]);
-					setCurrentMessage("");
-					setCurrentStep("transfer");
-				} else {
-					//handle error here some sort of popup / message to say error please try again
-				}
-			});
-	};
-
-	const convertFeedbackToInteger = (feedBack) => {
-		if (feedBack === "Positive") {
-			return 3;
-		}
-		if (feedBack === "Neutral") {
-			return 2;
-		}
-		if (feedBack === "Negative") {
-			return 1;
-		}
-	};
-
-	const completeTrade = () => {
-		const formattedFeedBack = convertFeedbackToInteger(feedBack);
-		//get feedback and send to db
-		axios
-			.post(`${AppUrl}/CompleteTrade`, {
-				liveTradeID,
-				saleID,
-				feedbackMessage,
-				formattedFeedBack,
-				sellerID,
-				buyerID,
-				solAmount,
-			})
-			.then((response) => {
-				console.log(response, 'response from /CompleteTrade');
-				if (response.data.tradeComplete === true){
-					navigate('/TradeComplete')
-				} else {
-					setErrors(response.data.error);
-				}
-			});
-	};
-
-	const setPaymentAsSent = () => {
-		setPaymentAsSent(true);
-	};
-
-	//Join the user to the room
-	const joinRoom = async () => {
-		if (userName !== "" && room !== "") {
-			socket.emit("join_room", room);
-		}
-	};
-
-	const sendMessage = async () => {
-		if (currentMessage !== "") {
-			const messageData = {
-				room: room,
-				author: userName,
-				message: currentMessage,
-				time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
-			};
-			await socket.emit("send_message", messageData);
-			setMessageList((list) => [...list, messageData]);
-			setCurrentMessage("");
-		}
-	};
+            const messageData = {
+              room: response.data[0].Reference,
+              author: userName,
+              message: response.data[0].Message,
+              time:
+                new Date(Date.now()).getHours() +
+                ":" +
+                new Date(Date.now()).getMinutes(),
+            };
+            socket.emit("send_message", messageData);
+            setMessageList((list) => [...list, messageData]);
+            setCurrentMessage("");
+          });
+          axios.get(`${AppUrl}/GetLiveTradePaymentInfo`, {
+            params: {
+              sellerID: response.data[0].sellerID,
+              paymentMethod: response.data[0].paymentMethod,
+            }    
+          })
+          .then((response) => {
+            setPaymentInfo(response);
+            console.log('PaymentInfo: ', response.data);
+          })
+      });
+  };
 
 
-	const value = useMemo(() => {
-		return {
-			feedBack,
-			setFeedback,
-		};
-	}, [feedBack, setFeedback]);
+  const sentPayment = () => {
+    axios
+      .post(`${AppUrl}/updateLiveTradePayment`, {
+        liveTradeID,
+        userName,
+      })
+      .then((response) => {
+        if (response.data.update === true) {
+          //send message to convo letting the seller know youve sent the payment
+          const messageData = {
+            room: room,
+            author: "Lumos Exchange",
+            message:
+              "Please note " +
+              userName +
+              " has confirmed they have sent the payment",
+            time:
+              new Date(Date.now()).getHours() +
+              ":" +
+              new Date(Date.now()).getMinutes(),
+          };
+          socket.emit("send_message", messageData);
+          setMessageList((list) => [...list, messageData]);
+          setCurrentMessage("");
+          setCurrentStep("transfer");
+        } else {
+          //handle error here some sort of popup / message to say error please try again
+        }
+      });
+  };
+
+  const convertFeedbackToInteger = (feedBack) => {
+    if (feedBack === "Positive") {
+      return 3;
+    }
+    if (feedBack === "Neutral") {
+      return 2;
+    }
+    if (feedBack === "Negative") {
+      return 1;
+    }
+  };
+
+  const completeTrade = () => {
+    const formattedFeedBack = convertFeedbackToInteger(feedBack);
+    //get feedback and send to db
+    axios
+      .post(`${AppUrl}/CompleteTrade`, {
+        liveTradeID,
+        saleID,
+        feedbackMessage,
+        formattedFeedBack,
+        sellerID,
+        buyerID,
+        solAmount,
+      })
+      .then((response) => {
+        console.log(response, "response from /CompleteTrade");
+        if (response.data.tradeComplete === true) {
+          navigate("/TradeComplete");
+        } else {
+          setErrors(response.data.error);
+        }
+      });
+  };
+
+  const setPaymentAsSent = () => {
+    setPaymentAsSent(true);
+  };
+
+  //Join the user to the room
+  const joinRoom = async () => {
+    if (userName !== "" && room !== "") {
+      socket.emit("join_room", room);
+    }
+  };
+
+  const sendMessage = async () => {
+    if (currentMessage !== "") {
+      const messageData = {
+        room: room,
+        author: userName,
+        message: currentMessage,
+        time:
+          new Date(Date.now()).getHours() +
+          ":" +
+          new Date(Date.now()).getMinutes(),
+      };
+      await socket.emit("send_message", messageData);
+      setMessageList((list) => [...list, messageData]);
+      setCurrentMessage("");
+    }
+  };
+
+  const value = useMemo(() => {
+    return {
+      feedBack,
+      setFeedback,
+    };
+  }, [feedBack, setFeedback]);
+
+  const recievedSolMsg = () => {
+    const messageData = {
+      room: room,
+      author: "Lumos Exchange",
+      message:
+        "Please note " +
+        userName +
+        " has confirmed they have recieved the solana",
+      time:
+        new Date(Date.now()).getHours() +
+        ":" +
+        new Date(Date.now()).getMinutes(),
+    };
+    socket.emit("send_message", messageData);
+    setMessageList((list) => [...list, messageData]);
+    setCurrentMessage("");
+  };
+
+  const getFeedbackDetails = () => {
+    const ID = sellerID;
+    console.log("seller ID is:", ID);
+    axios
+      .get(`${AppUrl}/GetTradeFeedbackInfo`, {
+        params: {
+          ID,
+        },
+      })
+      .then((response) => {
+        setFeedbackScore(response.data.feedbackScore);
+        setRegisteredDate(response.data.registeredDate[0].date.split("T", 1));
+        setTotalTrades(response.data.totalTrades[0].total);
+      });
+  };
+
+  useEffect(() => {
+    getTradeDetails();
+    joinRoom();
 
 
-	const recievedSolMsg = () => {
-		const messageData = {
-			room: room,
-			author: "Lumos Exchange",
-			message:
-			  "Please note " +
-			  userName +
-			  " has confirmed they have recieved the solana",
-			time:
-			  new Date(Date.now()).getHours() +
-			  ":" +
-			  new Date(Date.now()).getMinutes(),
-		  };
-		  socket.emit("send_message", messageData);
-		  setMessageList((list) => [...list, messageData]);
-		  setCurrentMessage("");
+    if (paymentSentSetter === "YES") {
+      setCurrentStep("transfer");
+    } else {
+      setCurrentStep("buying");
+    }
+    
 
-	}
+    socket.on("recieve_message", (data) => {
+      setMessageList((list) => [...list, data]);
+    });
+  }, [socket]);
 
-	const getFeedbackDetails =() => {
-		const ID = sellerID;
-		console.log('seller ID is:',ID );
-		axios.get(`${AppUrl}/GetTradeFeedbackInfo`, {params: {
-			ID
-		}}).then ((response) => {
-			setFeedbackScore(response.data.feedbackScore);
-			setRegisteredDate(response.data.registeredDate[0].date.split("T", 1));
-			setTotalTrades(response.data.totalTrades[0].total);
-		});
-	};
 
-	useEffect(() => {
-		getTradeDetails();
-		joinRoom();
-		
 
-		if (paymentSentSetter === "YES") {
-			setCurrentStep("transfer");
-		} else {
-			setCurrentStep("buying");
-		}
+  const formattedCurrency = convertCurrencyToSymbol(paymentCurrency);
 
-		socket.on("recieve_message", (data) => {
-			setMessageList((list) => [...list, data]);
-		});
-	}, [socket]);
 
-	console.log(messageList, 'message list');
 
-	const formattedCurrency = convertCurrencyToSymbol(paymentCurrency);
-
-	console.log(feedbackScore, 'feedback score');
-
-	const isTheSolanaSent = messageList.filter(ml => ml.message.includes("sent the solana")).length > 0;
-	const isThePaymentRecieved = messageList.filter(ml => ml.message.includes("sent the payment")).length > 0;
-	const isThePaymentSent = messageList.filter(ml => ml.message.includes("sent the payment")).length > 0;
-	const isTheSolanaRecieved = messageList.filter(ml => ml.message.includes("recieved the solana")).length > 0;
-	console.log(isThePaymentSent, 'is the payment sent?');
-	console.log(isTheSolanaSent, 'is solana sent?');
-	console.log(isTheSolanaRecieved, 'is solana recieved?');
-	console.log(isThePaymentRecieved, 'is payment sent?');
-
-	return (
-		<PageBody>
-			<div className="container">
-				<div className="row py-5 mb-5">
-					<div className="col-12 mb-5">
-						<Heading size="26px" className="mb-4">
-							Offers &gt; Buy SOL from {userNameSeller} with {paymentMethod}.
-						</Heading>
-					</div>
-					<div className="col-12 col-md-6 row order-1 order-md-0">
-						<ChatWrapper>
-							<div className="chat-header d-flex align-items-center flex-column">
-								<div className="d-flex align-items-center mb-5">
-									<i className="material-icons messages-icon me-3">question_answer</i>
-									<div className="d-flex flex-column">
-										<Paragraph bold size="24px" className="mb-0">
-											Conversation
-										</Paragraph>
-										<Paragraph siuze="14px" className="mb-0">
-											Messages are end-to-end encrypted.
-										</Paragraph>
-									</div>
-								</div>
-								<div className="chat-body w-100">
-									{messageList.map((messageContent) => (
-										<div className="d-flex flex-column">
-											<div
-												className={
-													(messageContent.author === "Lumos Exchange" &&
-														"d-flex justify-content-center align-self-center") ||
-													(userName !== messageContent.author
-														? "d-flex self justify-content-end align-self-end"
-														: `d-flex justify-content-start align-self-start`)
-												}
-											>
-												{messageContent.author === "Lumos Exchange" && (
-													<LumosIcon className="me-1 mb-2" />
-												)}
-												<Paragraph size="16px" className="mb-0 me-2" bold>
-													{messageContent.author}
-												</Paragraph>
-												<Paragraph size="16px" className="mb-0">
-													{messageContent.time}
-												</Paragraph>
-											</div>
-											<div
-												className={
-													(messageContent.author === "Lumos Exchange" &&
-														"message admin justify-content-center text-center px-5") ||
-													(userName === messageContent.author
-														? "message self justify-content-start align-self-start"
-														: "message justify-content-end align-self-end")
-												}
-											>
-												{messageContent.message}
-											</div>
-										</div>
-									))}
-								</div>
-							</div>
-							<div className="chat-footer d-flex align-items-center">
-								<TextArea
-									type="text"
-									placeholder="Enter message here"
-									value={currentMessage}
-									className="me-3"
-									onChange={(event) => {
-										setCurrentMessage(event.target.value);
-									}}
-									onKeyPress={(event) => {
-										event.key === "Enter" && sendMessage() && setCurrentMessage("");
-									}}
-								/>
-								<SendButton
-									icon="send"
-									onClick={() => {
-										sendMessage();
-										setCurrentMessage("");
-									}}
-									disabled={currentMessage === ""}
-								/>
-							</div>
-						</ChatWrapper>
-					</div>
-					<div className="col-1 d-none d-md-flex justify-content-center">
-						<VerticalDivider />
-					</div>
-					{currentStep === "buying" && (
-						<div className="col-12 col-md-5 order-0 order-md-1">
-							<HalfStepper step2Title="Send Payment to the Seller" />
-							<div className="col-12 text-center">
-								<Heading className="me-2 d-inline-block">Buying</Heading>
-								<Heading bold className="d-inline-block">
-									{solAmount} SOL
-								</Heading>
-								<Heading className="mx-2 d-inline-block">for</Heading>
-								<Heading bold className="d-inline-block">
-									{formattedCurrency}
-									{fiatAmount}
-								</Heading>
-								<Paragraph size="18px" className="pb-3">
-									1 SOL = {formattedCurrency}
-									{userSolPrice}
-								</Paragraph>
-								<HorizontalDivider />
-								<div className="d-flex justify-content-center flex-column">
-									<Paragraph bold size="24px" className="me-2">
-										Please pay {formattedCurrency}
-										{fiatAmount}
-									</Paragraph>
-									<PaymentInfoArea
-										paymentInfo={paymentInfo}
-										paymentMethod={paymentMethod}
-										reference={reference}
-									/>
-									<div className="d-flex text-start">
-										<PrimaryButton
-											text={isPaymentSent ? "Payment marked as sent" : "I've sent the payment"}
-											className="w-100"
-											onClick={() => {
-											setIsPaymentSent(true);
-											
-										}}
-											disabled={isPaymentSent}
-										/>
-									</div>
-									<div className="row mt-5 mb-5 mb-md-0">
-										<div className="col-6">
-											<SecondaryButton
-												text="Cancel"
-												className="m-auto mt-3"
-												onClick={null}
-												type="check"
-												value="check"
-											/>
-										</div>
-										<div className="col-6">
-											<PrimaryButton
-												text="Continue"
-												className="m-auto mt-3"
-												onClick={() => {
-													sentPayment();
-												
-												}}
-												type="check"
-												value="check"
-												hasIcon
-												disabled={!isPaymentSent}
-											/>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					)}
-					{currentStep === "transfer" && (
-						<div className="col-12 col-md-5 mt-4">
-							<Stepper step2Title="Send Payment to the Seller" />
-							<div className="col-12 text-center">
-								<Heading className="me-2 d-inline-block mb-4">Check your wallet</Heading>
-								<Heading bold className="d-inline-block">
-									{solAmount} SOL
-								</Heading>
-								<Paragraph size="18px">Should have been sent to the wallet addresss:</Paragraph>
-								<StyledCode>{walletAddress}</StyledCode>
-								<HorizontalDivider />
-								<div className="d-flex align-items-center py-3">
-									<Warning />
-									<Paragraph className="mb-0 text-start" size="18px">
-										Please double and triple check your wallet address before confirming. Do not mark as SOL received until the funds are in your wallet.
-									</Paragraph>
-								</div>
-								<div className="d-flex align-items-center mb-4 pt-3">
-									<FormCheckbox type="checkbox" id="solReceived" name="solReceived" onChange={(e) => setConfirmation(e.target.checked) } />
-									<StyledLabel htmlFor="solReceived">I've received the SOL to my wallet address.</StyledLabel>
-								</div>
-								<div className="d-flex justify-content-center flex-column">
-									<div className="col-12">
-										<PrimaryButton
-											text="Continue"
-											className="w-100 mt-3"
-											onClick={() => {
-												setCurrentStep("bought");
-												recievedSolMsg();
-												getFeedbackDetails();
-											}}
-											disabled={!confirmation}
-										/>
-									</div>
-								</div>
-							</div>
-						</div>
-					)}
-					{currentStep === "bought" && (
-						<div className="col-12 col-md-5 mt-4">
-							<Stepper step2Title="Send Payment to the Seller" />
-							<div className="col-12 text-center">
-								<Heading className="me-2 d-inline-block">Bought</Heading>
-								<Heading bold className="d-inline-block">
-									{solAmount} SOL
-								</Heading>
-								<Heading className="mx-2 d-inline-block">for</Heading>
-								<Heading bold className="d-inline-block">
-									{formattedCurrency}
-									{fiatAmount}
-								</Heading>
-								<Paragraph size="18px" className="pb-3">
-									1 SOL = {formattedCurrency}
-									{userSolPrice}
-								</Paragraph>
-								<HorizontalDivider />
-								<div className="d-flex justify-content-center flex-column">
-									<div className="row mt-5">
-										<div className="col-6 text-start">
-											<Paragraph size="18px" bold>
-												Seller
-											</Paragraph>
-											<div className="d-flex">
-												<IconPrimaryCta className="material-icons">person</IconPrimaryCta>
-												<Link
-													to={`/profile/user/${sellerID}`}
-													params={{ sellerID }}
-													style={{ textDecoration: "none" }}
-												>
-													<Paragraph size="18px" bold color="primary_cta">
-														{userNameSeller}
-													</Paragraph>
-												</Link>
-											</div>
-											<Paragraph size="18px" bold className="d-inline">Feedback Score:</Paragraph>
-											<Paragraph size="18px" className="d-inline ms-1 mb-3">{feedbackScore && feedbackScore.toFixed(0)}%</Paragraph>
-											<Paragraph size="18px" bold className="mb-1 mt-2">Registered Date:</Paragraph>
-											<Paragraph size="18px">{registeredDate}</Paragraph>
-											<Paragraph size="18px" className="mb-1 d-inline" bold>Total Trades:</Paragraph>
-											<Paragraph size="18px" className="d-inline ms-1">{totalTrades}</Paragraph>
-										</div>
-										<div className="col-6">
-											<Paragraph size="18px">How was the seller?</Paragraph>
-											<FeedbackContext.Provider value={value}>
-												<GiveFeedback />
-											</FeedbackContext.Provider>
-											<div className="text-start">
-												<StyledLabel
-													htmlFor="feedbackMessage"
-													bold
-													className="mt-3"
-													padding="0"
-												>
-													Feedback Message
-												</StyledLabel>
-												<TextArea
-													type="text"
-													placeholder=""
-													name="feedbackMessage"
-													id="feedbackMessage"
-													value={feedbackMessage}
-													className="me-3"
-													onChange={(event) => {
-														setFeedbackMessage(event.target.value);
-													}}
-												/>
-											</div>
-										</div>
-										<div className="col-12">
-											<PrimaryButton
-												text="Complete Trade"
-												className="w-100 mt-3"
-												onClick={() => completeTrade()}
-												disabled={feedBack.length === 0 || feedbackMessage.length === 0}
-											/>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					)}
-				</div>
-			</div>
-		</PageBody>
-	);
+  return (
+    <PageBody>
+      <div className="container">
+        <div className="row py-5 mb-5">
+          <div className="col-12 mb-5">
+            <Heading size="26px" className="mb-4">
+              Offers &gt; Buy SOL from {userNameSeller} with {paymentMethod}.
+            </Heading>
+          </div>
+          <div className="col-12 col-md-6 row order-1 order-md-0">
+            <ChatWrapper>
+              <div className="chat-header d-flex align-items-center flex-column">
+                <div className="d-flex align-items-center mb-5">
+                  <i className="material-icons messages-icon me-3">
+                    question_answer
+                  </i>
+                  <div className="d-flex flex-column">
+                    <Paragraph bold size="24px" className="mb-0">
+                      Conversation
+                    </Paragraph>
+                    <Paragraph siuze="14px" className="mb-0">
+                      Messages are end-to-end encrypted.
+                    </Paragraph>
+                  </div>
+                </div>
+                <div className="chat-body w-100">
+                  {messageList.map((messageContent) => (
+                    <div className="d-flex flex-column">
+                      <div
+                        className={
+                          (messageContent.author === "Lumos Exchange" &&
+                            "d-flex justify-content-center align-self-center") ||
+                          (userName !== messageContent.author
+                            ? "d-flex self justify-content-end align-self-end"
+                            : `d-flex justify-content-start align-self-start`)
+                        }
+                      >
+                        {messageContent.author === "Lumos Exchange" && (
+                          <LumosIcon className="me-1 mb-2" />
+                        )}
+                        <Paragraph size="16px" className="mb-0 me-2" bold>
+                          {messageContent.author}
+                        </Paragraph>
+                        <Paragraph size="16px" className="mb-0">
+                          {messageContent.time}
+                        </Paragraph>
+                      </div>
+                      <div
+                        className={
+                          (messageContent.author === "Lumos Exchange" &&
+                            "message admin justify-content-center text-center px-5") ||
+                          (userName === messageContent.author
+                            ? "message self justify-content-start align-self-start"
+                            : "message justify-content-end align-self-end")
+                        }
+                      >
+                        {messageContent.message}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="chat-footer d-flex align-items-center">
+                <TextArea
+                  type="text"
+                  placeholder="Enter message here"
+                  value={currentMessage}
+                  className="me-3"
+                  onChange={(event) => {
+                    setCurrentMessage(event.target.value);
+                  }}
+                  onKeyPress={(event) => {
+                    event.key === "Enter" &&
+                      sendMessage() &&
+                      setCurrentMessage("");
+                  }}
+                />
+                <SendButton
+                  icon="send"
+                  onClick={() => {
+                    sendMessage();
+                    setCurrentMessage("");
+                  }}
+                  disabled={currentMessage === ""}
+                />
+              </div>
+            </ChatWrapper>
+          </div>
+          <div className="col-1 d-none d-md-flex justify-content-center">
+            <VerticalDivider />
+          </div>
+          {currentStep === "buying" && (
+            <div className="col-12 col-md-5 order-0 order-md-1">
+              <HalfStepper step2Title="Send Payment to the Seller" />
+              <div className="col-12 text-center">
+                <Heading className="me-2 d-inline-block">Buying</Heading>
+                <Heading bold className="d-inline-block">
+                  {solAmount} SOL
+                </Heading>
+                <Heading className="mx-2 d-inline-block">for</Heading>
+                <Heading bold className="d-inline-block">
+                  {formattedCurrency}
+                  {fiatAmount}
+                </Heading>
+                <Paragraph size="18px" className="pb-3">
+                  1 SOL = {formattedCurrency}
+                  {userSolPrice}
+                </Paragraph>
+                <HorizontalDivider />
+                <div className="d-flex justify-content-center flex-column">
+                  <Paragraph bold size="24px" className="me-2">
+                    Please pay {formattedCurrency}
+                    {fiatAmount}
+                  </Paragraph>
+                  <PaymentInfoArea
+                    paymentInfo={paymentInfo}
+                    paymentMethod={paymentMethod}
+                    reference={reference}
+                  />
+                  <div className="d-flex text-start">
+                    <PrimaryButton
+                      text={
+                        isPaymentSent
+                          ? "Payment marked as sent"
+                          : "I've sent the payment"
+                      }
+                      className="w-100"
+                      onClick={() => {
+                        setIsPaymentSent(true);
+                      }}
+                      disabled={isPaymentSent}
+                    />
+                  </div>
+                  <div className="row mt-5 mb-5 mb-md-0">
+                    <div className="col-6">
+                      <SecondaryButton
+                        text="Cancel"
+                        className="m-auto mt-3"
+                        onClick={() => navigate("/Buy")}
+                        type="check"
+                        value="check"
+                      />
+                    </div>
+                    <div className="col-6">
+                      <PrimaryButton
+                        text="Continue"
+                        className="m-auto mt-3"
+                        onClick={() => {
+                          sentPayment();
+                        }}
+                        type="check"
+                        value="check"
+                        hasIcon
+                        disabled={!isPaymentSent}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {currentStep === "transfer" && (
+            <div className="col-12 col-md-5 mt-4">
+              <Stepper step2Title="Send Payment to the Seller" />
+              <div className="col-12 text-center">
+                <Heading className="me-2 d-inline-block mb-4">
+                  Check your wallet
+                </Heading>
+                <Heading bold className="d-inline-block">
+                  {solAmount} SOL
+                </Heading>
+                <Paragraph size="18px">
+                  Should have been sent to the wallet addresss:
+                </Paragraph>
+                <StyledCode>{walletAddress}</StyledCode>
+                <HorizontalDivider />
+                <div className="d-flex align-items-center py-3">
+                  <Warning />
+                  <Paragraph className="mb-0 text-start" size="18px">
+                    Please double and triple check your wallet address before
+                    confirming. Do not mark as SOL received until the funds are
+                    in your wallet.
+                  </Paragraph>
+                </div>
+                <div className="d-flex align-items-center mb-4 pt-3">
+                  <FormCheckbox
+                    type="checkbox"
+                    id="solReceived"
+                    name="solReceived"
+                    onChange={(e) => setConfirmation(e.target.checked)}
+                  />
+                  <StyledLabel htmlFor="solReceived">
+                    I've received the SOL to my wallet address.
+                  </StyledLabel>
+                </div>
+                <div className="d-flex justify-content-center flex-column">
+                  <div className="col-12">
+                    <PrimaryButton
+                      text="Continue"
+                      className="w-100 mt-3"
+                      onClick={() => {
+                        setCurrentStep("bought");
+                        recievedSolMsg();
+                        getFeedbackDetails();
+                      }}
+                      disabled={!confirmation}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {currentStep === "bought" && (
+            <div className="col-12 col-md-5 mt-4">
+              <Stepper step2Title="Send Payment to the Seller" />
+              <div className="col-12 text-center">
+                <Heading className="me-2 d-inline-block">Bought</Heading>
+                <Heading bold className="d-inline-block">
+                  {solAmount} SOL
+                </Heading>
+                <Heading className="mx-2 d-inline-block">for</Heading>
+                <Heading bold className="d-inline-block">
+                  {formattedCurrency}
+                  {fiatAmount}
+                </Heading>
+                <Paragraph size="18px" className="pb-3">
+                  1 SOL = {formattedCurrency}
+                  {userSolPrice}
+                </Paragraph>
+                <HorizontalDivider />
+                <div className="d-flex justify-content-center flex-column">
+                  <div className="row mt-5">
+                    <div className="col-6 text-start">
+                      <Paragraph size="18px" bold>
+                        Seller
+                      </Paragraph>
+                      <div className="d-flex">
+                        <IconPrimaryCta className="material-icons">
+                          person
+                        </IconPrimaryCta>
+                        <Link
+                          to={`/profile/user/${sellerID}`}
+                          params={{ sellerID }}
+                          style={{ textDecoration: "none" }}
+                        >
+                          <Paragraph size="18px" bold color="primary_cta">
+                            {userNameSeller}
+                          </Paragraph>
+                        </Link>
+                      </div>
+                      <Paragraph size="18px" bold className="d-inline">
+                        Feedback Score:
+                      </Paragraph>
+                      <Paragraph size="18px" className="d-inline ms-1 mb-3">
+                        {feedbackScore && feedbackScore.toFixed(0)}%
+                      </Paragraph>
+                      <Paragraph size="18px" bold className="mb-1 mt-2">
+                        Registered Date:
+                      </Paragraph>
+                      <Paragraph size="18px">{registeredDate}</Paragraph>
+                      <Paragraph size="18px" className="mb-1 d-inline" bold>
+                        Total Trades:
+                      </Paragraph>
+                      <Paragraph size="18px" className="d-inline ms-1">
+                        {totalTrades}
+                      </Paragraph>
+                    </div>
+                    <div className="col-6">
+                      <Paragraph size="18px">How was the seller?</Paragraph>
+                      <FeedbackContext.Provider value={value}>
+                        <GiveFeedback />
+                      </FeedbackContext.Provider>
+                      <div className="text-start">
+                        <StyledLabel
+                          htmlFor="feedbackMessage"
+                          bold
+                          className="mt-3"
+                          padding="0"
+                        >
+                          Feedback Message
+                        </StyledLabel>
+                        <TextArea
+                          type="text"
+                          placeholder=""
+                          name="feedbackMessage"
+                          id="feedbackMessage"
+                          value={feedbackMessage}
+                          className="me-3"
+                          onChange={(event) => {
+                            setFeedbackMessage(event.target.value);
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-12">
+                      <PrimaryButton
+                        text="Complete Trade"
+                        className="w-100 mt-3"
+                        onClick={() => completeTrade()}
+                        disabled={
+                          feedBack.length === 0 || feedbackMessage.length === 0
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </PageBody>
+  );
 };
 
 export default Buying;

@@ -1,0 +1,1 @@
+export const SET_WALLET_BALANCE = "SET_WALLET_BALANCE";

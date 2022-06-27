@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import Axios from "axios";
 import styled, { css } from "styled-components";
 import {
@@ -26,6 +27,12 @@ import TradeCard from "../Components/TradeCard";
 import { LoadingState } from "../Components/Profile";
 import { AppUrl } from "../App";
 import { paymentMethods } from "../Constants/Index";
+import {
+  handleStakeCancel,
+  handleStake,
+  getEscrowLastIndex,
+} from "../Solana/actions";
+import { useWeb3Context } from "../Utils/web3-context";
 
 const CardActionButton = styled(InvisibleButton)(
   ({ theme }) => css`
@@ -46,6 +53,8 @@ const MissingIcon = styled.i(
 );
 
 const MyListings = ({ solGbp, currency }) => {
+  const { publickey } = useWeb3Context();
+
   const [userListings, setUserListings] = useState([]);
   const [modal, setModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -62,6 +71,7 @@ const MyListings = ({ solGbp, currency }) => {
   // Delete Listings
   const [saleID, setSaleId] = useState("");
   const [userID, setUserId] = useState("");
+  const [stakeId, setStakeId] = useState(null);
   const [confirmationMessage, setConfirmationMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -81,24 +91,35 @@ const MyListings = ({ solGbp, currency }) => {
     setAboveOrBelow(val.aboveOrBelow);
     setPercentageDifference(val.percentChange);
     setVolumeForSale(val.amountForSale);
+    setStakeId(val.stakeId);
     setSaleId(val.saleID);
     setUserId(val.userID);
     setModal(!modal);
   };
 
   const openDeleteModal = (val) => {
+    console.log(val);
     setDeleteModal(!deleteModal);
+    setStakeId(val.stakeId);
     setSaleId(val.saleID);
     setUserId(val.userID);
   };
 
-  const editListing = () => {
+  const editListing = async () => {
+    if (!publickey) {
+      return;
+    }
+    await handleStakeCancel(publickey, stakeId);
+    await handleStake(publickey, Number(volumeForSale));
+    const escrowIndex = await getEscrowLastIndex();
     Axios.post(`${AppUrl}/UpdateMyListings`, {
       amountForSale: volumeForSale,
       aboveOrBelow,
       percentChange: percentageDifference,
       paymentMethod1: primaryPaymentMethod,
       paymentMethod2: secondaryPaymentMethod,
+      stakeId: escrowIndex,
+      sellerAddress: publickey,
       userID,
       saleID,
     }).then((response) => {
@@ -112,7 +133,12 @@ const MyListings = ({ solGbp, currency }) => {
     });
   };
 
-  const deleteListing = () => {
+  const deleteListing = async () => {
+    if (!publickey) {
+      return;
+    }
+    await handleStakeCancel(publickey, stakeId);
+
     Axios.post(`${AppUrl}/DeleteMyListing`, {
       saleID,
     }).then((response) => {

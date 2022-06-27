@@ -179,6 +179,10 @@ const sell = async (req, res) => {
   const id = req.session.user[0].userID;
   const payment1 = req.body.payment1;
   const payment2 = req.body.payment2;
+  const stakeId = req.body.stakeId;
+  const sellerAddress = req.body.sellerAddress;
+
+  // Add functionality to store userescrow account (already made the db just need to wire it up)
 
   var sql =
     "SELECT country AS Country FROM upgradeTiers WHERE (userID) = (?);SELECT city AS Town FROM upgradeTiers WHERE (userID) = (?);SELECT saleID AS SaleID FROM TradeHistory WHERE (sellerID) = (?);SELECT AVG(feedbackScore) as feedbackScore from feedback WHERE (sellerUserID) = (?);";
@@ -190,9 +194,10 @@ const sell = async (req, res) => {
       console.log(results);
       console.log(results[3][0].feedbackScore);
     }
+    console.log('AMOUNT FOR SALEEEEE: ', req.body.amountForSale);
 
     db.query(
-      "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory, feedbackScore) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+      "INSERT INTO sale (userID, amountForSale, aboveOrBelow, percentChange, userName, Country, Town, paymentMethod1, paymentMethod2, tradeHistory, feedbackScore, stakeId, sellerAddress) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
       [
         id,
         amountForSale,
@@ -205,6 +210,8 @@ const sell = async (req, res) => {
         payment2,
         results[2].length,
         results[3][0].feedbackScore || 0,
+        stakeId,
+        sellerAddress,
       ],
       (err, resultt) => {
         if (err) {
@@ -636,7 +643,7 @@ const UpgradeBronze = async (req, res) => {
   //Now update sql upgradeTiers & account level
 
   var sql =
-    "Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;INSERT INTO KYC set userID =?, documentAddressKYC =?, KYCdate=?;";
+    "Insert INTO upgradeTiers SET userID=?, legalName=?, address=?, city=?, cityState=?, postCode=?, country=?; UPDATE accountLevel SET accountLevel=?, dateUpgraded=? WHERE userID =?;INSERT INTO KYC set userID =?, documentAddressKYC =?, dateKYC=?;";
 
   db.query(
     sql,
@@ -1481,9 +1488,11 @@ const OpenTrade = async (req, res) => {
   let reference = crypto.randomBytes(5).toString("hex");
   let no = "NO";
   const walletAddress = req.body.walletAddress;
+  const stakeId = req.body.stakeId;
+  const sellerAddress = req.body.sellerAddress;
 
   db.query(
-    "INSERT INTO LiveTrades (saleID, sellerID, buyerID, Date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, Message, Reference, paymentRecieved, escrowReleaseTime, walletAddress) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+    "INSERT INTO LiveTrades (saleID, sellerID, buyerID, Date, paymentMethod, userSolPrice, amountOfSol, fiatAmount, paymentCurrency, Message, Reference, paymentRecieved, escrowReleaseTime, walletAddress, stakeId, sellerAddress) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
     [
       saleID,
       sellerID,
@@ -1499,6 +1508,8 @@ const OpenTrade = async (req, res) => {
       no,
       date,
       walletAddress,
+      stakeId,
+      sellerAddress,
     ],
     (err, result) => {
       if (err) {

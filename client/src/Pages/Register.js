@@ -106,7 +106,7 @@ const Register = () => {
         }).then((response) => {
           if (response.data.emailSent === true) {
             //Navigate to emailVerification
-            console.log(response.data.emailSent, 'email sent');
+            console.log(response.data.emailSent, "email sent");
             navigate("/AccountRegistered", {
               state: {
                 email,
@@ -147,6 +147,7 @@ const Register = () => {
               className="mb-3 w-100"
               type="text"
               placeholder="First Name"
+              maxLength={40}
               form="register"
               onChange={(e) => {
                 setFirstName(e.target.value);
@@ -166,6 +167,7 @@ const Register = () => {
               type="text"
               form="register"
               placeholder="Last Name"
+              maxLength={40}
               onChange={(e) => {
                 setLastName(e.target.value);
               }}
@@ -185,7 +187,7 @@ const Register = () => {
               id="userName"
               type="text"
               form="register"
-              placeholder="User Name"
+              placeholder="Username"
               autocomplete="off"
               autoComplete="off"
               maxLength={30}
@@ -206,7 +208,7 @@ const Register = () => {
                   error_outline
                 </StyledIcon>
                 <Paragraph size="18px" color="invalid">
-                  Username too short
+                  Username is too short
                 </Paragraph>
               </div>
             )}
@@ -243,7 +245,7 @@ const Register = () => {
               className="mb-3 w-100"
               type="text"
               form="register"
-              placeholder="email"
+              placeholder="Email"
               autocomplete="off"
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -265,13 +267,13 @@ const Register = () => {
               id="password"
               type="password"
               form="register"
-              placeholder="password"
+              placeholder="Password"
               autocomplete="off"
               maxLength={20}
               className={`
 								mb-3 w-100
 								${
-                  ((password.length > 0 && password.length < 7) ||
+                  ((password.length > 0 && password.length < 8) ||
                     password.includes(" ")) &&
                   "invalid"
                 }
@@ -286,7 +288,7 @@ const Register = () => {
                   error_outline
                 </StyledIcon>
                 <Paragraph size="18px" color="invalid">
-                  Password too short (Minimum 8 Charachters)
+                  Password is too short (Minimum 8 Charachters)
                 </Paragraph>
               </div>
             )}
@@ -300,15 +302,17 @@ const Register = () => {
                 </Paragraph>
               </div>
             )}
-
-            <StyledLabel
-              htmlFor="confirmPassword"
-              padding="0 0 5px 0"
-              bold
-              fontSize="20px"
-            >
-              Confirm Password
-            </StyledLabel>
+            <div className="d-flex justify-content-between align-items-center">
+              <StyledLabel
+                htmlFor="confirmPassword"
+                padding="0 0 5px 0"
+                bold
+                fontSize="20px"
+              >
+                Confirm Password
+              </StyledLabel>
+              <InputValidator value={passwordConfirm} min={8} max={20} />
+            </div>
             <FormInput
               id="confirmPassword"
               className={`mb-3 w-100 ${
@@ -317,7 +321,7 @@ const Register = () => {
               type="password"
               form="register"
               maxLength={20}
-              placeholder="password"
+              placeholder="Confirm Password"
               autocomplete="off"
               onChange={(e) => {
                 setPasswordConfirm(e.target.value);
