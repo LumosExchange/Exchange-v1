@@ -256,7 +256,13 @@ const Selling = ({ userName }) => {
   };
 
   const release = async () => {
-    await handleStakeRelease(publickey, walletAddress, stakeId);
+    console.log("stakeId", stakeId);
+    await handleStakeRelease(
+      publickey,
+      walletAddress,
+      stakeId,
+      Number(solAmount)
+    );
   };
 
   const value = useMemo(() => {

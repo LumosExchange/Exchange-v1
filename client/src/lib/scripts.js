@@ -68,7 +68,7 @@ export const createStakeTx = async (userAddress, amount, program) => {
   return tx;
 };
 
-export const createCancelTx = async (userAddress, stakeIndex, program) => {
+export const cancelStakeTx = async (userAddress, stakeIndex, program) => {
   const [escrowAccount, escrow_bump] = await PublicKey.findProgramAddress(
     [Buffer.from(ESCROW_SEED)],
     SOLANA_PROGRAM_ID
@@ -105,6 +105,7 @@ export const createReleaseTx = async (
   userAddress,
   receiver,
   stakeIndex,
+  releaseAmount,
   program
 ) => {
   const [escrowAccount, escrow_bump] = await PublicKey.findProgramAddress(
@@ -125,11 +126,46 @@ export const createReleaseTx = async (
   let tx = new Transaction();
 
   tx.add(
-    program.instruction.release({
+    program.instruction.release(new anchor.BN(releaseAmount), {
       accounts: {
         staker: userAddress,
         receiver,
         escrowAccount,
+        vaultAccount,
+        userEscrowAccount,
+        systemProgram: SystemProgram.programId,
+      },
+      instructions: [],
+      signers: [],
+    })
+  );
+
+  return tx;
+};
+
+export const modifyStakeTx = async (
+  userAddress,
+  stakeIndex,
+  newAmount,
+  program
+) => {
+  const [vaultAccount, vault_bump] = await PublicKey.findProgramAddress(
+    [Buffer.from(VAULT_SEED)],
+    SOLANA_PROGRAM_ID
+  );
+
+  const [userEscrowAccount, user_escrow_bump] =
+    await PublicKey.findProgramAddress(
+      [userAddress.toBuffer(), Buffer.from(stakeIndex.toString())],
+      SOLANA_PROGRAM_ID
+    );
+
+  let tx = new Transaction();
+
+  tx.add(
+    program.instruction.modify(new anchor.BN(newAmount), {
+      accounts: {
+        staker: userAddress,
         vaultAccount,
         userEscrowAccount,
         systemProgram: SystemProgram.programId,
