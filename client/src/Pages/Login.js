@@ -75,10 +75,6 @@ const Login = () => {
 
   const login = () => {
     Axios.post(`${AppUrl}/login`, {
-      header: {
-        origin: `${AppUrlNoPort}`,
-        "cache-control": "no-store, no-cache, must-revalidate",
-      },
       userName: userLog,
       password: passwordLog,
     })
