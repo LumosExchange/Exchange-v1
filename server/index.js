@@ -20,7 +20,7 @@ const server = http.createServer(app);
 //Setting up socket for chatroom
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://dev-api.lumos.exchange",
     methods: ["GET", "POST"],
   },
 });
@@ -56,7 +56,7 @@ app.use(function (req, res, next) {
   // Website you wish to allow to connect
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "http://localhost:3000",
+    "https://dev-api.lumos.exchange",
     "https://api.coingecko.com",
     "https://api.coingecko.com/api/v3/coins/markets"
   );
@@ -80,7 +80,7 @@ app.use(function (req, res, next) {
 
 app.use(
   cors({
-    origin: ["http:localhost:3000", "https://api.coingecko.com/api/v3/coins"],
+    origin: ["https://dev-api.lumos.exchange", "https://api.coingecko.com/api/v3/coins"],
     methods: ["GET", "POST"],
     credentials: true,
     optionSuccessStatus: 200,
