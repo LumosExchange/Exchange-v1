@@ -53,14 +53,14 @@ import WalletTesting from "./Pages/WalletTesting";
 import TradeComplete from "./Pages/TradeComplete";
 import AccountRegistered from "./Pages/AccountRegistered";
 
-export const AppUrl = "http://localhost:3001";
-export const AppUrlNoPort = "http://localhost";
-export const SocketUrl = "http://localhost:3002";
+//export const AppUrl = "http://localhost:3001";
+//export const AppUrlNoPort = "http://localhost";
+//export const SocketUrl = "http://localhost:3002";
 
 // Prod Details
-//export const AppUrl = "http://3.8.159.233:3001";
-// export const AppUrlNoPort = "http://3.8.159.233";
-// export const SocketUrl = "http://3.8.159.233:3002";
+export const AppUrl = "https://dev-api.lumos.exchange/";
+export const AppUrlNoPort = "https://stage.lumos.exchange/";
+export const SocketUrl = "https://dev-ws.lumos.exchange/";
 
 const App = () => {
   const dispatch = useDispatch();
