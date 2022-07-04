@@ -58,9 +58,9 @@ import AccountRegistered from "./Pages/AccountRegistered";
 //export const SocketUrl = "http://localhost:3002";
 
 // Prod Details
-export const AppUrl = "https://dev-api.lumos.exchange/";
-export const AppUrlNoPort = "https://stage.lumos.exchange/";
-export const SocketUrl = "https://dev-ws.lumos.exchange/";
+export const AppUrl = "https://dev-api.lumos.exchange";
+export const AppUrlNoPort = "https://dev-api.lumos.exchange";
+export const SocketUrl = "https://dev-ws.lumos.exchange";
 
 const App = () => {
   const dispatch = useDispatch();
