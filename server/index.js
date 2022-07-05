@@ -81,7 +81,7 @@ app.use(function (req, res, next) {
 
 app.use(
   cors({
-    origin: ["https://dev-api.lumos.exchange", "https://stage.lumos.exchange", "https://api.coingecko.com/api/v3/coins"],
+    origin: ["https://dev-api.lumos.exchange", "https://stage.lumos.exchange", "https://api.coingecko.com/api/v3/coins", "*"],
     methods: ["GET", "POST"],
     credentials: true,
     optionSuccessStatus: 200,
