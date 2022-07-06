@@ -596,7 +596,8 @@ const Wallets = () => {
                   onChange={(e) => {
                     setEditingWalletAddress(e.target.value);
                   }}
-                  className="w-100"
+                  className="
+										w-100"
                 />
                 <PrimaryButton
                   className="w-100 mt-3"
