@@ -96,6 +96,37 @@ export const IDL = {
       ],
     },
     {
+      name: "modify",
+      accounts: [
+        {
+          name: "staker",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "vaultAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "userEscrowAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: "newAmount",
+          type: "u64",
+        },
+      ],
+    },
+    {
       name: "release",
       accounts: [
         {
@@ -129,7 +160,12 @@ export const IDL = {
           isSigner: false,
         },
       ],
-      args: [],
+      args: [
+        {
+          name: "releaseAmount",
+          type: "u64",
+        },
+      ],
     },
   ],
   accounts: [

@@ -22,10 +22,22 @@ export const handleStakeCancel = async (publicKey, stakeIndex) => {
   }
 };
 
-export const handleStakeRelease = async (publicKey, receiver, stakeIndex) => {
+export const handleModifyStake = async (publicKey, stakeIndex, newAmount) => {
   if ("solana" in window && publicKey) {
     const scripts = new Scripts(window.solana);
-    await scripts.release(new PublicKey(receiver), stakeIndex);
+    await scripts.modify(stakeIndex, newAmount);
+  }
+};
+
+export const handleStakeRelease = async (
+  publicKey,
+  receiver,
+  stakeIndex,
+  releaseAmount
+) => {
+  if ("solana" in window && publicKey) {
+    const scripts = new Scripts(window.solana);
+    await scripts.release(new PublicKey(receiver), stakeIndex, releaseAmount);
   }
 };
 

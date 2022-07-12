@@ -44,7 +44,6 @@ const nexmo = new Nexmo({
 
 const register = async (req, res) => {
   const firstName = req.body.firstName;
-
   const lastName = req.body.lastName;
   const email = req.body.email;
   const password = req.body.password;
@@ -62,6 +61,21 @@ const register = async (req, res) => {
       console.log(err);
       res.send({ err });
     } else {
+      // let userExist = false;
+      // db.query(
+      //   "select * from users where userName = '" + userName + "' limit 1",
+      //   (err, result) => {
+      //     console.log(err);
+      //     console.log("result", result, result.length);
+      //     if (result && result.length) {
+      //       console.log("User Already Exist");
+      //       userExist = true;
+      //     }
+      //   }
+      // );
+      // if (userExist) {
+      //   return res.status(400).send({ error: "User Already Exist" });
+      // }
       db.query(
         "INSERT INTO users (firstName, lastName, email, password, userName, registeredDate) VALUES (?,?,?,?,?,?)",
         [firstName, lastName, email, hash, userName, date],
@@ -113,6 +127,7 @@ const getUserInfo = async (req, res) => {
 const login = async (req, res) => {
   const userName = req.body.userName;
   const password = req.body.password;
+  console.log(userName, password);
 
   db.query(
     "SELECT * FROM users WHERE userName = ?",

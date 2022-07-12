@@ -30,6 +30,7 @@ import { paymentMethods } from "../Constants/Index";
 import {
   handleStakeCancel,
   handleStake,
+  handleModifyStake,
   getEscrowLastIndex,
 } from "../Solana/actions";
 import { useWeb3Context } from "../Utils/web3-context";
@@ -109,8 +110,7 @@ const MyListings = ({ solGbp, currency }) => {
     if (!publickey) {
       return;
     }
-    await handleStakeCancel(publickey, stakeId);
-    await handleStake(publickey, Number(volumeForSale));
+    await handleModifyStake(publickey, stakeId, Number(volumeForSale));
     const escrowIndex = await getEscrowLastIndex();
     Axios.post(`${AppUrl}/UpdateMyListings`, {
       amountForSale: volumeForSale,
@@ -236,8 +236,10 @@ const MyListings = ({ solGbp, currency }) => {
                   }}
                   className="w-100"
                 >
-                  {paymentMethods.map((data) => (
-                    <option value={data}>{data}</option>
+                  {paymentMethods.map((data, key) => (
+                    <option key={key} value={data}>
+                      {data}
+                    </option>
                   ))}
                 </StyledDropdown>
               </div>

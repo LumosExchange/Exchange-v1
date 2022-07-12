@@ -13,6 +13,9 @@ const pipeline = promisify(require("stream").pipeline);
 const S3 = require("aws-sdk/clients/s3");
 
 const {
+  validateResourceMW,
+} = require("../../Middlewares/validationMiddlewear");
+const {
   register,
   login,
   checkLogin,
@@ -90,6 +93,10 @@ const {
   CheckSaleEligibility,
 } = require("../controllers/index");
 
+const {
+  userLoginSchema,
+  userRegisterSchema,
+} = require("../../Validations/userValidation");
 const upload = multer({ dest: "uploads/" });
 
 //create JWT aauth
@@ -109,8 +116,8 @@ const verifyJWT = (req, res, next) => {
   }
 };
 
-router.post("/register", register);
-router.post("/login", login);
+router.post("/register", validateResourceMW(userRegisterSchema), register);
+router.post("/login", validateResourceMW(userLoginSchema), login);
 //Login functionality
 //check logged in state
 router.get("/login", checkLogin);

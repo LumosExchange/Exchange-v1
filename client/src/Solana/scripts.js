@@ -2,8 +2,9 @@ import * as anchor from "@project-serum/anchor";
 import {
   createInitTx,
   createStakeTx,
-  createCancelTx,
+  cancelStakeTx,
   createReleaseTx,
+  modifyStakeTx,
   getEscrowState,
   getVaultState,
   getUserEscrowState,
@@ -52,7 +53,7 @@ export class Scripts extends Connection {
   };
 
   cancel = async (stakeIndex) => {
-    const tx = await createCancelTx(
+    const tx = await cancelStakeTx(
       this.wallet.publicKey,
       stakeIndex,
       this.program
@@ -67,11 +68,29 @@ export class Scripts extends Connection {
     console.log("Your transaction signature", txId);
   };
 
-  release = async (receiver, stakeIndex) => {
+  modify = async (stakeIndex, newAmount) => {
+    const tx = await modifyStakeTx(
+      this.wallet.publicKey,
+      stakeIndex,
+      newAmount,
+      this.program
+    );
+    const { blockhash } = await this.connection().getRecentBlockhash(
+      "finalized"
+    );
+    tx.feePayer = this.wallet.publicKey;
+    tx.recentBlockhash = blockhash;
+    // this.wallet.signTransaction(tx);
+    let txId = await this.wallet.signAndSendTransaction(tx);
+    console.log("Your transaction signature", txId);
+  };
+
+  release = async (receiver, stakeIndex, releaseAmount) => {
     const tx = await createReleaseTx(
       this.wallet.publicKey,
       receiver,
       stakeIndex,
+      releaseAmount,
       this.program
     );
     const { blockhash } = await this.connection().getRecentBlockhash(
