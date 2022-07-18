@@ -81,7 +81,12 @@ app.use(function (req, res, next) {
 
 app.use(
   cors({
-    origin: ["https://dev-api.lumos.exchange", "https://stage.lumos.exchange", "https://api.coingecko.com/api/v3/coins", "*"],
+    origin: [
+      "https://dev-api.lumos.exchange",
+      "https://stage.lumos.exchange",
+      "https://api.coingecko.com/api/v3/coins",
+      "*",
+    ],
     methods: ["GET", "POST"],
     credentials: true,
     optionSuccessStatus: 200,
@@ -111,6 +116,7 @@ app.use(
 const db = mysql.createPool({
   connectionLimit: 100,
   host: process.env.MYSQL_HOST,
+  port: 3306,
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASS,
   database: process.env.MYSQL_DATABASE,

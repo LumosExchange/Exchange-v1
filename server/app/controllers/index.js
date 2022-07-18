@@ -61,59 +61,55 @@ const register = async (req, res) => {
       console.log(err);
       res.send({ err });
     } else {
-      // let userExist = false;
-      // db.query(
-      //   "select * from users where userName = '" + userName + "' limit 1",
-      //   (err, result) => {
-      //     console.log(err);
-      //     console.log("result", result, result.length);
-      //     if (result && result.length) {
-      //       console.log("User Already Exist");
-      //       userExist = true;
-      //     }
-      //   }
-      // );
-      // if (userExist) {
-      //   return res.status(400).send({ error: "User Already Exist" });
-      // }
       db.query(
-        "INSERT INTO users (firstName, lastName, email, password, userName, registeredDate) VALUES (?,?,?,?,?,?)",
-        [firstName, lastName, email, hash, userName, date],
+        "select * from users where email = '" + email + "' limit 1",
         (err, result) => {
-          console.log(err);
+          if (err) console.log(err);
+          console.log("result", result);
+          if (result && result.length) {
+            console.log("User Already Exist");
+            return res.status(400).send({ error: "User Already Exist" });
+          }
+          db.query(
+            "INSERT INTO users (firstName, lastName, email, password, userName, registeredDate) VALUES (?,?,?,?,?,?)",
+            [firstName, lastName, email, hash, userName, date],
+            (err, result) => {
+              if (err) console.log(err);
+            }
+          );
+          db.query(
+            "INSERT INTO userSettings (theme, timezone, currency) VALUES (?,?,?)",
+            [theme, timezone, currency],
+            (err, result) => {
+              if (err) console.log(err);
+            }
+          );
+          db.query(
+            "INSERT INTO accountLevel (accountLevel, dateUpgraded) VALUES (?,?)",
+            [accountLevel, date],
+            (err, result) => {
+              if (err) console.log(err);
+            }
+          );
+          db.query(
+            "INSERT INTO userAuth (Email, emailVerified, SMS, google, googleSecret, Authy, phoneNumber) VALUES (?,?,?,?,?,?,?)",
+            [email, 0, 0, 0, 0, 0, "0"],
+            (err, result) => {
+              if (err) console.log(err);
+            }
+          );
+          db.query(
+            "INSERT INTO userPaymentAccounts (EUBank, UKBank, InterBank, Paypal, Skrill) VALUES (?,?,?,?,?)",
+            [0, 0, 0, 0, 0],
+            (err, result) => {
+              if (err) console.log(err);
+            }
+          );
+          res.send({
+            registered: true,
+          });
         }
       );
-      db.query(
-        "INSERT INTO userSettings (theme, timezone, currency) VALUES (?,?,?)",
-        [theme, timezone, currency],
-        (err, result) => {
-          console.log(err);
-        }
-      );
-      db.query(
-        "INSERT INTO accountLevel (accountLevel, dateUpgraded) VALUES (?,?)",
-        [accountLevel, date],
-        (err, result) => {
-          console.log(err);
-        }
-      );
-      db.query(
-        "INSERT INTO userAuth (Email, emailVerified, SMS, google, googleSecret, Authy, phoneNumber) VALUES (?,?,?,?,?,?,?)",
-        [email, 0, 0, 0, 0, 0, "0"],
-        (err, result) => {
-          console.log(err);
-        }
-      );
-      db.query(
-        "INSERT INTO userPaymentAccounts (EUBank, UKBank, InterBank, Paypal, Skrill) VALUES (?,?,?,?,?)",
-        [0, 0, 0, 0, 0],
-        (err, result) => {
-          console.log(err);
-        }
-      );
-      res.send({
-        registered: true,
-      });
     }
   });
 };
