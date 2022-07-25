@@ -1539,19 +1539,41 @@ const PaymentMethods = () => {
                       onChange={(e) => {
                         setPayPalEmail(e.target.value);
                       }}
-                      className="w-100"
+                      className={`
+                      mb-3 w-100
+                      ${
+                        ((paypalEmail.length > 0 && paypalEmail.length < 4) ||
+                          paypalEmail.includes(" ") ||
+                          paypalEmail.match(/[^A-Za-z 0-9*@]/g)) &&
+                        "invalid"
+                      }
+                    `}
                     />
                   </div>
+                  {paypalEmail.length > 0 && paypalEmail.length < 4 && (
+                    <div className="d-flex">
+                      <StyledIcon
+                        className="material-icons me-1"
+                        color="invalid"
+                      >
+                        error_outline
+                      </StyledIcon>
+                      <Paragraph size="18px" color="invalid">
+                        Paypal email is too short
+                      </Paragraph>
+                    </div>
+                  )}
                   <div className="col-12">
                     <PrimaryButton
                       text={isEditing ? "Edit Paypal" : "Add PayPal"}
                       className="w-100"
-                      disabled={paypalEmail.length === 0}
+                      disabled={paypalEmail.length < 4}
                       onClick={(event) => {
                         event.preventDefault();
                         isEditing ? editPayPal() : addPayPal();
                       }}
                     />
+
                     {errorMessage && (
                       <Paragraph
                         className="showError mt-3 mb-0"
